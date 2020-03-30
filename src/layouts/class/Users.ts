@@ -1,0 +1,23 @@
+import { IUser} from '../data/schema'
+
+export const UserTypes = [
+    {title:'Member',value:0},
+    {title:'Agent',value:1},
+    {title:'WebOwner',value:2},
+    {title:'Operator',value:3}
+]
+export default class Users{
+    constructor(private Data:IUser){ }
+    get Account(){
+        return this.Data.Account as string;
+    }
+    set Account(v:string){
+        this.Data.Account = v;
+    }
+    get Password(){
+        return '***************';
+    }
+    set Password(v:string){
+        this.Data.Password =v;
+    }
+}

@@ -1,0 +1,40 @@
+interface BTTXT {
+    [v:number]:string;
+}
+const BtText:string[] = [];
+BtText[1]='MarkSix';        // 六合彩
+BtText[2]='3D';             // 中國體彩
+BtText[3]='3D';             // 中國福彩
+BtText[4]='';             // 中國福彩
+BtText[5]='Happy';          // 廣西快樂10分
+BtText[6]='Always';             // 中國福彩
+BtText[7]='';             // 中國福彩
+BtText[8]='Always';             // 中國福彩
+BtText[9]='';             // 中國福彩
+BtText[10]='';             // 中國福彩
+BtText[11]='Always';             // 中國福彩
+BtText[12]='Happy';             // 廣東快樂10分
+BtText[13]='Happy';             // 天津快樂10
+BtText[14]='';             // 中國福彩
+BtText[15]='';             // 中國福彩
+BtText[16]='';             // 中國福彩
+BtText[17]='';             // 中國福彩
+BtText[18]='';             // 中國福彩
+BtText[19]='Always';             // 中國福彩
+BtText[20]='Cars';             // 北京賽車
+BtText[21]='Speed3';             // 中國福彩
+BtText[22]='Happy8';             // 中國福彩
+BtText[23]='Cars';             // 中國福彩
+BtText[24]='Always';             // 中國福彩
+BtText[25]='Happy';          // 中國福彩
+BtText[26]='3D';             // 中國福彩
+BtText[27]='MarkSix';        // 大眾六合彩
+BtText[28]='Speed3';             // 中國福彩
+BtText[29]='Happy8';             // 中國福彩
+BtText[30]='Happy8';             // 中國福彩
+BtText[31]='VN1';             // 中國福彩
+BtText[32]='VN2';             // 中國福彩
+BtText[33]='VN3';             // 中國福彩
+BtText[34]='VN4';             // 中國福彩
+BtText[35]='VN5';             // 中國福彩
+export default BtText;
