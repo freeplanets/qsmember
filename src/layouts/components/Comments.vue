@@ -35,7 +35,7 @@ export default class Comments extends Vue {
         PageName:this.page,
         Comments:this.comment
       }
-      const ans:IMsg = await AxApi.getApi(cp,'saveComments','post');
+      const ans:IMsg = await AxApi.getApi('saveComments',cp,'post');
       if(ans.ErrNo===0){
         let msg:QDialogOptions={
           title: 'Save Comments',
@@ -49,7 +49,7 @@ export default class Comments extends Vue {
       let cp:CommonParams={
         PageName:this.page
       }
-      const ans:IMsg = await AxApi.getApi(cp,'getComments','post');
+      const ans:IMsg = await AxApi.getApi('getComments',cp,'post');
       //console.log('getComment',ans);
       if(ans.ErrNo===0){
         const dta:any=ans.data;

@@ -14,16 +14,18 @@
 				<q-card-section>
 					<div class="row">
 					<q-checkbox 
-						class="col-1"
 						v-for="(itm,idx) in btList"
 						:key="idx"
-						v-model="itm.chk" :label="itm.title" />
+						:class="{'col-1':true,bgc: itm.ungrouped}"
+						v-model="itm.chk" :label="itm.title"/>
 					</div>
 				</q-card-section>
 			</q-card>
 			<div class="row q-pa-sm">
-				<div class="col-1"><q-btn color="blue" icon-right="send" label="Save" @click="log()" /></div>
-				<div class="col-1"><q-btn color="red" icon-right="clear" label="clear" @click="clear()" /></div>
+				<div class="col-1"><q-btn color="blue" icon-right="send" label="Save" @click="Save()" /></div>
+				<div class="col-1"><q-btn color="accent" icon-right="clear" label="clear" @click="clear()" /></div>
+				<div class="col-1"><q-btn color="red" icon-right="delete_forever" label="Delete" @click="Delete()" /></div>
+				<div class="col-2"><q-btn color="green-9" icon-right="pan_tool" label="Unseleted" @click="getUnGroupedBT()" /></div>
 			</div>
 		</div>	 
 	</div>
@@ -31,10 +33,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import axios,{ AxiosRequestConfig, AxiosResponse } from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import {IGames} from './data/schema';
 import BTG from './data/defaultData';
 import { SelectOptions, ItmBtg, IbtCls,Btg} from './data/if';
 
@@ -71,60 +71,44 @@ export default class BetClass extends Vue{
 		} 
 		return '';
 	}
-	getGames(){
-		const url:string=this.store.ax.Host+'/api/getGames';
-		const config:AxiosRequestConfig = {
+	async getGames(){
+		const ans = await this.store.ax.getGames();
+		if(ans){
+			this.options=ans;
 		}
-		axios.get(url,config).then((res:AxiosResponse)=>{
-			//console.log(res.data);
-			const tmp:SelectOptions[]=[];
-			res.data.map((itm:IGames)=>{
-				const t:SelectOptions={
-					label: itm.name,
-					value: itm.id
-				}
-				tmp.push(t);
-			})
-			if(tmp.length > 0) this.options = tmp;
-		})
 	}
-	getBtClass(){
-		const url:string=this.store.ax.Host+'/api/getBtClass';
+	async getBtClass(){
 		const models:SelectOptions = this.models as SelectOptions;
-		const config:AxiosRequestConfig = {
-			params: {
-				GameID: models.value
+		this.clss=[];
+		this.BtClass=[];
+		if(models.value){
+			const ans = await this.store.ax.getBtClass(models.value)
+			if(ans){
+				ans.map((itm:IbtCls)=>{
+					this.clss.push(itm.BCName);
+					this.BtClass.push(itm)
+				});
 			}
-		}
-		axios.get(url,config).then((res:AxiosResponse)=>{
-			//console.log(res.data);
-			//const tmp:SelectOptions[]=[];
-			this.clss=[];
-			this.BtClass=[];
-			let me = this;
-			res.data.map((itm:IbtCls)=>{
-				me.clss.push(itm.BCName);
-				me.BtClass.push(itm)
-			})
-		})		
+		}	
 	}
 	listBetTypes(btg:string):void{
 		this.btList = [];
 		this.clss = [];
-		this.clear();
+		//this.clear();
 		const tmp:object=this.$t(`Game.${btg}.Item`) as object;
 		Object.keys(tmp).map(key=>{
 			const itm:Btg = tmp[key];
 			const ibtg:ItmBtg = {
 				id:key,
 				title: itm.title,
-				chk:false
+				chk:false,
+				ungrouped:false
 			}
 			this.btList.push(ibtg);
 		})
 		this.getBtClass();		
 	}
-	log(){
+	async Save(){
 		const bt:string[]=[];
 		this.btList.map(itm=>{
 			if(itm.chk) bt.push(itm.id);
@@ -139,18 +123,46 @@ export default class BetClass extends Vue{
 			BetTypes: bt.join(':'),
 			ModifyID: this.UserID
 		}
-		const url:string=this.store.ax.Host+'/api/saveBtClass';
-		axios.post(url,data).then((res:AxiosResponse)=>{
-			console.log(res.data);
+		const ans=await this.store.ax.getApi('saveBtClass',data,'post');
+		if(ans.ErrNo===0){
 			this.getBtClass();
-		}).catch(err=>{
-			console.log(err);
-		})
-		//console.log('log',this.btList);
+			this.clear();
+		}
 	}
+	async Delete(){
+		const models:SelectOptions = this.models as SelectOptions;
+		console.log('Delete',this.mClass);			
+	}
+	getUnGroupedBT(){
+		const slted:string[]=[];
+		this.BtClass.map((itm:IbtCls)=>{
+			const bts=itm.BetTypes.split(':');
+			console.log(bts);
+			bts.map(bt=>{
+				//const iBt=parseInt(bt,10);
+				const f=slted.find(sbt=>sbt===bt);
+				if(!f){
+					slted.push(bt);
+				}
+			})
+		})
+		this.btList.map((bitm:ItmBtg)=>{
+			const fd=slted.find(uns=>uns===bitm.id);
+			if(!fd){
+				bitm.ungrouped=true;
+				return bitm;
+			} else {
+				bitm.ungrouped = false;
+			}
+		});
+		console.log('getUnGroupedBT',this.btList);
+	}	
 	setBtSelect(v:string){
 		if(this.BtClass.length==0) return;
 		const found:IbtCls=this.BtClass.find((itm:IbtCls)=>itm.BCName===v) as IbtCls;
+		this.btList.map((itm:ItmBtg)=>{
+			itm.chk = false;
+		});
 		if(found){
 			this.newClassName = v;
 			const bts = found.BetTypes.split(':');
@@ -162,11 +174,13 @@ export default class BetClass extends Vue{
 		}
 	}
 	clear(){
+		this.mClass='';
 		this.modelClass = '';
 		this.newClassName = '';
 		this.btList.map((itm:ItmBtg)=>{
 			itm.chk = false;
 		});
+		//this.models = null;
 	}
   mounted(){
         if(!this.store.isLogin){
@@ -177,3 +191,8 @@ export default class BetClass extends Vue{
   }
 }
 </script>
+<style scoped>
+.bgc {
+	color: orange;
+}
+</style>

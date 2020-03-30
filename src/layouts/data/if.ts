@@ -13,7 +13,8 @@ export interface Btg {
 export interface ItmBtg {
 	id:string;
 	title:string;
-	chk:boolean;
+    chk:boolean;
+    ungrouped:boolean;
 }
 export interface IbtCls {
 	id:string;

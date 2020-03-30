@@ -194,7 +194,7 @@ export default class OddsManager extends Vue {
             //this.cont = this.dfLayout[0].cont;
             //console.log('setCurGames',this.dfLayout);
             if(v.value){
-                let ans:IMsg=await this.store.ax.getApi({GameID:v.value,MaxOddsID:0},'CurOddsInfo');
+                let ans:IMsg=await this.store.ax.getApi('CurOddsInfo',{GameID:v.value,MaxOddsID:0});
                 //console.log('get CurOddsInfo:',ans);
                 if(ans.data){
                     this.Game.inidata(ans.data as IData);
@@ -214,7 +214,7 @@ export default class OddsManager extends Vue {
             GameID:this.curGameID,
             MaxOddsID: this.Game.MaxOddsID
         }
-        let ans:IMsg=await this.store.ax.getApi(param,'CurOddsInfo');
+        let ans:IMsg=await this.store.ax.getApi('CurOddsInfo',param);
         if(ans.data){
             this.Game.updateData(ans.data as IData);
             this.curTid=ans.tid;
@@ -271,7 +271,7 @@ export default class OddsManager extends Vue {
             BetTypes: bt,
             UserID: this.store.personal.id
         }
-        let ans:IMsg=await this.store.ax.getApi(param,'setStop');
+        let ans:IMsg=await this.store.ax.getApi('setStop',param);
         console.log('setStop:',ans);
         if(ans.ErrNo===0){
             this.getCurOdds();

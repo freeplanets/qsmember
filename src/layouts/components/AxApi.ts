@@ -1,5 +1,5 @@
 import axios,{AxiosRequestConfig,AxiosResponse} from 'axios'
-import { SelectOptions,CBetItems,IMsg,CommonParams } from '../data/if';
+import { SelectOptions,CBetItems,IMsg,CommonParams,IbtCls} from '../data/if';
 import {IGames,ITerms,Game, IUser} from '../data/schema';
 let myApiUrl:string='https://testu.uuss.net:3000';
 if(window.location.hostname==='localhost'){
@@ -9,32 +9,42 @@ class AxApi {
     constructor(private ApiUrl){
         console.log('AxApi created!!',ApiUrl);
     }
-	getGames():Promise<SelectOptions[] | undefined>{
-        return new Promise((resolve,reject)=>{
-            const url:string=this.ApiUrl+'/api/getGames';
-            const config:AxiosRequestConfig = {
-            }
-            const tmp:SelectOptions[]=[];
-            axios.get(url,config).then((res:AxiosResponse)=>{
-                //console.log(res.data);
-                res.data.map((itm:IGames)=>{
-                    const t:SelectOptions={
-                        label: itm.name,
-                        value: itm.id,
-                        GType: itm.GType
-                    }
-                    tmp.push(t);
-                })
-                resolve(tmp);
-            }).catch(err=>{
-                console.log('getGames error:',url,err);
-                reject();
-            }) 
-        });
-    }
     get Host(){
         return this.ApiUrl;
     }
+	async getGames():Promise<SelectOptions[] | undefined>{
+        const ans=await this.getApi('getGames');
+        const tmp:SelectOptions[]=[];
+        console.log('getGames:',ans);
+        if(ans.ErrNo===0){
+            const dta:any=ans.data;
+            console.log('getGames ans.data:',dta);
+            dta.map(itm=>{
+                const t:SelectOptions={
+                    label: itm.name,
+                    value: itm.id,
+                    GType: itm.GType
+                }
+                tmp.push(t);                
+            })
+            return tmp;
+        } else {
+            return;
+        }
+    }
+    async getBtClass(gid:number|string):Promise<IbtCls[] | undefined>{
+		//const url:string=this.store.ax.Host+'/api/getBtClass';
+		//const models:SelectOptions = this.models as SelectOptions;
+		const param:CommonParams={
+            GameID:gid
+        }
+        const ans=await this.getApi('getBtClass',param);
+        if(ans.ErrNo===0){
+            return ans.data as IbtCls[];
+        } else {
+            return;
+        }
+    }    
     async saveTerms(dtas:ITerms){
         const url:string=this.ApiUrl+'/api/saveTerms';
         return await axios.post(url,dtas)
@@ -181,7 +191,7 @@ class AxApi {
         })
         return msg;                
     }
-    async getApi(param:CommonParams,appName:string,method?:string):Promise<IMsg>{
+    async getApi(appName:string,param?:CommonParams,method?:string):Promise<IMsg>{
         const url:string=`${this.ApiUrl}/api/${appName}`;
         if(method==='post'){
             return await this.doPost(url,param);
@@ -210,13 +220,14 @@ class AxApi {
         });
     }
     doPost(url:string,param?:CommonParams):Promise<IMsg>{
-        const config:AxiosRequestConfig = {}
-        if(param){
-            config.params=param
+        //const config:AxiosRequestConfig = {}
+        if(!param){
+            //config.params=param
+            param={};
         }
         let msg:IMsg={ErrNo:0};
         return new Promise(async(resolve)=>{
-            await axios.post(url,config).then((res:AxiosResponse)=>{
+            await axios.post(url,param).then((res:AxiosResponse)=>{
                 msg=res.data;
             }).catch(err=>{
                 msg.ErrNo=9;

@@ -23,6 +23,7 @@ import axios, { AxiosRequestConfig,AxiosResponse} from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import { getModule } from 'vuex-module-decorators';
 import {IUser} from './data/schema';
+import { IMsg } from './data/if';
 
 @Components
 export default class Login extends Vue {
@@ -53,9 +54,10 @@ export default class Login extends Vue {
     const url:string=this.store.ax.Host+'/login';
     //console.log('login:',url);
     await axios.get(url,config).then((res:AxiosResponse)=>{
-      //console.log('login:',res.data);
-      if(res.data){
-        this.Personal = res.data;
+      const ans:IMsg=res.data as IMsg;
+      console.log('login:',ans);
+      if(ans.ErrNo===0){
+        this.Personal = ans.data as IUser;
         this.isLogin = true;
         this.$router.push({path:'/'});
       }
