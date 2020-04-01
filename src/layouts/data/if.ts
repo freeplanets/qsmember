@@ -24,7 +24,7 @@ export interface IbtCls {
 export interface BasePayRateItm {
     Title:string;
     SubTitle?:string;
-    BetType?:string;
+    BetType?:number;
     SubType?:number;
     Profit?:number;
     DfRate?:number;
@@ -33,7 +33,6 @@ export interface BasePayRateItm {
 	Steps?:number;
 	TopPay?:number;
     OneHand?:number;
-    PlusRate?:number;
 }
 export interface PayRateItm extends BasePayRateItm {
 	Rate?:number;
@@ -121,4 +120,5 @@ export interface CommonParams {
     isStop?:number;
     PageName?:string;
     Comments?:string;
+    BCName?:string;
 }

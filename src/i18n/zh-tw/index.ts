@@ -50,7 +50,7 @@ export default {
     SubName:"指定名稱",
     Profit:"利潤",
     RateDefault:"賠率",
-    PateTop:"賠率上限",
+    RateTop:"賠率上限",
     Probability:"機率",
     Steps:"跳動點",
     TopPay:"最高派彩",
@@ -112,7 +112,9 @@ export default {
     LastTenTerms: '最近10期',
     TodayAll: '今日全部',
     NumTotal: '和值',
-    NumAllTotal: '總數'
+    NumAllTotal: '總數',
+    Attention: '注意',
+    DelBCMsg: '是否要刪除分類'
   },
   CPassword: '新登入密碼確認',
   NPassword: '新登入密碼',

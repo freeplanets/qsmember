@@ -36,7 +36,7 @@ import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 import BTG from './data/defaultData';
-import { SelectOptions, ItmBtg, IbtCls,Btg} from './data/if';
+import { SelectOptions, ItmBtg, IbtCls,Btg,CommonParams} from './data/if';
 
 @Component
 export default class BetClass extends Vue{
@@ -127,11 +127,38 @@ export default class BetClass extends Vue{
 		if(ans.ErrNo===0){
 			this.getBtClass();
 			this.clear();
+			this.$q.dialog({
+				title: this.$t('Label.Save') as string,
+				message: 'OK!!'
+			});
 		}
 	}
 	async Delete(){
+		if(!this.mClass) return;
+		this.$q.dialog({
+			title: this.$t('Dialog.Attention') as string,
+			message: this.$t('Dialog.DelBCMsg') + ':' + this.mClass,
+			cancel:true,
+			persistent:true
+		}).onOk(()=>{
+			this.delBtClass();
+		});
+	}
+	async delBtClass(){
 		const models:SelectOptions = this.models as SelectOptions;
-		console.log('Delete',this.mClass);			
+		let GameID:number= models.value ? models.value as number : 0;
+		if(!GameID) return;
+		console.log('delBtClass',GameID,this.mClass);			
+		const param:CommonParams={
+			GameID: GameID,
+			BCName: this.mClass
+		}
+		const ans=await this.store.ax.getApi('delBtClass',param);
+		if(ans.ErrNo===0){
+			this.getBtClass();
+			this.clear();			
+		}
+		console.log(ans);
 	}
 	getUnGroupedBT(){
 		const slted:string[]=[];

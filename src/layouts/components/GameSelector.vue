@@ -1,5 +1,5 @@
 <template>
-    <div class="row q-pa-sm">
+    <div class="row q-pa-sm GS">
         <div class="talign" >{{ $t('Label.GameName')}}</div>
         <q-select square filled dense v-model="model" :options="options" style="width:200px"/>
     </div>
@@ -29,6 +29,7 @@ export default class GameSelector extends Vue {
         const ans:SelectOptions[] | undefined = await this.store.ax.getGames()
         if(ans){
             this.options = ans;
+            this.model = this.options[0];
         }
     }    
     mounted(){
@@ -37,6 +38,9 @@ export default class GameSelector extends Vue {
 }
 </script>
 <style scoped>
+.GS {
+    padding: 0;
+}
 .talign {
     text-align: center;
     line-height:48px;

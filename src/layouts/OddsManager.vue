@@ -2,7 +2,7 @@
     <div>
         <div class='row'>
             <div class='col-2'><GS :store='store' @setGames="setCurGames"></GS></div>
-            <div class='col'
+            <div class='col talign'
                  v-if="oddshow"
             >
                 <q-btn-group outline class='mtop'>
@@ -286,7 +286,8 @@ export default class OddsManager extends Vue {
 //})
 </script>
 <style scoped>
-.mtop { 
-    margin-top: 14px;
+.talign {
+    line-height:48px;
+    margin: auto;
 }
 </style>

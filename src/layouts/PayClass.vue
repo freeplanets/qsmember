@@ -40,7 +40,7 @@ import Component from 'vue-class-component';
 import axios,{ AxiosRequestConfig, AxiosResponse } from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import {IGames} from './data/schema';
+//import {IGames} from './data/schema';
 //import BTG from './data/defaultData';
 import {SelectOptions,PayRateItm} from './data/if';
 import BTG from './data/defaultData';
@@ -98,7 +98,12 @@ export default class BetClass extends Vue{
             this.ExpendPayClass = true;
         }
     }
-	getGames(){
+	async getGames(){
+        const ans =await this.store.ax.getGames();
+        if(ans){
+            this.options = ans;
+        }
+        /*
 		const url:string=this.store.ax.Host+'/api/getGames';
 		const config:AxiosRequestConfig = {
 		}
@@ -113,7 +118,8 @@ export default class BetClass extends Vue{
 				tmp.push(t);
 			})
 			if(tmp.length > 0) this.options = tmp;
-		})
+        })
+        */
     }
     async chkPayCls(v:SelectOptions){
         const gid:string = v.value as string;
@@ -160,7 +166,7 @@ export default class BetClass extends Vue{
             let itm:PayRateItm[] = tmp[key];
             //if(key=='1') console.log('itm',itm);
             itm.map((p:PayRateItm,i:number)=>{
-                p.BetType=key;
+                p.BetType=parseInt(key,10);
                 p.SubType =i;
                 //if(!p.Rate) p.Rate=0;
                 //if(p.BetType=='1') console.log('bb:',p);

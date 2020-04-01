@@ -15,10 +15,10 @@ class AxApi {
 	async getGames():Promise<SelectOptions[] | undefined>{
         const ans=await this.getApi('getGames');
         const tmp:SelectOptions[]=[];
-        console.log('getGames:',ans);
+        //console.log('getGames:',ans);
         if(ans.ErrNo===0){
             const dta:any=ans.data;
-            console.log('getGames ans.data:',dta);
+            //console.log('getGames ans.data:',dta);
             dta.map(itm=>{
                 const t:SelectOptions={
                     label: itm.name,

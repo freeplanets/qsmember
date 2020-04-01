@@ -86,10 +86,9 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import axios,{ AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios,{ AxiosResponse } from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import {IGames} from './data/schema';
 //import BTG from './data/defaultData';
 import {SelectOptions} from './data/if';
 interface PayClass {
@@ -166,10 +165,15 @@ export default class BetClass extends Vue{
         })
         //console.log('tab:',this.tab);
     }
-	getGames(){
+	async getGames(){
+        const ans=await this.store.ax.getGames();
+        if(ans){
+            this.options = ans;
+        }
+        /*
 		const url:string=this.store.ax.Host+'/api/getGames';
 		const config:AxiosRequestConfig = {
-		}
+        }
 		axios.get(url,config).then((res:AxiosResponse)=>{
 			//console.log(res.data);
 			const tmp:SelectOptions[]=[];
@@ -181,7 +185,8 @@ export default class BetClass extends Vue{
 				tmp.push(t);
 			})
 			if(tmp.length > 0) this.options = tmp;
-		})
+        })
+        */
     }
     SaveData(){
     }

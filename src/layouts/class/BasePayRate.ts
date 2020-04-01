@@ -16,6 +16,7 @@ export class BasePayRate<T>{
     protected olddata:T | any ;
     protected data:T |any ;
     private isDataChanged: boolean = false;
+    private isSelected:boolean = false;
     constructor(v:T | any){ 
         let d = {};
         let o = {};
@@ -37,8 +38,8 @@ export class BasePayRate<T>{
     get SubTitle():string | undefined {
         return this.data.SubTitle;
     }
-    get BetType():string{
-        return this.data.BetType ? this.data.BetType : '';
+    get BetType():number{
+        return this.data.BetType ? this.data.BetType : 0;
     }
     get SubType():number | undefined{
         return this.data.SubType;
@@ -109,13 +110,6 @@ export class BasePayRate<T>{
         this.data.OneHand = v;
         this.isDataChanged = true;
     }
-    get PlusRate(){
-        return this.data.PlusRate;
-    }
-    set PlusRate(v:number|undefined){
-        this.data.PlusRate = v;
-        this.isDataChanged = true;
-    }
     get Datas():T {
         return this.data;
     }
@@ -131,12 +125,28 @@ export class BasePayRate<T>{
     set DataChanged(v:boolean){
         this.isDataChanged = v;
     }
+    get Selected(){
+        return this.isSelected;
+    }
+    set Selected(v:boolean){
+        this.isSelected = v;
+    }
     public restoreData(){
         //this.data = this.olddata;
         Object.keys(this.data).map(key=>{
             this.data[key]=this.olddata[key];
         })
         this.isDataChanged = false;
+    }
+    updateRateTopByProfit(pft:number){
+        if(this.Probability){
+            this.TopRate = (1-pft/100)/this.Probability;
+        }
+    }
+    updateDefaultRateByProfit(pft:number){
+        if(this.Probability){
+            this.DfRate = (1-pft/100)/this.Probability;
+        }
     }
     protected fetchValueToSteps(v:number|undefined){
         if(v){

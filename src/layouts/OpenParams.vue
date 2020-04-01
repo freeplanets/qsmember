@@ -1,13 +1,13 @@
 <template>
 	<div>
 		<div class="row q-pa-sm">
-			<div class="col-1 text-h6">{{ $t('Label.GameName')}}</div>
-    		<div><q-select square filled dense v-model="game" :options="Games" style="width:200px"/></div>
-            <div><q-btn color="blue" icon-right="save" label="Save" @click="SaveData();" /></div>
+            <div class='col-2'><GS :store='store' @setGames="setCurGames"></GS></div>
+            <div class='col-1'><q-btn color="blue" icon-right="save" label="Save" @click="SaveData();" /></div>
 		</div>
         <div class="q-pa-md" v-if="model">
             <div class="row testheader">
                 <div class="col test">{{$t('Table.ItemName')}}</div>
+                <div class="col test">{{$t('Table.SubName')}}</div>
                 <div class="col test">{{$t('Table.TotalNums')}}</div>
                 <div class="col test">{{$t('Table.UseAvg')}}</div>
                 <div class="col test">{{$t('Table.SingleNum')}}</div>
@@ -20,6 +20,7 @@
                 :key="idx"
             >
                 <div class="col test">{{ itm.BTName }}</div>
+                <div class="col test">{{ itm.SubName }}</div>
                 <div class="col test"><q-input outlined dense v-model="itm.TotalNums" /></div>
                 <div class="col test"><q-checkbox v-model="itm.UseAvg" color="teal" /></div>
                 <div class="col test"><q-input outlined dense v-model="itm.SingleNum" /></div>
@@ -50,7 +51,9 @@ import {getModule} from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {SelectOptions,IMsg} from './data/if';
 import OpParams,{IOParam} from './class/OpParams';
-import {Orders} from './data/PayRateList';
+import {PayRateData} from './data/PayRateList';
+import GameSelector from './components/GameSelector.vue';
+Vue.component('GS',GameSelector);
 interface SItem  { 
     title: string, 
     shortT?: string,
@@ -70,6 +73,7 @@ export default class OpenParams extends Vue{
     private Params;
     private OpParams:OpParams[]=[];
     private model=false;
+    private gType:string='';
     public SuccessMsg:DialogMsg={
         icon:'check_circle',
         color:'green',
@@ -83,26 +87,19 @@ export default class OpenParams extends Vue{
         message:'Save Fail!!'
     }
     private Message:DialogMsg = Object.assign({},this.SuccessMsg);
-    set game(v:SelectOptions){
+    setCurGames(v:SelectOptions){
         this.curGame = v;
+        if(this.curGame.GType){
+            this.gType = this.curGame.GType;
+        }
         if(v.value){
-            this.getOpenParams(v.value);
-        }
-    }
-	get game(){
-        //console.log('get Model:', this.models);
-		return this.curGame as SelectOptions;
-    }
-    async getGames(){
-        let ans=await this.store.ax.getGames();
-        if(ans){
-            this.Games=ans;
-            this.model=true;
-        }
+            this.model = true;
+            this.getOpenParams(v.value as number);
+        }        
     }
     async SaveData(){
         console.log('SaveData');
-        let datas:IOParam[]=[];
+        const datas:IOParam[]=[];
         this.OpParams.map((itm:OpParams)=>{
             if(itm.DataChanged){
                 datas.push(itm.Datas);
@@ -126,47 +123,50 @@ export default class OpenParams extends Vue{
             itm.DataChanged = b;
         })
     }
-    async getOpenParams(GameID:number|string){
+    async getOpenParams(GameID:number){
         let msg:IMsg=await this.store.ax.getOpParams(GameID);
         console.log('getOpenParams',msg);
         this.OpParams=[];
         if(msg.ErrNo===0){
             if(msg.data){
-                let opparams:IOParam[]=msg.data as IOParam[];
-                let GType:string|undefined;
-                if(this.curGame){
-                    if(this.curGame.value==1){
-                        GType='MarkSix';
-                    }
-                }
-                if(GType){
-                    Orders[GType].map(itm=>{
-                        let f=opparams.find(p=>p.BetType===parseInt(itm,10));
-                        if(!f){
-                            let tmp:IOParam = {
-                                id:0,
-                                GameID:GameID as number,
-                                BetType:itm,
-                                TotalNums:0,
-                                UseAvg:0,
-                                SingleNum:0,
-                                UnionNum:0,
-                                MinHand:0,
-                                MaxHand:0,
-                                BetForChange:0,
-                                Steps:0
+                const opparams:IOParam[]=msg.data as IOParam[];
+                if(this.gType){
+                    const ops=PayRateData[this.gType].data;
+                    const orders=PayRateData[this.gType].order;
+                    orders.map(bt=>{
+                        ops[bt].map((itm,idx)=>{
+                            const ibt=parseInt(bt,10);
+                            let f=opparams.find(iop=>iop.BetType===ibt && iop.SubType===idx);
+                            if(!f){
+                                f=this.getDefaultIOP(GameID,ibt,idx);
                             }
-                            f=tmp;
-                        } 
-                        let S:any=this.$t(`Game.${GType}.Item.${f.BetType}`);
-                        let SI:SItem = S as SItem;
-                        let OPitm:OpParams=new OpParams(f);    
-                        OPitm.BTName = (SI.shortT && SI.subtitle ? SI.shortT + SI.subtitle.join('') : SI.title );
-                        this.OpParams.push(OPitm);
+                            let OPitm:OpParams=new OpParams(f);
+                            OPitm.BTName = itm.Title;
+                            OPitm.SubName = itm.SubTitle ? itm.SubTitle: '';
+                            this.OpParams.push(OPitm);
+                        })
                     })
+                    
                 }
             }
         }
+    }
+    getDefaultIOP(GameID:number,BetType:number,SubType:number):IOParam{
+        let tmp:IOParam = {
+            id:0,
+            GameID:GameID,
+            BetType:BetType,
+            SubType:SubType,
+            TotalNums:0,
+            UseAvg:0,
+            SingleNum:0,
+            UnionNum:0,
+            MinHand:0,
+            MaxHand:0,
+            BetForChange:0,
+            Steps:0
+        } 
+        return tmp;
     }
     mounted(){
         console.log('OpenParams mounted');
@@ -175,7 +175,6 @@ export default class OpenParams extends Vue{
         if(!this.store.isLogin){
             this.$router.push({path:'/login'});
         }
-        this.getGames();
     }
 }
 </script>

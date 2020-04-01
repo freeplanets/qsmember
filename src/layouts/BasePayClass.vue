@@ -1,37 +1,63 @@
 <template>
 	<div>
-		<div class="row q-pa-sm">
-			<div class="col-1 text-h6">{{ $t('Label.GameName')}}</div>
-    		<q-select square filled dense v-model="model" :options="options" style="width:200px"/>
-            <q-btn color="blue" icon-right="save" label="Save" @click="SaveData();" />
-		</div>
-        <div class="q-pa-md" v-if="model">
-            <div class="row testheader">
-                <div class="col test">{{$t('Table.ItemName')}}</div>
-                <div class="col test">{{$t('Table.SubName')}}</div>
-                <div class="col test">{{$t('Table.Profit')}}(%)</div>
-                <div class="col test">{{$t('Table.RateDefault')}}</div>
-                <div class="col test">{{$t('Table.PateTop')}}</div>
-                <div class="col test">{{$t('Table.Probability')}}</div>
-                <div class="col test">{{$t('Table.Steps')}}</div>
-                <div class="col test">{{$t('Table.TopPay')}}</div>
-                <div class="col test">{{$t('Table.OneHand')}}</div>
-                <div class="col test">{{$t('Table.PlusRate')}}</div>
+		<div class="row q-pa-sm ">
+            <div class='col-2'><GS :store='store' @setGames="setCurGames"></GS></div>
+            <div class='col-1 talign'><q-btn color="blue" icon-right="save" label="Save" @click="SaveData();" /></div>
+		    <div class='col talign'>
+                <q-btn-group>
+                    <q-btn 
+                        v-for="(itm,key) in BtClass"
+                        :key="'BtClass'+key"
+                        color="secondary" 
+                        glossy 
+                        :label="itm.BCName"
+                        @click="SltBetTypes(itm.BetTypes)"
+                         />
+                </q-btn-group>                
             </div>
-            <div class="row"
+		</div>
+        <div class="row profit">
+            <div class='col-3'>
+                賠率上限=(1 - 預定利潤
+                <input 
+                    maxlenght=2
+                    v-model="pfRateTop" />
+                %)/機率【轉換】
+                <q-btn round size="xs" color="primary" icon="autorenew" @click="updateRateTop()"/>
+            </div>
+            <div class='col-3'>利潤
+                <input
+                    maxlenght=2
+                    v-model="pfRate" />
+                %=(1-原始賠率 x 機率)x100【轉換】
+                <q-btn round size="xs" color="primary" icon="autorenew" @click="updateRateDefault()" />
+            </div>
+        </div>
+        <div class="q-pa-md" v-if="models">
+            <div class="row">
+                <div class="col-1 test testheader">{{$t('Table.ItemName')}}</div>
+                <div class="col-1 test testheader">{{$t('Table.SubName')}}</div>
+                <div class="col-1 test testheader">{{$t('Table.Profit')}}(%)</div>
+                <div class="col-1 test testheader">{{$t('Table.RateDefault')}}</div>
+                <div class="col-1 test testheader">{{$t('Table.RateTop')}}</div>
+                <div class="col-1 test testheader">{{$t('Table.Probability')}}</div>
+                <div class="col-1 test testheader">{{$t('Table.Steps')}}</div>
+                <div class="col-1 test testheader">{{$t('Table.TopPay')}}</div>
+                <div class="col-1 test testheader">{{$t('Table.OneHand')}}</div>
+            </div>
+            <div class="row datas"
                 v-for="(itm,idx) in BasePayR"
                 :key="idx"
             >
-                <div class="col test">{{ itm.Title }}</div>
-                <div class="col test">{{ itm.SubTitle }}</div>
-                <div class="col test">{{ itm.Profit }}</div>
-                <div class="col test"><q-input outlined dense v-model="itm.DfRate" @change="updateBPR()" /></div>
-                <div class="col test"><q-input outlined dense v-model="itm.TopRate" @change="updateBPR()" /></div>
-                <div class="col test"><q-input outlined dense v-model="itm.Probability" @change="updateBPR()" /></div>
-                <div class="col test"><q-input outlined dense v-model="itm.Steps" @change="updateBPR()" /></div>
-                <div class="col test"><q-input outlined dense v-model="itm.TopPay" @change="updateBPR()" /></div>
-                <div class="col test"><q-input outlined dense v-model="itm.OneHand" @change="updateBPR()" /></div>
-                <div class="col test"><q-input outlined dense v-model="itm.PlusRate" @change="updateBPR()" /></div>
+                <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.Title }}</div>
+                <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.SubTitle }}</div>
+                <div class="col-1 test">{{ itm.Profit }}</div>
+                <div class="col-1 test"><input v-model="itm.DfRate" @change="updateBPR()" /></div>
+                <div class="col-1 test"><input v-model="itm.TopRate" @change="updateBPR()" /></div>
+                <div class="col-1 test"><input v-model="itm.Probability" @change="updateBPR()" /></div>
+                <div class="col-1 test"><input v-model="itm.Steps" @change="updateBPR()" /></div>
+                <div class="col-1 test"><input v-model="itm.TopPay" @change="updateBPR()" /></div>
+                <div class="col-1 test"><input v-model="itm.OneHand" @change="updateBPR()" /></div>
             </div>
         </div>
 	</div>
@@ -42,13 +68,16 @@ import Component from 'vue-class-component';
 import axios,{ AxiosRequestConfig, AxiosResponse } from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import {IGames} from './data/schema';
+//import {IGames} from './data/schema';
 //import BTG from './data/defaultData';
-import {SelectOptions,BasePayRateItm} from './data/if';
+import {SelectOptions,BasePayRateItm,IbtCls} from './data/if';
 import BTG from './data/defaultData';
 import {PayRateData } from './data/PayRateList';
-import {BasePayRate} from './class/BasePayRate'
-import { cloneDeep } from 'lodash'
+import {BasePayRate} from './class/BasePayRate';
+import { cloneDeep } from 'lodash';
+import  GameSelector from './components/GameSelector.vue';
+Vue.component('GS',GameSelector);
+
 interface PayClass {
     id:number;
     PayClassName:string;
@@ -62,43 +91,25 @@ interface PostData {
 
 @Component
 export default class BetClass extends Vue{
-	private store = getModule(LayoutStoreModule);
-    private models:SelectOptions | null = null;
-    public BasePayR:BasePayRate<BasePayRateItm>[]=[];
+	store = getModule(LayoutStoreModule);
+    models:SelectOptions | null = null;
+    BasePayR:BasePayRate<BasePayRateItm>[]=[];
+    BtClass:IbtCls[] = [];
 	options:SelectOptions[] = [
 		{value: 0,label:'default'}
-	]
-
-	set model(v:SelectOptions){
-        this.models = v;
-        this.chkdata(v);
-	}
-	get model(){
-        //console.log('get Model:', this.models);
-		return this.models as SelectOptions;
-	}
+    ]
+    pfRateTop:number = 0;
+    pfRate:number = 0;
 	get UserID():string{
 		if(this.store.personal.id) {
 			return this.store.personal.id + '';
 		} 
 		return '';
-	}
-	getGames(){
-		const url:string=this.store.ax.Host+'/api/getGames';
-		const config:AxiosRequestConfig = {
-		}
-		axios.get(url,config).then((res:AxiosResponse)=>{
-			//console.log(res.data);
-			const tmp:SelectOptions[]=[];
-			res.data.map((itm:IGames)=>{
-				const t:SelectOptions={
-					label: itm.name,
-					value: itm.id
-				}
-				tmp.push(t);
-			})
-			if(tmp.length > 0) this.options = tmp;
-		})
+    }
+    setCurGames(v:SelectOptions){
+        this.models = v;
+        this.chkdata(v);
+        console.log('doGames',v);
     }
     async chkdata(v:SelectOptions){
         // console.log('chkdata:', v);
@@ -112,7 +123,7 @@ export default class BetClass extends Vue{
             let itm:BasePayRateItm[] = tmp[key];
             //if(key=='1') console.log('itm',itm);
             itm.map((p:BasePayRateItm,i:number)=>{
-                p.BetType=key;
+                p.BetType=parseInt(key,10);
                 p.SubType =i;
                 //if(p.BetType=='1') console.log('bb:',p);
                 this.BasePayR.push(new BasePayRate<BasePayRateItm>(p));
@@ -130,11 +141,30 @@ export default class BetClass extends Vue{
             })
             this.BasePayR=cloneDeep(this.BasePayR);
         }
+        await this.getBtClass();
         //console.log('PayRateData',tmp);
         // console.log('BasePayR before if:', this.BasePayR, this.BasePayR.length);
         //if(this.BasePayR.length==0) return;
 
     }
+	async getBtClass(){
+		const models:SelectOptions = this.models as SelectOptions;
+		this.BtClass=[];
+		if(models.value){
+			const ans = await this.store.ax.getBtClass(models.value)
+			if(ans){
+				ans.map((itm:IbtCls)=>{
+					this.BtClass.push(itm)
+                });
+                let df:IbtCls ={
+                    id:'',
+                    BCName:'C',
+                    BetTypes:''
+                }
+                this.BtClass.push(df);
+			}
+		}	
+	}    
     async getBasePayRate(gid:string|number){
         const url:string=this.store.ax.Host+'/api/getBasePayRate';
 		const config:AxiosRequestConfig = {
@@ -153,6 +183,37 @@ export default class BetClass extends Vue{
         //console.log('await 1',data);
         return data;
     }
+    updateRateTop(){
+        if(this.pfRateTop>0){
+            this.BasePayR.map(itm=>{
+                if(itm.Selected){
+                    itm.updateRateTopByProfit(this.pfRateTop);
+                }
+            })
+        }
+    }
+    updateRateDefault(){
+        if(this.pfRate>0){
+            this.BasePayR.map(itm=>{
+                if(itm.Selected){
+                    itm.updateDefaultRateByProfit(this.pfRate);
+                }
+            })
+        }
+    }
+    SltBetTypes(slt:string){
+        const bts:string[] = slt.split(':');
+        this.BasePayR.map(itm=>{
+            itm.Selected = false;
+        })
+        bts.map(bt=>{
+            const  f=this.BasePayR.find(bpr=>bpr.BetType===parseInt(bt,10));
+            if(f){
+                f.Selected = true;
+            }
+        })
+        //console.log('SltBetTypes',bts);
+    }
     SaveData(){
         const dtas:BasePayRateItm[] = [];
         this.BasePayR.map(itm=>{
@@ -165,9 +226,9 @@ export default class BetClass extends Vue{
         }
     }
     sendData(dtas:BasePayRateItm[]){
-        if(!this.model) return;
+        if(!this.models) return;
  		const data = {
-			GameID: this.model.value,
+			GameID: this.models.value,
             ModifyID: this.UserID,
             data: JSON.stringify(dtas)
 		}
@@ -191,12 +252,11 @@ export default class BetClass extends Vue{
         if(!this.store.isLogin){
         this.$router.push({path:'/login'});
         }      
-        this.getGames();
         this.BasePayR=[];
   }
 }
 </script>
-<style>
+<style scoped>
 .testheader {
     background-color: cadetblue;
     color:white;
@@ -205,5 +265,21 @@ export default class BetClass extends Vue{
     border: 1px gray solid;
     text-align: center;
     vertical-align: center;
+}
+.bgc {
+    background-color:lightseagreen;
+    color:white;
+}
+.talign {
+    text-align: center;
+    line-height:48px;
+    margin: auto;
+}
+.profit input {
+   height: 20px !important;
+   max-width: 40px;
+}
+.datas input {
+    width: 100%;
 }
 </style>
