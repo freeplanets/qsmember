@@ -50,16 +50,16 @@
                 v-for="(itm,idx) in BasePayR"
                 :key="idx"
             >
-                <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.Title }}</div>
-                <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.SubTitle }}</div>
+                <div :class="{'col-1':true,test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.Title }}</div>
+                <div :class="{'col-1':true,test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.SubTitle }}</div>
                 <div class="col-1 test"><q-checkbox v-model="itm.NoAdjust" color="teal" /></div>
                 <div class="col-1 test">{{ itm.Profit }}</div>
-                <div class="col-1 test"><input v-model="itm.DfRate"  /></div>
-                <div class="col-1 test"><input v-model="itm.TopRate"  /></div>
-                <div class="col-1 test"><input v-model="itm.Probability"  /></div>
-                <div class="col-1 test"><input v-model="itm.Steps"  /></div>
-                <div class="col-1 test"><input v-model="itm.TopPay"  /></div>
-                <div class="col-1 test"><input v-model="itm.OneHand"  /></div>
+                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.DfRate"  /></div>
+                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.TopRate"  /></div>
+                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.Probability"  /></div>
+                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.Steps"  /></div>
+                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.TopPay"  /></div>
+                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.OneHand"  /></div>
             </div>
         </div>
 	</div>
