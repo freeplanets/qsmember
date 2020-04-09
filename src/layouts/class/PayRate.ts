@@ -1,4 +1,5 @@
 import {PayRateItm} from '../data/if';
+//import BClass from './BClass';
 import {BasePayRate} from './BasePayRate';
 export class PayRate extends BasePayRate<PayRateItm> {
     constructor(v:PayRateItm){

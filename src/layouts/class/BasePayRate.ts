@@ -1,29 +1,27 @@
-/**
- *     Title:string;
-    SubTitle?:string;
-    BT?:string;
-    SubType?:number;
-    Profit?:number;
-    RateDefault?:number;
-    RateTop?:number;
-    Probability?:number;
-    Steps?:number;
- */
+import BClass from './BClass';
+import {fixlen} from '../components/func';
+/*
 interface T {
     [n:string]: string | number | undefined;
 }
+*/
 export class BasePayRate<T>{
     protected olddata:T | any ;
     protected data:T |any ;
     private isDataChanged: boolean = false;
     private isSelected:boolean = false;
+    private BC:BClass<T>;
     constructor(v:T | any){ 
+        this.BC=new BClass(v);
+        this.data = this.BC.Datas;
+        /*
         let d = {};
         let o = {};
         Object.assign(d,v);
         Object.assign(o,v);
         this.data = d;
         this.olddata = o;
+        */
         /*
         Object.keys(v).map(key=>{
             //if(v.BetType=='1') console.log('',key);
@@ -44,7 +42,15 @@ export class BasePayRate<T>{
     get SubType():number | undefined{
         return this.data.SubType;
     }
-
+    get NoAdjust():boolean {
+        //console.log('get NoAdjust:',this.data.NoAdjust);
+        return this.data.NoAdjust===1;
+    }
+    set NoAdjust(v:boolean){
+        this.data.NoAdjust = (v ? 1 : 0);
+        this.isDataChanged=true;
+        //console.log('set NoAdjust:',v,this.data.NoAdjust);
+    }
     get Profit():any {
         //console.log('get Profit',this.data.Profit);
         if(this.data.Profit){
@@ -114,10 +120,15 @@ export class BasePayRate<T>{
         return this.data;
     }
     set Datas(v:T){
+        this.BC.Datas = v;
+        this.data = this.BC.Datas;
+        this.DataChanged = this.BC.DataChanged;
+        /*
         Object.keys(v).map(key=>{
             this.data[key]=v[key];
             this.olddata[key]=v[key];
         })
+        */
     }
     get DataChanged() {
         return this.isDataChanged;
@@ -133,9 +144,13 @@ export class BasePayRate<T>{
     }
     public restoreData(){
         //this.data = this.olddata;
+        /*
         Object.keys(this.data).map(key=>{
             this.data[key]=this.olddata[key];
         })
+        */
+        this.BC.restoreData();
+        this.data=this.BC.Datas;
         this.isDataChanged = false;
     }
     updateRateTopByProfit(pft:number){
@@ -154,7 +169,8 @@ export class BasePayRate<T>{
                 //v=parseFloat(v.toPrecision(6));
                 if(this.data.Steps <=0) return v;
                 //if(typeof v ==='string') v=parseFloat(v);
-                const a = (Math.round(v/this.data.Steps)*this.data.Steps).toPrecision(12);
+                const ba=fixlen(this.data.Steps);
+                const a = (Math.round(v/this.data.Steps)*this.data.Steps).toFixed(ba);
                 //console.log('fetchValueToSteps',a,v,this.data.Steps,typeof v,typeof this.data.Steps,Math.floor(v/this.data.Steps)*this.data.Steps);
                 return parseFloat(a);
             }

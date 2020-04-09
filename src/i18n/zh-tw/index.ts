@@ -46,8 +46,9 @@ export default {
     OddsManager:'控盤'
   },
   Table: {
-    ItemName:"項目名稱",
-    SubName:"指定名稱",
+    ItemName: "項目名稱",
+    SubName: "指定名稱",
+    NoAdjust: "不調盤",
     Profit:"利潤",
     RateDefault:"賠率",
     RateTop:"賠率上限",
@@ -75,11 +76,12 @@ export default {
     Levels: '層級',
     CreateDate: '新增日期',
     TotalNums:'號數',
-    UseAvg:'使用平均值',
+    UseAvg:'平均值押碼',
     SingleNum:'單碼上限',
     UnionNum:'連碼上限',
     MinHand:'最小單注',
     MaxHand:'最大單注',
+    UseAvgOdds:'使用均成本(或最小)',
     GType:"遊戲代號"
   },
   Title: {

@@ -58,16 +58,20 @@ export interface ITerms {
 }
 
 export interface Game {
-    id?:number;
+    id:number;
     name:string;
-    StopBeforeEnd:string;
-    BothSideAdjust:boolean;
-    AutoOpen:boolean;
+    OfficeSite:string;
+    StopBeforeEnd:number;
+    BothSideAdjust:number;
+    AutoOpen:number;
     PDiffTwoSide:number;
     PDiffColorWave:number;
     DelAfterBet:number;
     DelBeforeEnd:number;
+    /*
     LowestBet:number;
     TopPay:number;
+    */
+    UseAvgOdds:number;
     GType:string;
 }

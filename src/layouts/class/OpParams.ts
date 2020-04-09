@@ -3,7 +3,6 @@ export interface IOParam {
     id:number;
     GameID:number;
     BetType:number;
-    SubType:number;
     TotalNums:number;
     UseAvg:number;
     SingleNum:number;
@@ -15,7 +14,6 @@ export interface IOParam {
 }
 export default class OpParams extends BClass<IOParam>{
     private BetName:string='';
-    private sSubName:string='';
     constructor(data:IOParam){
         super(data);
     }
@@ -24,12 +22,6 @@ export default class OpParams extends BClass<IOParam>{
     }
     set BTName(val:string){
         this.BetName=val;
-    }
-    get SubName():string {
-        return this.sSubName;
-    }
-    set SubName(v:string) {
-        this.sSubName = v;
     }
     get TotalNums():number {
         return this.data.TotalNums;

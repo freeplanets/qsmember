@@ -26,6 +26,7 @@ export interface BasePayRateItm {
     SubTitle?:string;
     BetType?:number;
     SubType?:number;
+    NoAdjust?:number;
     Profit?:number;
     DfRate?:number;
     TopRate?:number;

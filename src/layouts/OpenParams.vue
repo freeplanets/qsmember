@@ -2,12 +2,11 @@
 	<div>
 		<div class="row q-pa-sm">
             <div class='col-2'><GS :store='store' @setGames="setCurGames"></GS></div>
-            <div class='col-1'><q-btn color="blue" icon-right="save" label="Save" @click="SaveData();" /></div>
+            <div class='col-1 talign'><q-btn color="blue" icon-right="save" label="Save" @click="SaveData();" /></div>
 		</div>
         <div class="q-pa-md" v-if="model">
             <div class="row testheader">
                 <div class="col test">{{$t('Table.ItemName')}}</div>
-                <div class="col test">{{$t('Table.SubName')}}</div>
                 <div class="col test">{{$t('Table.TotalNums')}}</div>
                 <div class="col test">{{$t('Table.UseAvg')}}</div>
                 <div class="col test">{{$t('Table.SingleNum')}}</div>
@@ -20,7 +19,6 @@
                 :key="idx"
             >
                 <div class="col test">{{ itm.BTName }}</div>
-                <div class="col test">{{ itm.SubName }}</div>
                 <div class="col test"><q-input outlined dense v-model="itm.TotalNums" /></div>
                 <div class="col test"><q-checkbox v-model="itm.UseAvg" color="teal" /></div>
                 <div class="col test"><q-input outlined dense v-model="itm.SingleNum" /></div>
@@ -131,32 +129,30 @@ export default class OpenParams extends Vue{
             if(msg.data){
                 const opparams:IOParam[]=msg.data as IOParam[];
                 if(this.gType){
-                    const ops=PayRateData[this.gType].data;
+                    //const ops=PayRateData[this.gType].data;
                     const orders=PayRateData[this.gType].order;
                     orders.map(bt=>{
-                        ops[bt].map((itm,idx)=>{
+                        //ops[bt].map((itm,idx)=>{
                             const ibt=parseInt(bt,10);
-                            let f=opparams.find(iop=>iop.BetType===ibt && iop.SubType===idx);
+                            let f=opparams.find(iop=>iop.BetType===ibt);
                             if(!f){
-                                f=this.getDefaultIOP(GameID,ibt,idx);
+                                f=this.getDefaultIOP(GameID,ibt);
                             }
                             let OPitm:OpParams=new OpParams(f);
-                            OPitm.BTName = itm.Title;
-                            OPitm.SubName = itm.SubTitle ? itm.SubTitle: '';
+                            OPitm.BTName = this.$t(`Game.${this.gType}.Item.${bt}.title`) as string;
                             this.OpParams.push(OPitm);
-                        })
+                        //})
                     })
                     
                 }
             }
         }
     }
-    getDefaultIOP(GameID:number,BetType:number,SubType:number):IOParam{
+    getDefaultIOP(GameID:number,BetType:number):IOParam{
         let tmp:IOParam = {
             id:0,
             GameID:GameID,
             BetType:BetType,
-            SubType:SubType,
             TotalNums:0,
             UseAvg:0,
             SingleNum:0,
@@ -187,5 +183,9 @@ export default class OpenParams extends Vue{
     border: 1px gray solid;
     text-align: center;
     vertical-align: center;
+}
+.talign {
+    text-align: center;
+    line-height:48px;
 }
 </style>

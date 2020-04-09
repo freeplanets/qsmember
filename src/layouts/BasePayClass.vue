@@ -37,6 +37,7 @@
             <div class="row">
                 <div class="col-1 test testheader">{{$t('Table.ItemName')}}</div>
                 <div class="col-1 test testheader">{{$t('Table.SubName')}}</div>
+                <div class="col-1 test testheader">{{$t('Table.NoAdjust')}}</div>
                 <div class="col-1 test testheader">{{$t('Table.Profit')}}(%)</div>
                 <div class="col-1 test testheader">{{$t('Table.RateDefault')}}</div>
                 <div class="col-1 test testheader">{{$t('Table.RateTop')}}</div>
@@ -51,13 +52,14 @@
             >
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.Title }}</div>
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.SubTitle }}</div>
+                <div class="col-1 test"><q-checkbox v-model="itm.NoAdjust" color="teal" /></div>
                 <div class="col-1 test">{{ itm.Profit }}</div>
-                <div class="col-1 test"><input v-model="itm.DfRate" @change="updateBPR()" /></div>
-                <div class="col-1 test"><input v-model="itm.TopRate" @change="updateBPR()" /></div>
-                <div class="col-1 test"><input v-model="itm.Probability" @change="updateBPR()" /></div>
-                <div class="col-1 test"><input v-model="itm.Steps" @change="updateBPR()" /></div>
-                <div class="col-1 test"><input v-model="itm.TopPay" @change="updateBPR()" /></div>
-                <div class="col-1 test"><input v-model="itm.OneHand" @change="updateBPR()" /></div>
+                <div class="col-1 test"><input v-model="itm.DfRate"  /></div>
+                <div class="col-1 test"><input v-model="itm.TopRate"  /></div>
+                <div class="col-1 test"><input v-model="itm.Probability"  /></div>
+                <div class="col-1 test"><input v-model="itm.Steps"  /></div>
+                <div class="col-1 test"><input v-model="itm.TopPay"  /></div>
+                <div class="col-1 test"><input v-model="itm.OneHand"  /></div>
             </div>
         </div>
 	</div>
@@ -74,7 +76,7 @@ import {SelectOptions,BasePayRateItm,IbtCls} from './data/if';
 import BTG from './data/defaultData';
 import {PayRateData } from './data/PayRateList';
 import {BasePayRate} from './class/BasePayRate';
-import { cloneDeep } from 'lodash';
+//import { cloneDeep } from 'lodash';
 import  GameSelector from './components/GameSelector.vue';
 Vue.component('GS',GameSelector);
 
@@ -88,7 +90,11 @@ interface PostData {
     ModifyID:string;
     id?:number;
 }
-
+interface BItem {
+    Title:string;
+    SubTitle?:string;
+    Filter?:string;
+}
 @Component
 export default class BetClass extends Vue{
 	store = getModule(LayoutStoreModule);
@@ -120,18 +126,18 @@ export default class BetClass extends Vue{
         let itms:BasePayRateItm[];
         //console.log('tmp',tmp);
         order.map(key=>{
-            let itm:BasePayRateItm[] = tmp[key];
+            let itm:BItem[] = tmp[key];
             //if(key=='1') console.log('itm',itm);
-            itm.map((p:BasePayRateItm,i:number)=>{
-                p.BetType=parseInt(key,10);
-                p.SubType =i;
+            itm.map((p:BItem,i:number)=>{
+                const BetType:number=parseInt(key,10);
+                const SubType:number=i;
+                const bpr:BasePayRateItm=this.createBPRItem(p,BetType,SubType);
                 //if(p.BetType=='1') console.log('bb:',p);
-                this.BasePayR.push(new BasePayRate<BasePayRateItm>(p));
+                this.BasePayR.push(new BasePayRate<BasePayRateItm>(bpr));
             })
         });
-        //console.log('BasePayR:',this.BasePayR)
         itms=await this.getBasePayRate(gid);
-        //console.log('getBasePayRate itms:',itms);
+        console.log('getBasePayRate itms:',itms);
         if(itms.length>0){
             itms.map(itm=>{
                 const e = this.BasePayR.find(elm => elm.BetType == itm.BetType && elm.SubType == itm.SubType)
@@ -139,13 +145,31 @@ export default class BetClass extends Vue{
                     e.Datas= itm
                 }
             })
-            this.BasePayR=cloneDeep(this.BasePayR);
+            //this.BasePayR=cloneDeep(this.BasePayR);
         }
+        //console.log('BasePayR:',this.BasePayR)
         await this.getBtClass();
         //console.log('PayRateData',tmp);
         // console.log('BasePayR before if:', this.BasePayR, this.BasePayR.length);
         //if(this.BasePayR.length==0) return;
 
+    }
+    createBPRItem(p:BItem,BetType:number,SubType:number):BasePayRateItm{
+        let bpr:BasePayRateItm ={
+            Title:p.Title,
+            SubTitle: p.SubTitle ? p.SubTitle : '',
+            BetType: BetType,
+            SubType: SubType,
+            NoAdjust:0,
+            Profit:0,
+            DfRate:0,
+            TopRate:0,
+            Probability:0,
+            Steps:0,
+            TopPay:0,
+            OneHand:0
+        }
+        return bpr;
     }
 	async getBtClass(){
 		const models:SelectOptions = this.models as SelectOptions;
@@ -245,9 +269,11 @@ export default class BetClass extends Vue{
 			console.log(err);
 		})       
     }
+    /*
     updateBPR(){
         this.BasePayR=cloneDeep(this.BasePayR);
     }
+    */
   mounted(){
         if(!this.store.isLogin){
         this.$router.push({path:'/login'});
@@ -276,7 +302,6 @@ export default class BetClass extends Vue{
     margin: auto;
 }
 .profit input {
-   height: 20px !important;
    max-width: 40px;
 }
 .datas input {
