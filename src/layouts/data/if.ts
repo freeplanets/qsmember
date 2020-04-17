@@ -122,4 +122,9 @@ export interface CommonParams {
     PageName?:string;
     Comments?:string;
     BCName?:string;
+    findString?:string;
+    userType?:number;
+    ModifyID?:number;
+    data?:any;
+    PayClassName?:string;
 }

@@ -11,9 +11,9 @@ export default {
     BasePayRate:"基本盤",
     RefPayRate:"參考分盤",
     CratePayClass:"新增分盤",
-    PayClassFunc: "基本盤賠率差,基本盤利潤差,固定利潤,浮動利潤",
+    PayClassFunc: "基本盤賠率比,基本盤利潤差,固定利潤,浮動利潤",
     RateDiff:"賠率差距",
-    RateDiffInfo:"正值表示分盤賠率比基本盤高，負值表示比基本盤低",
+    RateDiffInfo:"正數,表示分盤賠率佔基本盤比率不可以小於90",
     ProfitDiff:"利潤差距",
     ProfitDiffInfo:"正值表示利潤比基本盤高，負值表示比基本盤低",
     FixProfit:"固定利潤",
@@ -35,6 +35,7 @@ export default {
     GameManager:"彩票管理",
     SPEndTime:"特碼截止時間",
     AddUser:"新增用戶",
+    UserManager:"用戶管理",
     Member:'會員',
     Agent:'代理',
     WebOwner:'網站站主',
@@ -44,6 +45,9 @@ export default {
     Settled:['','己結帳'],
     OpenParams:'開盤參數',
     OddsManager:'控盤'
+  },
+  Tip:{
+    UserFind: "請輸入名稱或代號"
   },
   Table: {
     ItemName: "項目名稱",
@@ -82,7 +86,8 @@ export default {
     MinHand:'最小單注',
     MaxHand:'最大單注',
     UseAvgOdds:'使用均成本(或最小)',
-    GType:"遊戲代號"
+    GType:"遊戲代號",
+    GameItems:'遊戲項目'
   },
   Title: {
     Dashboard: '大廳',

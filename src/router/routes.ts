@@ -36,7 +36,7 @@ const routes: RouteConfig[] = [
       },
       {
         path: '/adduser',
-        component: () => import('layouts/AddUser.vue')
+        component: () => import('layouts/UserManager.vue')
       }, 
       {
         path: '/openparams',

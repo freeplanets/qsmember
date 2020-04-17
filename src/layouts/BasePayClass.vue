@@ -1,38 +1,15 @@
 <template>
 	<div>
-		<div class="row q-pa-sm ">
+		<div class="row q-pa-sm">
             <div class='col-2'><GS :store='store' @setGames="setCurGames"></GS></div>
-            <div class='col-1 talign'><q-btn color="blue" icon-right="save" label="Save" @click="SaveData();" /></div>
-		    <div class='col talign'>
-                <q-btn-group>
-                    <q-btn 
-                        v-for="(itm,key) in BtClass"
-                        :key="'BtClass'+key"
-                        color="secondary" 
-                        glossy 
-                        :label="itm.BCName"
-                        @click="SltBetTypes(itm.BetTypes)"
-                         />
-                </q-btn-group>                
+            <div class='pbtn'><q-btn color="blue" icon-right="save" label="Save" @click="SaveData();" /></div>
+		    <div class='col' 
+                v-if='curGameID'
+                >
+                <BTC :store='store' :GameID='curGameID' @SltBT='SltBetTypes' ></BTC>
             </div>
 		</div>
-        <div class="row profit">
-            <div class='col-3'>
-                賠率上限=(1 - 預定利潤
-                <input 
-                    maxlenght=2
-                    v-model="pfRateTop" />
-                %)/機率【轉換】
-                <q-btn round size="xs" color="primary" icon="autorenew" @click="updateRateTop()"/>
-            </div>
-            <div class='col-3'>利潤
-                <input
-                    maxlenght=2
-                    v-model="pfRate" />
-                %=(1-原始賠率 x 機率)x100【轉換】
-                <q-btn round size="xs" color="primary" icon="autorenew" @click="updateRateDefault()" />
-            </div>
-        </div>
+        <RCO :showUpLimit='true' @updateRateTop="updateRateTop" @updateRateDefault="updateRateDefault"></RCO>
         <div class="q-pa-md" v-if="models">
             <div class="row">
                 <div class="col-1 test testheader">{{$t('Table.ItemName')}}</div>
@@ -54,7 +31,7 @@
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.SubTitle }}</div>
                 <div class="col-1 test"><q-checkbox v-model="itm.NoAdjust" color="teal" /></div>
                 <div class="col-1 test">{{ itm.Profit }}</div>
-                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.DfRate"  /></div>
+                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.Rate"  /></div>
                 <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.TopRate"  /></div>
                 <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.Probability"  /></div>
                 <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.Steps"  /></div>
@@ -67,18 +44,22 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import axios,{ AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios,{AxiosResponse } from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import {IGames} from './data/schema';
 //import BTG from './data/defaultData';
-import {SelectOptions,BasePayRateItm,IbtCls} from './data/if';
+import {SelectOptions,BasePayRateItm,IbtCls,CommonParams,IMsg} from './data/if';
 import BTG from './data/defaultData';
 import {PayRateData } from './data/PayRateList';
 import {BasePayRate} from './class/BasePayRate';
 //import { cloneDeep } from 'lodash';
-import  GameSelector from './components/GameSelector.vue';
+import GameSelector from './components/GameSelector.vue';
+import BetTypeClass from './components/BetTypeClass.vue';
+import RateChangeOption from './components/RateChangeOption.vue';
 Vue.component('GS',GameSelector);
+Vue.component('BTC',BetTypeClass);
+Vue.component('RCO',RateChangeOption);
 
 interface PayClass {
     id:number;
@@ -100,12 +81,11 @@ export default class BetClass extends Vue{
 	store = getModule(LayoutStoreModule);
     models:SelectOptions | null = null;
     BasePayR:BasePayRate<BasePayRateItm>[]=[];
+    curGameID:number|null=null;
     BtClass:IbtCls[] = [];
 	options:SelectOptions[] = [
 		{value: 0,label:'default'}
     ]
-    pfRateTop:number = 0;
-    pfRate:number = 0;
 	get UserID():string{
 		if(this.store.personal.id) {
 			return this.store.personal.id + '';
@@ -119,8 +99,9 @@ export default class BetClass extends Vue{
     }
     async chkdata(v:SelectOptions){
         // console.log('chkdata:', v);
-        const gid:string = v.value as string;
-        const btg=BTG[gid];
+        //const gid:string = v.value as string;
+        this.curGameID = v.value as number;
+        const btg=BTG[this.curGameID];
         const tmp:object=PayRateData[btg].data;
         const order:string[]=PayRateData[btg].order;
         let itms:BasePayRateItm[];
@@ -136,8 +117,8 @@ export default class BetClass extends Vue{
                 this.BasePayR.push(new BasePayRate<BasePayRateItm>(bpr));
             })
         });
-        itms=await this.getBasePayRate(gid);
-        console.log('getBasePayRate itms:',itms);
+        itms=await this.getBasePayRate(this.curGameID);
+        //console.log('getBasePayRate itms:',itms);
         if(itms.length>0){
             itms.map(itm=>{
                 const e = this.BasePayR.find(elm => elm.BetType == itm.BetType && elm.SubType == itm.SubType)
@@ -148,7 +129,6 @@ export default class BetClass extends Vue{
             //this.BasePayR=cloneDeep(this.BasePayR);
         }
         //console.log('BasePayR:',this.BasePayR)
-        await this.getBtClass();
         //console.log('PayRateData',tmp);
         // console.log('BasePayR before if:', this.BasePayR, this.BasePayR.length);
         //if(this.BasePayR.length==0) return;
@@ -170,57 +150,32 @@ export default class BetClass extends Vue{
             OneHand:0
         }
         return bpr;
-    }
-	async getBtClass(){
-		const models:SelectOptions = this.models as SelectOptions;
-		this.BtClass=[];
-		if(models.value){
-			const ans = await this.store.ax.getBtClass(models.value)
-			if(ans){
-				ans.map((itm:IbtCls)=>{
-					this.BtClass.push(itm)
-                });
-                let df:IbtCls ={
-                    id:'',
-                    BCName:'C',
-                    BetTypes:''
-                }
-                this.BtClass.push(df);
-			}
-		}	
-	}    
-    async getBasePayRate(gid:string|number){
-        const url:string=this.store.ax.Host+'/api/getBasePayRate';
-		const config:AxiosRequestConfig = {
-            params: {
-                GameID: gid
-            }
+    }  
+    async getBasePayRate(gid:number):Promise<BasePayRateItm[]>{
+        let dta:BasePayRateItm[]=[];
+        const param:CommonParams = {
+            GameID: gid
         }
-        let data;
-        await axios.get(url,config).then((res:AxiosResponse)=>{
-            //console.log('await ',res)
-            data= res.data;
-        }).catch(err=>{
-            //console.log('getBasePayRate error',err);
-            data= err;
-        })
-        //console.log('await 1',data);
-        return data;
+        let msg:IMsg = await this.store.ax.getApi('getBasePayRate',param);
+        if(msg.ErrNo==0){
+            dta=msg.data as BasePayRateItm[]; 
+        }
+        return dta;
     }
-    updateRateTop(){
-        if(this.pfRateTop>0){
+    updateRateTop(v:number){
+        if(v>0){
             this.BasePayR.map(itm=>{
                 if(itm.Selected){
-                    itm.updateRateTopByProfit(this.pfRateTop);
+                    itm.updateRateTopByProfit(v);
                 }
             })
         }
     }
-    updateRateDefault(){
-        if(this.pfRate>0){
+    updateRateDefault(v:number){
+        if(v>0){
             this.BasePayR.map(itm=>{
                 if(itm.Selected){
-                    itm.updateDefaultRateByProfit(this.pfRate);
+                    itm.updateDefaultRateByProfit(v);
                 }
             })
         }
@@ -258,7 +213,13 @@ export default class BetClass extends Vue{
 		}
         const url:string=this.store.ax.Host+'/api/batch/saveBasePayRate';
 		axios.post(url,data).then((res:AxiosResponse)=>{
-            console.log(res.data);
+            //console.log(res.data);
+            if(res.data.affectedRows>0){
+                this.$q.dialog({
+                    title: this.$t('Label.Save') as string,
+                    message: 'OK!!'
+                });
+            }            
             dtas.map(itm=>{
                 const tmp = this.BasePayR.find(elm => elm.BetType == itm.BetType && elm.SubType == itm.SubType)
                 if(tmp){
@@ -283,6 +244,9 @@ export default class BetClass extends Vue{
 }
 </script>
 <style scoped>
+.pbtn {
+    padding: 6px 4px;
+}
 .testheader {
     background-color: cadetblue;
     color:white;
@@ -290,19 +254,11 @@ export default class BetClass extends Vue{
 .test {
     border: 1px gray solid;
     text-align: center;
-    vertical-align: center;
+    vertical-align: middle;
 }
 .bgc {
     background-color:lightseagreen;
     color:white;
-}
-.talign {
-    text-align: center;
-    line-height:48px;
-    margin: auto;
-}
-.profit input {
-   max-width: 40px;
 }
 .datas input {
     width: 100%;

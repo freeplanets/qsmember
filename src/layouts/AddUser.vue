@@ -189,11 +189,6 @@ export default class AddUser extends Vue{
       //console.log('getUsers',ans);
     }
 
-    /*
-    async getPayClass(){
-      const ax=this.store.ax;
-    }
-    */
     mounted(){
       if(!this.store.isLogin){
         this.$router.push({path:'/login'});

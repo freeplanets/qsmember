@@ -10,10 +10,12 @@ export interface IUser {
     DfKey?: string;
     UpId?: number;
     PayClassID?: number;
+    Payclass?:string;
     Deposit?:number;
     Withdraw?:number;
     CreateDate?: string;
     ModifyDate?: string;
+    ModifyID?:number;
     CDate?: Date;
 }
 

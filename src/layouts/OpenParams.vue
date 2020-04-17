@@ -96,7 +96,7 @@ export default class OpenParams extends Vue{
         }        
     }
     async SaveData(){
-        console.log('SaveData');
+        //console.log('SaveData');
         const datas:IOParam[]=[];
         this.OpParams.map((itm:OpParams)=>{
             if(itm.DataChanged){
@@ -104,12 +104,12 @@ export default class OpenParams extends Vue{
             }
         })
         if(datas.length>0){
-            console.log('SaveData:',datas);
+            //console.log('SaveData:',datas);
             let msg=await this.store.ax.SaveData('OpenParams',JSON.stringify(datas));
-            console.log('SaveData:',msg);
+            //console.log('SaveData:',msg);
             if(msg.ErrNo===0){
                 this.Message=Object.assign(this.Message,this.SuccessMsg);
-                console.log('change message',this.Message,this.SuccessMsg);
+                //console.log('change message',this.Message,this.SuccessMsg);
                 this.setDataChange(false);
             } else {
                 this.Message=Object.assign(this.Message,this.FailMsg);
@@ -123,7 +123,7 @@ export default class OpenParams extends Vue{
     }
     async getOpenParams(GameID:number){
         let msg:IMsg=await this.store.ax.getOpParams(GameID);
-        console.log('getOpenParams',msg);
+        //console.log('getOpenParams',msg);
         this.OpParams=[];
         if(msg.ErrNo===0){
             if(msg.data){
@@ -165,7 +165,7 @@ export default class OpenParams extends Vue{
         return tmp;
     }
     mounted(){
-        console.log('OpenParams mounted');
+        //console.log('OpenParams mounted');
         this.Message.show=false;
         this.Message.message='check';
         if(!this.store.isLogin){
@@ -182,7 +182,7 @@ export default class OpenParams extends Vue{
 .test {
     border: 1px gray solid;
     text-align: center;
-    vertical-align: center;
+    vertical-align: middle;
 }
 .talign {
     text-align: center;

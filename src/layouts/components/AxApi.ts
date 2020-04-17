@@ -46,8 +46,9 @@ class AxApi {
         }
     }    
     async saveTerms(dtas:ITerms){
-        const url:string=this.ApiUrl+'/api/saveTerms';
-        return await axios.post(url,dtas)
+        //const url:string=this.ApiUrl+'/api/saveTerms';
+        //console.log('saveTerms',dtas);
+        return await this.getApi('saveTerms',dtas,'post');
     }
     async createBetItems(dtas:CBetItems){
         let ans;
@@ -115,8 +116,14 @@ class AxApi {
         })           
         return ans;        
     }
-    async getUsers(){
-        let ans;
+    async getUsers(f?:CommonParams){
+        let ans:IMsg;
+        ans = await this.getApi('getUsers',f);
+        if(ans.ErrNo==0){
+            return ans.data;
+        }
+        return false;
+        /*
         const url:string=this.ApiUrl+'/api/getUsers';
         await axios.get(url).then((res:AxiosResponse)=>{
             //console.log(res.data);
@@ -126,9 +133,10 @@ class AxApi {
             ans = err;
         })
         return ans;
+        */
     }
-    async getPayClass(GameID:number|string){
-        
+    async getPayClass(GameID?:number|string){
+        return await this.getApi('getPayClass');
     }
     async saveNums(tid:number,GameID:number|string,nums:string){
         let ans;
@@ -191,7 +199,7 @@ class AxApi {
         })
         return msg;                
     }
-    async getApi(appName:string,param?:CommonParams,method?:string):Promise<IMsg>{
+    async getApi(appName:string,param?:CommonParams|ITerms,method?:string):Promise<IMsg>{
         const url:string=`${this.ApiUrl}/api/${appName}`;
         if(method==='post'){
             return await this.doPost(url,param);

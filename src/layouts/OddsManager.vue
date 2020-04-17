@@ -163,7 +163,7 @@ export default class OddsManager extends Vue {
         Risk:123456
     }
     async setCurGames(v:SelectOptions){
-        console.log('setGames:',v);
+        //console.log('setGames:',v);
         if(v.value===this.curGameID) {
             return;
         }
@@ -200,8 +200,11 @@ export default class OddsManager extends Vue {
                     this.Game.inidata(ans.data as IData);
                     this.curTid=ans.tid;
                     this.oddshow=true;
-                    console.log('CGame MaxOddsID:',this.Game.MaxOddsID);
-                    this.curInterval=window.setInterval(this.getCurOdds,30000);
+                    //console.log('CGame MaxOddsID:',this.Game.MaxOddsID);
+                    if(this.curInterval){
+                        window.clearInterval(this.curInterval);
+                    }
+                    this.curInterval=window.setInterval(this.getCurOdds,3000);
                 }
             }
         }
@@ -231,7 +234,7 @@ export default class OddsManager extends Vue {
         }
         this.cont = v;
         this.curIdx = key;
-        //console.log('showlog',typeof(key),key);
+        //console.log('changePage cont:',v,this.cont);
         this.dfColor=this.dfColor.map((itm,idx)=>{
             if(idx===key) itm=this.sltColor;
             else itm=this.unSltColor;
@@ -262,7 +265,7 @@ export default class OddsManager extends Vue {
                 }
             })
         }
-        console.log('setStop',curCont,tmp);
+        //console.log('setStop',curCont,tmp);
         if(tmp.length>0) bt = tmp.join(',');
         const param:CommonParams = {
             GameID:this.curGameID,
@@ -272,13 +275,19 @@ export default class OddsManager extends Vue {
             UserID: this.store.personal.id
         }
         let ans:IMsg=await this.store.ax.getApi('setStop',param);
-        console.log('setStop:',ans);
+        //console.log('setStop:',ans);
         if(ans.ErrNo===0){
             this.getCurOdds();
         }
     }
     showinfo(num,v) {
         console.log('showinfo',num,v);
+    }
+    beforeDestroy(){
+        //console.log('page beforeDestroy',this.$route.name);
+        if(this.curInterval){
+            window.clearInterval(this.curInterval);
+        }
     }
 }
 //export default Vue.extend({
@@ -288,6 +297,6 @@ export default class OddsManager extends Vue {
 <style scoped>
 .talign {
     line-height:48px;
-    margin: auto;
+    padding-left: 12px;
 }
 </style>

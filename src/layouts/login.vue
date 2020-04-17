@@ -55,7 +55,7 @@ export default class Login extends Vue {
     //console.log('login:',url);
     await axios.get(url,config).then((res:AxiosResponse)=>{
       const ans:IMsg=res.data as IMsg;
-      console.log('login:',ans);
+      //console.log('login:',ans);
       if(ans.ErrNo===0){
         this.Personal = ans.data as IUser;
         this.isLogin = true;

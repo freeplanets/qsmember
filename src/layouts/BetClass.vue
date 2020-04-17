@@ -1,15 +1,12 @@
 <template>
 	<div>
 		<div class="row q-pa-sm">
-			<div class="col-1 text-h6">{{ $t('Label.GameName')}}</div>
-    		<q-select square filled v-model="model" :options="options" style="width:200px"/>
+			<GS :store='store' @setGames="setCurGame"></GS>
+			<div class="ptitle">{{ $t('Label.ClassName')}}</div>
+			<div class="pd"><q-select square filled dense v-model="modelClass" :options="clss" style="width:200px" /></div>
+			<div class="pd"><q-input outlined dense v-model="newClassName" :label="$t('Label.InputClassName')" /></div>			
 		</div>
-		<div v-if="model">
-			<div class="row q-pa-sm">
-			<div class="col-1 text-h6">{{ $t('Label.ClassName')}}</div>
-			<div><q-select square filled v-model="modelClass" :options="clss" style="width:200px" /></div>
-			<div><q-input outlined v-model="newClassName" :label="$t('Label.InputClassName')" /></div>
-			</div>
+		<div v-if="curGameID">
 			<q-card class="my-card q-pa-sm">
 				<q-card-section>
 					<div class="row">
@@ -35,29 +32,25 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import BTG from './data/defaultData';
+//import BTG from './data/defaultData';
 import { SelectOptions, ItmBtg, IbtCls,Btg,CommonParams} from './data/if';
+import GameSelector from './components/GameSelector.vue';
+Vue.component('GS',GameSelector);
 
 @Component
 export default class BetClass extends Vue{
 	private store = getModule(LayoutStoreModule);
-	private models:SelectOptions | null = null;
 	private mClass:string = '';
 	public newClassName:string ='';
 	public btList: ItmBtg[] = [];
 	public clss:string[]=[];
 	private BtClass:IbtCls[] = [];
+	private curGameID:number|null=null;
+	private curGType:string='';
 	options:SelectOptions[] = [
 		{value: 0,label:'default'}
 	]
 
-	set model(v:SelectOptions){
-		this.models = v;
-		this.listBetTypes(BTG[v.value as number]);
-	}
-	get model(){
-		return this.models as SelectOptions;
-	}
 	set modelClass(v){
 		this.mClass = v;
 		this.setBtSelect(v);
@@ -71,18 +64,16 @@ export default class BetClass extends Vue{
 		} 
 		return '';
 	}
-	async getGames(){
-		const ans = await this.store.ax.getGames();
-		if(ans){
-			this.options=ans;
-		}
+	setCurGame(v:SelectOptions){
+		this.curGameID = v.value as number;
+		this.curGType = v.GType as string;
+		this.listBetTypes(this.curGType);
 	}
 	async getBtClass(){
-		const models:SelectOptions = this.models as SelectOptions;
 		this.clss=[];
 		this.BtClass=[];
-		if(models.value){
-			const ans = await this.store.ax.getBtClass(models.value)
+		if(this.curGameID){
+			const ans = await this.store.ax.getBtClass(this.curGameID)
 			if(ans){
 				ans.map((itm:IbtCls)=>{
 					this.clss.push(itm.BCName);
@@ -100,7 +91,7 @@ export default class BetClass extends Vue{
 			const itm:Btg = tmp[key];
 			const ibtg:ItmBtg = {
 				id:key,
-				title: itm.title,
+				title: itm.title + (itm.shortT && key !=='74' ? ( itm.subtitle ? itm.subtitle.join('') : '' ): ''),
 				chk:false,
 				ungrouped:false
 			}
@@ -115,13 +106,12 @@ export default class BetClass extends Vue{
 		})
 		if(bt.length==0) return;
 		if(this.UserID==='') return;
-		const models:SelectOptions = this.models as SelectOptions;
-		if(!models) return;
-		const data = {
-			GameID: models.value as number,
+		if(!this.curGameID) return;
+		const data:CommonParams = {
+			GameID: this.curGameID,
 			BCName: this.newClassName,
 			BetTypes: bt.join(':'),
-			ModifyID: this.UserID
+			ModifyID: parseInt(this.UserID,10)
 		}
 		const ans=await this.store.ax.getApi('saveBtClass',data,'post');
 		if(ans.ErrNo===0){
@@ -145,12 +135,10 @@ export default class BetClass extends Vue{
 		});
 	}
 	async delBtClass(){
-		const models:SelectOptions = this.models as SelectOptions;
-		let GameID:number= models.value ? models.value as number : 0;
-		if(!GameID) return;
-		console.log('delBtClass',GameID,this.mClass);			
+		if(!this.curGameID) return;
+		//console.log('delBtClass',this.curGameID,this.mClass);			
 		const param:CommonParams={
-			GameID: GameID,
+			GameID:this.curGameID,
 			BCName: this.mClass
 		}
 		const ans=await this.store.ax.getApi('delBtClass',param);
@@ -158,13 +146,13 @@ export default class BetClass extends Vue{
 			this.getBtClass();
 			this.clear();			
 		}
-		console.log(ans);
+		//console.log(ans);
 	}
 	getUnGroupedBT(){
 		const slted:string[]=[];
 		this.BtClass.map((itm:IbtCls)=>{
 			const bts=itm.BetTypes.split(':');
-			console.log(bts);
+			//console.log(bts);
 			bts.map(bt=>{
 				//const iBt=parseInt(bt,10);
 				const f=slted.find(sbt=>sbt===bt);
@@ -182,7 +170,7 @@ export default class BetClass extends Vue{
 				bitm.ungrouped = false;
 			}
 		});
-		console.log('getUnGroupedBT',this.btList);
+		//console.log('getUnGroupedBT',this.btList);
 	}	
 	setBtSelect(v:string){
 		if(this.BtClass.length==0) return;
@@ -213,12 +201,19 @@ export default class BetClass extends Vue{
         if(!this.store.isLogin){
         this.$router.push({path:'/login'});
         }   	  
-		this.getGames();
 		//console.log('BTG:',BTG)
   }
 }
 </script>
 <style scoped>
+.ptitle {
+    text-align: center;
+    line-height:48px;
+    padding: 0 4px 0 4px;
+}
+.pd {
+	padding: 4px 0 0 0;
+}
 .bgc {
 	color: orange;
 }

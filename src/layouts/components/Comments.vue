@@ -65,7 +65,7 @@ export default class Comments extends Vue {
           this.page='root';
         }
         this.getComment();
-        console.log('mounted getComment');
+        //console.log('mounted getComment');
     }
 }
 </script>

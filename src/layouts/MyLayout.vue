@@ -82,12 +82,12 @@
             <q-item-label>{{$t('Label.GameManager')}}</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/adduser" @click="ProName=$t('Label.AddUser');showComment=false">
+        <q-item to="/adduser" @click="ProName=$t('Label.UserManager');showComment=false">
           <q-item-section avatar>
-            <q-icon name="person_add" />
+            <q-icon name="people" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>{{$t('Label.AddUser')}}</q-item-label>
+            <q-item-label>{{$t('Label.UserManager')}}</q-item-label>
           </q-item-section>
         </q-item>
         <q-item to="/openparams" @click="ProName=$t('Label.OpenParams');showComment=false">

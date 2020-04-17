@@ -25,12 +25,7 @@ interface IBetType {
 interface IBetTypes {
     [BT:string]:IBetType;
 }
-/*
-interface IGame {
-    //ModifyOdds(Odds:IOdds):void;
-    member:IBetTypes
-}
-*/
+
 interface RiskGroup {
     member:number[];
     TotalNum?:number;
@@ -179,7 +174,7 @@ export class CGame {
             let B =  this.member[BT];
             let M =  B.member[key];
             let Risk = B.Total - M.tolP;
-            this.member[BT].member[key].Risk = Risk;
+            this.member[BT].member[key].Risk = Math.round(Risk);
             if(MaxWin > Risk) MaxWin = Risk;
         });
         this.member[BT].MaxWin=MaxWin;
@@ -194,7 +189,7 @@ export class CGame {
             let B =  this.member[BT];
             let M =  B.member[key];
             let Risk = B.Total - M.tolP - (B.Payouts-M.tolP)*(otherNums/leftNums);
-            this.member[BT].member[key].Risk = Risk;
+            this.member[BT].member[key].Risk = Math.round(Risk);
         });
         /*
 		for(var i=0;i<len;i+=1){

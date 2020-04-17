@@ -70,7 +70,7 @@ export default class TestComp extends Vue {
         return itemName(bt,num,this);
     }
     async setOdds(BT:number,Num:number,step:number){
-        console.log('setOdds:',BT,Num,step);
+        //console.log('setOdds:',BT,Num,step);
         if(this.Odds){
             if(this.Odds.isStop) return;
         }
@@ -83,7 +83,7 @@ export default class TestComp extends Vue {
             UserID:this.UserID
         }
         const ans=await AxApi.getApi('setOdds',params);
-        console.log('setOdds:',ans);
+        //console.log('setOdds:',ans);
         this.$emit('OddChange');
     }
     mounted(){

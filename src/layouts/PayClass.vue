@@ -1,35 +1,37 @@
 <template>
 	<div>
 		<div class="row q-pa-sm">
-			<div class="col-1 text-h6">{{ $t('Label.GameName')}}</div>
-    		<div><q-select square filled dense v-model="model" :options="options" style="width:200px"/></div>
-		</div>       
-        <div class="row q-pa-md" v-if="model">
-            <div>{{ $t('Label.PayClassName') }}</div>
-            <div><q-select square filled dense v-model="ClassName" :options="clsNameList" style="width:200px" transition-show='fade'/></div>
-            <div><q-btn color="green" icon-right="save" label="Save" @click="SaveData();" /></div>
-		</div>  
-        <div class="q-pa-md" v-if="model">
-            <div class="row testheader">
-                <div class="col test">{{$t('Table.ItemName')}}</div>
-                <div class="col test">{{$t('Table.SubName')}}</div>
-                <div class="col test">{{$t('Table.Profit')}}(%)</div>
-                <div class="col test">{{$t('Table.RateDefault')}}</div>
-                <div class="col test">{{$t('Table.Probability')}}</div>
-                <div class="col test">{{$t('Table.Steps')}}</div>
-                <div class="col test">{{$t('Table.OneHand')}}</div>
+            <div class="col-2"><GS :store="store" @setGames="setCurGames"></GS></div>
+            <div class="pcls">
+                <div class="row" v-if="curGameID">
+                    <div><q-select square filled dense v-model="ClassName" :options="clsNameList" style="width:200px" transition-show='fade'/></div>
+                    <div class="pbtn2"><q-btn color="green" icon-right="save" label="Save" @click="SaveData();" /></div>
+    		    </div>
+            </div>
+            <div class="col" v-if="curGameID" ><BTC :store="store" :GameID="curGameID" @SltBT="SltBetTypes"></BTC></div>
+		</div>
+        <RCO @updateRateDefault="updateRateDefault"></RCO>       
+        <div class="q-pa-md" v-if="curGameID">
+            <div class="row">
+                <div class="col-1 test testheader">{{$t('Table.ItemName')}}</div>
+                <div class="col-1 test testheader">{{$t('Table.SubName')}}</div>
+                <div class="col-1 test testheader">{{$t('Table.Profit')}}(%)</div>
+                <div class="col-1 test testheader">{{$t('Table.RateDefault')}}</div>
+                <div class="col-1 test testheader">{{$t('Table.Probability')}}</div>
+                <div class="col-1 test testheader">{{$t('Table.Steps')}}</div>
+                <div class="col-1 test testheader">{{$t('Table.OneHand')}}</div>
             </div>
             <div class="row"
                 v-for="(itm,idx) in PayR"
                 :key="idx"
             >
-                <div class="col test">{{ itm.Title }}</div>
-                <div class="col test">{{ itm.SubTitle }}</div>
-                <div class="col test">{{ itm.Profit }}</div>
-                <div class="col test"><q-input square standout dense v-model="itm.Rate" @change="updateBPR(idx)" /></div>
-                <div class="col test">{{itm.Probability}}</div>
-                <div class="col test">{{itm.Steps}}</div>
-                <div class="col test">{{itm.OneHand}}</div>
+                <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.Title }}</div>
+                <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.SubTitle }}</div>
+                <div class="col-1 test">{{ itm.Profit }}</div>
+                <div class="col-1 test"><q-input square standout dense v-model="itm.Rate" /></div>
+                <div class="col-1 test">{{itm.Probability}}</div>
+                <div class="col-1 test">{{itm.Steps}}</div>
+                <div class="col-1 test">{{itm.OneHand}}</div>
             </div>
         </div>
 	</div>
@@ -42,11 +44,19 @@ import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import {IGames} from './data/schema';
 //import BTG from './data/defaultData';
-import {SelectOptions,PayRateItm} from './data/if';
+import {SelectOptions,PayRateItm,IMsg} from './data/if';
 import BTG from './data/defaultData';
 import {PayRateData } from './data/PayRateList';
 import {PayRate} from './class/PayRate'
 import { cloneDeep } from 'lodash'
+//import { QDialogOptions } from 'quasar';
+import GameSelector from './components/GameSelector.vue';
+import BetTypeClass from './components/BetTypeClass.vue';
+import RateChangeOption from './components/RateChangeOption.vue';
+Vue.component('GS',GameSelector);
+Vue.component('BTC',BetTypeClass);
+Vue.component('RCO',RateChangeOption);
+
 interface PayClass {
     id:number;
     PayClassName:string;
@@ -60,7 +70,7 @@ interface PostData {
 @Component
 export default class BetClass extends Vue{
 	private store = getModule(LayoutStoreModule);
-    private models:SelectOptions | null = null;
+    private curGameID:number|null=null
     private clsName:SelectOptions | null = null;
     public PayR:PayRate[]=[];
 	options:SelectOptions[] = [
@@ -69,21 +79,14 @@ export default class BetClass extends Vue{
     clsNameList:SelectOptions[]= [];
     ExpendPayClass:boolean = false;
     opPayRate:string | null=null;
-	set model(v:SelectOptions){
-        this.models = v;
-        this.chkPayCls(v);
-    }
-	get model(){
-        //console.log('get Model:', this.models);
-		return this.models as SelectOptions;
-    }
     get ClassName() {
         return this.clsName as SelectOptions;
     }
     set ClassName(v:SelectOptions){
         this.clsName = v;
+        //console.log('ClassName:',v.value,v.label);
         //this.PayClassName = v.label as string;
-        this.chkdata();
+        this.chkdata(v.value as number);
     }
 	get UserID():string{
 		if(this.store.personal.id) {
@@ -98,66 +101,63 @@ export default class BetClass extends Vue{
             this.ExpendPayClass = true;
         }
     }
-	async getGames(){
-        const ans =await this.store.ax.getGames();
-        if(ans){
-            this.options = ans;
-        }
-        /*
-		const url:string=this.store.ax.Host+'/api/getGames';
-		const config:AxiosRequestConfig = {
-		}
-		axios.get(url,config).then((res:AxiosResponse)=>{
-			//console.log(res.data);
-			const tmp:SelectOptions[]=[];
-			res.data.map((itm:IGames)=>{
-				const t:SelectOptions={
-					label: itm.name,
-					value: itm.id
-				}
-				tmp.push(t);
-			})
-			if(tmp.length > 0) this.options = tmp;
-        })
-        */
+    setCurGames(v:SelectOptions){
+        this.curGameID = v.value as number;
+        this.chkPayCls(this.curGameID);
+        //console.log('doGames',v);
     }
-    async chkPayCls(v:SelectOptions){
-        const gid:string = v.value as string;
+    SltBetTypes(slt:string){
+        const bts:string[] = slt.split(':');
+        this.PayR.map(itm=>{
+            itm.Selected = false;
+        })
+        bts.map(bt=>{
+            const  f=this.PayR.find(bpr=>bpr.BetType===parseInt(bt,10));
+            if(f){
+                f.Selected = true;
+            }
+        })
+        //console.log('SltBetTypes',bts);
+    }
+    updateRateDefault(v:number){
+        if(v>0){
+            this.PayR.map(itm=>{
+                if(itm.Selected){
+                    itm.updateDefaultRateByProfit(v);
+                }
+            })
+        }
+    }    
+    async chkPayCls(gid:number){
         const data:PayClass[] = await this.getPayCls(gid);
         this.clsNameList=[];
         if(data.length>0){
+            let firstItem:SelectOptions|undefined;
             data.map((itm:PayClass)=>{
                 const tmp:SelectOptions={
                     value: itm.id,
                     label: itm.PayClassName
                 }
                 this.clsNameList.push(tmp);
+                if(!firstItem) firstItem=tmp;
             });
+            if(firstItem) this.ClassName = firstItem;
         }
     }
     async getPayCls(gid:string|number) {
-        const url:string=this.store.ax.Host+'/api/getPayClass';
-		const config:AxiosRequestConfig = {
-            params: {
-                GameID: gid
-            }
-        }
         let data:PayClass[] = [];
-        await axios.get(url,config).then((res:AxiosResponse)=>{
-            //console.log('await ',res)
-            data= res.data;
-        }).catch(err=>{
-            console.error('getPayRate error',err);
-            //data= false;
-        })
-        //console.log('await 1',data);
+        const ans:IMsg=await this.store.ax.getPayClass(gid);
+        if(ans.ErrNo==0){
+            data=ans.data as PayClass[];
+        }
         return data;
     }
-    async chkdata(){
+    async chkdata(v:number){
         //console.log('chkdata:', v);
         this.PayR=[];
-        const gid:string = this.model.value as string;
-        const btg=BTG[gid];
+        //const gid:string = this.models.value as string;
+        if(!this.curGameID) return;
+        const btg=BTG[this.curGameID];
         const tmp:object=PayRateData[btg].data;
         const order:string[]=PayRateData[btg].order;
         let itms:PayRateItm[];
@@ -174,7 +174,7 @@ export default class BetClass extends Vue{
             })
         });
         //console.log('BasePayR:',this.BasePayR)
-        itms=await this.getPayRate(gid);
+        itms=await this.getPayRate(this.curGameID,v);
         //console.log('getPayRate itms:',itms);
         if(itms.length>0){
             itms.map(itm=>{
@@ -183,17 +183,17 @@ export default class BetClass extends Vue{
                     e.Datas= itm
                 }
             })
-            //this.PayR=cloneDeep(this.PayR);
-            this.updateBPR(1);
+            this.PayR=cloneDeep(this.PayR);
+            //this.updateBPR(1);
         }
 
     }
-    async getPayRate(gid:string|number){
+    async getPayRate(gid:string|number,v:number){
         const url:string=this.store.ax.Host+'/api/getPayRate';
 		const config:AxiosRequestConfig = {
             params: {
                 GameID: gid,
-                PayClassID: this.ClassName.value as string
+                PayClassID: v
             }
         }
         let data;
@@ -219,16 +219,22 @@ export default class BetClass extends Vue{
         }
     }
     sendData(dtas:PayRateItm[]){
-        if(!this.model) return;
+        if(!this.curGameID) return;
  		const data = {
-			GameID: this.model.value,
+			GameID: this.curGameID,
             ModifyID: this.UserID,
             PayClassID: this.ClassName.value,
             data: JSON.stringify(dtas)
 		}
 		const url:string=this.store.ax.Host+'/api/batch/savePayRate';
 		axios.post(url,data).then((res:AxiosResponse)=>{
-            console.log(res.data);
+            //console.log(res.data);
+            if(res.data.affectedRows>0){
+                this.$q.dialog({
+                    title: this.$t('Label.Save') as string,
+                    message: 'OK!!'
+                });
+            }
             dtas.map(itm=>{
                 const tmp = this.PayR.find(elm => elm.BetType == itm.BetType && elm.SubType == itm.SubType)
                 if(tmp){
@@ -239,26 +245,28 @@ export default class BetClass extends Vue{
 			console.error(err);
 		})       
     }
+    /*
     updateBPR(idx:number|undefined=undefined){
-        /*
-        if(idx){
-            //console.log('updateBPR',this.PayR[idx]);
-        }
-        */
         if(idx){
             this.PayR=cloneDeep(this.PayR);
         }
     }
+    */
   mounted(){
         if(!this.store.isLogin){
         this.$router.push({path:'/login'});
         }         
-        this.getGames();
         this.PayR=[];
   }
 }
 </script>
 <style>
+.pcls {
+    padding: 4px 4px;
+}
+.pbtn2 {
+    padding: 2px 4px;
+}
 .testheader {
     background-color: cadetblue;
     color:white;
@@ -266,6 +274,10 @@ export default class BetClass extends Vue{
 .test {
     border: 1px gray solid;
     text-align: center;
-    vertical-align: center;
+    vertical-align: middle;
+}
+.bgc {
+    background-color:lightseagreen;
+    color:white;
 }
 </style>

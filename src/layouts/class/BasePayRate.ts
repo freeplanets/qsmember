@@ -68,11 +68,14 @@ export class BasePayRate<T>{
         this.isDataChanged = true;
     }
     */
-    get DfRate():number | undefined{
+    get Rate():number | undefined{
         return this.data.DfRate;
     }
-    set DfRate(v:number | undefined) {
+    set Rate(v:number | undefined) {
         this.data.DfRate = this.fetchValueToSteps(v);
+        if(this.data.DfRate > this.data.TopRate){
+            this.data.DfRate = this.data.TopRate;
+        }
         this.calProfit();
         this.isDataChanged = true;
     }
@@ -81,6 +84,9 @@ export class BasePayRate<T>{
     }
     set TopRate(v:number | undefined){
         this.data.TopRate = this.fetchValueToSteps(v);
+        if(this.data.DfRate > this.data.TopRate){
+            this.data.DfRate = this.data.TopRate;
+        }        
         this.isDataChanged = true;
     }
     get Probability():number |undefined{
@@ -160,7 +166,7 @@ export class BasePayRate<T>{
     }
     updateDefaultRateByProfit(pft:number){
         if(this.Probability){
-            this.DfRate = (1-pft/100)/this.Probability;
+            this.Rate = (1-pft/100)/this.Probability;
         }
     }
     protected fetchValueToSteps(v:number|undefined){
@@ -188,9 +194,9 @@ export class BasePayRate<T>{
         }
     }
     private calProfit(){
-        if(this.DfRate && this.Probability) {
+        if(this.Rate && this.Probability) {
             if(this.Probability > 0) {
-                this.data.Profit = Math.round((1 - this.Probability * this.DfRate)*1000000)/10000;
+                this.data.Profit = Math.round((1 - this.Probability * this.Rate)*1000000)/10000;
             }
         }
     }
