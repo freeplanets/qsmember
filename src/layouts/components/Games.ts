@@ -1,3 +1,4 @@
+import {BaNum} from './func';
 export interface IOdds {
     OID:number;
     Odds:number;
@@ -9,6 +10,7 @@ export interface IOdds {
     Risk?:number;
     BT?:number;
     Num?:number;
+    Steps?:number;
 }
 interface INum {
     [num:string]:IOdds;
@@ -127,7 +129,8 @@ export class CGame {
             return {};
         }
         const tmp:IOdds=this.member[sBT].member[sNum];
-        tmp.Odds=parseFloat(tmp.Odds.toFixed(2));
+        const ba = BaNum(tmp.Steps ? tmp.Steps : 1);
+        tmp.Odds= Math.round(tmp.Odds*ba)/ba;
         tmp.BT = BT;
         tmp.Num = num;
         return tmp;

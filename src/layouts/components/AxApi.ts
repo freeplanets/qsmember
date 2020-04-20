@@ -2,10 +2,17 @@ import axios,{AxiosRequestConfig,AxiosResponse} from 'axios'
 import { SelectOptions,CBetItems,IMsg,CommonParams,IbtCls} from '../data/if';
 import {IGames,ITerms,Game, IUser} from '../data/schema';
 let myApiUrl:string='https://testu.uuss.net:3000';
+
 if(window.location.hostname==='localhost'){
     myApiUrl = 'http://localhost:3000';
 }
-class AxApi { 
+/*
+const config:AxiosRequestConfig = {
+    //withCredentials: true,
+    //headers: { 'Access-Control-Allow-Origin': '*' }
+}
+*/
+export class AxApi { 
     constructor(private ApiUrl){
         console.log('AxApi created!!',ApiUrl);
     }
@@ -212,13 +219,14 @@ class AxApi {
         return await this.doit(url,param); 
     }
     doit(url:string,param?:CommonParams):Promise<IMsg>{
-        const config:AxiosRequestConfig = {}
+       const config:AxiosRequestConfig = {};
         if(param){
             config.params=param
         }
         let msg:IMsg={ErrNo:0};
         return new Promise(async(resolve)=>{
             await axios.get(url,config).then((res:AxiosResponse)=>{
+                console.log('AxApi doit res:',res);
                 msg=res.data;
             }).catch(err=>{
                 msg.ErrNo=9;

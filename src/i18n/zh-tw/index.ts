@@ -8,6 +8,7 @@ export default {
     PayClassName: '盤口名稱',
     InputPayClassName: '請輸入分盤名稱',
     SavePayClassName: '儲存分盤名稱',
+    EditPayClassName: '修改分盤名稱',
     BasePayRate:"基本盤",
     RefPayRate:"參考分盤",
     CratePayClass:"新增分盤",

@@ -83,7 +83,7 @@ export default class TestComp extends Vue {
             UserID:this.UserID
         }
         const ans=await AxApi.getApi('setOdds',params);
-        //console.log('setOdds:',ans);
+        console.log('setOdds:',ans);
         this.$emit('OddChange');
     }
     mounted(){

@@ -128,3 +128,8 @@ export interface CommonParams {
     data?:any;
     PayClassName?:string;
 }
+
+export interface PayClass {
+    id:number;
+    PayClassName:string;
+}

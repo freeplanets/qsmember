@@ -44,7 +44,7 @@ import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import {IGames} from './data/schema';
 //import BTG from './data/defaultData';
-import {SelectOptions,PayRateItm,IMsg} from './data/if';
+import {SelectOptions,PayRateItm,IMsg,PayClass} from './data/if';
 import BTG from './data/defaultData';
 import {PayRateData } from './data/PayRateList';
 import {PayRate} from './class/PayRate'
@@ -57,10 +57,6 @@ Vue.component('GS',GameSelector);
 Vue.component('BTC',BetTypeClass);
 Vue.component('RCO',RateChangeOption);
 
-interface PayClass {
-    id:number;
-    PayClassName:string;
-}
 interface PostData {
     GameID:number;
     PayClassName:string;
