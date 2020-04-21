@@ -226,7 +226,7 @@ export class AxApi {
         let msg:IMsg={ErrNo:0};
         return new Promise(async(resolve)=>{
             await axios.get(url,config).then((res:AxiosResponse)=>{
-                console.log('AxApi doit res:',res);
+                //console.log('AxApi doit res:',res);
                 msg=res.data;
             }).catch(err=>{
                 msg.ErrNo=9;

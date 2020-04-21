@@ -1,8 +1,8 @@
 import { BasePayRate } from "../class/BasePayRate"
 
 export interface SelectOptions {
+    value:number;
 	label?:string;
-    value?:string | number;
     GType?:string;
 }
 export interface Btg { 
@@ -53,6 +53,7 @@ export interface IMsg {
     ErrNo?: number;
     data?: object[]|object;
     debug?: string;
+    ErrCon?:string;
     [key: string]: any;
 }
 export interface CMain<T> {
@@ -110,6 +111,7 @@ export interface Odds {
     Risk:number,
 }
 export interface CommonParams {
+    id?:number;
     tid?:number;
     GameID?:number|string;
     BT?:number;
@@ -127,6 +129,7 @@ export interface CommonParams {
     ModifyID?:number;
     data?:any;
     PayClassName?:string;
+    NameOrNick?:string;
 }
 
 export interface PayClass {

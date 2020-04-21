@@ -3,10 +3,8 @@
 		<div class="row q-pa-sm">
 			<div><GS :store='store' @setGames="setCurGames"></GS></div>
             <div class="talign">{{ $t('Label.PayClassName') }}</div>
-            <div class='pbtn'><PCS :ax="store.ax" :GameID='curGameID' @setPayClass="setPayClass"></PCS></div>
             <div class="pbtn"><q-input outlined dense v-model="PayClassName" /></div>
-            <div class="pbtn"><q-btn color="blue" icon-right="save" :label="$t('Label.SavePayClassName')" @click="SavePayClass();" /></div>
-            <div class="pbtn"><q-btn color="green" icon-right="save" :label="$t('Label.EditPayClassName')" @click="EditPayClassName();" /></div>            
+            <div class="pbtn"><q-btn color="blue" icon-right="save" :label="$t('Label.SavePayClassName')" @click="SavePayClass();" /></div>       
 		</div>       
         <div v-if="models">
             <div class="my-pa-md q-gutter-y-md" style="max-width: 600px">
@@ -85,13 +83,11 @@ import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import BTG from './data/defaultData';
-import {SelectOptions,CommonParams,IMsg, BasePayRateItm,PayClass} from './data/if';
+import {SelectOptions,CommonParams,IMsg, BasePayRateItm} from './data/if';
 import { QDialogOptions } from 'quasar';
 import GameSelector from './components/GameSelector.vue';
-import PayClassSelector from './components/PayClassSelector.vue';
 import {BaNum} from './components/func';
 Vue.component('GS',GameSelector);
-Vue.component('PCS',PayClassSelector);
 
 interface FuncBtn {
     id:number;
@@ -126,7 +122,6 @@ export default class BetClass extends Vue{
     private models:SelectOptions | null = null;
     BPR:BasePayRateItm[]=[];
     PayClassName:string='';
-    curPayClass:PayClass={id:0,PayClassName:''};
 	options:SelectOptions[] = [
 		{value: 0,label:'default'}
     ];
@@ -174,20 +169,10 @@ export default class BetClass extends Vue{
         this.tab = 0;
         this.BPR=[];
     }
-    setPayClass(pc:PayClass){
-        this.curPayClass=pc;
-        this.PayClassName=pc.PayClassName;
-        console.log('GreatePayClass setPayClass:',pc);
-    }
-    EditPayClassName(){
 
-    }
     async SavePayClass(){
         let RateData:any;
         if(this.tab === null) {
-            return;
-        }
-        if(this.curPayClass.PayClassName===this.PayClassName){
             return;
         }
         if(this.BPR.length==0){

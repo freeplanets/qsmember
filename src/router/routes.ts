@@ -45,6 +45,10 @@ const routes: RouteConfig[] = [
       {
         path: '/oddsmanager',
         component: () => import('layouts/OddsManager.vue')
+      },
+      {
+        path: '/betlists',
+        component: () => import('layouts/BetLists.vue')
       },                    
     ],
   }

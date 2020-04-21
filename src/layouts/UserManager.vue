@@ -120,7 +120,7 @@ interface UserGPC {
 export default class UserManager extends Vue{
     store=getModule(LayoutStoreModule);
     NewUser:IUser = {TableName:'User',id:0}
-    slt:SelectOptions={}
+    slt:SelectOptions={value:0}
     showList=true;
     showEdit=false;
     Userf:string='';

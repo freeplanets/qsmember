@@ -156,3 +156,9 @@ export function fixlen(n: number): number {
     const p: number = s.length - (s.indexOf(".") + 1);
     return p;
 }
+
+export function dateString():string{
+    const d:Date=new Date();
+    const reg1 = /(\d+)-(\d+)-(\d+).*/;
+    return d.toJSON().replace(reg1, '$1-$2-$3');
+}

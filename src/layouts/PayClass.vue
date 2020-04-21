@@ -4,13 +4,18 @@
             <div class="col-2"><GS :store="store" @setGames="setCurGames"></GS></div>
             <div class="pcls">
                 <div class="row" v-if="curGameID">
-                    <div><q-select square filled dense v-model="ClassName" :options="clsNameList" style="width:200px" transition-show='fade'/></div>
-                    <div class="pbtn2"><q-btn color="green" icon-right="save" label="Save" @click="SaveData();" /></div>
+                    <div class='pbtn'><PCS :ax="store.ax" :GameID='curGameID' :itmChange="PNChange" @setPayClass="setPayClass"></PCS></div>
+                    <div class="pbtn"><q-input outlined dense v-model="PayClassName" /></div>
+                    <div class="pbtn2"><q-btn color="green" icon-right="save" :label="$t('Label.EditPayClassName')" @click="EditPayClassName();" /></div>
+                    <div class="pbtn2"><q-btn color="red" icon-right="delete_forever" :label="$t('Label.DeletePayClass')" @click="DelPayClass();" /></div>
     		    </div>
             </div>
             <div class="col" v-if="curGameID" ><BTC :store="store" :GameID="curGameID" @SltBT="SltBetTypes"></BTC></div>
 		</div>
-        <RCO @updateRateDefault="updateRateDefault"></RCO>       
+        <div class="row">
+            <RCO @updateRateDefault="updateRateDefault"></RCO>
+            <div class="pbtn2 col"><q-btn color="green" icon-right="save" label="Save" @click="SaveData();" /></div>
+        </div> 
         <div class="q-pa-md" v-if="curGameID">
             <div class="row">
                 <div class="col-1 test testheader">{{$t('Table.ItemName')}}</div>
@@ -44,7 +49,7 @@ import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import {IGames} from './data/schema';
 //import BTG from './data/defaultData';
-import {SelectOptions,PayRateItm,IMsg,PayClass} from './data/if';
+import {SelectOptions,PayRateItm,IMsg,PayClass, CommonParams} from './data/if';
 import BTG from './data/defaultData';
 import {PayRateData } from './data/PayRateList';
 import {PayRate} from './class/PayRate'
@@ -53,6 +58,8 @@ import { cloneDeep } from 'lodash'
 import GameSelector from './components/GameSelector.vue';
 import BetTypeClass from './components/BetTypeClass.vue';
 import RateChangeOption from './components/RateChangeOption.vue';
+import PayClassSelector from './components/PayClassSelector.vue';
+Vue.component('PCS',PayClassSelector);
 Vue.component('GS',GameSelector);
 Vue.component('BTC',BetTypeClass);
 Vue.component('RCO',RateChangeOption);
@@ -66,13 +73,15 @@ interface PostData {
 @Component
 export default class BetClass extends Vue{
 	private store = getModule(LayoutStoreModule);
-    private curGameID:number|null=null
+    private curGameID:number|undefined=0;
     private clsName:SelectOptions | null = null;
+    private PayClassName:string='';
+    private curPayClass:PayClass={id:0,PayClassName:''};
     public PayR:PayRate[]=[];
+    private PNChange:boolean=false;
 	options:SelectOptions[] = [
 		{value: 0,label:'default'}
 	];
-    clsNameList:SelectOptions[]= [];
     ExpendPayClass:boolean = false;
     opPayRate:string | null=null;
     get ClassName() {
@@ -99,7 +108,6 @@ export default class BetClass extends Vue{
     }
     setCurGames(v:SelectOptions){
         this.curGameID = v.value as number;
-        this.chkPayCls(this.curGameID);
         //console.log('doGames',v);
     }
     SltBetTypes(slt:string){
@@ -124,30 +132,6 @@ export default class BetClass extends Vue{
             })
         }
     }    
-    async chkPayCls(gid:number){
-        const data:PayClass[] = await this.getPayCls(gid);
-        this.clsNameList=[];
-        if(data.length>0){
-            let firstItem:SelectOptions|undefined;
-            data.map((itm:PayClass)=>{
-                const tmp:SelectOptions={
-                    value: itm.id,
-                    label: itm.PayClassName
-                }
-                this.clsNameList.push(tmp);
-                if(!firstItem) firstItem=tmp;
-            });
-            if(firstItem) this.ClassName = firstItem;
-        }
-    }
-    async getPayCls(gid:string|number) {
-        let data:PayClass[] = [];
-        const ans:IMsg=await this.store.ax.getPayClass(gid);
-        if(ans.ErrNo==0){
-            data=ans.data as PayClass[];
-        }
-        return data;
-    }
     async chkdata(v:number){
         //console.log('chkdata:', v);
         this.PayR=[];
@@ -241,6 +225,60 @@ export default class BetClass extends Vue{
 			console.error(err);
 		})       
     }
+	setPayClass(pc:PayClass){
+        this.curPayClass=pc;
+        this.PayClassName=pc.PayClassName;
+        this.PNChange = false;
+        this.chkdata(pc.id);
+        //console.log('GreatePayClass setPayClass:',pc);
+    }
+    async EditPayClassName(){
+        if(this.PayClassName===this.curPayClass.PayClassName) return;
+        const param:CommonParams={};
+        param.id= this.curPayClass.id;
+        param.PayClassName=this.PayClassName;
+        param.ModifyID = this.store.personal.id;
+        const msg:IMsg=await this.store.ax.getApi('editPayClass',param);
+        console.log('after getApi editPayClass',msg);
+        if(msg.ErrNo===0){
+            this.$q.dialog({
+                title: this.$t('Label.Save') as string,
+                message: 'OK!!'
+            });
+            console.log('before change PNChange',this.PNChange);
+            this.PNChange = true;
+        }
+    }
+    DelPayClass(){
+        const param:CommonParams={};
+        param.id= this.curPayClass.id;
+        this.$q.dialog({
+            title: `${this.$t('Label.DeletePayClass')}`,
+            message: `${this.$t('Label.DeletePayClass')} ${this.curPayClass.PayClassName} ?`,
+            ok: true,
+            cancel: true,
+        }).onOk(this.DPC);
+    }
+    async DPC(){
+        const param:CommonParams={};
+        param.id= this.curPayClass.id;
+        param.GameID = this.curGameID;
+        const msg:IMsg=await this.store.ax.getApi('delPayClass',param);
+        console.log('after getApi editPayClass',msg);
+        if(msg.ErrNo===0){
+            this.$q.dialog({
+                title: `${this.$t('Label.DeletePayClass')}`,
+                message: 'OK!!'
+            });
+            this.PNChange = true;
+        } else {
+             this.$q.dialog({
+                title: `${this.$t('Label.DeletePayClass')}`,
+                message: msg.ErrCon
+            });           
+        }
+    }
+
     /*
     updateBPR(idx:number|undefined=undefined){
         if(idx){

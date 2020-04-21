@@ -92,7 +92,7 @@
                 <q-date v-model="TDate" mask="YYYY-MM-DD" />
                 </q-card-section>                
             </q-card>
-        </q-dialog>       
+        </q-dialog>
     </div>    
 </template>
 <script lang="ts">

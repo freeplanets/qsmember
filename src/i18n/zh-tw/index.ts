@@ -9,6 +9,7 @@ export default {
     InputPayClassName: '請輸入分盤名稱',
     SavePayClassName: '儲存分盤名稱',
     EditPayClassName: '修改分盤名稱',
+    DeletePayClass: '刪除分盤',
     BasePayRate:"基本盤",
     RefPayRate:"參考分盤",
     CratePayClass:"新增分盤",
@@ -45,7 +46,9 @@ export default {
     Status:'狀態',
     Settled:['','己結帳'],
     OpenParams:'開盤參數',
-    OddsManager:'控盤'
+    OddsManager:'控盤',
+    BetLists:'注單查詢',
+    NameOrNick:'名稱/代號'
   },
   Tip:{
     UserFind: "請輸入名稱或代號"
@@ -109,6 +112,8 @@ export default {
     PageStop: '本頁停押',
     TotalOpen: '總開放',
     PageOpen: '本頁開放',
+    Confirm: '碓認',
+    Search:'查詢'
   },
   Dialog: {
     MTitle: '主選單',

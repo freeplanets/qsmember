@@ -12,18 +12,26 @@ import {AxApi} from './AxApi';
 export default class PayClassSelector extends Vue {
   @Prop() readonly ax?:AxApi;
   @Prop() GameID?:number;
+  @Prop() itmChange:boolean=false;
   @Watch('GameID',{ immediate: true, deep: true })
   onGameIDChange(val:number,oldval:number){
     console.log('onGameIDChange:',val,oldval);
     this.chkPayCls();
   }
-  
-  private clsName:SelectOptions | null = null;
-  get ClassName() {
-      return this.clsName as SelectOptions;
+  @Watch('itmChange',{ immediate: true, deep: true })
+  onItmChange(v){
+    console.log('onItmChange:',v);
+    if(v){
+      this.chkPayCls();
+    }
+  }
+  private curItem:SelectOptions|null = null;
+  //private clsName:SelectOptions | null = null;
+  get ClassName():SelectOptions {
+      return this.curItem as SelectOptions;
   }
   set ClassName(v:SelectOptions){
-      this.clsName = v;
+      this.curItem = v;
       const pc:PayClass={
         id:v.value as number,
         PayClassName: v.label as string
@@ -32,21 +40,31 @@ export default class PayClassSelector extends Vue {
   }  
   clsNameList:SelectOptions[]= [];
   public async chkPayCls(){
-      console.log('chkPayCls:',this.GameID);
       if(this.GameID){
         const data:PayClass[] = await this.getPayCls(this.GameID);
         this.clsNameList=[];
         if(data.length>0){
-            let firstItem:SelectOptions|undefined;
+            let firstItm:SelectOptions|undefined;
             data.map((itm:PayClass)=>{
                 const tmp:SelectOptions={
                     value: itm.id,
                     label: itm.PayClassName
                 }
                 this.clsNameList.push(tmp);
-                if(!firstItem) firstItem=tmp;
+                if(!firstItm) firstItm = tmp;
+                if(!this.curItem) this.curItem=tmp;
             });
-            if(firstItem) this.ClassName = firstItem;
+            if(this.curItem){
+              const pItem = this.curItem;
+              const f=this.clsNameList.find(itm=>itm.value===pItem.value)
+              if(f){
+                this.ClassName = f;
+              } else {
+                if(firstItm){
+                  this.ClassName = firstItm;
+                }
+              }
+            } 
         }
       }
   }

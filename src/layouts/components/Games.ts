@@ -131,6 +131,7 @@ export class CGame {
         const tmp:IOdds=this.member[sBT].member[sNum];
         const ba = BaNum(tmp.Steps ? tmp.Steps : 1);
         tmp.Odds= Math.round(tmp.Odds*ba)/ba;
+        //console.log('getOdds:',sBT,tmp.Odds,tmp.Steps);
         tmp.BT = BT;
         tmp.Num = num;
         return tmp;

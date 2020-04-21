@@ -1,6 +1,6 @@
 <template>
     <div class="row profit">
-        <div class='col-3' v-if='showUpLimit'>
+        <div class='col' v-if='showUpLimit'>
             賠率上限=(1 - 預定利潤
             <input 
                 maxlenght=2
@@ -8,7 +8,7 @@
             %)/機率【轉換】
             <q-btn round size="xs" color="primary" icon="autorenew" @click="updateRateTop()"/>
         </div>
-        <div class='col-3'>利潤
+        <div class='col'>利潤
             <input
                 maxlenght=2
                 v-model="pfRate" />

@@ -9,7 +9,9 @@
                 <BTC :store='store' :GameID='curGameID' @SltBT='SltBetTypes' ></BTC>
             </div>
 		</div>
-        <RCO :showUpLimit='true' @updateRateTop="updateRateTop" @updateRateDefault="updateRateDefault"></RCO>
+        <div class="row">
+        <RCO class='col-6' :showUpLimit='true' @updateRateTop="updateRateTop" @updateRateDefault="updateRateDefault"></RCO>
+        </div>
         <div class="q-pa-md" v-if="models">
             <div class="row">
                 <div class="col-1 test testheader">{{$t('Table.ItemName')}}</div>

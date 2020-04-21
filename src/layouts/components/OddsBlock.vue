@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <div class='row'>    
-                    <div class='col'>{{Odds.tolS}}</div>
+                    <div class='col'>{{Math.round(Odds.tolS)}}</div>
                 </div>
                 <div class='row'>
                     <div class='col' :class="{redcolor:Odds.Risk<0}">{{Odds.Risk}}</div>

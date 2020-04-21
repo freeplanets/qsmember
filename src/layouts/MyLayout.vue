@@ -105,7 +105,15 @@
           <q-item-section>
             <q-item-label>{{$t('Label.OddsManager')}}</q-item-label>
           </q-item-section>
-        </q-item>                 
+        </q-item>
+        <q-item to="/betlists" @click="ProName=$t('Label.BetLists');showComment=false">
+          <q-item-section avatar>
+            <q-icon name="receipt" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{$t('Label.BetLists')}}</q-item-label>
+          </q-item-section>
+        </q-item>           
         <!--
           
         <q-item clickable tag="a" target="_blank" href="https://facebook.quasar.dev">
