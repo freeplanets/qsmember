@@ -130,9 +130,43 @@ export interface CommonParams {
     data?:any;
     PayClassName?:string;
     NameOrNick?:string;
+    SDate?:string;
+    UpId?:number;
 }
 
 export interface PayClass {
     id:number;
     PayClassName:string;
+}
+
+//單頭
+export interface BetHeader {
+    id: number;
+    UserID: number;
+    tid: number;
+    GameID: number;
+    BetContent: string;
+    Fee?: number;
+    Total: number;
+    Payout?: number;
+    WinLose?: number;
+    ExRate?: number;
+    CancelLimit?: number;
+    CreateTime?: string;
+    GameName?:string;
+    UserName?:string;
+}
+
+export interface INumData {
+    Num: number;
+    OddsID: number;
+    Odds?: string | number;
+    Amt: number;
+    BetType?: number;
+}
+export interface IBetContent {
+    BetType?: number;
+    Content?: INumData[];
+    isPaylay?: boolean;
+    Sets?: number;
 }

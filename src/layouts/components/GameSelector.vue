@@ -18,6 +18,7 @@ import LayoutStoreModule from '../data/LayoutStoreModule';
 export default class GameSelector extends Vue {
     @Prop() readonly store?:LayoutStoreModule;
     @Prop() AddAllItem?:boolean;   //增加GameID=0的選項=> Select ALL
+    @Prop() ReturnList?:boolean;
     models:SelectOptions = {value: 0,label:''};
     options:SelectOptions[] = []
     AllItem:SelectOptions = {value:0,label:'ALL'};
@@ -30,7 +31,7 @@ export default class GameSelector extends Vue {
 		return this.models as SelectOptions;
     }
 	async getGames(){
-        console.log('getGames AddAllItem:',this.AddAllItem);
+        //console.log('getGames AddAllItem:',this.AddAllItem);
         if(!this.store) return;
         const ans:SelectOptions[] | undefined = await this.store.ax.getGames()
         if(ans){
@@ -41,6 +42,9 @@ export default class GameSelector extends Vue {
                 this.options = ans;
                 this.model = this.options[0];
             }
+        }
+        if(this.ReturnList){
+            this.$emit('setLists',this.options);
         }
     }    
     mounted(){

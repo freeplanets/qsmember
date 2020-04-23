@@ -1,3 +1,5 @@
+import {BetHeader, SelectOptions,INumData,IBetContent} from '../data/if'
+import Vue from 'vue';
 export const chkColor = (v:number,GType:string,chkExt:number|undefined=undefined)=>{
     //console.log('chkColor:',v,GType,chkExt);
     if(GType != 'MarkSix'){
@@ -47,7 +49,7 @@ const chkColorOther=(v,GType)=>{
 };
 
 export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle:boolean|undefined=undefined)=>{
-    //console.log('itemName:',bt,num,V.GType);
+    //console.log('itemName:',bt,num,GType);
     let n = num % 10
     let h 
     if(num > 100 && V.GType != 'Cars'){
@@ -112,27 +114,27 @@ export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle:boolean|u
 const Num7=function(bt,num,V){
     let t = Math.floor(num/8)
     let n = num % 8
-    return V.$t('Game.'+ V.GType+'.Item.'+bt+'.subtitle.'+t) + n
+    return V.$t(`Game.MarkSix.Item.${bt}.subtitle.${t}`) + n
 };
 const NumPass=function(num,V,sct,bt){
     let t = Math.floor(num/100)
     let n = num % 10
-    //*
-    if(typeof(V.$t('Game.'+ V.GType+'.Item.'+t+'.subtitle.'+n))=='undefined'){
-        console.log('Game.'+ V.GType+'.Item.'+t+'.subtitle.'+n)
+    /*
+    if(typeof(V.$t('Game.MarkSix.Item.'+t+'.subtitle.'+n))=='undefined'){
+        console.log('Game.MarkSix.Item.'+t+'.subtitle.'+n)
     }
-    //*/
-    let tmp = V.$t('Game.'+ V.GType+'.Item.'+t+'.subtitle.'+n)
+    */
+    let tmp = V.$t(`Game.MarkSix.Item.${t}.subtitle.${n}`)
     if(sct) {
         let k =Math.floor((num % 100) / 10)
-        tmp = V.$t('Game.'+ V.GType+'.Item.'+bt+'.sctitle.'+k) + ' ' + tmp
+        tmp = V.$t(`Game.MarkSix.Item.${bt}.sctitle.${k}`) + ' ' + tmp
     }
     return tmp
 };
 const DragonTiger=function(bt,num,V){
     let ext = num % 2
     let h = Math.floor(num/10)
-    return (h+1)+'vs'+(6-h)+V.$t('Game.' + V.GType + '.Item.'+bt+'.subtitle.' + ext)
+    return (h+1)+'vs'+(6-h)+V.$t('Game.MarkSix.Item.'+bt+'.subtitle.' + ext)
 };
 const padingZero=function(num:string|number,dtl:number):string{
     if(typeof(num)==='number') num=num.toString();
@@ -162,3 +164,142 @@ export function dateString():string{
     const reg1 = /(\d+)-(\d+)-(\d+).*/;
     return d.toJSON().replace(reg1, '$1-$2-$3');
 }
+export function datetime(v:string){
+    const dt:Date=new Date(v);
+    return dt.toLocaleString('zh-TW', {timeZone: 'Asia/Taipei',hour12:false});
+}
+export function BHRemaster(bh:BetHeader,glist:SelectOptions[],vue:Vue,users?:any):BetHeader{
+    console.log('BHRemaster type:',typeof bh.GameID);
+    const f=glist.find(itm=>itm.value==bh.GameID);
+    if(f){
+        const GType=f.GType ? f.GType : '';
+        bh.GameName = f.label;
+        bh.BetContent = RemasterCon(bh.BetContent,GType,vue);
+        console.log('BHRemaster',bh.BetContent);
+    } 
+    return bh;
+}
+interface BtN { 
+    title: string; 
+    shortT?: string; 
+    subtitle?: string[];
+    sctitle?:string[];
+}
+function RemasterCon(BC:any,GType:string,vue:Vue):string{
+    //console.log('RemasterCon:',BC);
+    const btc:IBetContent=BC as IBetContent;
+    if(GType){
+        let tItm:BtN|undefined;
+        if(btc.BetType){
+            let tmp:any=vue.$t(`Game.${GType}.Item.${btc.BetType}`);
+            tItm=tmp as BtN;
+            if(btc.BetType==15){
+                console.log('emasterCon:',typeof(btc.BetType),btc);
+            }
+        }
+        let SNum:string[]=[];
+        if(btc.Content){
+            let stmp:BtN|undefined;
+            btc.Content.map(itm=>{
+                if(itm.BetType){
+                    let tt:any=vue.$t(`Game.${GType}.Item.${itm.BetType}`);
+                    stmp=tt as BtN
+                }
+                let tmp:string;
+                let numtitle:string='';
+                let bt:number = btc.BetType ? btc.BetType : (itm.BetType ? itm.BetType : 0);                   
+                numtitle=itemNameNew(GType, bt,itm.Num,vue,1,true);
+                /*
+                if(stmp  &&  !tItm){
+                    console.log('NumNoPass',itm.Num,vue,true,itm.BetType);                   
+                    tmp=`${stmp.title}:${stmp.subtitle ? stmp.subtitle[itm.Num] : itm.Num}${itm.Odds ? '('+itm.Odds+')' :''}`
+                } else {
+                    console.log('NumPass',itm.Num,vue,true,btc.BetType);                   
+                    if(GType=='MarkSix' && itm.BetType==68){
+                         numtitle = DragonTiger(itm.BetType,itm.Num,vue);
+                    } else if(GType=='MarkSix' && btc.BetType==15){     
+                        numtitle= NumPass(itm.Num,vue,true,btc.BetType);
+                    } else if(GType=='MarkSix' && btc.BetType==53) {
+                         numtitle= Num7(btc.BetType,itm.Num,vue);
+                    } else {
+                        numtitle = itm.Num+'';
+                    }                    
+                    tmp=`${numtitle}${itm.Odds ? '('+itm.Odds+')' :''}`;
+                }
+                */
+                tmp=`<span class="Nums">${numtitle}</span>${itm.Odds ? '(<span class="Odds">'+itm.Odds+'</span>)' :''}`;
+                SNum.push(tmp);
+            })
+        }
+        //return `${btc.BetType}:${tItm ? tItm.title : '' }${SNum.join(",")}`;
+        return `${tItm ? '<span class="BetType">'+tItm.title+'</span><br>' : '' }${SNum.join(",")}`;
+    }
+    return BC;
+}
+
+function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1,showScTitle:boolean|undefined=undefined){
+    //console.log('itemName:',bt,num,V.GType);
+    let n = num % 10
+    let h 
+    if(num > 100 && GType != 'Cars'){
+        h=Math.floor(num/100)
+    } else {
+        h=Math.floor(num/10)
+    }
+    if(GType=='Cars'){
+        if(bt==1){
+            if(n==0){
+                h=h-1
+                n=10
+            }
+        }        
+        if(bt>=7) return num
+        if(bt>1){
+            const tmp1:string=V.$t(`Game.Cars.Item.${bt}.sctitle[${h}]`)+'';
+            const tmp2:string=V.$t(`Game.Cars.Item.${bt}.subTitle[${n}]`)+'';
+            return tmp1+tmp2;
+        } 
+        //if(bt==1) return V.$t('Game.Cars.Item.' + bt +'.sctitle[' + h +']') + ' ' + n 
+        //return V.$t('Game.Cars.Item.' + bt +'.sctitle[' + h +']') + V.$t('Game.Cars.Item.' + bt +'.subTitle[' + n +']')
+    }
+    if(GType=='MarkSix' && bt==53) return Num7(bt,num,V)
+    if(GType=='MarkSix' && bt==15) return NumPass(num,V,showScTitle,bt)
+    if(GType=='MarkSix' && bt==68) return DragonTiger(bt,num,V) /* 龍虎 */
+    //let subtt = V.$t('Game.'+GType+'.Item.' + bt +'.subTitle')
+    const tmpT:any=V.$t('Game.'+GType+'.Item.' + bt);
+    const btitem:BtN = tmpT as BtN;
+    if(showScTitle){
+        if(btitem.sctitle){
+            if(btitem.subtitle){
+                return btitem.sctitle[h] + btitem.subtitle[n]
+            } else {
+                return btitem.sctitle[h] + ' ' + n
+            }
+        }
+    }    
+    let exTitle=''
+    //let subT = V.$t('Game.' + GType + '.Item.'+bt+'.subtitle').length
+    if(btitem.subtitle){
+      let ext = num % btitem.subtitle.length
+      if(GType=='MarkSix' && bt==14) {
+          ext = num % 10
+      }
+      if(btitem.shortT){
+          exTitle = btitem.shortT + btitem.subtitle[ext]
+      } else {
+        exTitle = btitem.subtitle[ext]
+      }
+      //exTitle = V.$t('Game.' + GType + '.Item.'+bt+'.shortT') + V.$t('Game.' + GType + '.Item.'+bt+'.subtitle.' + ext)
+      return exTitle
+    }
+    if(dgt>1){
+      return padingZero(num,dgt)
+    }
+    if(num > 100 && typeof(dgt)=='undefined') num = num % 100
+    if(GType=='Always') return num %10
+    if(GType=='Cars'){
+        return n
+    } 
+    if(num<10 && (GType=='MarkSix' || GType=="Happy8" || dgt==2)) return '0'+num
+    return num
+};

@@ -64,7 +64,7 @@ interface Ans {
 export default class AddUser extends Vue{
     store=getModule(LayoutStoreModule);
     NewUser:IUser = {TableName:'User',id:0}
-    slt:SelectOptions={}
+    slt:SelectOptions={value:0}
     showList=true;
     showEdit=false;
     data:IUser[]=[]
@@ -176,9 +176,9 @@ export default class AddUser extends Vue{
     }
     async getUsers(){
       const ax=this.store.ax;
-      const ans:IMsg=await ax.getUsers();
-      if(ans.ErrNo===0){
-        this.data = ans.data as [];
+      const ans=await ax.getUsers();
+      if(ans){
+        this.data = ans as IUser[];
       }
       this.data.map(u=>{
         const tmp=this.typesOption.find(itm => itm.value===u.Types);
