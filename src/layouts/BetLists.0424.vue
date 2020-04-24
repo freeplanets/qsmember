@@ -11,28 +11,26 @@
     </div>
     <q-separator inset />
     <div v-if="list.length>0" class="mytable">
-      <table>
-        <tr>
-          <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OrderNo')}}</td>
-          <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OrderTime')}}</td>
-          <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.GameName')}}</td>
-          <td class="col mytable-head mytable-field-txt">{{$t('Report.OdrType')}}</td>
-          <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OdrAmt')}}</td>
-          <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.Result')}}</td>
-        </tr>
-      <tr 
+      <div class="row">
+        <div class="col-1 mytable-head mytable-field-txt">{{$t('Report.OrderNo')}}</div>
+        <div class="col-1 mytable-head mytable-field-txt">{{$t('Report.OrderTime')}}</div>
+        <div class="col-1 mytable-head mytable-field-txt">{{$t('Label.GameName')}}</div>
+        <div class="col mytable-head mytable-field-txt">{{$t('Report.OdrType')}}</div>
+        <div class="col-1 mytable-head mytable-field-txt">{{$t('Report.OdrAmt')}}</div>
+        <div class="col-1 mytable-head mytable-field-txt">{{$t('Report.Result')}}</div>
+      </div>
+      <div 
         v-for="(itm,idx) in list"
         :key="'bh'+idx"
-        >
-        <td class="col-1 mytable-field-txt">{{itm.id}}</td>
-        <td class="col-1 mytable-field-txt">{{DTString(itm.CreateTime)}}</td>
-        <td class="col-1 mytable-field-txt">{{itm.GameName}}</td>
-        <td class="col mytable-field-txt" v-html="itm.BetContent"></td>
-        <td class="col-1 mytable-field-num">{{itm.Total}}</td>
-        <td class="col-1 mytable-field-num">{{itm.WinLose.toFixed(2)}}</td>        
-      </tr>
-      </table>
+        class="row">
+        <div class="col-1 mytable-field-txt">{{itm.id}}</div>
+        <div class="col-1 mytable-field-txt">{{DTString(itm.CreateTime)}}</div>
+        <div class="col-1 mytable-field-txt">{{itm.GameName}}</div>
+        <div class="col mytable-field-txt" v-html="itm.BetContent"></div>
+        <div class="col-1 mytable-field-num">{{itm.Total}}</div>
+        <div class="col-1 mytable-field-num">{{itm.WinLose.toFixed(2)}}</div>        
       </div>
+    </div>
     <q-dialog v-model="datePickerShow">
       <q-card>            
           <q-card-section>
@@ -107,12 +105,6 @@ export default class BetLists extends Vue {
 .mytable {
     max-width: 1000px; 
     padding-left: 8px;
-    padding-top: 4px;
-}
-.mytable table {
-    border-collapse: collapse;
-
-
 }
 .mytable-head {
     background-color: cadetblue;

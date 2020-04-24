@@ -125,7 +125,7 @@ export class CGame {
         const sBT:string=BT.toString();
         const sNum:string=num.toString();
         if(!this.member[sBT]){
-            console.log(this.member[sBT]);
+            //console.log(this.member[sBT]);
             return {};
         }
         const tmp:IOdds=this.member[sBT].member[sNum];

@@ -14,13 +14,14 @@ export default class PayClassSelector extends Vue {
   @Prop() GameID?:number;
   @Prop() itmChange:boolean=false;
   @Watch('GameID',{ immediate: true, deep: true })
-  onGameIDChange(val:number,oldval:number){
-    console.log('onGameIDChange:',val,oldval);
+  onGameIDChange(){
+  //onGameIDChange(val?:number,oldval?:number){
+    //console.log('onGameIDChange:',val,oldval);
     this.chkPayCls();
   }
   @Watch('itmChange',{ immediate: true, deep: true })
   onItmChange(v){
-    console.log('onItmChange:',v);
+    //console.log('onItmChange:',v);
     if(v){
       this.chkPayCls();
     }

@@ -73,7 +73,7 @@ export default class GamePayClassSelector extends Vue {
     const pans = await this.store.ax.getPayClass();
     if(pans.ErrNo==0){
       const pc:PayClass[] = pans.data as PayClass[];
-      console.log('PayClass:',pc);
+      //console.log('PayClass:',pc);
       pc.map(itm=>{
         let f = this.games.find(g=>g.id === itm.GameID);
         if(f){

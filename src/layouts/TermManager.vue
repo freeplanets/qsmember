@@ -183,8 +183,12 @@ export default class TermManager extends Vue {
         const ans=await this.ax.getTerms(GameID)
         if(ans.ErrNo===0){
             this.data=ans.data;
+            this.data.map(itm=>{
+                if(itm.ResultFmt){
+                    console.log('getTerms',JSON.parse(itm.ResultFmt));
+                }
+            })
         }
-        //console.log('getTerms',ans,this.data);
     }
     Edit(v:ITerms){
         Object.keys(v).map(key=>{

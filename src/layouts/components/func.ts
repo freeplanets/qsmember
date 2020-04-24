@@ -169,13 +169,13 @@ export function datetime(v:string){
     return dt.toLocaleString('zh-TW', {timeZone: 'Asia/Taipei',hour12:false});
 }
 export function BHRemaster(bh:BetHeader,glist:SelectOptions[],vue:Vue,users?:any):BetHeader{
-    console.log('BHRemaster type:',typeof bh.GameID);
+    //console.log('BHRemaster type:',typeof bh.GameID);
     const f=glist.find(itm=>itm.value==bh.GameID);
     if(f){
         const GType=f.GType ? f.GType : '';
         bh.GameName = f.label;
         bh.BetContent = RemasterCon(bh.BetContent,GType,vue);
-        console.log('BHRemaster',bh.BetContent);
+        //console.log('BHRemaster',bh.BetContent);
     } 
     return bh;
 }
@@ -193,9 +193,6 @@ function RemasterCon(BC:any,GType:string,vue:Vue):string{
         if(btc.BetType){
             let tmp:any=vue.$t(`Game.${GType}.Item.${btc.BetType}`);
             tItm=tmp as BtN;
-            if(btc.BetType==15){
-                console.log('emasterCon:',typeof(btc.BetType),btc);
-            }
         }
         let SNum:string[]=[];
         if(btc.Content){
@@ -209,25 +206,8 @@ function RemasterCon(BC:any,GType:string,vue:Vue):string{
                 let numtitle:string='';
                 let bt:number = btc.BetType ? btc.BetType : (itm.BetType ? itm.BetType : 0);                   
                 numtitle=itemNameNew(GType, bt,itm.Num,vue,1,true);
-                /*
-                if(stmp  &&  !tItm){
-                    console.log('NumNoPass',itm.Num,vue,true,itm.BetType);                   
-                    tmp=`${stmp.title}:${stmp.subtitle ? stmp.subtitle[itm.Num] : itm.Num}${itm.Odds ? '('+itm.Odds+')' :''}`
-                } else {
-                    console.log('NumPass',itm.Num,vue,true,btc.BetType);                   
-                    if(GType=='MarkSix' && itm.BetType==68){
-                         numtitle = DragonTiger(itm.BetType,itm.Num,vue);
-                    } else if(GType=='MarkSix' && btc.BetType==15){     
-                        numtitle= NumPass(itm.Num,vue,true,btc.BetType);
-                    } else if(GType=='MarkSix' && btc.BetType==53) {
-                         numtitle= Num7(btc.BetType,itm.Num,vue);
-                    } else {
-                        numtitle = itm.Num+'';
-                    }                    
-                    tmp=`${numtitle}${itm.Odds ? '('+itm.Odds+')' :''}`;
-                }
-                */
-                tmp=`<span class="Nums">${numtitle}</span>${itm.Odds ? '(<span class="Odds">'+itm.Odds+'</span>)' :''}`;
+                const Odds = fixP(itm.Odds)
+                tmp=`<span class="Nums">${numtitle}</span>${Odds ? '(<span class="Odds">'+Odds+'</span>)' :''}`;
                 SNum.push(tmp);
             })
         }
@@ -236,7 +216,30 @@ function RemasterCon(BC:any,GType:string,vue:Vue):string{
     }
     return BC;
 }
-
+function fixP(v?:number|string):string|undefined{
+    let n:number | undefined;
+    if(typeof(v)==='string'){
+        if(v.indexOf(',')>=0){
+            const arr=v.split(',');
+            const nn:string[]=[];
+            arr.map(vv=>{
+                const tmp:string|undefined=fixP(vv);
+                if(tmp){
+                    nn.push(tmp);
+                }
+            })
+            return nn.join('/');
+        }
+        n = parseFloat(v);
+    } 
+    else n=v;
+    if(n){
+        const ba:number=BaNum(n)/10;
+        if(ba<100) return n+'';
+        return (Math.round(n*ba)/ba)+'';
+    }
+    return n+'';
+}
 function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1,showScTitle:boolean|undefined=undefined){
     //console.log('itemName:',bt,num,V.GType);
     let n = num % 10

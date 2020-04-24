@@ -54,6 +54,7 @@ export interface ITerms {
     StopTime:string;
     StopTimeS:string;
     Result?:string;
+    ResultFmt?:string;
     SpNo?:string;
     isSettled?:number;
     ModifyID:number;
