@@ -132,6 +132,7 @@ export interface CommonParams {
     NameOrNick?:string;
     SDate?:string;
     UpId?:number;
+    [key:string]:number|string|undefined;
 }
 
 export interface PayClass {
@@ -155,6 +156,7 @@ export interface BetHeader {
     CreateTime?: string;
     GameName?:string;
     UserName?:string;
+    TermID?:string;
 }
 
 export interface INumData {

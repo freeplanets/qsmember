@@ -39,9 +39,27 @@ export class AxApi {
             return;
         }
     }
+    async getTermIDByGameID(GameID:number):Promise<SelectOptions[] | undefined>{
+        const params:CommonParams={
+            GameID:GameID
+        }
+        const tmp:SelectOptions[]=[];
+        const ans=await this.getApi('getTermIDByGameID',params);
+        if(ans.ErrNo===0){
+            const dta:any=ans.data;
+            dta.map(itm=>{
+                const t:SelectOptions={
+                    label: itm.TermID,
+                    value: itm.id,
+                }
+                tmp.push(t);                
+            })
+            return tmp;            
+        } else {
+            return;
+        }
+    }
     async getBtClass(gid:number|string):Promise<IbtCls[] | undefined>{
-		//const url:string=this.store.ax.Host+'/api/getBtClass';
-		//const models:SelectOptions = this.models as SelectOptions;
 		const param:CommonParams={
             GameID:gid
         }
@@ -218,7 +236,7 @@ export class AxApi {
         const url:string=`${this.ApiUrl}/api/${appName}`;
         return await this.doit(url,param); 
     }
-    doit(url:string,param?:CommonParams):Promise<IMsg>{
+    doit(url:string,param?:CommonParams|ITerms):Promise<IMsg>{
        const config:AxiosRequestConfig = {};
         if(param){
             config.params=param
@@ -235,7 +253,7 @@ export class AxApi {
             resolve(msg);
         });
     }
-    doPost(url:string,param?:CommonParams):Promise<IMsg>{
+    doPost(url:string,param?:CommonParams|ITerms):Promise<IMsg>{
         //const config:AxiosRequestConfig = {}
         if(!param){
             //config.params=param

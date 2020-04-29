@@ -6,7 +6,7 @@
           flat
           dense
           round
-          @click="store.toggleLeftDrawer()"
+          @click="leftDrawerOpen=!leftDrawerOpen"
           icon="menu"
           aria-label="Menu"
         />

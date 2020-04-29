@@ -7,7 +7,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component';
-import {Prop} from 'vue-property-decorator';
+import {Prop, Watch} from 'vue-property-decorator';
 import {SelectOptions} from '../data/if';
 import LayoutStoreModule from '../data/LayoutStoreModule';
 /**
@@ -19,12 +19,25 @@ export default class GameSelector extends Vue {
     @Prop() readonly store?:LayoutStoreModule;
     @Prop() AddAllItem?:boolean;   //增加GameID=0的選項=> Select ALL
     @Prop() ReturnList?:boolean;
+    @Prop() GameID?:number;
+    @Watch('GameID',{ immediate: true, deep: true })
+    onGameIDChange(val:number){
+        //console.log('onGameIDChange:',this.GameID,val,typeof val);
+        if(val===undefined) return;
+        this.ChangeFromUp=true;
+        const f=this.options.find(itm=>itm.value===val)
+        if(f){
+            this.model=f;
+        }
+    }
+    ChangeFromUp:boolean=false;
     models:SelectOptions = {value: 0,label:''};
     options:SelectOptions[] = []
     AllItem:SelectOptions = {value:0,label:'ALL'};
 	set model(v:SelectOptions){
         this.models = v;
-        this.$emit('setGames',v);
+        if(!this.ChangeFromUp) this.$emit('setGames',v);
+        this.ChangeFromUp=false;
 	}
 	get model(){
         //console.log('get Model:', this.models);

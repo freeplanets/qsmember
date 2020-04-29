@@ -48,7 +48,8 @@ export default {
     OpenParams:'開盤參數',
     OddsManager:'控盤',
     BetLists:'注單查詢',
-    NameOrNick:'名稱/代號'
+    NameOrNick:'名稱/代號',
+    TotalN:'共 {N} 筆'
   },
   Tip:{
     UserFind: "請輸入名稱或代號"
@@ -113,7 +114,8 @@ export default {
     TotalOpen: '總開放',
     PageOpen: '本頁開放',
     Confirm: '碓認',
-    Search:'查詢'
+    Search:'查詢',
+    Clear:"清除"
   },
   Dialog: {
     MTitle: '主選單',

@@ -197,17 +197,19 @@ function RemasterCon(BC:any,GType:string,vue:Vue):string{
         let SNum:string[]=[];
         if(btc.Content){
             let stmp:BtN|undefined;
+            let subBt:string='';
             btc.Content.map(itm=>{
                 if(itm.BetType){
                     let tt:any=vue.$t(`Game.${GType}.Item.${itm.BetType}`);
                     stmp=tt as BtN
+                    subBt = tItm ? '' : (stmp ? '<span class="BetType">'+stmp.title+"</span>:" : '');
                 }
                 let tmp:string;
                 let numtitle:string='';
                 let bt:number = btc.BetType ? btc.BetType : (itm.BetType ? itm.BetType : 0);                   
                 numtitle=itemNameNew(GType, bt,itm.Num,vue,1,true);
                 const Odds = fixP(itm.Odds)
-                tmp=`<span class="Nums">${numtitle}</span>${Odds ? '(<span class="Odds">'+Odds+'</span>)' :''}`;
+                tmp=`${subBt}<span class="Nums">${numtitle}</span>${Odds ? '(<span class="Odds">'+Odds+'</span>)' :''}`;
                 SNum.push(tmp);
             })
         }

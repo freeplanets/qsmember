@@ -18,6 +18,7 @@ export default class LayoutStoreModule extends VuexModule {
     @Mutation
     public SET_LEFT_DRAWER_OPEN(value: boolean){
         this.leftDrawerOpen = value;
+        //console.log('SET_LEFT_DRAWER_OPEN',this.leftDrawerOpen,typeof this.leftDrawerOpen);
     }
 
     @Action
@@ -28,7 +29,7 @@ export default class LayoutStoreModule extends VuexModule {
     @Action
     public toggleLeftDrawer(){
         this.SET_LEFT_DRAWER_OPEN(!this.leftDrawerOpen);
-        //console.log('toggleLeftDrawer',this.leftDrawerOpen);
+        //console.log('toggleLeftDrawer',this.leftDrawerOpen)
     }
 
     @Mutation

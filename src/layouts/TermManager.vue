@@ -216,6 +216,10 @@ export default class TermManager extends Vue {
         const ans=await ax.saveNums(this.curTid,this.term.GameID,this.nums.join(','));
         //console.log('SendNums',ans);
         if(ans.data.ErrNo===0){
+            this.$q.dialog({
+                title: this.$t('Label.Save') as string,
+                message: 'OK!!'
+            });
             this.isInputNum=false;
             this.getTerms(this.term.GameID);
         }
