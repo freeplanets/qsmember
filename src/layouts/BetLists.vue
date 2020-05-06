@@ -6,15 +6,11 @@
       <div class="col-1 tsltor" v-if="curGameID>0"><BTS :GType='curGType' @setBetType='setBetType'></BTS></div>
       <div class="pbtn2"><q-input outlined dense v-model="NameOrNick" :label="$t('Label.NameOrNick')" /></div>
       <div class="pbtn2"><q-input outlined dense v-model="UpName" :label="`${$t('Label.Agent')}/${$t('Label.WebOwner')}`" /></div>
-    </div>
-    <div class="row">
-      <div class="pbtn2"><q-input outlined dense v-model="BetID" :label="$t('Report.OrderNo')" /></div>
-      <div class='pbtn'><q-btn dense color="primary" icon-right="date_range" :label="$t('Label.Date')"  @click="dateSPickerShow=true"/></div>      
-      <div class='pbtn2'><q-input outlined dense v-model="SDate" mask="####-##-##"/></div>
-      <div class='pbtn2'><q-input outlined dense v-model="STime" mask="##:##:##"/></div>
-      <div class='pbtn'><q-btn dense color="primary" icon-right="date_range" :label="$t('Label.Date')"  @click="dateEPickerShow=true"/></div>      
-      <div class='pbtn2'><q-input outlined dense v-model="EDate" mask="####-##-##"/></div>
-      <div class='pbtn2'><q-input outlined dense v-model="ETime" mask="##:##:##"/></div>
+      <div class="pbtn2"><q-input outlined dense v-model="BetID" :label="$t('Report.OrderNo')+'(n,1,2,3,...)'" /></div>
+      <div class="tbox-pd"><q-input class="tbox-w" outlined dense v-model="dateSet" /></div>
+      <div class="miniBtn-pd"><q-btn color="primary" dense icon="date_range" @click="DateSlt=true"/></div>      
+      <div v-if="showTimeEdit" class='pbtn2'><q-input outlined dense v-model="STime" label="##:##:##" mask="##:##:##"/></div>
+      <div v-if="showTimeEdit" class='pbtn2'><q-input outlined dense v-model="ETime" label="##:##:##" mask="##:##:##"/></div>      
     </div>
     <div class="row">
       <div class="col-1">{{$t('Report.OdrAmt')}}</div>
@@ -62,33 +58,29 @@
       </tr>
       </table>
       </div>
-    <q-dialog v-model="dateSPickerShow">
-      <q-card>            
-          <q-card-section>
-          <q-date v-model="SDateT" mask="YYYY-MM-DD" @click="setSDate(SDateT);dateSPickerShow=false;" />
-          </q-card-section>                
+    <q-dialog v-model="DateSlt">
+      <q-card class='diaDate'>
+        <q-card-section class="q-pt-none">
+          <SED v-model="dateSet" @closeme="DateSlt=false"></SED>
+        </q-card-section>
       </q-card>
-    </q-dialog>
-    <q-dialog v-model="dateEPickerShow">
-      <q-card>            
-          <q-card-section>
-          <q-date v-model="EDateT" mask="YYYY-MM-DD" @click="setEDate(EDateT);dateEPickerShow=false;" />
-          </q-card-section>                
-      </q-card>
-    </q-dialog>    
+    </q-dialog>            
   </div>
 </template>
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import {Watch} from 'vue-property-decorator';
 import LayoutStoreModule from './data/LayoutStoreModule'
 import {getModule} from 'vuex-module-decorators';
 import {SelectOptions,CommonParams,IMsg,BetHeader} from './data/if';
-import {dateString,BHRemaster,datetime} from './components/func';
+import {BHRemaster,datetime} from './components/func';
 import GameSelector from './components/GameSelector.vue';
 import TermIDSelector from './components/TermIDSelector.vue';
 import BetTypeSelector from './components/BetTypeSelector.vue';
+import SEDate from './components/SEDate.vue';
 Vue.component('GS',GameSelector);
+Vue.component('SED',SEDate);
 Vue.component('TIDS',TermIDSelector);
 Vue.component('BTS',BetTypeSelector);
 
@@ -98,15 +90,9 @@ export default class BetLists extends Vue {
   NameOrNick:string='';
   curGameID:number=0;
   curGType:string='';
-  SDateT:string=dateString();
-  EDateT:string=dateString();
-  SDate:string='';
-  EDate:string='';  
   STime:string='';
   ETime:string='';
   list:BetHeader[]=[];
-  dateSPickerShow:boolean=false;
-  dateEPickerShow:boolean=false;
   GameList:SelectOptions[]=[];
   total:number=0;
   winlose:number=0;
@@ -118,8 +104,21 @@ export default class BetLists extends Vue {
   OrdAmtE:number=0;
   WinLoseS:number=0;
   WinLoseE:number=0;
+  DateSlt:boolean=false;
+  showTimeEdit:boolean=false;
+  dateSet:string='';
+  @Watch('dateSet',{immediate:true,deep:true})
+  onDateSetChange(){
+    //console.log('onDateSetChange',this.DateSlt);
+    this.DateSlt=false;
+    if(this.dateSet && this.dateSet.indexOf('-')<0){
+      this.showTimeEdit=true;
+    } else {
+      this.showTimeEdit=false;
+    }
+  }
   setCurGames(v:SelectOptions){
-    console.log('setCurGames',v);
+    //console.log('setCurGames',v);
     this.curGameID=v.value;
     this.curGType=v.GType ? v.GType : '';
   }
@@ -130,8 +129,7 @@ export default class BetLists extends Vue {
     this.UpName='';
     this.termid=0;
     this.bettype=0;
-    this.SDate='';
-    this.EDate='';
+    this.dateSet='';
     this.STime='';
     this.ETime='';
     this.OrdAmtS=0;
@@ -147,8 +145,11 @@ export default class BetLists extends Vue {
     param.UpName=this.UpName;
     if(this.termid) param.tid = this.termid;
     if(this.bettype) param.BetType = this.bettype;
-    if(this.SDate) param.SDate = this.SDate;
-    if(this.EDate) param.EDate = this.EDate;
+    if(this.dateSet){
+      const tmp:string[]=this.dateSet.split('-');
+      if(tmp[0]) param.SDate = tmp[0];
+      if(tmp[1]) param.EDate = tmp[1];
+    }
     if(this.STime) param.STime = this.STime;
     if(this.ETime) param.ETime = this.ETime;
     if(this.OrdAmtS) param.OrdAmtS = this.OrdAmtS;
@@ -188,12 +189,6 @@ export default class BetLists extends Vue {
   setBetType(v:number){
     this.bettype=v;
   }
-  setSDate(d:string){
-    this.SDate=d;
-  }
-  setEDate(d:string){
-    this.EDate=d;
-  }
   mounted(){
       if(!this.store.isLogin){
           this.$router.push({path:'/login'});
@@ -209,13 +204,11 @@ export default class BetLists extends Vue {
     padding: 4px 4px;
 }
 .mytable {
-    max-width: 1000px; 
+    max-width: 1400px; 
     padding: 4px 0 8px 8px;
 }
 .mytable table {
     border-collapse: collapse;
-
-
 }
 .mytable-head {
     background-color: cadetblue;
@@ -250,9 +243,6 @@ export default class BetLists extends Vue {
   background-color: black;
   color: white;
 }
-.cont {
-  max-width: 200px;
-}
 .linetotal {
   background-color: lightskyblue;
 }
@@ -268,6 +258,11 @@ export default class BetLists extends Vue {
 }
 .wdbr {
   word-break: break-all;
-  max-width: 100px;
+  max-width: 500px;
+}
+.diaDate {
+  padding-top: 20px;
+  width: 705px;
+  max-width: 1000px;
 }
 </style>

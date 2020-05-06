@@ -6,7 +6,7 @@
           flat
           dense
           round
-          @click="leftDrawerOpen=!leftDrawerOpen"
+          @click="leftDrawerOpen=true"
           icon="menu"
           aria-label="Menu"
         />
@@ -25,10 +25,8 @@
 
     <q-drawer
       v-model="leftDrawerOpen"
-      show-if-above
       bordered
       content-class="bg-grey-2"
-      no-swipe-close
       overlay
       @click="leftDrawerOpen=false"
     >
@@ -113,7 +111,15 @@
           <q-item-section>
             <q-item-label>{{$t('Label.BetLists')}}</q-item-label>
           </q-item-section>
-        </q-item>           
+        </q-item>
+        <q-item to="/betreport" @click="ProName=$t('Label.BetReport');showComment=false">
+          <q-item-section avatar>
+            <q-icon name="receipt" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{$t('Label.BetReport')}}</q-item-label>
+          </q-item-section>
+        </q-item>                    
         <!--
           
         <q-item clickable tag="a" target="_blank" href="https://facebook.quasar.dev">
@@ -153,9 +159,11 @@ export default class MyLayout extends Vue {
   showComment:boolean=false;
   ProName:string='*';
   get leftDrawerOpen() {
+    //console.log('leftDrawerOpen get:',this.store.leftDrawerOpen);
     return this.store.leftDrawerOpen;
   }
   set leftDrawerOpen(value:boolean){
+    //console.log('leftDrawerOpen set:');
     this.store.setLeftDrawerOpen(value);
   }
   get isLogin(){
@@ -171,7 +179,7 @@ export default class MyLayout extends Vue {
       if(this.$route.path !== '/login'){
         this.$router.push({path:'/login'});
       }
-    }
+    } 
   }
 }
 

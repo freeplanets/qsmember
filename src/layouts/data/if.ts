@@ -32,8 +32,8 @@ export interface BasePayRateItm {
     TopRate?:number;
     Probability?:number;
 	Steps?:number;
-	TopPay?:number;
-    OneHand?:number;
+	//TopPay?:number;
+    //OneHand?:number;
 }
 export interface PayRateItm extends BasePayRateItm {
 	Rate?:number;

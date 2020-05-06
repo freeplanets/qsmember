@@ -100,7 +100,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import {SelectOptions} from './data/if';
+import {SelectOptions,CommonParams,IMsg} from './data/if';
 import {ITerms} from './data/schema';
 import GameSelector from './components/GameSelector.vue';
 Vue.component('GS',GameSelector);
@@ -127,6 +127,7 @@ export default class TermManager extends Vue {
     data:ITerms[]=[];
     isAddTerm:boolean=false;
     isInputNum:boolean=false;
+    curTermSettleStatus:number=0;
     curTid:number=0;
     get ax(){
         return this.store.ax;
@@ -152,7 +153,33 @@ export default class TermManager extends Vue {
     ShowAdd(){
         if(this.models){
             this.isAddTerm = !this.isAddTerm
+            this.getLastTerm();
         }
+    }
+    async getLastTerm(){
+        const param:CommonParams={
+            GameID: this.term.GameID
+        }
+        const msg:IMsg=await this.store.ax.getApi('getLastTerm',param);
+        if(msg.ErrNo===0){
+            //console.log(msg.data);
+            if(msg.data){
+                const lsTerm:ITerms=msg.data[0] as ITerms;
+                this.term.PTime = lsTerm.PTime;
+                this.term.StopTime = lsTerm.StopTime;
+                this.term.StopTimeS = lsTerm.StopTimeS;
+                this.term.TermID = this.TermIDAdd(lsTerm.TermID)
+            }
+
+        }
+    }
+    TermIDAdd(TermID:string):string{
+        const len:number=TermID.length;
+        let rs:string=(parseInt(TermID,10)+1).toString();
+        while(rs.length<len){
+            rs='0'+rs;
+        }
+        return rs;
     }
     showDatePicker(){
         this.datePickerShow=!this.datePickerShow;
@@ -200,6 +227,9 @@ export default class TermManager extends Vue {
     }
     InputNum(v:ITerms){
         this.nums=['','','','','','',''];
+        if(v.isSettled){
+            this.curTermSettleStatus = v.isSettled;
+        }
         if(v.Result){
             this.nums=v.Result.split(',');
             if(v.SpNo) this.nums.push(v.SpNo);
@@ -213,7 +243,7 @@ export default class TermManager extends Vue {
     }
     async SendNums(){
         const ax=this.store.ax;
-        const ans=await ax.saveNums(this.curTid,this.term.GameID,this.nums.join(','));
+        const ans=await ax.saveNums(this.curTid,this.term.GameID,this.nums.join(','),this.curTermSettleStatus);
         //console.log('SendNums',ans);
         if(ans.data.ErrNo===0){
             this.$q.dialog({

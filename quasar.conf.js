@@ -89,7 +89,8 @@ module.exports = function (ctx) {
         'QAvatar',
         'QBtnGroup',
         'QChip',
-        'QEditor'
+        'QEditor',
+        'QBtnToggle'
       ],
 
       directives: [

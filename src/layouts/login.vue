@@ -59,6 +59,7 @@ export default class Login extends Vue {
       if(ans.ErrNo===0){
         this.Personal = ans.data as IUser;
         this.isLogin = true;
+        //this.store.leftDrawerOpen=true;
         this.$router.push({path:'/'});
       }
     }).catch(err=>{

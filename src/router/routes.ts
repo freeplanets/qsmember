@@ -49,7 +49,11 @@ const routes: RouteConfig[] = [
       {
         path: '/betlists',
         component: () => import('layouts/BetLists.vue')
-      },                    
+      }, 
+      {
+        path: '/betreport',
+        component: () => import('layouts/BetReport.vue')
+      },                          
     ],
   }
 

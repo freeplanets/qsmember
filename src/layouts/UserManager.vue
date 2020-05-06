@@ -344,7 +344,7 @@ export default class UserManager extends Vue{
 .UserModify div {
   margin-bottom: 5px; 
 }
-.testheader {
+.testheader div{
     background-color: cadetblue;
     color:white;
 }

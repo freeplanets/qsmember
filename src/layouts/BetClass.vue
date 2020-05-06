@@ -19,10 +19,10 @@
 				</q-card-section>
 			</q-card>
 			<div class="row q-pa-sm">
-				<div class="col-1"><q-btn color="blue" icon-right="send" label="Save" @click="Save()" /></div>
-				<div class="col-1"><q-btn color="accent" icon-right="clear" label="clear" @click="clear()" /></div>
-				<div class="col-1"><q-btn color="red" icon-right="delete_forever" label="Delete" @click="Delete()" /></div>
-				<div class="col-2"><q-btn color="green-9" icon-right="pan_tool" label="Unseleted" @click="getUnGroupedBT()" /></div>
+				<div class="col-1"><q-btn color="blue" icon-right="send" :label="$t('Label.Save')" @click="Save()" /></div>
+				<div class="col-1"><q-btn color="accent" icon-right="clear" :label="$t('Button.Clear')" @click="clear()" /></div>
+				<div class="col-1"><q-btn color="red" icon-right="delete_forever" :label="$t('Label.Delete')" @click="Delete()" /></div>
+				<div class="col-2"><q-btn color="green-9" icon-right="pan_tool" :label="$t('Label.Unselected')" @click="getUnGroupedBT()" /></div>
 			</div>
 		</div>	 
 	</div>

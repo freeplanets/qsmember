@@ -13,7 +13,7 @@ export default {
     BasePayRate:"基本盤",
     RefPayRate:"參考分盤",
     CratePayClass:"新增分盤",
-    PayClassFunc: "基本盤賠率比,基本盤利潤差,固定利潤,浮動利潤",
+    PayClassFunc: "基本盤賠率%,基本盤利潤差,固定利潤,浮動利潤",
     RateDiff:"賠率差距",
     RateDiffInfo:"正數,表示分盤賠率佔基本盤比率不可以小於90",
     ProfitDiff:"利潤差距",
@@ -33,6 +33,8 @@ export default {
     SpNo:"特碼",
     Save:"存檔",
     Cancel:"取消",
+    Delete:"刪除",
+    Unselected:"未選取過項目",
     TermID:"期次",
     GameManager:"彩票管理",
     SPEndTime:"特碼截止時間",
@@ -49,7 +51,8 @@ export default {
     OddsManager:'控盤',
     BetLists:'注單查詢',
     NameOrNick:'名稱/代號',
-    TotalN:'共 {N} 筆'
+    TotalN:'共 {N} 筆',
+    BetReport:'下注報表'
   },
   Tip:{
     UserFind: "請輸入名稱或代號"
@@ -86,13 +89,15 @@ export default {
     CreateDate: '新增日期',
     TotalNums:'號數',
     UseAvg:'平均值押碼',
-    SingleNum:'單碼上限',
-    UnionNum:'連碼上限',
+    SingleNum:'單碼滿倉',
+    UnionNum:'連碼滿倉',
     MinHand:'最小單注',
     MaxHand:'最大單注',
     UseAvgOdds:'使用均成本(或最小)',
     GType:"遊戲代號",
-    GameItems:'遊戲項目'
+    GameItems:'遊戲項目',
+    BetForChange:"押碼啟動全額",
+    StepsGroup:"押碼級距"
   },
   Title: {
     Dashboard: '大廳',
@@ -166,6 +171,7 @@ export default {
   },
   Report: {
     Today: '今日',
+    Yesterday:'昨日',
     Orders: '投注額',
     Result: '結果',
     Commission: '退水',
@@ -174,13 +180,18 @@ export default {
     OrderTime: '下單時間',
     ThisWeek: '本週',
     LastWeek: '上週',
+    ThisMonth: '本月',
+    LastMonth: '上月',
+    SinceLastMonth: '從上月起',
     Item: '項目',
     Comm: '退水',
     SingleBet: '單注',
     SingleBT: '單場',
     OdrType: '下注項目',
     OdrAmt: '下注金額',
-    Total: '合計'
+    Total: '合計',
+    GeneralLedger:'總帳',
+    Ledger:'分類帳'
   },
   Common: {
     AccHistory: '帳戶歷史',

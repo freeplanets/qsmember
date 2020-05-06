@@ -6,25 +6,31 @@
 		</div>
         <div class="q-pa-md" v-if="model">
             <div class="row testheader">
-                <div class="col test">{{$t('Table.ItemName')}}</div>
-                <div class="col test">{{$t('Table.TotalNums')}}</div>
-                <div class="col test">{{$t('Table.UseAvg')}}</div>
-                <div class="col test">{{$t('Table.SingleNum')}}</div>
-                <div class="col test">{{$t('Table.UnionNum')}}</div>
-                <div class="col test">{{$t('Table.MinHand')}}</div>
-                <div class="col test">{{$t('Table.MaxHand')}}</div>
+                <div class="col-1 test">{{$t('Table.ItemName')}}</div>
+                <div class="col-1 test">{{$t('Table.TotalNums')}}</div>
+                <div class="col-1 test">{{$t('Table.UseAvg')}}</div>
+                <div class="col-1 test">{{$t('Table.SingleNum')}}</div>
+                <div class="col-1 test">{{$t('Table.UnionNum')}}</div>
+                <div class="col-1 test">{{$t('Table.MinHand')}}</div>
+                <div class="col-1 test">{{$t('Table.MaxHand')}}</div>
+                <div class="col-1 test">{{$t('Table.BetForChange')}}</div>
+                <div class="col-j test">{{$t('Table.Steps')}}</div>
             </div>
             <div class="row"
                 v-for="(itm,idx) in OpParams"
                 :key="idx"
             >
-                <div class="col test">{{ itm.BTName }}</div>
-                <div class="col test"><q-input outlined dense v-model="itm.TotalNums" /></div>
-                <div class="col test"><q-checkbox v-model="itm.UseAvg" color="teal" /></div>
-                <div class="col test"><q-input outlined dense v-model="itm.SingleNum" /></div>
-                <div class="col test"><q-input outlined dense v-model="itm.UnionNum" /></div>
-                <div class="col test"><q-input outlined dense v-model="itm.MinHand" /></div>
-                <div class="col test"><q-input outlined dense v-model="itm.MaxHand" /></div>
+                <div class="col-1 test colh">{{ itm.BTName }}</div>
+                <div class="col-1 test"><q-input outlined dense v-model="itm.TotalNums" /></div>
+                <div class="col-1 test"><q-checkbox v-model="itm.UseAvg" color="teal" /></div>
+                <div class="col-1 test"><q-input outlined dense v-model="itm.SingleNum" /></div>
+                <div class="col-1 test"><q-input outlined dense v-model="itm.UnionNum" /></div>
+                <div class="col-1 test"><q-input outlined dense v-model="itm.MinHand" /></div>
+                <div class="col-1 test"><q-input outlined dense v-model="itm.MaxHand" /></div>
+                <div class="col-1 test"><q-input outlined dense v-model="itm.BetForChange" /></div>
+                <div class="col-j test">
+                    <div class="row"><q-input outlined dense v-model="itm.Steps" /><q-btn round dense color="primary" icon="trending_up" /></div>
+                </div>
             </div>            
         </div>
         <q-dialog v-model="Message.show" persistent>
@@ -160,7 +166,8 @@ export default class OpenParams extends Vue{
             MinHand:0,
             MaxHand:0,
             BetForChange:0,
-            Steps:0
+            Steps:0,
+            StepsGroup:''
         } 
         return tmp;
     }
@@ -174,8 +181,8 @@ export default class OpenParams extends Vue{
     }
 }
 </script>
-<style>
-.testheader {
+<style scoped>
+.testheader div {
     background-color: cadetblue;
     color:white;
 }
@@ -187,5 +194,13 @@ export default class OpenParams extends Vue{
 .talign {
     text-align: center;
     line-height:48px;
+}
+.colh {
+    text-align: center;
+    line-height:40px;  
+}
+.col-j {
+    height: auto;
+    width: 220px;
 }
 </style>

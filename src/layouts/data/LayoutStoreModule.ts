@@ -10,26 +10,22 @@ import AxApi from '../components/AxApi';
     store: Store
 })
 export default class LayoutStoreModule extends VuexModule {
-    public leftDrawerOpen = false;
+    private isleftDrawerOpen = true;
     public isLogin = false;
     public personal:IUser = {TableName:'User',id:0};
     //public ApiUrl:string=myApiUrl;
     public ax=AxApi;
     @Mutation
     public SET_LEFT_DRAWER_OPEN(value: boolean){
-        this.leftDrawerOpen = value;
-        //console.log('SET_LEFT_DRAWER_OPEN',this.leftDrawerOpen,typeof this.leftDrawerOpen);
+        this.isleftDrawerOpen = value;
+    }
+    get leftDrawerOpen(){
+        return this.isleftDrawerOpen && this.isLogin;
     }
 
     @Action
     public setLeftDrawerOpen(value:boolean){
         this.SET_LEFT_DRAWER_OPEN(value);
-    }
-
-    @Action
-    public toggleLeftDrawer(){
-        this.SET_LEFT_DRAWER_OPEN(!this.leftDrawerOpen);
-        //console.log('toggleLeftDrawer',this.leftDrawerOpen)
     }
 
     @Mutation

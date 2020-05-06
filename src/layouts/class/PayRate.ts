@@ -12,7 +12,7 @@ export class PayRate extends BasePayRate<PayRateItm> {
             const r:number= this.data.Rate as number;
             const Rate:number = br + r;
             //console.log(this.data.BetType,this.data.SubType,br,r,Rate);
-            return Math.round((1- Probability*Rate)*10000)/10000;
+            return Math.round((1- Probability*Rate)*1000000)/10000;
         }
     }
     get Rate(){

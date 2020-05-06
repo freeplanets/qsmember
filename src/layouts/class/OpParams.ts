@@ -11,6 +11,11 @@ export interface IOParam {
     MaxHand:number;
     BetForChange:number;
     Steps:number;
+    StepsGroup:string;
+}
+export interface StepG {
+    Start:number;
+    Step:number;
 }
 export default class OpParams extends BClass<IOParam>{
     private BetName:string='';
@@ -78,6 +83,14 @@ export default class OpParams extends BClass<IOParam>{
     set Steps(val:number){
         this.isDataChanged=true;
         this.data.Steps=val;
+    }
+    get StepsGroup():StepG[]{
+        if(!this.data.StepsGroup) return [];
+        return JSON.parse(this.data.StepsGroup);
+    }
+    set StepsGroup(val:StepG[]){
+        this.isDataChanged=true;
+        this.data.StepsGroup = JSON.stringify(val);
     }
 }
 /*

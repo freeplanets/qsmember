@@ -159,8 +159,13 @@ export function fixlen(n: number): number {
     return p;
 }
 
-export function dateString():string{
-    const d:Date=new Date();
+export function dateString(DateS?:string):string{
+    let d:Date;
+    if(DateS){
+        d=new Date(DateS);
+    } else {
+        d=new Date();
+    }
     const reg1 = /(\d+)-(\d+)-(\d+).*/;
     return d.toJSON().replace(reg1, '$1-$2-$3');
 }

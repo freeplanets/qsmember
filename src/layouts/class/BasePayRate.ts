@@ -108,6 +108,7 @@ export class BasePayRate<T>{
         this.data.TopRate = this.fetchValueToSteps(this.data.TopRate);
         this.isDataChanged = true;
     }
+    /*
     get TopPay(){
         return this.data.TopPay;
     }
@@ -122,6 +123,7 @@ export class BasePayRate<T>{
         this.data.OneHand = v;
         this.isDataChanged = true;
     }
+    */
     get Datas():T {
         return this.data;
     }

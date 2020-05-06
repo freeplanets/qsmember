@@ -13,17 +13,15 @@
         <RCO class='col-6' :showUpLimit='true' @updateRateTop="updateRateTop" @updateRateDefault="updateRateDefault"></RCO>
         </div>
         <div class="q-pa-md" v-if="models">
-            <div class="row">
-                <div class="col-1 test testheader">{{$t('Table.ItemName')}}</div>
-                <div class="col-1 test testheader">{{$t('Table.SubName')}}</div>
-                <div class="col-1 test testheader">{{$t('Table.NoAdjust')}}</div>
-                <div class="col-1 test testheader">{{$t('Table.Profit')}}(%)</div>
-                <div class="col-1 test testheader">{{$t('Table.RateDefault')}}</div>
-                <div class="col-1 test testheader">{{$t('Table.RateTop')}}</div>
-                <div class="col-1 test testheader">{{$t('Table.Probability')}}</div>
-                <div class="col-1 test testheader">{{$t('Table.Steps')}}</div>
-                <div class="col-1 test testheader">{{$t('Table.TopPay')}}</div>
-                <div class="col-1 test testheader">{{$t('Table.OneHand')}}</div>
+            <div class="row testheader">
+                <div class="col-1 test">{{$t('Table.ItemName')}}</div>
+                <div class="col-1 test">{{$t('Table.SubName')}}</div>
+                <div class="col-1 test">{{$t('Table.NoAdjust')}}</div>
+                <div class="col-1 test">{{$t('Table.Profit')}}(%)</div>
+                <div class="col-1 test">{{$t('Table.RateDefault')}}</div>
+                <div class="col-1 test">{{$t('Table.RateTop')}}</div>
+                <div class="col-1 test">{{$t('Table.Probability')}}</div>
+                <div class="col-1 test">{{$t('Table.Steps')}}</div>
             </div>
             <div class="row datas"
                 v-for="(itm,idx) in BasePayR"
@@ -32,13 +30,11 @@
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.Title }}</div>
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.SubTitle }}</div>
                 <div class="col-1 test"><q-checkbox v-model="itm.NoAdjust" color="teal" /></div>
-                <div class="col-1 test">{{ itm.Profit }}</div>
+                <div :class="{'col-1 test':true,redColor:itm.Profit<0}">{{ itm.Profit }}</div>
                 <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.Rate"  /></div>
                 <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.TopRate"  /></div>
                 <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.Probability"  /></div>
                 <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.Steps"  /></div>
-                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.TopPay"  /></div>
-                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.OneHand"  /></div>
             </div>
         </div>
 	</div>
@@ -148,8 +144,8 @@ export default class BetClass extends Vue{
             TopRate:0,
             Probability:0,
             Steps:0,
-            TopPay:0,
-            OneHand:0
+            //TopPay:0,
+            //OneHand:0
         }
         return bpr;
     }  
@@ -187,12 +183,20 @@ export default class BetClass extends Vue{
         this.BasePayR.map(itm=>{
             itm.Selected = false;
         })
+        this.BasePayR.map(itm=>{
+            const f = bts.find(bt=>parseInt(bt,10)===itm.BetType);
+            if(f){
+                itm.Selected = true;
+            }
+        })
+        /*
         bts.map(bt=>{
             const  f=this.BasePayR.find(bpr=>bpr.BetType===parseInt(bt,10));
             if(f){
                 f.Selected = true;
             }
         })
+        */
         //console.log('SltBetTypes',bts);
     }
     SaveData(){
@@ -249,7 +253,7 @@ export default class BetClass extends Vue{
 .pbtn {
     padding: 6px 4px;
 }
-.testheader {
+.testheader div {
     background-color: cadetblue;
     color:white;
 }

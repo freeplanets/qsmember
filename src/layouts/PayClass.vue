@@ -17,14 +17,14 @@
             <div class="pbtn2 col"><q-btn color="green" icon-right="save" label="Save" @click="SaveData();" /></div>
         </div> 
         <div class="q-pa-md" v-if="curGameID">
-            <div class="row">
-                <div class="col-1 test testheader">{{$t('Table.ItemName')}}</div>
-                <div class="col-1 test testheader">{{$t('Table.SubName')}}</div>
-                <div class="col-1 test testheader">{{$t('Table.Profit')}}(%)</div>
-                <div class="col-1 test testheader">{{$t('Table.RateDefault')}}</div>
-                <div class="col-1 test testheader">{{$t('Table.Probability')}}</div>
-                <div class="col-1 test testheader">{{$t('Table.Steps')}}</div>
-                <div class="col-1 test testheader">{{$t('Table.OneHand')}}</div>
+            <div class="row testheader">
+                <div class="col-1 test">{{$t('Table.ItemName')}}</div>
+                <div class="col-1 test">{{$t('Table.SubName')}}</div>
+                <div class="col-1 test">{{$t('Table.Profit')}}(%)</div>
+                <div class="col-1 test">{{$t('Table.RateDefault')}}</div>
+                <div class="col-1 test">{{$t('Table.Probability')}}</div>
+                <div class="col-1 test">{{$t('Table.Steps')}}</div>
+                <div class="col-1 test">{{$t('Table.OneHand')}}</div>
             </div>
             <div class="row"
                 v-for="(itm,idx) in PayR"
@@ -32,7 +32,7 @@
             >
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.Title }}</div>
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.SubTitle }}</div>
-                <div class="col-1 test">{{ itm.Profit }}</div>
+                <div :class="{'col-1 test':true,redColor: itm.Profit<0 }">{{ itm.Profit }}</div>
                 <div class="col-1 test"><q-input square standout dense v-model="itm.Rate" /></div>
                 <div class="col-1 test">{{itm.Probability}}</div>
                 <div class="col-1 test">{{itm.Steps}}</div>
@@ -301,7 +301,7 @@ export default class BetClass extends Vue{
 .pbtn2 {
     padding: 2px 4px;
 }
-.testheader {
+.testheader div {
     background-color: cadetblue;
     color:white;
 }

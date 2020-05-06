@@ -163,14 +163,15 @@ export class AxApi {
     async getPayClass(GameID?:number|string){
         return await this.getApi('getPayClass');
     }
-    async saveNums(tid:number,GameID:number|string,nums:string){
+    async saveNums(tid:number,GameID:number|string,nums:string,isSettled?:number){
         let ans;
         const url:string=this.ApiUrl+'/api/SaveNums';
         const config:AxiosRequestConfig = {
             params: {
                 tid:tid,
                 GameID:GameID,
-                Nums:nums
+                Nums:nums,
+                isSettled:isSettled,
             }            
         }
         await axios.post(url,config).then((res:AxiosResponse)=>{

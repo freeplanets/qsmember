@@ -4,7 +4,7 @@
             <q-btn 
                 v-for="(itm,key) in BtClass"
                 :key="'BtClass'+key"
-                color="secondary" 
+                :color="itm.BetTypes ? 'secondary' : 'orange'" 
                 glossy 
                 :label="itm.BCName"
                 @click="SltBetTypes(itm.BetTypes)"
@@ -38,7 +38,7 @@ export default class BetTypeClass extends Vue {
                 });
                 let df:IbtCls ={
                     id:'',
-                    BCName:'C',
+                    BCName:`${this.$t('Button.Clear')}`,
                     BetTypes:''
                 }
                 this.BtClass.push(df);
