@@ -88,6 +88,7 @@
             <q-item-label>{{$t('Label.UserManager')}}</q-item-label>
           </q-item-section>
         </q-item>
+        <!--
         <q-item to="/openparams" @click="ProName=$t('Label.OpenParams');showComment=false">
           <q-item-section avatar>
             <q-icon name="emoji_symbols" />
@@ -96,6 +97,7 @@
             <q-item-label>{{$t('Label.OpenParams')}}</q-item-label>
           </q-item-section>
         </q-item>
+        -->
         <q-item to="/oddsmanager" @click="ProName=$t('Label.OddsManager');showComment=false">
           <q-item-section avatar>
             <q-icon name="emoji_symbols" />

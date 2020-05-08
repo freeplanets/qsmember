@@ -1,5 +1,6 @@
 import BClass from './BClass';
 import {fixlen} from '../components/func';
+import {StepG} from '../data/if';
 /*
 interface T {
     [n:string]: string | number | undefined;
@@ -124,6 +125,67 @@ export class BasePayRate<T>{
         this.isDataChanged = true;
     }
     */
+   get TotalNums():number {
+    return this.data.TotalNums;
+    }
+    set TotalNums(val:number){
+        this.isDataChanged=true;
+        this.data.TotalNums=val;
+    }
+    get UseAvg():boolean{
+        return this.data.UseAvg===1;
+    }
+    set UseAvg(val:boolean){
+        this.isDataChanged=true;
+        this.data.UseAvg=(val? 1 : 0);
+    }
+    get SingleNum():number{
+        return this.data.SingleNum;
+    }
+    set SingleNum(val:number){
+        this.isDataChanged=true;
+        this.data.SingleNum = val;
+    }
+    get UnionNum():number{
+        return this.data.UnionNum;
+    }
+    set UnionNum(val:number){
+        this.isDataChanged=true;
+        this.data.UnionNum=val;
+    }
+    get MinHand():number{
+        return this.data.MinHand;
+    } 
+    set MinHand(val:number){
+        this.isDataChanged=true;
+        this.data.MinHand=val;
+    }
+    get MaxHand():number{
+        return this.data.MaxHand;
+    }
+    set MaxHand(val:number){
+        this.isDataChanged=true;
+        this.data.MaxHand=val;
+    }
+    get BetForChange():number{
+        return this.data.BetForChange;
+    }
+    set BetForChange(val:number){
+        this.isDataChanged=true;
+        this.data.BetForChange=val;
+    }
+    get StepsGroup():StepG[]{
+        if(!this.data.StepsGroup) return [];
+        return JSON.parse(this.data.StepsGroup);
+    }
+    set StepsGroup(val:StepG[]){
+        this.isDataChanged=true;
+        const tmp:StepG[]=[];
+        val.map(itm=>{
+            if(itm.Step>0) tmp.push(itm);
+        })
+        this.data.StepsGroup = JSON.stringify(tmp);
+    }   
     get Datas():T {
         return this.data;
     }
@@ -137,7 +199,7 @@ export class BasePayRate<T>{
             this.olddata[key]=v[key];
         })
         */
-    }
+    }    
     get DataChanged() {
         return this.isDataChanged;
     }

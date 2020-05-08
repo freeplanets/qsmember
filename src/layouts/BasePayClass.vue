@@ -13,41 +13,88 @@
         <RCO class='col-6' :showUpLimit='true' @updateRateTop="updateRateTop" @updateRateDefault="updateRateDefault"></RCO>
         </div>
         <div class="q-pa-md" v-if="models">
-            <div class="row testheader">
-                <div class="col-1 test">{{$t('Table.ItemName')}}</div>
-                <div class="col-1 test">{{$t('Table.SubName')}}</div>
-                <div class="col-1 test">{{$t('Table.NoAdjust')}}</div>
-                <div class="col-1 test">{{$t('Table.Profit')}}(%)</div>
-                <div class="col-1 test">{{$t('Table.RateDefault')}}</div>
-                <div class="col-1 test">{{$t('Table.RateTop')}}</div>
-                <div class="col-1 test">{{$t('Table.Probability')}}</div>
-                <div class="col-1 test">{{$t('Table.Steps')}}</div>
-            </div>
-            <div class="row datas"
+            <table>
+              <tr class="testheader">
+                <td class="test">{{$t('Table.ItemName')}}</td>
+                <td class="test">{{$t('Table.SubName')}}</td>
+                <td class="test">{{$t('Table.NoAdjust')}}</td>
+                <td class="test">{{$t('Table.Profit')}}(%)</td>
+                <td class="test">{{$t('Table.RateDefault')}}</td>
+                <td class="test">{{$t('Table.RateTop')}}</td>
+                <td class="test">{{$t('Table.Probability')}}</td>
+                <td class="test">{{$t('Table.TotalNums')}}</td>
+                <td class="test">{{$t('Table.UseAvg')}}</td>
+                <td class="test">{{$t('Table.SingleNum')}}</td>
+                <td class="test">{{$t('Table.UnionNum')}}</td>
+                <td class="test">{{$t('Table.MinHand')}}</td>
+                <td class="test">{{$t('Table.MaxHand')}}</td>
+                <td class="test">{{$t('Table.BetForChange')}}</td>                
+                <td class="test">{{$t('Table.Steps')}}</td>
+              </tr>
+              <tr class="datas"
                 v-for="(itm,idx) in BasePayR"
                 :key="idx"
-            >
-                <div :class="{'col-1':true,test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.Title }}</div>
-                <div :class="{'col-1':true,test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.SubTitle }}</div>
-                <div class="col-1 test"><q-checkbox v-model="itm.NoAdjust" color="teal" /></div>
-                <div :class="{'col-1 test':true,redColor:itm.Profit<0}">{{ itm.Profit }}</div>
-                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.Rate"  /></div>
-                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.TopRate"  /></div>
-                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.Probability"  /></div>
-                <div class="col-1 test"><q-input square standout="bg-teal text-white" dense v-model="itm.Steps"  /></div>
-            </div>
+              >
+                <td :class="{test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.Title }}</td>
+                <td :class="{test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.SubTitle }}</td>
+                <td class="test1"><input type="checkbox" v-model="itm.NoAdjust" /></td>
+                <td :class="{'test':true,redColor:itm.Profit<0}">{{ itm.Profit }}</td>
+                <td class="test"><input type="text" size='4' v-model="itm.Rate" /></td>
+                <td class="test"><input type="text" size='4' v-model="itm.TopRate"  /></td>
+                <td class="test"><input type="text" size='4' v-model="itm.Probability"  /></td>
+                <td class="test"><input type="text" size='4' v-model="itm.TotalNums" /></td>
+                <td class="test1"><input type="checkbox" v-model="itm.UseAvg" /></td>
+                <td class="test"><input type="text" size='4' v-model="itm.SingleNum" /></td>
+                <td class="test"><input type="text" size='4' v-model="itm.UnionNum" /></td>
+                <td class="test"><input type="text" size='4' v-model="itm.MinHand" /></td>
+                <td class="test"><input type="text" size='4' v-model="itm.MaxHand" /></td>
+                <td class="test"><input type="text" size='4' v-model="itm.BetForChange" /></td>
+                <td class="test1">
+                    <input type="text" size='4' v-model="itm.Steps"  />
+                    <q-btn round dense size='sm' color="primary" icon="trending_up" @click="showStepGroup(itm)" />
+                </td>                
+              </tr>
+            </table>
         </div>
+    <q-dialog v-model="showBFCG" persistent>
+      <q-card style="width: 300px">
+        <q-card-section>
+            <div class="text-h6">{{ BFCTitle }}</div>
+        </q-card-section>
+
+        <q-card-section>
+            <table>
+                <tr class="testheader">
+                    <td class="test">{{$t('Table.StepsGroup')}}</td>
+                    <td class="test">{{$t('Table.Steps')}}</td>
+                </tr>
+                <tr class="datas"
+                v-for="(itm,idx) in BFCS"
+                :key="'BFCS'+idx">
+                    <td class="test"><input type="text" size='4' v-model="itm.Start" /></td>
+                    <td class="test"><input type="text" size='4' v-model="itm.Step" /></td>
+                </tr>
+            </table>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="primary" v-close-popup />
+          <q-btn flat label="OK" color="primary" @click="SaveStepG()" />
+        </q-card-actions>        
+      </q-card>
+    </q-dialog>        
 	</div>
 </template>
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import {Watch} from 'vue-property-decorator';
 import axios,{AxiosResponse } from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import {IGames} from './data/schema';
 //import BTG from './data/defaultData';
-import {SelectOptions,BasePayRateItm,IbtCls,CommonParams,IMsg} from './data/if';
+import {SelectOptions,BasePayRateItm,IbtCls,CommonParams,IMsg,StepG} from './data/if';
 import BTG from './data/defaultData';
 import {PayRateData } from './data/PayRateList';
 import {BasePayRate} from './class/BasePayRate';
@@ -74,16 +121,31 @@ interface BItem {
     SubTitle?:string;
     Filter?:string;
 }
+
 @Component
 export default class BetClass extends Vue{
 	store = getModule(LayoutStoreModule);
     models:SelectOptions | null = null;
     BasePayR:BasePayRate<BasePayRateItm>[]=[];
     curGameID:number|null=null;
+    curItem:BasePayRate<BasePayRateItm>|undefined;
     BtClass:IbtCls[] = [];
+    BFCS:StepG[]=[];
+    @Watch('BFCS',{immediate:true,deep:true})
+    onBFCSChange(){
+        let needAddLine=true;
+        this.BFCS.map(itm=>{
+            if(itm.Step===0) needAddLine=false;
+        })
+        if(needAddLine){
+            this.BFCS.push({Start:0,Step:0})
+        }
+    }
+    BFCTitle:string='';
 	options:SelectOptions[] = [
 		{value: 0,label:'default'}
     ]
+    showBFCG:boolean=false;
 	get UserID():string{
 		if(this.store.personal.id) {
 			return this.store.personal.id + '';
@@ -146,6 +208,14 @@ export default class BetClass extends Vue{
             Steps:0,
             //TopPay:0,
             //OneHand:0
+            TotalNums:0,
+            UseAvg:0,
+            SingleNum:0,
+            UnionNum:0,
+            MinHand:0,
+            MaxHand:0,
+            BetForChange:0,
+            StepsGroup:''
         }
         return bpr;
     }  
@@ -236,6 +306,23 @@ export default class BetClass extends Vue{
 			console.log(err);
 		})       
     }
+    showStepGroup(itm:BasePayRate<BasePayRateItm>){
+        this.BFCTitle=itm.Title + (itm.SubTitle ? ' / ' + itm.SubTitle : '');
+        this.curItem=itm;
+        const EmptyItm:StepG={
+            Start:0,
+            Step:0
+        }
+        this.BFCS=itm.StepsGroup;
+        this.BFCS.push(EmptyItm)
+        this.showBFCG=true;
+    }
+    SaveStepG(){
+        if(this.curItem){
+            this.curItem.StepsGroup=this.BFCS;
+        }
+        this.showBFCG=false;
+    }
     /*
     updateBPR(){
         this.BasePayR=cloneDeep(this.BasePayR);
@@ -250,12 +337,16 @@ export default class BetClass extends Vue{
 }
 </script>
 <style scoped>
+table {
+    border: 0;
+}
 .pbtn {
     padding: 6px 4px;
 }
-.testheader div {
+.testheader td {
     background-color: cadetblue;
     color:white;
+    width: 100px;
 }
 .test {
     border: 1px gray solid;
@@ -266,7 +357,13 @@ export default class BetClass extends Vue{
     background-color:lightseagreen;
     color:white;
 }
-.datas input {
+.test input {
     width: 100%;
 }
+.test1 {
+    border: 1px gray solid;
+    text-align: center;
+    vertical-align: middle;    
+}
+
 </style>

@@ -34,6 +34,18 @@ export interface BasePayRateItm {
 	Steps?:number;
 	//TopPay?:number;
     //OneHand?:number;
+    TotalNums?:number;
+    UseAvg?:number;
+    SingleNum?:number;
+    UnionNum?:number;
+    MinHand?:number;
+    MaxHand?:number;
+    BetForChange?:number;
+    StepsGroup?:string;    
+}
+export interface StepG {
+    Start:number;
+    Step:number;
 }
 export interface PayRateItm extends BasePayRateItm {
 	Rate?:number;

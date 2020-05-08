@@ -46,7 +46,7 @@ export default {
     Operator:'操盤手',
     InputNums:'輸入號碼',
     Status:'狀態',
-    Settled:['','己結帳'],
+    Settled:['','己結帳','','己重結'],
     OpenParams:'開盤參數',
     OddsManager:'控盤',
     BetLists:'注單查詢',

@@ -1,4 +1,5 @@
 import BClass from './BClass';
+import {StepG} from '../data/if';
 export interface IOParam {
     id:number;
     GameID:number;
@@ -12,10 +13,6 @@ export interface IOParam {
     BetForChange:number;
     Steps:number;
     StepsGroup:string;
-}
-export interface StepG {
-    Start:number;
-    Step:number;
 }
 export default class OpParams extends BClass<IOParam>{
     private BetName:string='';

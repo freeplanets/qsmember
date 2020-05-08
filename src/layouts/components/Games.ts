@@ -113,7 +113,7 @@ export class CGame {
             this.isUpdated = true;
         })
     }
-    getOdds(BT:number,num:number,extOdds:number|undefined=undefined){
+    getOdds(BT:number,num:number,Steps?:number,extOdds?:number){
         //console.log('CGame getOdds',BT,num);
         if(extOdds!==undefined){
             if(extOdds==1){
@@ -134,6 +134,7 @@ export class CGame {
         //console.log('getOdds:',sBT,tmp.Odds,tmp.Steps);
         tmp.BT = BT;
         tmp.Num = num;
+        if(Steps) tmp.Steps = Steps;
         return tmp;
     }
     calRisk=(BT:string|number)=>{

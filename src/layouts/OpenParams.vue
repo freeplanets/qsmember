@@ -69,6 +69,7 @@ interface DialogMsg {
     show:boolean;
     message?:string;
 }
+
 @Component
 export default class OpenParams extends Vue{
     private store= getModule(LayoutStoreModule);

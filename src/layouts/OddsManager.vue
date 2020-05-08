@@ -75,7 +75,7 @@
                                             :tid="curTid"
                                             :GameID="curGameID"
                                             :Odds="getOdds(nItm.BT,nItm.Num)"
-                                            :ExtOdds="Game.getOdds(nItm.BT,nItm.Num,(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
+                                            :ExtOdds="Game.getOdds(nItm.BT,nItm.Num,Steps[nItm.BT],(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
                                             :rightLine="nidx==(LItm.length-1)"
                                             :bottomLine="Lidx==(tmpItem.length-1) || (nidx==9 && (tmpItem[Lidx+1] && tmpItem[Lidx+1].length<10))"
                                             :GType="curGType"
@@ -138,6 +138,10 @@ interface BTNs {
     SubItm?:number[];
     SubMenu?:string[];
 }
+interface OSteps {
+    BetType:number;
+    Steps:number;
+}
 @Component
 export default class OddsManager extends Vue {
     private store = getModule(LayoutStoreModule);
@@ -157,6 +161,7 @@ export default class OddsManager extends Vue {
     private curTid:number=0;
     private curInterval:number|null=null;
     private curIdx:number=0;
+    private Steps:number[]=[];
     odds:Odds={
         Num:1,
         Odds:49,
@@ -183,6 +188,7 @@ export default class OddsManager extends Vue {
             this.curGType=v.GType;
             this.dfLayout=Layouts[v.GType];
             this.dfColor=[];
+            this.getOpSteps();
             Object.keys(this.dfLayout).map(key=>{
                 if(key==='0'){
                     this.cont = this.dfLayout[key].cont;
@@ -210,7 +216,20 @@ export default class OddsManager extends Vue {
         }
     }
     getOdds(BT:number,Num:number){
-        return this.Game.getOdds(BT,Num);
+        return this.Game.getOdds(BT,Num,this.Steps[BT]);
+    }
+    async getOpSteps(){
+        const param:CommonParams = {
+            GameID:this.curGameID,
+            onlySteps:1
+        }
+        let ans:IMsg=await this.store.ax.getApi('getOpParams',param);
+        if(ans.ErrNo===0){
+            const st=ans.data as OSteps[];
+            st.map(itm=>{
+                this.Steps[itm.BetType]=itm.Steps;
+            })
+        }
     }
     async getCurOdds(){
         const param:CommonParams = {
