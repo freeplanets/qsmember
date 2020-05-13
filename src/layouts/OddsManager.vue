@@ -75,7 +75,7 @@
                                             :tid="curTid"
                                             :GameID="curGameID"
                                             :Odds="getOdds(nItm.BT,nItm.Num)"
-                                            :ExtOdds="Game.getOdds(nItm.BT,nItm.Num,Steps[nItm.BT],(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
+                                            :ExtOdds="Game.getOdds(nItm.BT,nItm.Num,(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
                                             :rightLine="nidx==(LItm.length-1)"
                                             :bottomLine="Lidx==(tmpItem.length-1) || (nidx==9 && (tmpItem[Lidx+1] && tmpItem[Lidx+1].length<10))"
                                             :GType="curGType"
@@ -125,7 +125,7 @@ import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 import OddsBlock from './components/OddsBlock.vue';
 import GameSelector from './components/GameSelector.vue';
-import {Odds, SelectOptions,IMsg, CommonParams} from './data/if';
+import {Odds, SelectOptions,IMsg, CommonParams,OSteps} from './data/if';
 import Layouts,{Layout,contBlock,numBlock} from './components/layouts';
 import {CGame,IData} from './components/Games';
 
@@ -138,10 +138,7 @@ interface BTNs {
     SubItm?:number[];
     SubMenu?:string[];
 }
-interface OSteps {
-    BetType:number;
-    Steps:number;
-}
+
 @Component
 export default class OddsManager extends Vue {
     private store = getModule(LayoutStoreModule);
@@ -188,7 +185,7 @@ export default class OddsManager extends Vue {
             this.curGType=v.GType;
             this.dfLayout=Layouts[v.GType];
             this.dfColor=[];
-            this.getOpSteps();
+            //this.getOpSteps();
             Object.keys(this.dfLayout).map(key=>{
                 if(key==='0'){
                     this.cont = this.dfLayout[key].cont;
@@ -203,7 +200,12 @@ export default class OddsManager extends Vue {
                 let ans:IMsg=await this.store.ax.getApi('CurOddsInfo',{GameID:v.value,MaxOddsID:0});
                 //console.log('get CurOddsInfo:',ans);
                 if(ans.data){
-                    this.Game.inidata(ans.data as IData);
+                    let Steps:OSteps[]=[];
+                    if(ans.Steps){
+                        Steps=ans.Steps;
+                    }
+                    this.Game.inidata(ans.data as IData,Steps);
+                    //console.log('Game:',this.Game.Items)
                     this.curTid=ans.tid;
                     this.oddshow=true;
                     //console.log('CGame MaxOddsID:',this.Game.MaxOddsID);
@@ -216,20 +218,7 @@ export default class OddsManager extends Vue {
         }
     }
     getOdds(BT:number,Num:number){
-        return this.Game.getOdds(BT,Num,this.Steps[BT]);
-    }
-    async getOpSteps(){
-        const param:CommonParams = {
-            GameID:this.curGameID,
-            onlySteps:1
-        }
-        let ans:IMsg=await this.store.ax.getApi('getOpParams',param);
-        if(ans.ErrNo===0){
-            const st=ans.data as OSteps[];
-            st.map(itm=>{
-                this.Steps[itm.BetType]=itm.Steps;
-            })
-        }
+        return this.Game.getOdds(BT,Num);
     }
     async getCurOdds(){
         const param:CommonParams = {

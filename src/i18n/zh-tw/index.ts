@@ -65,7 +65,6 @@ export default {
     RateDefault:"賠率",
     RateTop:"賠率上限",
     Probability:"機率",
-    Steps:"跳動點",
     TopPay:"最高派彩",
     OneHand: "公司單注",
     PlusRate: "加本金",
@@ -96,7 +95,10 @@ export default {
     UseAvgOdds:'使用均成本(或最小)',
     GType:"遊戲代號",
     GameItems:'遊戲項目',
-    BetForChange:"押碼啟動全額",
+    ChangeStart:"押碼啟動全額",
+    BetForChange:"押碼全額",
+    PerStep:"跳動點",
+    Steps:"押碼點數",
     StepsGroup:"押碼級距"
   },
   Title: {

@@ -99,16 +99,33 @@ export class BasePayRate<T>{
         this.calProfit();
         this.isDataChanged = true;
     }
+    get PerStep():number | undefined{
+        return this.data.PerStep;
+    }
+    set PerStep(v:number  | undefined){
+        this.data.PerStep=v;
+        //console.log('set Steps',this.data.Steps,v);
+        this.data.DfRate = this.fetchValueToSteps(this.data.DfRate);
+        this.data.TopRate = this.fetchValueToSteps(this.data.TopRate);
+        this.isDataChanged = true;
+    }
     get Steps():number | undefined{
         return this.data.Steps ;
     }
     set Steps(v:number  | undefined){
         this.data.Steps = v;
         //console.log('set Steps',this.data.Steps,v);
-        this.data.DfRate = this.fetchValueToSteps(this.data.DfRate);
-        this.data.TopRate = this.fetchValueToSteps(this.data.TopRate);
         this.isDataChanged = true;
     }
+    get ChangeStart():number | undefined{
+        return this.data.ChangeStart ;
+    }
+    set ChangeStart(v:number  | undefined){
+        this.data.ChangeStart = v;
+        //console.log('set Steps',this.data.Steps,v);
+        this.isDataChanged = true;
+    }
+
     /*
     get TopPay(){
         return this.data.TopPay;
@@ -235,12 +252,12 @@ export class BasePayRate<T>{
     }
     protected fetchValueToSteps(v:number|undefined){
         if(v){
-            if(this.data.Steps){
+            if(this.data.PerStep){
                 //v=parseFloat(v.toPrecision(6));
-                if(this.data.Steps <=0) return v;
+                if(this.data.PerStep <=0) return v;
                 //if(typeof v ==='string') v=parseFloat(v);
-                const ba=fixlen(this.data.Steps);
-                const a = (Math.round(v/this.data.Steps)*this.data.Steps).toFixed(ba);
+                const ba=fixlen(this.data.PerStep);
+                const a = (Math.round(v/this.data.PerStep)*this.data.PerStep).toFixed(ba);
                 //console.log('fetchValueToSteps',a,v,this.data.Steps,typeof v,typeof this.data.Steps,Math.floor(v/this.data.Steps)*this.data.Steps);
                 return parseFloat(a);
             }

@@ -1,7 +1,9 @@
 import {BaNum} from './func';
+import {OSteps} from '../data/if';
 export interface IOdds {
     OID:number;
     Odds:number;
+    SubType:number;
     MaxOdds:number;
     isStop:number;
     tolW:number;
@@ -11,6 +13,7 @@ export interface IOdds {
     BT?:number;
     Num?:number;
     Steps?:number;
+    PerStep?:number;
 }
 interface INum {
     [num:string]:IOdds;
@@ -77,7 +80,7 @@ export class CGame {
     get MaxOddsID(){
         return this.OID;
     }
-    inidata(dta:IData){
+    inidata(dta:IData,Steps:OSteps[]){
         Object.keys(dta).map(bt=>{
             const BTItm:INum=dta[bt];
             this.member[bt]={
@@ -87,6 +90,11 @@ export class CGame {
             }
             Object.keys(BTItm).map(num=>{
                 //this.member.
+                const f=Steps.find(itm=>itm.BetType===parseInt(bt,10) && itm.SubType===BTItm[num].SubType);
+                if(f){
+                    BTItm[num].Steps=f.Steps*f.PerStep;
+                    BTItm[num].PerStep=f.PerStep;
+                }
                 this.member[bt].member[num]=BTItm[num];
                 this.member[bt].Total += BTItm[num].tolS;
                 this.member[bt].Payouts += BTItm[num].tolP;
@@ -102,7 +110,11 @@ export class CGame {
             Object.keys(dta[bt]).map(num=>{
                 this.member[bt].Total -= this.member[bt].member[num].tolS
                 this.member[bt].Payouts -= this.member[bt].member[num].tolP
+                dta[bt][num].PerStep=this.member[bt].member[num].PerStep;
+                dta[bt][num].Steps=this.member[bt].member[num].Steps;
                 this.member[bt].member[num]=dta[bt][num];
+                //this.member[bt].member[num]=Object.assign(this.member[bt].member[num],dta[bt][num])
+                //console.log('game updateData',this.member[bt].member[num])
                 if(dta[bt][num].OID > this.OID) {
                     this.OID = dta[bt][num].OID;
                 }
@@ -113,7 +125,7 @@ export class CGame {
             this.isUpdated = true;
         })
     }
-    getOdds(BT:number,num:number,Steps?:number,extOdds?:number){
+    getOdds(BT:number,num:number,extOdds?:number){
         //console.log('CGame getOdds',BT,num);
         if(extOdds!==undefined){
             if(extOdds==1){
@@ -129,12 +141,12 @@ export class CGame {
             return {};
         }
         const tmp:IOdds=this.member[sBT].member[sNum];
-        const ba = BaNum(tmp.Steps ? tmp.Steps : 1);
+        const ba = BaNum(tmp.PerStep ? tmp.PerStep : 1);
         tmp.Odds= Math.round(tmp.Odds*ba)/ba;
         //console.log('getOdds:',sBT,tmp.Odds,tmp.Steps);
         tmp.BT = BT;
         tmp.Num = num;
-        if(Steps) tmp.Steps = Steps;
+        //if(Steps) tmp.Steps = Steps;
         return tmp;
     }
     calRisk=(BT:string|number)=>{
@@ -202,5 +214,8 @@ export class CGame {
 			this.Datas[i].Risk=this.LRTotal-((this.Datas[i].RPay+this.Datas[i].SPay+this.Datas[i].RLeft)+((this.TotalRPay+this.TotalSPay+this.LRTotal)-(this.Datas[i].RPay+this.Datas[i].SPay+this.Datas[i].RLeft))*otherNums/leftNums)-this.CTotal+this.SCTotal;
         }
         */
-	}     
+    }
+    get Items(){
+        return this.member;
+    }     
 }

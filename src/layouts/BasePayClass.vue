@@ -28,6 +28,8 @@
                 <td class="test">{{$t('Table.UnionNum')}}</td>
                 <td class="test">{{$t('Table.MinHand')}}</td>
                 <td class="test">{{$t('Table.MaxHand')}}</td>
+                <td class="test">{{$t('Table.PerStep')}}</td>
+                <td class="test">{{$t('Table.ChangeStart')}}</td>
                 <td class="test">{{$t('Table.BetForChange')}}</td>                
                 <td class="test">{{$t('Table.Steps')}}</td>
               </tr>
@@ -48,6 +50,8 @@
                 <td class="test"><input type="text" size='4' v-model="itm.UnionNum" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.MinHand" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.MaxHand" /></td>
+                <td class="test"><input type="text" size='4' v-model="itm.PerStep" /></td>
+                <td class="test"><input type="text" size='4' v-model="itm.ChangeStart" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.BetForChange" /></td>
                 <td class="test1">
                     <input type="text" size='4' v-model="itm.Steps"  />
@@ -89,7 +93,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Watch} from 'vue-property-decorator';
-import axios,{AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import {IGames} from './data/schema';
@@ -289,8 +293,8 @@ export default class BetClass extends Vue{
 		}
         const url:string=this.store.ax.Host+'/api/batch/saveBasePayRate';
 		axios.post(url,data).then((res:AxiosResponse)=>{
-            //console.log(res.data);
-            if(res.data.affectedRows>0){
+            //console.log(res);
+            if(res.data.ErrNo===0){
                 this.$q.dialog({
                     title: this.$t('Label.Save') as string,
                     message: 'OK!!'

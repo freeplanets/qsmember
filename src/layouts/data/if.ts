@@ -41,6 +41,8 @@ export interface BasePayRateItm {
     MinHand?:number;
     MaxHand?:number;
     BetForChange?:number;
+    ChangeStart?:number;
+    PerStep?:number;    
     StepsGroup?:string;    
 }
 export interface StepG {
@@ -183,4 +185,11 @@ export interface IBetContent {
     Content?: INumData[];
     isPaylay?: boolean;
     Sets?: number;
+}
+
+export interface OSteps {
+    BetType:number;
+    SubType:number;
+    PerStep:number;
+    Steps:number;
 }

@@ -7,22 +7,22 @@
             <td class='col data'>
                 <div class='row'>
                     <div class='col btnpos'>
-                        <q-btn dense style="font-szie:6px" icon="add" @click="setOdds(Odds.BT,Odds.Num,1)" />
+                        <q-btn dense style="font-szie:6px" icon="add" @click="setOdds(Odds.BT,Odds.Num,1,Odds.Steps)" />
                     </div>
                     <div class='col'>{{Odds.Odds}}</div>
                     <div class='col btnpos'>
-                        <q-btn dense style="font-szie:6px" icon="remove" @click="setOdds(Odds.BT,Odds.Num,-1)" />
+                        <q-btn dense style="font-szie:6px" icon="remove" @click="setOdds(Odds.BT,Odds.Num,-1,Odds.Steps)" />
                     </div>
                 </div>
                 <div class='row'
                     v-if="ExtOdds"
                 >
                     <div class='col btnpos'>
-                        <q-btn dense style="font-szie:6px" icon="add" @click="setOdds(ExtOdds.BT,ExtOdds.Num,1)" />
+                        <q-btn dense style="font-szie:6px" icon="add" @click="setOdds(ExtOdds.BT,ExtOdds.Num,1,ExtOdds.Steps)" />
                     </div>
                     <div class='col'>{{ExtOdds.Odds}}</div>
                     <div class='col btnpos'>
-                        <q-btn dense style="font-szie:6px" icon="remove" @click="setOdds(ExtOdds.BT,ExtOdds.Num,-1)" />
+                        <q-btn dense style="font-szie:6px" icon="remove" @click="setOdds(ExtOdds.BT,ExtOdds.Num,-1,ExtOdds.Steps)" />
                     </div>
                 </div>
                 <div class='row'>    
@@ -69,7 +69,7 @@ export default class TestComp extends Vue {
         const bt=this.Odds ? (this.Odds.BT ? this.Odds.BT : 0) : 0;
         return itemName(bt,num,this);
     }
-    async setOdds(BT:number,Num:number,step:number){
+    async setOdds(BT:number,Num:number,add:number,step:number){
         //console.log('setOdds:',BT,Num,step);
         if(this.Odds){
             if(this.Odds.isStop) return;
@@ -79,6 +79,7 @@ export default class TestComp extends Vue {
             GameID:this.GameID,
             BT:BT,
             Num:Num,
+            Add:add,
             Step:step,
             UserID:this.UserID
         }

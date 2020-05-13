@@ -181,6 +181,7 @@ export class AxApi {
         })
         return ans;
     }
+    /*
     async getOpParams(GameID:number|string){
         let msg:IMsg={ErrNo:0};
         const url:string=this.ApiUrl+'/api/getOpParams';
@@ -203,6 +204,7 @@ export class AxApi {
         })
         return msg;        
     }
+    */
     async SaveData(TableName:string,data:string){
         let msg:IMsg={ErrNo:0};
         const url:string=`${this.ApiUrl}/api/save/${TableName}`;

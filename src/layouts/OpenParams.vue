@@ -53,7 +53,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import {getModule} from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
-import {SelectOptions,IMsg} from './data/if';
+import {SelectOptions,IMsg,CommonParams} from './data/if';
 import OpParams,{IOParam} from './class/OpParams';
 import {PayRateData} from './data/PayRateList';
 import GameSelector from './components/GameSelector.vue';
@@ -129,7 +129,11 @@ export default class OpenParams extends Vue{
         })
     }
     async getOpenParams(GameID:number){
-        let msg:IMsg=await this.store.ax.getOpParams(GameID);
+        //let msg:IMsg=await this.store.ax.getOpParams(GameID);
+        const param:CommonParams={
+            GameID:GameID
+        }
+        let msg:IMsg=await this.store.ax.getApi('getOpParams',param);
         //console.log('getOpenParams',msg);
         this.OpParams=[];
         if(msg.ErrNo===0){
