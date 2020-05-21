@@ -125,7 +125,7 @@ import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 import OddsBlock from './components/OddsBlock.vue';
 import GameSelector from './components/GameSelector.vue';
-import {Odds, SelectOptions,IMsg, CommonParams,OSteps} from './data/if';
+import {Odds, SelectOptions,IMsg, CommonParams} from './data/if';
 import Layouts,{Layout,contBlock,numBlock} from './components/layouts';
 import {CGame,IData} from './components/Games';
 
@@ -200,11 +200,13 @@ export default class OddsManager extends Vue {
                 let ans:IMsg=await this.store.ax.getApi('CurOddsInfo',{GameID:v.value,MaxOddsID:0});
                 //console.log('get CurOddsInfo:',ans);
                 if(ans.data){
+                    /*
                     let Steps:OSteps[]=[];
                     if(ans.Steps){
                         Steps=ans.Steps;
                     }
-                    this.Game.inidata(ans.data as IData,Steps);
+                    */
+                    this.Game.inidata(ans.data as IData);
                     //console.log('Game:',this.Game.Items)
                     this.curTid=ans.tid;
                     this.oddshow=true;

@@ -23,8 +23,6 @@
                 <div class="col-1 test">{{$t('Table.Profit')}}(%)</div>
                 <div class="col-1 test">{{$t('Table.RateDefault')}}</div>
                 <div class="col-1 test">{{$t('Table.Probability')}}</div>
-                <div class="col-1 test">{{$t('Table.Steps')}}</div>
-                <div class="col-1 test">{{$t('Table.OneHand')}}</div>
             </div>
             <div class="row"
                 v-for="(itm,idx) in PayR"
@@ -35,8 +33,6 @@
                 <div :class="{'col-1 test':true,redColor: itm.Profit<0 }">{{ itm.Profit }}</div>
                 <div class="col-1 test"><q-input square standout dense v-model="itm.Rate" /></div>
                 <div class="col-1 test">{{itm.Probability}}</div>
-                <div class="col-1 test">{{itm.Steps}}</div>
-                <div class="col-1 test">{{itm.OneHand}}</div>
             </div>
         </div>
 	</div>

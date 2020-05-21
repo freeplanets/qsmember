@@ -57,7 +57,7 @@ import Component from 'vue-class-component';
 import {Game} from './data/schema';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import { SelectOptions} from './data/if';
+import { SelectOptions,IMsg} from './data/if';
 import {GameM} from './class/GameM';
 import GameSelector from './components/GameSelector.vue';
 Vue.component('GS',GameSelector);
@@ -117,7 +117,18 @@ export default class GameManager extends Vue{
         if(this.MyGame){
             if(this.MyGame.DataChanged){
                 const g:Game=this.MyGame.Datas;
-                await this.ax.saveGame(g);
+                let msg:IMsg=await this.ax.saveGame(g);
+                if(msg.ErrNo===0){
+                    this.$q.dialog({
+                        title: this.$t('Label.Save') as string,
+                        message: 'OK!!'
+                    });                    
+                } else {
+                    this.$q.dialog({
+                        title: this.$t('Label.Save') as string,
+                        message: msg.ErrCon ? msg.ErrCon : 'Error!!'
+                    });                     
+                }
             }
         }
         //console.log('saveGame',ans);

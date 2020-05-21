@@ -12,7 +12,7 @@ export interface IOdds {
     Risk?:number;
     BT?:number;
     Num?:number;
-    Steps?:number;
+    Steps:number;
     PerStep?:number;
 }
 interface INum {
@@ -80,7 +80,7 @@ export class CGame {
     get MaxOddsID(){
         return this.OID;
     }
-    inidata(dta:IData,Steps:OSteps[]){
+    inidata(dta:IData){
         Object.keys(dta).map(bt=>{
             const BTItm:INum=dta[bt];
             this.member[bt]={
@@ -90,11 +90,13 @@ export class CGame {
             }
             Object.keys(BTItm).map(num=>{
                 //this.member.
+                /*
                 const f=Steps.find(itm=>itm.BetType===parseInt(bt,10) && itm.SubType===BTItm[num].SubType);
                 if(f){
                     BTItm[num].Steps=f.Steps*f.PerStep;
                     BTItm[num].PerStep=f.PerStep;
                 }
+                */
                 this.member[bt].member[num]=BTItm[num];
                 this.member[bt].Total += BTItm[num].tolS;
                 this.member[bt].Payouts += BTItm[num].tolP;
@@ -110,8 +112,8 @@ export class CGame {
             Object.keys(dta[bt]).map(num=>{
                 this.member[bt].Total -= this.member[bt].member[num].tolS
                 this.member[bt].Payouts -= this.member[bt].member[num].tolP
-                dta[bt][num].PerStep=this.member[bt].member[num].PerStep;
-                dta[bt][num].Steps=this.member[bt].member[num].Steps;
+                //dta[bt][num].PerStep=this.member[bt].member[num].PerStep;
+                //dta[bt][num].Steps=this.member[bt].member[num].Steps;
                 this.member[bt].member[num]=dta[bt][num];
                 //this.member[bt].member[num]=Object.assign(this.member[bt].member[num],dta[bt][num])
                 //console.log('game updateData',this.member[bt].member[num])
@@ -141,7 +143,8 @@ export class CGame {
             return {};
         }
         const tmp:IOdds=this.member[sBT].member[sNum];
-        const ba = BaNum(tmp.PerStep ? tmp.PerStep : 1);
+        //const ba = BaNum(tmp.PerStep ? tmp.PerStep : 1);
+        const ba = BaNum(tmp.Steps);
         tmp.Odds= Math.round(tmp.Odds*ba)/ba;
         //console.log('getOdds:',sBT,tmp.Odds,tmp.Steps);
         tmp.BT = BT;

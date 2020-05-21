@@ -100,15 +100,16 @@ export class AxApi {
         })
         return ans;
     }
-    async saveGame(dta:Game){
-        let ans;
+    async saveGame(dta:Game):Promise<IMsg>{
+        let ans:IMsg={ErrNo:0};
         const url:string=this.ApiUrl+'/api/UpdateGame';
         await axios.post(url,dta).then((res:AxiosResponse)=>{
             //console.log(res.data);
             ans = res.data;
         }).catch(err=>{
             //console.log(err);
-            ans = err;
+            ans.ErrNo=8;
+            ans.error = err;
         })           
         return ans;
     }

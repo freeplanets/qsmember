@@ -15,6 +15,18 @@ export default class LayoutStoreModule extends VuexModule {
     public personal:IUser = {TableName:'User',id:0};
     //public ApiUrl:string=myApiUrl;
     public ax=AxApi;
+    private sInfo={};
+    @Mutation
+    private SET_SYSINFO(info:object){
+        Object.assign(this.sInfo,info);
+    }
+    @Action 
+    public setSysInfo(info:object){
+        this.SET_SYSINFO(info);
+    }
+    get SysInfo():object{
+        return this.sInfo;
+    }
     @Mutation
     public SET_LEFT_DRAWER_OPEN(value: boolean){
         this.isleftDrawerOpen = value;

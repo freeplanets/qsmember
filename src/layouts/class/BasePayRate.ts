@@ -113,7 +113,7 @@ export class BasePayRate<T>{
         return this.data.Steps ;
     }
     set Steps(v:number  | undefined){
-        this.data.Steps = v;
+        this.data.Steps = this.fetchValueToSteps(v);
         //console.log('set Steps',this.data.Steps,v);
         this.isDataChanged = true;
     }
@@ -199,7 +199,10 @@ export class BasePayRate<T>{
         this.isDataChanged=true;
         const tmp:StepG[]=[];
         val.map(itm=>{
-            if(itm.Step>0) tmp.push(itm);
+            if(itm.Step){
+                itm.Step = this.fetchValueToSteps(itm.Step);
+                tmp.push(itm);
+            } 
         })
         this.data.StepsGroup = JSON.stringify(tmp);
     }   
@@ -262,7 +265,7 @@ export class BasePayRate<T>{
                 return parseFloat(a);
             }
         }
-        return v;
+        return 0;
     }
     private calTopRate(){
         if(this.Profit && this.Probability){

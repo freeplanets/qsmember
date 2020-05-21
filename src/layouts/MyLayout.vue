@@ -151,6 +151,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
+import {IMsg} from './data/if';
 import {IUser} from './data/schema';
 import Comments from './components/Comments.vue';
 Vue.component('CMMT',Comments);
@@ -174,8 +175,17 @@ export default class MyLayout extends Vue {
   get Personal():IUser{
     return this.store.personal as IUser;
   }
+  async getSysInfo(){
+    const msg:IMsg=await this.store.ax.getApi('getSysInfo');
+    //console.log(msg);
+    if(msg.ErrNo===0){
+      //Object.assign(this.store.SysInfo,msg.data);
+      this.store.setSysInfo(msg.data as object);
+    }
+  }
   mounted() {
     //console.log('MyLayout mounted isLogin:',this.isLogin);
+    this.getSysInfo();
     if(!this.isLogin){
       //console.log('MyLayout:',this.$route);
       if(this.$route.path !== '/login'){
