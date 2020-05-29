@@ -13,7 +13,7 @@ export interface IOdds {
     BT?:number;
     Num?:number;
     Steps:number;
-    PerStep?:number;
+    PerStep:number;
 }
 interface INum {
     [num:string]:IOdds;
@@ -144,7 +144,7 @@ export class CGame {
         }
         const tmp:IOdds=this.member[sBT].member[sNum];
         //const ba = BaNum(tmp.PerStep ? tmp.PerStep : 1);
-        const ba = BaNum(tmp.Steps);
+        const ba = BaNum(tmp.PerStep);
         tmp.Odds= Math.round(tmp.Odds*ba)/ba;
         //console.log('getOdds:',sBT,tmp.Odds,tmp.Steps);
         tmp.BT = BT;

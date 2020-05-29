@@ -3,6 +3,12 @@
 		<div class="row q-pa-sm">
 			<div><GS :store='store' @setGames="setCurGames"></GS></div>
             <div class="pd"><q-btn color="blue" icon-right="note_add" :label="$t('Label.AddTerm')" @click="ShowAdd()" /></div>
+            <div class="pd"><q-btn color="secondary" :label="$t('Report.Today')" @click="getToday()" /></div>
+            <div class="pd"><q-btn color="secondary" :label="$t('Report.Yesterday')" @click="getYesterday()" /></div>
+            <div class="pd"><q-btn color="secondary" :label="$t('Report.Beforeday')" @click="getBeforeday()" /></div>
+            <div class="miniBtn-pd"><q-btn color="secondary" dense icon="date_range" @click="DateSlt=true"/></div>    
+            <div class="tbox-pd"><q-input class="tbox-w" outlined dense v-model="sdate" /></div>
+            <div class="pd"><q-btn color="secondary" :label="$t('Button.Search')" @click="getTerms()" /></div>
 		</div>
         <div v-if="data.length>0" class='mytable'>
             <div class="row">
@@ -31,6 +37,22 @@
                     </div>
                 </div>             
             </div>
+        </div>
+        <div class="q-pa-md q-gutter-sm">
+        <q-dialog v-model="DateSlt">
+        <q-card>
+            <q-card-section class="row items-center q-pb-none">
+            <q-btn icon="close" flat round dense v-close-popup />
+            </q-card-section>
+
+            <q-card-section>
+                <q-date
+                    v-model="sdate"
+                    minimal
+                />
+            </q-card-section>
+        </q-card>
+        </q-dialog>
         </div>
         <q-dialog v-model="isInputNum" persistent>
         <q-card style="min-width: 350px">
@@ -102,6 +124,8 @@ import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 import {SelectOptions,CommonParams,IMsg} from './data/if';
 import {ITerms} from './data/schema';
+import JDate from './components/Date/JDate'
+import {dateAddZero} from './components/func';
 import GameSelector from './components/GameSelector.vue';
 Vue.component('GS',GameSelector);
 
@@ -129,6 +153,8 @@ export default class TermManager extends Vue {
     isInputNum:boolean=false;
     curTermSettleStatus:number=0;
     curTid:number=0;
+    sdate:string='';
+    DateSlt:boolean=false;
     get ax(){
         return this.store.ax;
     }
@@ -148,7 +174,7 @@ export default class TermManager extends Vue {
     setCurGames(v:SelectOptions){
         this.models = v;
         this.term.GameID = v.value as number;
-        this.getTerms(this.term.GameID);
+        this.getTerms();
     }      
     ShowAdd(){
         if(this.models){
@@ -158,7 +184,9 @@ export default class TermManager extends Vue {
     }
     async getLastTerm(){
         const param:CommonParams={
-            GameID: this.term.GameID
+            GameID: this.term.GameID,
+            UserID: this.store.personal.id,
+            sid: this.store.personal.sid
         }
         const msg:IMsg=await this.store.ax.getApi('getLastTerm',param);
         if(msg.ErrNo===0){
@@ -197,7 +225,7 @@ export default class TermManager extends Vue {
         //console.log('SaveTerm',this.term,ans);
         if(ans.ErrNo === 0) {
             this.isAddTerm = false;    
-            this.getTerms(this.term.GameID)
+            this.getTerms()
         }
     }
     get dateString(){
@@ -205,11 +233,12 @@ export default class TermManager extends Vue {
         const reg1 = /(\d+)-(\d+)-(\d+).*/;
         return d.toJSON().replace(reg1, '$1-$2-$3');
     }
-    async getTerms(GameID:number){
+    async getTerms(){
+        const GameID:number=this.term.GameID;
         this.data=[];
-        const ans=await this.ax.getTerms(GameID)
+        const ans=await this.ax.getTerms(this.store.personal.id,this.store.personal.sid,GameID,this.sdate.split('/').join('-'))
         if(ans.ErrNo===0){
-            this.data=ans.data;
+            this.data=ans.data as ITerms[];
             this.data.map(itm=>{
                 if(itm.ResultFmt){
                     console.log('getTerms',JSON.parse(itm.ResultFmt));
@@ -243,22 +272,38 @@ export default class TermManager extends Vue {
     }
     async SendNums(){
         const ax=this.store.ax;
-        const ans=await ax.saveNums(this.curTid,this.term.GameID,this.nums.join(','),this.curTermSettleStatus);
+        const ans=await ax.saveNums(this.store.personal.id,this.store.personal.sid,this.curTid,this.term.GameID,this.nums.join(','),this.curTermSettleStatus);
         //console.log('SendNums',ans);
-        if(ans.data.ErrNo===0){
+        if(ans.ErrNo===0){
             this.$q.dialog({
                 title: this.$t('Label.Save') as string,
                 message: 'OK!!'
             });
             this.isInputNum=false;
-            this.getTerms(this.term.GameID);
+            this.getTerms();
         }
+    }
+    getToday(){
+        this.sdate = JDate.today.start;
+    }
+    getYesterday(){
+        this.sdate = JDate.yesterday.start;
+    }
+    getBeforeday(){
+        //console.log('getBeforeday',this.sdate);
+        if(!this.sdate) return;
+        const d=new Date(this.sdate);
+        const ds=d.getTime()-86400000;
+        const d1=new Date(ds);
+        this.sdate=dateAddZero(d1.toLocaleDateString());
+        //console.log('getBeforeday',this.sdate,d1.toJSON(),d.toUTCString(),d.toLocaleDateString(),d.toISOString());
     }
     mounted(){
         if(!this.store.isLogin){
             this.$router.push({path:'/login'});
         }     
         this.term.PDate=this.dateString;
+        this.getToday();
         //console.log(this.$t(`Label.Settled`),this.$t(`Label.Settled.${1}`));
     }
 }

@@ -6,24 +6,29 @@
 		    <div class='col' 
                 v-if='curGameID'
                 >
-                <BTC :store='store' :GameID='curGameID' @SltBT='SltBetTypes' ></BTC>
+                <BTC :store='store' :GameID='curGameID' :pinfo='store.personal' @SltBT='SltBetTypes' ></BTC>
             </div>
 		</div>
         <div class="row">
-        <RCO class='col-6' :showUpLimit='true' @updateRateTop="updateRateTop" @updateRateDefault="updateRateDefault"></RCO>
+        <RCO class='col-6' :showUpLimit='true' @updateRateTop="updateRateTop" @updateRateDefault="updateRateDefault"
+            @updateSingleNum="updateSingleNum"
+            @updateMinBet="updateMinBet"
+            @updateMaxBet="updateMaxBet"
+            @updateChangeStart="updateChangeStart"
+            @updateBetForChange="updateBetForChange"
+            @updateBetSteps="updateBetSteps"
+        ></RCO>
         </div>
         <div class="q-pa-md" v-if="models">
             <table>
               <tr class="testheader">
                 <td class="test">{{$t('Table.ItemName')}}</td>
                 <td class="test">{{$t('Table.SubName')}}</td>
-                <td class="test">{{$t('Table.NoAdjust')}}</td>
                 <td class="test">{{$t('Table.Profit')}}(%)</td>
                 <td class="test">{{$t('Table.RateDefault')}}</td>
                 <td class="test">{{$t('Table.RateTop')}}</td>
                 <td class="test">{{$t('Table.Probability')}}</td>
                 <td class="test">{{$t('Table.TotalNums')}}</td>
-                <td class="test">{{$t('Table.UseAvg')}}</td>
                 <td class="test">{{$t('Table.SingleNum')}}</td>
                 <td class="test">{{$t('Table.UnionNum')}}</td>
                 <td class="test">{{$t('Table.MinHand')}}</td>
@@ -32,6 +37,8 @@
                 <td class="test">{{$t('Table.ChangeStart')}}</td>
                 <td class="test">{{$t('Table.BetForChange')}}</td>                
                 <td class="test">{{$t('Table.Steps')}}</td>
+                <td class="test">{{$t('Table.NoAdjust')}}</td>
+                <td class="test">{{$t('Table.UseAvg')}}</td>
               </tr>
               <tr class="datas"
                 v-for="(itm,idx) in BasePayR"
@@ -39,13 +46,11 @@
               >
                 <td :class="{test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.Title }}</td>
                 <td :class="{test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.SubTitle }}</td>
-                <td class="test1"><input type="checkbox" v-model="itm.NoAdjust" /></td>
                 <td :class="{'test':true,redColor:itm.Profit<0}">{{ itm.Profit }}</td>
                 <td class="test"><input type="text" size='4' v-model="itm.Rate" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.TopRate"  /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.Probability"  /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.TotalNums" /></td>
-                <td class="test1"><input type="checkbox" v-model="itm.UseAvg" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.SingleNum" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.UnionNum" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.MinHand" /></td>
@@ -56,7 +61,9 @@
                 <td class="test1">
                     <input type="text" size='4' v-model="itm.Steps"  />
                     <q-btn round dense size='sm' color="primary" icon="trending_up" @click="showStepGroup(itm)" />
-                </td>                
+                </td>
+                <td class="test1"><input type="checkbox" v-model="itm.NoAdjust" /></td>
+                <td class="test1"><input type="checkbox" v-model="itm.UseAvg" /></td>
               </tr>
             </table>
         </div>
@@ -102,7 +109,7 @@ import {SelectOptions,BasePayRateItm,IbtCls,CommonParams,IMsg,StepG} from './dat
 import BTG from './data/defaultData';
 import {PayRateData } from './data/PayRateList';
 import {BasePayRate} from './class/BasePayRate';
-//import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash';
 import GameSelector from './components/GameSelector.vue';
 import BetTypeClass from './components/BetTypeClass.vue';
 import RateChangeOption from './components/RateChangeOption.vue';
@@ -159,7 +166,7 @@ export default class BetClass extends Vue{
     setCurGames(v:SelectOptions){
         this.models = v;
         this.chkdata(v);
-        console.log('doGames',v);
+        //console.log('doGames',v);
     }
     async chkdata(v:SelectOptions){
         // console.log('chkdata:', v);
@@ -184,10 +191,31 @@ export default class BetClass extends Vue{
         itms=await this.getBasePayRate(this.curGameID);
         //console.log('getBasePayRate itms:',itms);
         if(itms.length>0){
+            // 8,72 三中二
+            // 10,73 二中特
+            let spArr:number[] | undefined;
+            if(this.models){
+                if(this.models.GType==='MarkSix'){
+                    spArr=[8,72,10,73];
+                }
+            }
             itms.map(itm=>{
                 const e = this.BasePayR.find(elm => elm.BetType == itm.BetType && elm.SubType == itm.SubType)
                 if(e){
                     e.Datas= itm
+                    if(spArr){
+                        if(e.SubType===0){
+                            if(spArr.indexOf(e.BetType)>-1){
+                                const f=itms.find(m=>m.BetType===e.BetType && m.SubType===0);
+                                if(f){
+                                    if(f.Probability){
+                                        e.ExtProb = f.Probability;
+                                        e.ExtRate = f.DfRate ? f.DfRate : 0;
+                                    } 
+                                }
+                            }
+                        }
+                    }
                 }
             })
             //this.BasePayR=cloneDeep(this.BasePayR);
@@ -226,7 +254,9 @@ export default class BetClass extends Vue{
     async getBasePayRate(gid:number):Promise<BasePayRateItm[]>{
         let dta:BasePayRateItm[]=[];
         const param:CommonParams = {
-            GameID: gid
+            GameID: gid,
+            UserID: this.store.personal.id,
+            sid: this.store.personal.sid
         }
         let msg:IMsg = await this.store.ax.getApi('getBasePayRate',param);
         if(msg.ErrNo==0){
@@ -248,6 +278,61 @@ export default class BetClass extends Vue{
             this.BasePayR.map(itm=>{
                 if(itm.Selected){
                     itm.updateDefaultRateByProfit(v);
+                }
+            })
+        }
+    }
+    updateSingleNum(risk:number){
+        if(risk>0){
+            this.BasePayR.map(itm=>{
+                if(itm.Selected){
+                    itm.updateSingleNumFull(risk);
+                }
+            })
+        }        
+    }
+    updateMinBet(v:number){
+        if(v>0){
+            this.BasePayR.map(itm=>{
+                if(itm.Selected){
+                    itm.MinHand=v;
+                }
+            })
+        }
+    }
+    updateMaxBet(v:number){
+        if(v>0){
+            this.BasePayR.map(itm=>{
+                if(itm.Selected){
+                    itm.MaxHand=v;
+                }
+            })
+        }
+    }
+    updateChangeStart(v:number){
+        if(v){
+            this.BasePayR.map(itm=>{
+                if(itm.Selected){
+                    itm.updateChangeStart(v);
+                }
+            })
+            this.BasePayR=cloneDeep(this.BasePayR);
+        }
+    }
+    updateBetForChange(v:number){
+        if(v){
+            this.BasePayR.map(itm=>{
+                if(itm.Selected){
+                    itm.updateBetForChange(v);
+                }
+            })
+        }
+    }
+    updateBetSteps(v:number){
+        if(v){
+            this.BasePayR.map(itm=>{
+                if(itm.Selected){
+                    itm.updateSteps(v);
                 }
             })
         }
@@ -343,6 +428,8 @@ export default class BetClass extends Vue{
 <style scoped>
 table {
     border: 0;
+    border-spacing: 0;
+    border-collapse: collapse;
 }
 .pbtn {
     padding: 6px 4px;

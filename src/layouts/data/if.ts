@@ -127,11 +127,12 @@ export interface Odds {
 export interface CommonParams {
     id?:number;
     tid?:number;
+    sid:string;
     GameID?:number|string;
     BT?:number;
     Num?:number;
     Step?:number;
-    UserID?:number;
+    UserID:number;
     MaxOddsID?:number;
     BetTypes?:string;
     isStop?:number;
@@ -192,4 +193,9 @@ export interface OSteps {
     SubType:number;
     PerStep:number;
     Steps:number;
+}
+export interface ILoginInfo {
+    id: number;
+    Account: string;
+    sid: string;
 }

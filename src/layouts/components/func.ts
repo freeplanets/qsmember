@@ -173,6 +173,20 @@ export function datetime(v:string){
     const dt:Date=new Date(v);
     return dt.toLocaleString('zh-TW', {timeZone: 'Asia/Taipei',hour12:false});
 }
+export function dateAddZero(d:string):string{
+    const sep:string= d.indexOf('-') > -1 ? '-' : '/';
+    const dArr:string[]= d.split(sep);
+    const newA=dArr.map(s=>{
+        return addZeroIfUnderTen(s);
+    })
+    
+    return newA.join(sep);
+}
+function addZeroIfUnderTen(v:string|number):string{
+    const i:number=typeof(v)==='string' ? parseInt(v,10) : 0;
+    if(i<10) return '0'+i;
+    return ''+i;
+}
 export function BHRemaster(bh:BetHeader,glist:SelectOptions[],vue:Vue,users?:any):BetHeader{
     //console.log('BHRemaster type:',typeof bh.GameID);
     const f=glist.find(itm=>itm.value==bh.GameID);

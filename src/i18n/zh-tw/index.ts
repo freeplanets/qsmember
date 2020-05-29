@@ -105,7 +105,12 @@ export default {
     Dashboard: '大廳',
     ChangePassword: '變更密碼',
     AccHistory: '帳戶歷史',
-    PersonalInfo: '個人中心'
+    PersonalInfo: '個人中心',
+    CPassword: '新登入密碼確認',
+    NPassword: '新登入密碼',
+    OPassword: '原登入密碼',
+    PassERR: '新登入密碼和碓認碼不同',
+    PassChgMsg: '密碼已修改,請重新登入!'
   },
   Button: {
     Num: '號碼',
@@ -138,9 +143,6 @@ export default {
     Attention: '注意',
     DelBCMsg: '是否要刪除分類'
   },
-  CPassword: '新登入密碼確認',
-  NPassword: '新登入密碼',
-  OPassword: '原登入密碼',
   InputSwitch: [
     { title: '一般', isActive: 'false' },
     { title: '鍵盤', isActive: 'false' },
@@ -174,6 +176,7 @@ export default {
   Report: {
     Today: '今日',
     Yesterday:'昨日',
+    Beforeday:"前一日",
     Orders: '投注額',
     Result: '結果',
     Commission: '退水',

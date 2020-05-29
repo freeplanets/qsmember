@@ -10,11 +10,11 @@
                     <div class="pbtn2"><q-btn color="red" icon-right="delete_forever" :label="$t('Label.DeletePayClass')" @click="DelPayClass();" /></div>
     		    </div>
             </div>
-            <div class="col" v-if="curGameID" ><BTC :store="store" :GameID="curGameID" @SltBT="SltBetTypes"></BTC></div>
+            <div v-if="curGameID" ><BTC :store="store" :GameID="curGameID" :pinfo='store.personal' @SltBT="SltBetTypes"></BTC></div>
+            <div class="pbtn3"><q-btn color="green" icon-right="save" label="Save" @click="SaveData();" /></div>
 		</div>
         <div class="row">
             <RCO @updateRateDefault="updateRateDefault"></RCO>
-            <div class="pbtn2 col"><q-btn color="green" icon-right="save" label="Save" @click="SaveData();" /></div>
         </div> 
         <div class="q-pa-md" v-if="curGameID">
             <div class="row testheader">
@@ -22,17 +22,15 @@
                 <div class="col-1 test">{{$t('Table.SubName')}}</div>
                 <div class="col-1 test">{{$t('Table.Profit')}}(%)</div>
                 <div class="col-1 test">{{$t('Table.RateDefault')}}</div>
-                <div class="col-1 test">{{$t('Table.Probability')}}</div>
             </div>
             <div class="row"
                 v-for="(itm,idx) in PayR"
                 :key="idx"
             >
-                <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.Title }}</div>
+                <div :class="{'col-1':true,test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.Title }}</div>
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.SubTitle }}</div>
                 <div :class="{'col-1 test':true,redColor: itm.Profit<0 }">{{ itm.Profit }}</div>
                 <div class="col-1 test"><q-input square standout dense v-model="itm.Rate" /></div>
-                <div class="col-1 test">{{itm.Probability}}</div>
             </div>
         </div>
 	</div>
@@ -111,12 +109,20 @@ export default class BetClass extends Vue{
         this.PayR.map(itm=>{
             itm.Selected = false;
         })
+        this.PayR.map(itm=>{
+            const f = bts.find(bt=>parseInt(bt,10)===itm.BetType);
+            if(f){
+                itm.Selected = true;
+            }
+        })
+        /*
         bts.map(bt=>{
             const  f=this.PayR.find(bpr=>bpr.BetType===parseInt(bt,10));
             if(f){
                 f.Selected = true;
             }
         })
+        */
         //console.log('SltBetTypes',bts);
     }
     updateRateDefault(v:number){
@@ -296,6 +302,9 @@ export default class BetClass extends Vue{
 }
 .pbtn2 {
     padding: 2px 4px;
+}
+.pbtn3 {
+    padding: 6px 8px;
 }
 .testheader div {
     background-color: cadetblue;

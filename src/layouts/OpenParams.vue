@@ -131,7 +131,9 @@ export default class OpenParams extends Vue{
     async getOpenParams(GameID:number){
         //let msg:IMsg=await this.store.ax.getOpParams(GameID);
         const param:CommonParams={
-            GameID:GameID
+            GameID:GameID,
+            UserID:this.store.personal.id,
+            sid:this.store.personal.sid
         }
         let msg:IMsg=await this.store.ax.getApi('getOpParams',param);
         //console.log('getOpenParams',msg);

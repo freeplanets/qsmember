@@ -17,7 +17,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
 import LayoutStoreModule from '../data/LayoutStoreModule';
-import { IbtCls } from '../data/if';
+import { IbtCls,ILoginInfo } from '../data/if';
 /**
  * :store="ParameterName"
  * :GameID="ParameterName"
@@ -27,11 +27,18 @@ import { IbtCls } from '../data/if';
 export default class BetTypeClass extends Vue {
     @Prop() readonly store?:LayoutStoreModule;
     @Prop() readonly GameID?:number;
+    @Prop() readonly pinfo?:ILoginInfo;
     BtClass:IbtCls[]=[];
 	async getBtClass(){
+        let pinfo:ILoginInfo={
+            id:0,
+            Account:'',
+            sid:''
+        }
+        if(this.pinfo) pinfo=this.pinfo;
         this.BtClass=[];
         if(this.GameID && this.store){
-			const ans = await this.store.ax.getBtClass(this.GameID)
+			const ans = await this.store.ax.getBtClass(pinfo.id,pinfo.sid,this.GameID)
 			if(ans){
 				ans.map((itm:IbtCls)=>{
 					this.BtClass.push(itm)

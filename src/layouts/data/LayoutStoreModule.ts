@@ -2,6 +2,7 @@ import { Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 import Store from '../../store/index';
 import {IUser} from './schema';
 import AxApi from '../components/AxApi';
+import {ILoginInfo} from './if';
 
 @Module({
     dynamic: true,
@@ -12,7 +13,7 @@ import AxApi from '../components/AxApi';
 export default class LayoutStoreModule extends VuexModule {
     private isleftDrawerOpen = true;
     public isLogin = false;
-    public personal:IUser = {TableName:'User',id:0};
+    public personal:ILoginInfo = {id:0,Account:'',sid:''};
     //public ApiUrl:string=myApiUrl;
     public ax=AxApi;
     private sInfo={};
@@ -41,12 +42,12 @@ export default class LayoutStoreModule extends VuexModule {
     }
 
     @Mutation
-    public SET_PERSONAL(value:IUser){
+    public SET_PERSONAL(value:ILoginInfo){
         this.personal = value;
     }
 
     @Action
-    public setPersonal(value:IUser){
+    public setPersonal(value:ILoginInfo){
         this.SET_PERSONAL(value);
     }
 

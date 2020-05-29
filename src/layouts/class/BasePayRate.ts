@@ -12,6 +12,8 @@ export class BasePayRate<T>{
     private isDataChanged: boolean = false;
     private isSelected:boolean = false;
     private BC:BClass<T>;
+    private extProbability:number|undefined;
+    private extRate:number=0;
     constructor(v:T | any){ 
         this.BC=new BClass(v);
         this.data = this.BC.Datas;
@@ -99,6 +101,12 @@ export class BasePayRate<T>{
         this.calProfit();
         this.isDataChanged = true;
     }
+    set ExtProb(v:number){
+        this.extProbability = v;
+    }
+    set ExtRate(v:number){
+        this.extRate = v;
+    }
     get PerStep():number | undefined{
         return this.data.PerStep;
     }
@@ -109,21 +117,21 @@ export class BasePayRate<T>{
         this.data.TopRate = this.fetchValueToSteps(this.data.TopRate);
         this.isDataChanged = true;
     }
-    get Steps():number | undefined{
+    get Steps():number{
         return this.data.Steps ;
     }
-    set Steps(v:number  | undefined){
+    set Steps(v:number){
         this.data.Steps = this.fetchValueToSteps(v);
         //console.log('set Steps',this.data.Steps,v);
         this.isDataChanged = true;
     }
-    get ChangeStart():number | undefined{
+    get ChangeStart():number{
         return this.data.ChangeStart ;
     }
-    set ChangeStart(v:number  | undefined){
+    set ChangeStart(v:number){
+        this.isDataChanged = true;
         this.data.ChangeStart = v;
         //console.log('set Steps',this.data.Steps,v);
-        this.isDataChanged = true;
     }
 
     /*
@@ -200,6 +208,8 @@ export class BasePayRate<T>{
         const tmp:StepG[]=[];
         val.map(itm=>{
             if(itm.Step){
+                itm.Start = typeof(itm.Start)==='string' ?  parseInt(itm.Start,10) : itm.Start;
+                itm.Step = typeof(itm.Step)==='string' ?  parseInt(itm.Step,10) : itm.Step;
                 itm.Step = this.fetchValueToSteps(itm.Step);
                 tmp.push(itm);
             } 
@@ -253,6 +263,30 @@ export class BasePayRate<T>{
             this.Rate = (1-pft/100)/this.Probability;
         }
     }
+    //單碼滿倉=風險金額 (    )/不含本金賠率
+    updateSingleNumFull(risk:number){
+        if(this.Rate){
+            this.SingleNum=Math.abs(Math.round(risk/(this.Rate-1)));
+        }
+    }
+    //押碼啟動金額 = 不降賠可承受風險(      )/不含本金賠率
+    updateChangeStart(topRisk:number){
+        if(this.Rate){
+            this.ChangeStart = Math.abs(Math.round(topRisk/(this.Rate-1)));
+        }
+    }
+    //押碼金額 = 押碼風險金額(      )/不含本金賠率
+    updateBetForChange(betRisk:number){
+        if(this.Rate){
+            this.BetForChange = Math.abs(Math.round(betRisk/(this.Rate-1)));
+        }
+    }
+    //押碼點數 = 跳動點 * (     )
+    updateSteps(v:number){
+        if(v && this.PerStep){
+            this.Steps = this.PerStep * v;
+        }
+    }
     protected fetchValueToSteps(v:number|undefined){
         if(v){
             if(this.data.PerStep){
@@ -280,7 +314,13 @@ export class BasePayRate<T>{
     private calProfit(){
         if(this.Rate && this.Probability) {
             if(this.Probability > 0) {
-                this.data.Profit = Math.round((1 - this.Probability * this.Rate)*1000000)/10000;
+                let p:number;
+                if( this.extProbability){
+                    p = Math.round((1 - (this.Probability * this.Rate + this.extProbability*this.extRate))*1000000)/10000;
+                } else {
+                    p = Math.round((1 - this.Probability * this.Rate)*1000000)/10000;
+                }
+                this.data.Profit=p;
             }
         }
     }

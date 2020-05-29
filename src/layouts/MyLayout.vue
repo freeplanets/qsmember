@@ -16,8 +16,27 @@
         </q-toolbar-title>
         <q-btn flat round dense icon="edit" @click="showComment=!showComment" />
         <div v-if="Personal.Account">
-          <q-icon name="account_circle"  class="text-white" style="font-size: 32px;" />
-          {{ Personal.Account }}
+          <q-btn-dropdown flat icon="account_circle" :label="Personal.Account">
+            <q-list>
+              <q-item clickable v-close-popup @click="logout">
+                <q-item-section>
+                  <q-item-label>Photos</q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-close-popup @click="showCp=true">
+                <q-item-section>
+                  <q-item-label>{{$t('Title.ChangePassword')}}</q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-close-popup @click="logout">
+                <q-item-section>
+                  <q-item-label>{{$t('Common.Logout')}}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>          
         </div>
         <div v-if="!Personal.Account">App v{{ $q.version }}</div>
       </q-toolbar>
@@ -136,7 +155,33 @@
         // !-->
       </q-list>
     </q-drawer>
+    <q-dialog v-model="showCp">
+      <q-card style="width: 300px" class="q-px-sm q-pb-md">
+        <q-card-section>
+          <div class="text-h6">{{$t('Title.ChangePassword')}}</div>
+        </q-card-section>
+        <q-item dense>
+          <q-item-section>
+            <q-input outlined dense type="password" v-model="OPassword" :label="$t('Title.OPassword')" />
+          </q-item-section>
+        </q-item>
+        <q-item dense>
+          <q-item-section>
+            <q-input outlined dense type="password" v-model="NPassword" :label="$t('Title.NPassword')" />
+          </q-item-section>
+        </q-item>
 
+        <q-item dense>
+          <q-item-section>
+            <q-input outlined dense type="password" v-model="CPassword" :label="$t('Title.CPassword')" />
+          </q-item-section>
+        </q-item>
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat :label="$t('Label.Cancel')" v-close-popup />
+          <q-btn flat :label="$t('Button.Confirm')" @click="ChangePW" />
+        </q-card-actions>        
+      </q-card>
+    </q-dialog>
     <q-page-container>
       <router-view />
       <q-dialog v-model="showComment" seamless position="bottom">
@@ -151,8 +196,8 @@ import Vue from 'vue'
 import Component from 'vue-class-component';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
-import {IMsg} from './data/if';
-import {IUser} from './data/schema';
+import {IMsg,ILoginInfo, CommonParams} from './data/if';
+//import {IUser} from './data/schema';
 import Comments from './components/Comments.vue';
 Vue.component('CMMT',Comments);
 
@@ -161,6 +206,10 @@ export default class MyLayout extends Vue {
   store = getModule(LayoutStoreModule);
   showComment:boolean=false;
   ProName:string='*';
+  showCp:boolean=false;
+  OPassword:string='';
+  NPassword:string='';
+  CPassword:string='';
   get leftDrawerOpen() {
     //console.log('leftDrawerOpen get:',this.store.leftDrawerOpen);
     return this.store.leftDrawerOpen;
@@ -172,16 +221,54 @@ export default class MyLayout extends Vue {
   get isLogin(){
     return this.store.isLogin;
   }
-  get Personal():IUser{
-    return this.store.personal as IUser;
+  get Personal():ILoginInfo{
+    return this.store.personal as ILoginInfo;
   }
   async getSysInfo(){
-    const msg:IMsg=await this.store.ax.getApi('getSysInfo');
+    const param:CommonParams={
+      UserID:0,
+      sid:''
+    }
+    const msg:IMsg=await this.store.ax.getApi('getSysInfo',param);
     //console.log(msg);
     if(msg.ErrNo===0){
       //Object.assign(this.store.SysInfo,msg.data);
       this.store.setSysInfo(msg.data as object);
     }
+  }
+  async ChangePW(){
+    if(this.CPassword !== this.NPassword){
+        this.$q.dialog({
+            title: this.$t('Title.ChangePassword') as string,
+            message: this.$t('Title.PassERR') as string
+        });
+        return;
+    }
+    const param:CommonParams={
+      UserID:this.store.personal.id,
+      sid:this.store.personal.sid,
+      OPassword: this.OPassword,
+      NPassword: this.NPassword,
+      CPassword: this.CPassword
+    }
+    const msg:IMsg= await this.store.ax.getApi('ChangePassword',param,'post');
+    if(msg.ErrNo===0){
+      this.showCp=false;
+      this.$q.dialog({
+          title: this.$t('Title.ChangePassword') as string,
+          message: this.$t('Title.PassChgMsg') as string
+      });
+      this.$router.push({path:'/login'});      
+    }
+  }
+  async logout(){
+    const param:CommonParams={
+      UserID:this.Personal.id,
+      sid: this.Personal.sid
+    }
+    const msg:IMsg= await this.store.ax.getApi('logout',param);
+    console.log(msg);
+    this.$router.push({path:'/login'});
   }
   mounted() {
     //console.log('MyLayout mounted isLogin:',this.isLogin);

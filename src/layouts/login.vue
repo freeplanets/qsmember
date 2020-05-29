@@ -19,21 +19,21 @@
 <script lang="ts">
 import Vue from 'vue';
 import Components from 'vue-class-component';
-import axios, { AxiosRequestConfig,AxiosResponse} from 'axios';
+//import axios, { AxiosRequestConfig,AxiosResponse} from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import { getModule } from 'vuex-module-decorators';
-import {IUser} from './data/schema';
-import { IMsg } from './data/if';
+//import {IUser} from './data/schema';
+import { IMsg,CommonParams,ILoginInfo } from './data/if';
 
 @Components
 export default class Login extends Vue {
   store = getModule(LayoutStoreModule);
   Account='';
   Password='';
-  set Personal(value:IUser){
+  set Personal(value:ILoginInfo){
     this.store.setPersonal(value);
   }
-  get Personal():IUser {
+  get Personal():ILoginInfo {
     return this.store.personal;
   }
   set isLogin(value:boolean){
@@ -43,6 +43,7 @@ export default class Login extends Vue {
     return this.store.isLogin;
   }
   async login(){
+    /*
     const config:AxiosRequestConfig = {
       //withCredentials: true,
       //headers: {'Access-Control-Allow-Origin': 'http://localhost:8080'},
@@ -51,8 +52,24 @@ export default class Login extends Vue {
         Password: this.Password
       }
     }
-    const url:string=this.store.ax.Host+'/login';
+    */
+    const params:CommonParams = {
+        Account: this.Account,
+        Password: this.Password,
+        UserID:0,
+        sid:''
+    }
+    //const url:string=this.store.ax.Host+'/login';
+    const msg:IMsg=await this.store.ax.getApi('/login',params);
+    if(msg.ErrNo===0){
+      console.log(msg.data);
+        this.Personal = msg.data as ILoginInfo;
+        this.isLogin = true;
+        //this.store.leftDrawerOpen=true;
+        this.$router.push({path:'/'});      
+    }
     //console.log('login:',url);
+    /*
     await axios.get(url,config).then((res:AxiosResponse)=>{
       const ans:IMsg=res.data as IMsg;
       //console.log('login:',ans);
@@ -65,6 +82,7 @@ export default class Login extends Vue {
     }).catch(err=>{
       console.error('login error:',err);
     })
+    */
     //console.log('login',this.Account,this.Password);
   }
   mounted(){

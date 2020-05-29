@@ -19,8 +19,12 @@ export class AxApi {
     get Host(){
         return this.ApiUrl;
     }
-	async getGames():Promise<SelectOptions[] | undefined>{
-        const ans=await this.getApi('getGames');
+	async getGames(UserID:number,sid:string):Promise<SelectOptions[] | undefined>{
+        const params:CommonParams={
+            UserID:UserID,
+            sid:sid
+        }        
+        const ans=await this.getApi('getGames',params);
         const tmp:SelectOptions[]=[];
         //console.log('getGames:',ans);
         if(ans.ErrNo===0){
@@ -39,9 +43,11 @@ export class AxApi {
             return;
         }
     }
-    async getTermIDByGameID(GameID:number):Promise<SelectOptions[] | undefined>{
+    async getTermIDByGameID(UserID:number,sid:string,GameID:number):Promise<SelectOptions[] | undefined>{
         const params:CommonParams={
-            GameID:GameID
+            GameID:GameID,
+            UserID:UserID,
+            sid:sid
         }
         const tmp:SelectOptions[]=[];
         const ans=await this.getApi('getTermIDByGameID',params);
@@ -59,9 +65,11 @@ export class AxApi {
             return;
         }
     }
-    async getBtClass(gid:number|string):Promise<IbtCls[] | undefined>{
+    async getBtClass(UserID:number,sid:string,GameID:number|string):Promise<IbtCls[] | undefined>{
 		const param:CommonParams={
-            GameID:gid
+            GameID:GameID,
+            UserID:UserID,
+            sid:sid            
         }
         const ans=await this.getApi('getBtClass',param);
         if(ans.ErrNo===0){
@@ -87,10 +95,21 @@ export class AxApi {
         })           
         return ans;
     }
-    async getGameList(){
+    async getGameList(UserID:number,sid:string){
+		const param:CommonParams={
+            UserID:UserID,
+            sid:sid            
+        }        
+        const msg:IMsg=await this.getApi('GameList',param);
+        if(msg.ErrNo===0){
+            return msg.data
+        } else {
+            return;
+        }
         const url:string=this.ApiUrl+'/api/GameList';
         const config:AxiosRequestConfig = {
         }
+        /*
         let ans;
         await axios.get(url,config).then(res=>{
             ans=res.data;
@@ -99,26 +118,34 @@ export class AxApi {
             ans= err;
         })
         return ans;
+        */
     }
-    async saveGame(dta:Game):Promise<IMsg>{
-        let ans:IMsg={ErrNo:0};
+    async saveGame(UserID:number,sid:string,dta:Game):Promise<IMsg>{
+        const param:CommonParams={
+            UserID:UserID,
+            sid:sid,
+        }
+        Object.keys(dta).map(key=>{
+            param[key]=dta[key];
+        })
         const url:string=this.ApiUrl+'/api/UpdateGame';
-        await axios.post(url,dta).then((res:AxiosResponse)=>{
-            //console.log(res.data);
-            ans = res.data;
-        }).catch(err=>{
-            //console.log(err);
-            ans.ErrNo=8;
-            ans.error = err;
-        })           
-        return ans;
+        return await this.getApi('UpdateGame',param,'post');
     }
 
-    async getTerms(GameID:number|string){
+    async getTerms(UserID:number,sid:string,GameID:number|string,sdate?:string):Promise<IMsg>{
+        const param:CommonParams={
+            UserID:UserID,
+            sid:sid,
+            GameID:GameID,
+            SDate:sdate
+        }
+        return await this.getApi('getTerms',param);
+        /*
         const url:string=this.ApiUrl+'/api/getTerms';
         const config:AxiosRequestConfig = {
             params: {
-                GameID:GameID
+                GameID:GameID,
+                SDate:sdate
             }
         }
         let ans;
@@ -128,9 +155,19 @@ export class AxApi {
             //console.log(err);
             ans= err;
         })
-        return ans;        
+        return ans;
+        */   
     }
-    async saveUser(user:IUser){
+    async saveUser(UserID:number,sid:string,user:IUser):Promise<IMsg>{
+        const param:CommonParams={
+            UserID:UserID,
+            sid:sid,
+        }
+        Object.keys(user).map(key=>{
+            param[key]=user[key];
+        })
+        return await this.getApi('SaveUser',param,'post');
+        /*
         let ans;
         const url:string=this.ApiUrl+'/api/SaveUser';
         await axios.post(url,user).then((res:AxiosResponse)=>{
@@ -140,15 +177,11 @@ export class AxApi {
             //console.log(err);
             ans = err;
         })           
-        return ans;        
+        return ans;
+        */     
     }
-    async getUsers(f?:CommonParams){
-        let ans:IMsg;
-        ans = await this.getApi('getUsers',f);
-        if(ans.ErrNo==0){
-            return ans.data;
-        }
-        return false;
+    async getUsers(f:CommonParams):Promise<IMsg>{
+        return await this.getApi('getUsers',f);
         /*
         const url:string=this.ApiUrl+'/api/getUsers';
         await axios.get(url).then((res:AxiosResponse)=>{
@@ -161,10 +194,25 @@ export class AxApi {
         return ans;
         */
     }
-    async getPayClass(GameID?:number|string){
-        return await this.getApi('getPayClass');
+    async getPayClass(UserID:number,sid:string,GameID?:number|string):Promise<IMsg>{
+        const param:CommonParams={
+            GameID:GameID,
+            UserID:UserID,
+            sid:sid            
+        }       
+        return await this.getApi('getPayClass',param);
     }
-    async saveNums(tid:number,GameID:number|string,nums:string,isSettled?:number){
+    async saveNums(UserID:number,sid:string,tid:number,GameID:number|string,nums:string,isSettled?:number):Promise<IMsg>{
+        const param:CommonParams={
+            UserID:UserID,
+            sid:sid,
+            tid:tid,
+            GameID:GameID,
+            Nums:nums,
+            isSettled:isSettled,                        
+        }       
+        return await this.getApi('SaveNums',param,'post');
+        /*
         let ans;
         const url:string=this.ApiUrl+'/api/SaveNums';
         const config:AxiosRequestConfig = {
@@ -181,6 +229,7 @@ export class AxApi {
             ans=err;
         })
         return ans;
+        */
     }
     /*
     async getOpParams(GameID:number|string){
@@ -228,7 +277,7 @@ export class AxApi {
         })
         return msg;                
     }
-    async getApi(appName:string,param?:CommonParams|ITerms,method?:string):Promise<IMsg>{
+    async getApi(appName:string,param:CommonParams|ITerms,method?:string):Promise<IMsg>{
         const url:string=`${this.ApiUrl}/api/${appName}`;
         if(method==='post'){
             return await this.doPost(url,param);
@@ -240,11 +289,15 @@ export class AxApi {
         const url:string=`${this.ApiUrl}/api/${appName}`;
         return await this.doit(url,param); 
     }
-    doit(url:string,param?:CommonParams|ITerms):Promise<IMsg>{
-       const config:AxiosRequestConfig = {};
+    doit(url:string,param:CommonParams|ITerms):Promise<IMsg>{
+       const config:AxiosRequestConfig = {
+           params: param
+       };
+       /*
         if(param){
             config.params=param
         }
+        */
         let msg:IMsg={ErrNo:0};
         return new Promise(async(resolve)=>{
             await axios.get(url,config).then((res:AxiosResponse)=>{
@@ -257,12 +310,8 @@ export class AxApi {
             resolve(msg);
         });
     }
-    doPost(url:string,param?:CommonParams|ITerms):Promise<IMsg>{
+    doPost(url:string,param:CommonParams|ITerms):Promise<IMsg>{
         //const config:AxiosRequestConfig = {}
-        if(!param){
-            //config.params=param
-            param={};
-        }
         let msg:IMsg={ErrNo:0};
         return new Promise(async(resolve)=>{
             await axios.post(url,param).then((res:AxiosResponse)=>{
