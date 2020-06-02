@@ -31,10 +31,9 @@ export default class TermIDSelector extends Vue {
       }
     async getGameID(){
         //console.log('getGames AddAllItem:',this.AddAllItem);
-        if(!this.store) return;
-        if(this.GameID){
+        if(this.GameID && this.store){
           this.options=[];
-          const ans:SelectOptions[] | undefined = await this.store.ax.getTermIDByGameID(this.GameID);
+          const ans:SelectOptions[] | undefined = await this.store.ax.getTermIDByGameID(this.store.personal.id,this.store.personal.sid,this.GameID);
           if(ans){
             this.options = ans;
             this.model = this.options[0];

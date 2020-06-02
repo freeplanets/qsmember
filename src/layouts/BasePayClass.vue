@@ -47,9 +47,9 @@
                 <td :class="{test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.Title }}</td>
                 <td :class="{test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.SubTitle }}</td>
                 <td :class="{'test':true,redColor:itm.Profit<0}">{{ itm.Profit }}</td>
-                <td class="test"><input type="text" size='4' v-model="itm.Rate" /></td>
+                <td class="test"><input type="text" size='4' v-model="itm.Rate" @change="chkItem(itm)" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.TopRate"  /></td>
-                <td class="test"><input type="text" size='4' v-model="itm.Probability"  /></td>
+                <td class="test"><input type="text" size='4' v-model="itm.Probability" @change="chkItem(itm)" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.TotalNums" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.SingleNum" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.UnionNum" /></td>
@@ -93,7 +93,14 @@
           <q-btn flat label="OK" color="primary" @click="SaveStepG()" />
         </q-card-actions>        
       </q-card>
-    </q-dialog>        
+    </q-dialog>
+    <q-circular-progress
+      reverse
+      :value="value"
+      size="50px"
+      color="light-blue"
+      class="q-ma-md"
+    />            
 	</div>
 </template>
 <script lang="ts">
@@ -142,6 +149,8 @@ export default class BetClass extends Vue{
     curItem:BasePayRate<BasePayRateItm>|undefined;
     BtClass:IbtCls[] = [];
     BFCS:StepG[]=[];
+    value:number=50;
+    spArr:number[] | undefined;
     @Watch('BFCS',{immediate:true,deep:true})
     onBFCSChange(){
         let needAddLine=true;
@@ -165,6 +174,13 @@ export default class BetClass extends Vue{
     }
     setCurGames(v:SelectOptions){
         this.models = v;
+        if(this.models.GType==='MarkSix'){
+            // 8,72 三中二
+            // 10,73 二中特
+            this.spArr=[8,72,10,73];
+        } else {
+            this.spArr = undefined;
+        }
         this.chkdata(v);
         //console.log('doGames',v);
     }
@@ -191,33 +207,17 @@ export default class BetClass extends Vue{
         itms=await this.getBasePayRate(this.curGameID);
         //console.log('getBasePayRate itms:',itms);
         if(itms.length>0){
-            // 8,72 三中二
-            // 10,73 二中特
-            let spArr:number[] | undefined;
-            if(this.models){
-                if(this.models.GType==='MarkSix'){
-                    spArr=[8,72,10,73];
-                }
-            }
             itms.map(itm=>{
                 const e = this.BasePayR.find(elm => elm.BetType == itm.BetType && elm.SubType == itm.SubType)
                 if(e){
                     e.Datas= itm
-                    if(spArr){
-                        if(e.SubType===0){
-                            if(spArr.indexOf(e.BetType)>-1){
-                                const f=itms.find(m=>m.BetType===e.BetType && m.SubType===0);
-                                if(f){
-                                    if(f.Probability){
-                                        e.ExtProb = f.Probability;
-                                        e.ExtRate = f.DfRate ? f.DfRate : 0;
-                                    } 
-                                }
-                            }
-                        }
-                    }
                 }
             })
+            if(this.spArr){
+                this.spArr.map(bt=>{
+                    this.chainEdit(bt);
+                });
+            }            
             //this.BasePayR=cloneDeep(this.BasePayR);
         }
         //console.log('BasePayR:',this.BasePayR)
@@ -225,6 +225,16 @@ export default class BetClass extends Vue{
         // console.log('BasePayR before if:', this.BasePayR, this.BasePayR.length);
         //if(this.BasePayR.length==0) return;
 
+    }
+    chainEdit(bt:number){
+        const e0 = this.BasePayR.find(elm => elm.BetType == bt && elm.SubType == 0);
+        const e1 = this.BasePayR.find(elm => elm.BetType == bt && elm.SubType == 1);
+        if( e0 &&  e1){
+            e0.ExtProb = e1.Probability ? e1.Probability : 0;
+            e0.ExtRate = e1.Rate ? e1.Rate : 0;
+            e1.ExtProb = e0.Probability ? e0.Probability : 0;
+            e1.ExtRate = e0.Rate ? e0.Rate : 0;
+        }
     }
     createBPRItem(p:BItem,BetType:number,SubType:number):BasePayRateItm{
         let bpr:BasePayRateItm ={
@@ -417,6 +427,15 @@ export default class BetClass extends Vue{
         this.BasePayR=cloneDeep(this.BasePayR);
     }
     */
+    chkItem(itm){
+        console.log('chkItem',itm.BetType);
+        if(this.spArr){
+            const f = this.spArr.find(bt=>bt===itm.BetType)
+            if(f){
+                this.chainEdit(f);
+            }
+        }
+    }
   mounted(){
         if(!this.store.isLogin){
         this.$router.push({path:'/login'});

@@ -73,7 +73,7 @@ import Component from 'vue-class-component';
 import {Watch} from 'vue-property-decorator';
 import LayoutStoreModule from './data/LayoutStoreModule'
 import {getModule} from 'vuex-module-decorators';
-import {SelectOptions,CommonParams,IMsg,BetHeader} from './data/if';
+import {SelectOptions,CommonParams,IMsg,BetHeader, ILoginInfo} from './data/if';
 import {BHRemaster,datetime} from './components/func';
 import GameSelector from './components/GameSelector.vue';
 import TermIDSelector from './components/TermIDSelector.vue';
@@ -117,6 +117,9 @@ export default class BetLists extends Vue {
       this.showTimeEdit=false;
     }
   }
+  get PInfo():ILoginInfo {
+    return this.store.personal;
+  }
   setCurGames(v:SelectOptions){
     //console.log('setCurGames',v);
     this.curGameID=v.value;
@@ -138,7 +141,10 @@ export default class BetLists extends Vue {
     this.WinLoseE=0;    
   }
   async SearchData(){
-    const param:CommonParams={}
+    const param:CommonParams={
+      UserID: this.PInfo.id,
+      sid: this.PInfo.sid
+    }
     param.findString = this.NameOrNick;
     param.GameID=this.curGameID;
     if(this.BetID) param.BetID=this.BetID;

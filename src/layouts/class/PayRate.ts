@@ -37,6 +37,5 @@ export class PayRate extends BasePayRate<PayRateItm> {
     set SingleBet(v:number|undefined){
         this.data.SingleBet = v;
         this.DataChanged = true;
-    }
-    
+    }   
 }

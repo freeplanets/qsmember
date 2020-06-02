@@ -57,6 +57,7 @@ export class BasePayRate<T>{
     get Profit():any {
         //console.log('get Profit',this.data.Profit);
         if(this.data.Profit){
+            this.calProfit();
             return Math.round(this.data.Profit*10000)/10000;
         } else {
             return this.data.Profit;
@@ -79,7 +80,7 @@ export class BasePayRate<T>{
         if(this.data.DfRate > this.data.TopRate){
             this.data.DfRate = this.data.TopRate;
         }
-        this.calProfit();
+        //this.calProfit();
         this.isDataChanged = true;
     }
     get TopRate():number | undefined{
@@ -98,7 +99,7 @@ export class BasePayRate<T>{
     set Probability(v:number |undefined){
         this.data.Probability = v;
         //this.calTopRate();
-        this.calProfit();
+        //this.calProfit();
         this.isDataChanged = true;
     }
     set ExtProb(v:number){
@@ -316,6 +317,7 @@ export class BasePayRate<T>{
             if(this.Probability > 0) {
                 let p:number;
                 if( this.extProbability){
+                    //console.log(this.BetType,this.Probability,this.Rate,this.extProbability,this.extRate);
                     p = Math.round((1 - (this.Probability * this.Rate + this.extProbability*this.extRate))*1000000)/10000;
                 } else {
                     p = Math.round((1 - this.Probability * this.Rate)*1000000)/10000;

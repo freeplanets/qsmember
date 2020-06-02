@@ -199,3 +199,13 @@ export interface ILoginInfo {
     Account: string;
     sid: string;
 }
+
+export interface ParamLog {
+    id:number;
+    tb:string;
+    uid:number;
+    mykey:string;
+    ovalue:string;
+    nvalue:string;
+    adminid:number;
+}

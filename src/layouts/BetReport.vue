@@ -59,7 +59,7 @@ import Compnent from 'vue-class-component';
 import {Watch} from 'vue-property-decorator';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import { SelectOptions, CommonParams,IMsg } from './data/if';
+import { SelectOptions, CommonParams,IMsg, ILoginInfo } from './data/if';
 import GameSelector from './components/GameSelector.vue';
 import SEDate from './components/SEDate.vue';
 Vue.component('GS',GameSelector);
@@ -103,6 +103,9 @@ export default class BetReport extends Vue{
       this.curLedger=v;
     }
   }
+  get PInfo():ILoginInfo {
+    return this.store.personal;
+  }
   setCurGames(v:SelectOptions){
     this.curGameID=v.value;
     this.curGType=v.GType ? v.GType : '';
@@ -111,7 +114,10 @@ export default class BetReport extends Vue{
     }
   }
   async SearchData(){
-    const param:CommonParams={};
+    const param:CommonParams={
+      UserID:this.PInfo.id,
+      sid:this.PInfo.sid
+    };
     if(this.dateSet){
       const tmp:string[]=this.dateSet.split('-');
       if(tmp[0]) param.SDate=tmp[0];

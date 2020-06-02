@@ -104,7 +104,7 @@ import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule'
 import {getModule} from 'vuex-module-decorators';
 import {IUser} from './data/schema'
-import { SelectOptions,ITableHeader,CommonParams} from './data/if';
+import { SelectOptions,ITableHeader,CommonParams, ILoginInfo, IMsg} from './data/if';
 import {UserTypes} from './class/Users'
 import GamePayClassSelector,{GamePayClass} from './components/GamePayClassSelector.vue';
 Vue.component('GPCS',GamePayClassSelector);
@@ -180,6 +180,9 @@ export default class UserManager extends Vue{
     }
     get UserID(){
       return this.store.personal.id;
+    }
+    get PInfo():ILoginInfo{
+      return this.store.personal;
     }
     getTypeOptions(){
       const tmp:SelectOptions[]=[]
@@ -269,9 +272,9 @@ export default class UserManager extends Vue{
       }
       curUser.ModifyID = this.UserID;
       const ax=this.store.ax;
-      const ans:Ans=await ax.saveUser(curUser);
+      const ans:IMsg=await ax.saveUser(this.PInfo.id,this.PInfo.sid,curUser);
       //console.log('saveUSer',ans);
-      if(ans.warningStatus===0){
+      if(ans.ErrNo===0){
         this.clearUser();
         this.getUsers();
         this.showList=true;
@@ -302,20 +305,23 @@ export default class UserManager extends Vue{
     }
     async getUsers(){
       const ax=this.store.ax;
-      const param:CommonParams={};
+      const param:CommonParams={
+        UserID:this.PInfo.id,
+        sid:this.PInfo.sid
+      };
       if(this.Userf) param.findString = this.Userf;
       if(this.curType !== undefined) param.userType = this.curType;
     
-      const ans=await ax.getUsers(param);
-      if(ans){
-        this.data = ans as [];
+      const ans:IMsg=await ax.getUsers(param);
+      if(ans.ErrNo===0){
+        this.data = ans.data as [];
+        this.data.map(u=>{
+          const tmp=this.typesOption.find(itm => itm.value===u.Types);
+          if(tmp){
+            u.TypeName = tmp.label;
+          }
+        })
       }
-      this.data.map(u=>{
-        const tmp=this.typesOption.find(itm => itm.value===u.Types);
-        if(tmp){
-          u.TypeName = tmp.label;
-        }
-      })
       //console.log('getUsers',ans);
     }
     SearchUser(){

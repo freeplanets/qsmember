@@ -95,21 +95,23 @@ export class AxApi {
         })           
         return ans;
     }
-    async getGameList(UserID:number,sid:string){
+    async getGameList(UserID:number,sid:string):Promise<Game[]|undefined>{
 		const param:CommonParams={
             UserID:UserID,
             sid:sid            
-        }        
-        const msg:IMsg=await this.getApi('GameList',param);
-        if(msg.ErrNo===0){
-            return msg.data
-        } else {
-            return;
         }
+        return new Promise((resolve,reject)=>{
+            this.getApi('GameList',param).then((msg:IMsg)=>{
+                resolve(msg.data as Game[]);
+            }).catch(err=>{
+                reject(err);
+            })
+        });      
+
+        /*
         const url:string=this.ApiUrl+'/api/GameList';
         const config:AxiosRequestConfig = {
         }
-        /*
         let ans;
         await axios.get(url,config).then(res=>{
             ans=res.data;
@@ -279,11 +281,30 @@ export class AxApi {
     }
     async getApi(appName:string,param:CommonParams|ITerms,method?:string):Promise<IMsg>{
         const url:string=`${this.ApiUrl}/api/${appName}`;
+        let func:Promise<IMsg>;
+        if(method==='post'){
+            func=this.doPost(url,param);
+        } else {
+            func=this.doit(url,param);
+        }
+        return new Promise((resolve,reject)=>{
+            func.then((msg:IMsg)=>{
+                resolve(msg);
+            }).catch(err=>{
+                const msg:IMsg={
+                    ErrNo:9,
+                    error:err
+                };
+                reject(msg);
+            })
+        })
+        /*
         if(method==='post'){
             return await this.doPost(url,param);
         } else {
             return await this.doit(url,param);
         }
+        */
     }
     async setOdds(param:CommonParams,appName:string){
         const url:string=`${this.ApiUrl}/api/${appName}`;
@@ -299,28 +320,30 @@ export class AxApi {
         }
         */
         let msg:IMsg={ErrNo:0};
-        return new Promise(async(resolve)=>{
-            await axios.get(url,config).then((res:AxiosResponse)=>{
+        return new Promise((resolve,reject)=>{
+            axios.get(url,config).then((res:AxiosResponse)=>{
                 //console.log('AxApi doit res:',res);
                 msg=res.data;
+                resolve(msg);
             }).catch(err=>{
                 msg.ErrNo=9;
                 msg.error=err;
+                reject(msg);
             })
-            resolve(msg);
         });
     }
     doPost(url:string,param:CommonParams|ITerms):Promise<IMsg>{
         //const config:AxiosRequestConfig = {}
         let msg:IMsg={ErrNo:0};
-        return new Promise(async(resolve)=>{
-            await axios.post(url,param).then((res:AxiosResponse)=>{
+        return new Promise((resolve,reject)=>{
+            axios.post(url,param).then((res:AxiosResponse)=>{
                 msg=res.data;
+                resolve(msg);
             }).catch(err=>{
                 msg.ErrNo=9;
                 msg.error=err;
+                reject(msg);
             })
-            resolve(msg);
         });
     }
 }

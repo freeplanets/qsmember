@@ -4,7 +4,7 @@
             <div class="col-2"><GS :store="store" @setGames="setCurGames"></GS></div>
             <div class="pcls">
                 <div class="row" v-if="curGameID">
-                    <div class='pbtn'><PCS :ax="store.ax" :GameID='curGameID' :itmChange="PNChange" @setPayClass="setPayClass"></PCS></div>
+                    <div class='pbtn'><PCS :store='store' :GameID='curGameID' :itmChange="PNChange" @setPayClass="setPayClass"></PCS></div>
                     <div class="pbtn"><q-input outlined dense v-model="PayClassName" /></div>
                     <div class="pbtn2"><q-btn color="green" icon-right="save" :label="$t('Label.EditPayClassName')" @click="EditPayClassName();" /></div>
                     <div class="pbtn2"><q-btn color="red" icon-right="delete_forever" :label="$t('Label.DeletePayClass')" @click="DelPayClass();" /></div>
@@ -22,6 +22,8 @@
                 <div class="col-1 test">{{$t('Table.SubName')}}</div>
                 <div class="col-1 test">{{$t('Table.Profit')}}(%)</div>
                 <div class="col-1 test">{{$t('Table.RateDefault')}}</div>
+                <div class="col-1 test">{{$t('Table.MinHand')}}</div>
+                <div class="col-1 test">{{$t('Table.MaxHand')}}</div>
             </div>
             <div class="row"
                 v-for="(itm,idx) in PayR"
@@ -31,6 +33,8 @@
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.SubTitle }}</div>
                 <div :class="{'col-1 test':true,redColor: itm.Profit<0 }">{{ itm.Profit }}</div>
                 <div class="col-1 test"><q-input square standout dense v-model="itm.Rate" /></div>
+                <div class="col-1 test">{{ itm.MinHand }}</div>
+                <div class="col-1 test">{{ itm.MaxHand }}</div>                
             </div>
         </div>
 	</div>
@@ -43,7 +47,7 @@ import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import {IGames} from './data/schema';
 //import BTG from './data/defaultData';
-import {SelectOptions,PayRateItm,IMsg,PayClass, CommonParams} from './data/if';
+import {SelectOptions,PayRateItm,IMsg,PayClass, CommonParams,ILoginInfo} from './data/if';
 import BTG from './data/defaultData';
 import {PayRateData } from './data/PayRateList';
 import {PayRate} from './class/PayRate'
@@ -78,20 +82,25 @@ export default class BetClass extends Vue{
 	];
     ExpendPayClass:boolean = false;
     opPayRate:string | null=null;
+    /*
     get ClassName() {
         return this.clsName as SelectOptions;
     }
     set ClassName(v:SelectOptions){
         this.clsName = v;
-        //console.log('ClassName:',v.value,v.label);
+        console.log('ClassName:',v.value,v.label);
         //this.PayClassName = v.label as string;
         this.chkdata(v.value as number);
     }
+    */
 	get UserID():string{
 		if(this.store.personal.id) {
 			return this.store.personal.id + '';
 		} 
 		return '';
+    }
+    get PInfo():ILoginInfo {
+        return this.store.personal;
     }
     expendPR(){
         if( this.ExpendPayClass){
@@ -205,7 +214,8 @@ export default class BetClass extends Vue{
  		const data = {
 			GameID: this.curGameID,
             ModifyID: this.UserID,
-            PayClassID: this.ClassName.value,
+            //PayClassID: this.ClassName.value,
+            PayClassID: this.curPayClass.id,
             data: JSON.stringify(dtas)
 		}
 		const url:string=this.store.ax.Host+'/api/batch/savePayRate';
@@ -236,7 +246,10 @@ export default class BetClass extends Vue{
     }
     async EditPayClassName(){
         if(this.PayClassName===this.curPayClass.PayClassName) return;
-        const param:CommonParams={};
+        const param:CommonParams={
+            UserID: this.PInfo.id,
+            sid:this.PInfo.sid
+        };
         param.id= this.curPayClass.id;
         param.PayClassName=this.PayClassName;
         param.ModifyID = this.store.personal.id;
@@ -252,7 +265,10 @@ export default class BetClass extends Vue{
         }
     }
     DelPayClass(){
-        const param:CommonParams={};
+        const param:CommonParams={
+            UserID:this.PInfo.id,
+            sid: this.PInfo.sid
+        };
         param.id= this.curPayClass.id;
         this.$q.dialog({
             title: `${this.$t('Label.DeletePayClass')}`,
@@ -262,7 +278,10 @@ export default class BetClass extends Vue{
         }).onOk(this.DPC);
     }
     async DPC(){
-        const param:CommonParams={};
+        const param:CommonParams={
+            UserID: this.PInfo.id,
+            sid: this.PInfo.sid
+        };
         param.id= this.curPayClass.id;
         param.GameID = this.curGameID;
         const msg:IMsg=await this.store.ax.getApi('delPayClass',param);

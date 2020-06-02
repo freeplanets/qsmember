@@ -33,7 +33,7 @@ import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import BTG from './data/defaultData';
-import { SelectOptions, ItmBtg, IbtCls,Btg,CommonParams} from './data/if';
+import { SelectOptions, ItmBtg, IbtCls,Btg,CommonParams, ILoginInfo} from './data/if';
 import GameSelector from './components/GameSelector.vue';
 Vue.component('GS',GameSelector);
 
@@ -64,6 +64,9 @@ export default class BetClass extends Vue{
 		} 
 		return '';
 	}
+	get PInfo():ILoginInfo {
+		return this.store.personal;
+	}
 	setCurGame(v:SelectOptions){
 		this.curGameID = v.value as number;
 		this.curGType = v.GType as string;
@@ -73,7 +76,7 @@ export default class BetClass extends Vue{
 		this.clss=[];
 		this.BtClass=[];
 		if(this.curGameID){
-			const ans = await this.store.ax.getBtClass(this.curGameID)
+			const ans = await this.store.ax.getBtClass(this.PInfo.id,this.PInfo.sid,this.curGameID)
 			if(ans){
 				ans.map((itm:IbtCls)=>{
 					this.clss.push(itm.BCName);
@@ -108,6 +111,8 @@ export default class BetClass extends Vue{
 		if(this.UserID==='') return;
 		if(!this.curGameID) return;
 		const data:CommonParams = {
+			UserID: this.PInfo.id,
+			sid: this.PInfo.sid,
 			GameID: this.curGameID,
 			BCName: this.newClassName,
 			BetTypes: bt.join(':'),
@@ -138,6 +143,8 @@ export default class BetClass extends Vue{
 		if(!this.curGameID) return;
 		//console.log('delBtClass',this.curGameID,this.mClass);			
 		const param:CommonParams={
+			UserID:this.PInfo.id,
+			sid:this.PInfo.sid,
 			GameID:this.curGameID,
 			BCName: this.mClass
 		}

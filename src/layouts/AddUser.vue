@@ -53,7 +53,7 @@ import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule'
 import {getModule} from 'vuex-module-decorators';
 import {IUser} from './data/schema'
-import { SelectOptions,ITableHeader,IMsg} from './data/if';
+import { SelectOptions,ITableHeader,IMsg, ILoginInfo, CommonParams} from './data/if';
 import {UserTypes} from './class/Users'
 interface Ans {
   affectedRow?:number;
@@ -88,7 +88,10 @@ export default class AddUser extends Vue{
     private typesOption:SelectOptions[]=[]
     //paycls:SelectOptions={}
     //payclss:SelectOptions[]=[];
-    private slted=[]
+    private slted=[];
+    get PInfo():ILoginInfo {
+      return this.store.personal;
+    }
     get Selected(){
       return this.slted;
     }
@@ -143,9 +146,9 @@ export default class AddUser extends Vue{
     }
     async saveUser(){
       const ax=this.store.ax;
-      const ans:Ans=await ax.saveUser(this.NewUser);
+      const ans:IMsg=await ax.saveUser(this.PInfo.id,this.PInfo.sid,this.NewUser);
       //console.log('saveUSer',ans);
-      if(ans.warningStatus===0){
+      if(ans.ErrNo===0){
         this.clearUser();
         this.getUsers();
         this.showList=true;
@@ -176,16 +179,21 @@ export default class AddUser extends Vue{
     }
     async getUsers(){
       const ax=this.store.ax;
-      const ans=await ax.getUsers();
-      if(ans){
-        this.data = ans as IUser[];
+      const param:CommonParams={
+        UserID:this.PInfo.id,
+        sid:this.PInfo.sid
       }
-      this.data.map(u=>{
-        const tmp=this.typesOption.find(itm => itm.value===u.Types);
-        if(tmp){
-          u.TypeName = tmp.label;
-        }
-      })
+      const ans:IMsg=await ax.getUsers(param);
+      if(ans.ErrNo===0){
+        this.data = ans.data as IUser[];
+
+        this.data.map(u=>{
+          const tmp=this.typesOption.find(itm => itm.value===u.Types);
+          if(tmp){
+            u.TypeName = tmp.label;
+          }
+        })
+      }
       //console.log('getUsers',ans);
     }
 

@@ -57,7 +57,7 @@ import Component from 'vue-class-component';
 import {Game} from './data/schema';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import { SelectOptions,IMsg} from './data/if';
+import { SelectOptions,IMsg, ILoginInfo,CommonParams} from './data/if';
 import {GameM} from './class/GameM';
 import GameSelector from './components/GameSelector.vue';
 Vue.component('GS',GameSelector);
@@ -84,6 +84,9 @@ export default class GameManager extends Vue{
     */
     options:SelectOptions[]=[];
     gamelist:Game[]=[];
+    get PInfo():ILoginInfo{
+        return this.store.personal;
+    }
     get ax(){
         return this.store.ax;
     }
@@ -92,6 +95,7 @@ export default class GameManager extends Vue{
         if(this.gamelist.length===0){
            await this.getGameList();
         }
+        //console.log('setGurGames',this.gamelist);
         const g:Game|undefined=this.gamelist.find(itm=>{
             //console.log('setCurGames',itm.id,gid);
             if(itm.id===gid) return itm
@@ -102,9 +106,16 @@ export default class GameManager extends Vue{
         }
     }    
     async getGameList(){
-        const tmp:Game[]=await this.ax.getGameList();
-        //console.log('getGameList',tmp);
-        if(tmp){
+        //GameList
+        //const tmp:Game[]|undefined=await this.ax.getGameList(this.PInfo.id,this.PInfo.sid);
+        const param:CommonParams={
+            UserID:this.PInfo.id,
+            sid:this.PInfo.sid
+        }
+        const msg:IMsg = await this.ax.getApi('GameList',param);
+        //console.log('getGameList',msg);
+        if(msg.ErrNo===0){
+            let tmp:Game[]=msg.data as Game[];
             tmp.map((itm:Game)=>{
                 if(itm.id){
                     this.gamelist.push(itm);
@@ -117,7 +128,7 @@ export default class GameManager extends Vue{
         if(this.MyGame){
             if(this.MyGame.DataChanged){
                 const g:Game=this.MyGame.Datas;
-                let msg:IMsg=await this.ax.saveGame(g);
+                let msg:IMsg=await this.ax.saveGame(this.PInfo.id,this.PInfo.sid,g);
                 if(msg.ErrNo===0){
                     this.$q.dialog({
                         title: this.$t('Label.Save') as string,

@@ -6,11 +6,11 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
 import {SelectOptions,PayClass,IMsg} from '../data/if';
-import {AxApi} from './AxApi';
+import LayoutStoreModule from '../data/LayoutStoreModule';
 
 @Component
 export default class PayClassSelector extends Vue {
-  @Prop() readonly ax?:AxApi;
+  @Prop() readonly store?:LayoutStoreModule;
   @Prop() GameID?:number;
   @Prop() itmChange:boolean=false;
   @Watch('GameID',{ immediate: true, deep: true })
@@ -71,8 +71,8 @@ export default class PayClassSelector extends Vue {
   }
   async getPayCls(gid:string|number) {
       let data:PayClass[] = [];
-      if(this.ax){
-        const ans:IMsg=await this.ax.getPayClass(gid);
+      if(this.store){
+        const ans:IMsg=await this.store.ax.getPayClass(this.store.personal.id,this.store.personal.sid,gid);
         if(ans.ErrNo==0){
             data=ans.data as PayClass[];
         }

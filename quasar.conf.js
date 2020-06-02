@@ -90,7 +90,8 @@ module.exports = function (ctx) {
         'QBtnGroup',
         'QChip',
         'QEditor',
-        'QBtnToggle'
+        'QBtnToggle',
+        'QCircularProgress'
       ],
 
       directives: [

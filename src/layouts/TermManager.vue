@@ -193,6 +193,7 @@ export default class TermManager extends Vue {
             //console.log(msg.data);
             if(msg.data){
                 const lsTerm:ITerms=msg.data[0] as ITerms;
+                this.term.PDate = this.dateString;
                 this.term.PTime = lsTerm.PTime;
                 this.term.StopTime = lsTerm.StopTime;
                 this.term.StopTimeS = lsTerm.StopTimeS;
@@ -225,7 +226,7 @@ export default class TermManager extends Vue {
         //console.log('SaveTerm',this.term,ans);
         if(ans.ErrNo === 0) {
             this.isAddTerm = false;    
-            this.getTerms()
+            await this.getTerms()
         }
     }
     get dateString(){
@@ -278,9 +279,10 @@ export default class TermManager extends Vue {
             this.$q.dialog({
                 title: this.$t('Label.Save') as string,
                 message: 'OK!!'
+            }).onOk(async ()=>{
+                await this.getTerms();
             });
             this.isInputNum=false;
-            this.getTerms();
         }
     }
     getToday(){
