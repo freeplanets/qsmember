@@ -91,7 +91,10 @@ module.exports = function (ctx) {
         'QChip',
         'QEditor',
         'QBtnToggle',
-        'QCircularProgress'
+        'QCircularProgress',
+        'QBar',
+        'QSpace',
+        'QTooltip'
       ],
 
       directives: [

@@ -1,5 +1,5 @@
 import axios,{AxiosRequestConfig,AxiosResponse} from 'axios'
-import { SelectOptions,CBetItems,IMsg,CommonParams,IbtCls} from '../data/if';
+import { SelectOptions,CBetItems,IMsg,CommonParams,IbtCls, ParamLog} from '../data/if';
 import {IGames,ITerms,Game, IUser} from '../data/schema';
 let myApiUrl:string='https://testu.uuss.net:3000';
 
@@ -78,10 +78,18 @@ export class AxApi {
             return;
         }
     }    
-    async saveTerms(dtas:ITerms){
+    async saveTerms(UserID:number,sid:string,dtas:ITerms,PL?:ParamLog[]){
+        let param:CommonParams={
+            UserID,
+            sid
+        }
+        param=Object.assign(param,dtas)
+        if(PL){
+            param.ParamLog = PL
+        }
         //const url:string=this.ApiUrl+'/api/saveTerms';
         //console.log('saveTerms',dtas);
-        return await this.getApi('saveTerms',dtas,'post');
+        return await this.getApi('saveTerms',param,'post');
     }
     async createBetItems(dtas:CBetItems){
         let ans;

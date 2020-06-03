@@ -99,7 +99,9 @@ export default {
     BetForChange:"押碼全額",
     PerStep:"跳動點",
     Steps:"押碼點數",
-    StepsGroup:"押碼級距"
+    StepsGroup:"押碼級距",
+    StopTimeS:"特碼下注截止時間",
+    StopTime:"下注截止時間"
   },
   Title: {
     Dashboard: '大廳',
@@ -110,7 +112,12 @@ export default {
     NPassword: '新登入密碼',
     OPassword: '原登入密碼',
     PassERR: '新登入密碼和碓認碼不同',
-    PassChgMsg: '密碼已修改,請重新登入!'
+    PassChgMsg: '密碼已修改,請重新登入!',
+    LoginERR: '帳碼或密碼錯誤!!',
+    Item:'項目',
+    OValue:'舊值',
+    NValue:'新值',
+    EditMan:'修改人員'
   },
   Button: {
     Num: '號碼',
@@ -127,7 +134,9 @@ export default {
     PageOpen: '本頁開放',
     Confirm: '碓認',
     Search:'查詢',
-    Clear:"清除"
+    Clear:'清除',
+    EditRecord:'修改記錄',
+    Edit:'修改'
   },
   Dialog: {
     MTitle: '主選單',

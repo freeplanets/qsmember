@@ -77,6 +77,7 @@ export default class BetClass extends Vue{
     private curPayClass:PayClass={id:0,PayClassName:''};
     public PayR:PayRate[]=[];
     private PNChange:boolean=false;
+    spArr:number[]|undefined;
 	options:SelectOptions[] = [
 		{value: 0,label:'default'}
 	];
@@ -111,6 +112,13 @@ export default class BetClass extends Vue{
     }
     setCurGames(v:SelectOptions){
         this.curGameID = v.value as number;
+        if(v.GType==='MarkSix'){
+            // 8,72 三中二
+            // 10,73 二中特
+            this.spArr=[8,72,10,73];
+        } else {
+            this.spArr = undefined;
+        }        
         //console.log('doGames',v);
     }
     SltBetTypes(slt:string){
@@ -175,10 +183,25 @@ export default class BetClass extends Vue{
                 }
             })
             this.PayR=cloneDeep(this.PayR);
+            if(this.spArr){
+                this.spArr.map(bt=>{
+                    this.chainEdit(bt);
+                });
+            }               
             //this.updateBPR(1);
         }
 
     }
+    chainEdit(bt:number){
+        const e0 = this.PayR.find(elm => elm.BetType == bt && elm.SubType == 0);
+        const e1 = this.PayR.find(elm => elm.BetType == bt && elm.SubType == 1);
+        if( e0 &&  e1){
+            e0.ExtProb = e1.Probability ? e1.Probability : 0;
+            e0.ExtRate = e1.Rate ? e1.Rate : 0;
+            e1.ExtProb = e0.Probability ? e0.Probability : 0;
+            e1.ExtRate = e0.Rate ? e0.Rate : 0;
+        }
+    }    
     async getPayRate(gid:string|number,v:number){
         const url:string=this.store.ax.Host+'/api/getPayRate';
 		const config:AxiosRequestConfig = {

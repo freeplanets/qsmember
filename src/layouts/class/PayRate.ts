@@ -3,8 +3,10 @@ import {PayRateItm} from '../data/if';
 import {BasePayRate} from './BasePayRate';
 export class PayRate extends BasePayRate<PayRateItm> {
     constructor(v:PayRateItm){
+        v.Profit=1;
         super(v);
     }
+    /*
     get Profit(){
         if(this.data.DfRate){
             const Probability:number = this.data.Probability as number;
@@ -15,6 +17,7 @@ export class PayRate extends BasePayRate<PayRateItm> {
             return Math.round((1- Probability*Rate)*1000000)/10000;
         }
     }
+    */
     get Rate(){
          //this.data.Rate ? this.data.Rate : 0;
         return this.fetchValueToSteps(this.data.Rate + this.data.DfRate);

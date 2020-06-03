@@ -67,6 +67,11 @@ export default class Login extends Vue {
         this.isLogin = true;
         //this.store.leftDrawerOpen=true;
         this.$router.push({path:'/'});      
+    } else {
+      this.$q.dialog({
+          title: this.$t('Title.PersonalInfo') as string,
+          message: this.$t('Title.LoginERR') as string
+      })      
     }
     //console.log('login:',url);
     /*

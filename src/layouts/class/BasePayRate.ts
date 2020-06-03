@@ -9,11 +9,11 @@ interface T {
 export class BasePayRate<T>{
     protected olddata:T | any ;
     protected data:T |any ;
-    private isDataChanged: boolean = false;
-    private isSelected:boolean = false;
-    private BC:BClass<T>;
-    private extProbability:number|undefined;
-    private extRate:number=0;
+    protected isDataChanged: boolean = false;
+    protected isSelected:boolean = false;
+    protected BC:BClass<T>;
+    protected extProbability:number|undefined;
+    protected extRate:number=0;
     constructor(v:T | any){ 
         this.BC=new BClass(v);
         this.data = this.BC.Datas;
@@ -88,9 +88,6 @@ export class BasePayRate<T>{
     }
     set TopRate(v:number | undefined){
         this.data.TopRate = this.fetchValueToSteps(v);
-        if(this.data.DfRate > this.data.TopRate){
-            this.data.DfRate = this.data.TopRate;
-        }        
         this.isDataChanged = true;
     }
     get Probability():number |undefined{
@@ -312,7 +309,7 @@ export class BasePayRate<T>{
             }
         }
     }
-    private calProfit(){
+    protected calProfit(){
         if(this.Rate && this.Probability) {
             if(this.Probability > 0) {
                 let p:number;

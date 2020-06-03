@@ -24,7 +24,7 @@
                 </q-item-section>
               </q-item>
 
-              <q-item clickable v-close-popup @click="showCp=true">
+              <q-item clickable v-close-popup @click="cleanPW">
                 <q-item-section>
                   <q-item-label>{{$t('Title.ChangePassword')}}</q-item-label>
                 </q-item-section>
@@ -235,6 +235,12 @@ export default class MyLayout extends Vue {
       //Object.assign(this.store.SysInfo,msg.data);
       this.store.setSysInfo(msg.data as object);
     }
+  }
+  cleanPW(){
+    this.OPassword='';
+    this.NPassword='';
+    this.CPassword='';
+    this.showCp=true;
   }
   async ChangePW(){
     if(this.CPassword !== this.NPassword){

@@ -32,8 +32,9 @@
                 <div class='col-1 mytable-field'>{{$t(`Label.Settled.${itm.isSettled}`)}}</div>
                 <div class='col mytable-field'>
                     <div class="row">
-                        <div class='col'><q-btn color="blue" icon-right="edit" label="Edit" @click="Edit(itm)" /></div>
-                        <div class='col'><q-btn color="green" icon-right="edit" :label="$t('Label.InputNums')" @click="InputNum(itm)" /></div>
+                        <div class='col'><q-btn color="blue" :label="$t('Button.Edit')" @click="Edit(itm)" /></div>
+                        <div class='col'><q-btn color="green" :label="$t('Label.InputNums')" @click="InputNum(itm.id)" /></div>
+                        <div class='col'><q-btn color="blue" :label="$t('Button.EditRecord')" @click="getEditRecord(itm.id);" /></div>
                     </div>
                 </div>             
             </div>
@@ -115,6 +116,38 @@
                 </q-card-section>                
             </q-card>
         </q-dialog>
+        <q-dialog v-model="showEditRecord">
+      <q-card class="bg-teal text-white" >
+        <q-bar>
+          <div>{{$t('Button.EditRecord')}}</div>
+
+          <q-space />
+
+          <q-btn dense flat icon="close" v-close-popup>
+            <q-tooltip>Close</q-tooltip>
+          </q-btn>
+        </q-bar>          
+        <q-card-section class="bg-white text-black">
+          <table>
+            <tr>
+                <th>{{$t('Title.Item')}}</th>
+                <th>{{$t('Title.OValue')}}</th>
+                <th>{{$t('Title.NValue')}}</th>
+                <th>{{$t('Title.EditMan')}}</th>
+            </tr>
+            <tr 
+                v-for="(itm,key) in EditRecord"
+                :key="'term'+key"
+            >
+                <td>{{$t(`Table.${itm.mykey}`)}}</td>
+                <td>{{itm.ovalue}}</td>
+                <td>{{itm.nvalue}}</td>
+                <td>{{itm.adminid}}</td>
+            </tr>
+          </table>
+        </q-card-section>
+      </q-card>
+        </q-dialog>        
     </div>    
 </template>
 <script lang="ts">
@@ -122,7 +155,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import {SelectOptions,CommonParams,IMsg} from './data/if';
+import {SelectOptions,CommonParams,IMsg,ParamLog,ILoginInfo} from './data/if';
 import {ITerms} from './data/schema';
 import JDate from './components/Date/JDate'
 import {dateAddZero} from './components/func';
@@ -147,6 +180,7 @@ export default class TermManager extends Vue {
         StopTimeS:'',
         ModifyID: this.User.id as number,
     }
+    oldTerm:ITerms|undefined;
     nums:string[]=[];
     data:ITerms[]=[];
     isAddTerm:boolean=false;
@@ -155,10 +189,13 @@ export default class TermManager extends Vue {
     curTid:number=0;
     sdate:string='';
     DateSlt:boolean=false;
+    PLog:ParamLog[]|undefined;
+    showEditRecord:boolean=false;
+    EditRecord:ParamLog[]=[];
     get ax(){
         return this.store.ax;
     }
-    get User(){
+    get User():ILoginInfo{
         return this.store.personal;
     }
     get TDate() {
@@ -181,6 +218,19 @@ export default class TermManager extends Vue {
             this.isAddTerm = !this.isAddTerm
             this.getLastTerm();
         }
+    }
+    async getEditRecord(id:number) {
+        const param:CommonParams={
+            UserID:this.User.id,
+            sid:this.User.sid,
+            id,
+            tb:'Terms'
+        }
+        const msg:IMsg=await this.ax.getApi('getEditRecord',param);
+        if(msg.ErrNo===0){
+            this.EditRecord = msg.data as ParamLog[];
+        }
+        this.showEditRecord=true;
     }
     async getLastTerm(){
         const param:CommonParams={
@@ -222,9 +272,29 @@ export default class TermManager extends Vue {
        
         */
         //const ans = await this.ax.createBetItems(param);
-        const ans = await this.ax.saveTerms(this.term);
+        if(this.oldTerm){
+            const OLD=this.oldTerm;
+            const adminid = this.User.id;
+            Object.keys(OLD).map(key=>{
+                if(OLD[key]!==this.term[key]){
+                    const pl:ParamLog={
+                        id:0,
+                        tb:'Terms',
+                        uid:OLD.id ? OLD.id : 0,
+                        mykey:key,
+                        ovalue:OLD[key],
+                        nvalue:this.term[key],
+                        adminid
+                    }
+                    if(!this.PLog) this.PLog=[];
+                    this.PLog.push(pl);
+                }
+            })
+        }
+        const ans = await this.ax.saveTerms(this.User.id,this.User.sid,this.term,this.PLog);
         //console.log('SaveTerm',this.term,ans);
         if(ans.ErrNo === 0) {
+            this.PLog=undefined;
             this.isAddTerm = false;    
             await this.getTerms()
         }
@@ -248,9 +318,14 @@ export default class TermManager extends Vue {
         }
     }
     Edit(v:ITerms){
+        this.oldTerm=Object.assign({},v);
+        this.term=Object.assign(this.term,v);
+        console.log('Edit',this.oldTerm);
+        /*
         Object.keys(v).map(key=>{
             this.term[key]=v[key];
         })
+        */
         //v.ModifyID = this.User.id as number;
         this.term.ModifyID = this.User.id as number;
         this.isAddTerm = true;
@@ -311,8 +386,25 @@ export default class TermManager extends Vue {
 }
 </script>
 <style scoped>
+table {
+    padding-top: 8px;
+    border: 0;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+th {
+    background-color: cadetblue;
+    border: 1px gray solid;
+    color:white;
+    width: 100px;
+}
+td {
+    border: 1px gray solid;
+    text-align: center;
+    vertical-align: middle;
+}
 .mytable {
-    max-width: 900px; 
+    max-width: 1000px; 
     padding-left: 8px;
 }
 .mytable-head {
