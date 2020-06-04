@@ -32,9 +32,10 @@
                 <div class='col-1 mytable-field'>{{$t(`Label.Settled.${itm.isSettled}`)}}</div>
                 <div class='col mytable-field'>
                     <div class="row">
-                        <div class='col'><q-btn color="blue" :label="$t('Button.Edit')" @click="Edit(itm)" /></div>
-                        <div class='col'><q-btn color="green" :label="$t('Label.InputNums')" @click="InputNum(itm.id)" /></div>
-                        <div class='col'><q-btn color="blue" :label="$t('Button.EditRecord')" @click="getEditRecord(itm.id);" /></div>
+                        <div class='col'><q-btn color="blue" dense :label="$t('Button.Edit')" @click="Edit(itm)" /></div>
+                        <div class='col'><q-btn color="green" dense :label="$t('Label.InputNums')" @click="InputNum(itm,itm.Result,itm.SpNo)" /></div>
+                        <div class='col'><q-btn color="blue" dense :label="$t('Button.EditRecord')" @click="getEditRecord(itm.id);" /></div>
+                        <div class='col' v-if="itm.isSettled===0"><q-btn color="red" dense :label="$t('Label.Delete')" @click="DelTerm(itm.id);" /></div>
                     </div>
                 </div>             
             </div>
@@ -147,7 +148,19 @@
           </table>
         </q-card-section>
       </q-card>
-        </q-dialog>        
+        </q-dialog>
+        <q-dialog v-model="showInProcess">
+            <q-card>
+            <q-card-section>
+                <q-circular-progress
+                indeterminate
+                size="50px"
+                color="lime"
+                class="q-ma-md"
+                />                
+            </q-card-section>
+            </q-card>
+        </q-dialog>
     </div>    
 </template>
 <script lang="ts">
@@ -192,6 +205,9 @@ export default class TermManager extends Vue {
     PLog:ParamLog[]|undefined;
     showEditRecord:boolean=false;
     EditRecord:ParamLog[]=[];
+    curResult:string|undefined;
+    showInProcess:boolean=false;
+    InProcess:boolean=false;
     get ax(){
         return this.store.ax;
     }
@@ -305,17 +321,26 @@ export default class TermManager extends Vue {
         return d.toJSON().replace(reg1, '$1-$2-$3');
     }
     async getTerms(){
+        if(this.InProcess) return;
+        if(!this.term.GameID) return;
+        this.InProcess=true;
+        this.showInProcess=true;
         const GameID:number=this.term.GameID;
         this.data=[];
         const ans=await this.ax.getTerms(this.store.personal.id,this.store.personal.sid,GameID,this.sdate.split('/').join('-'))
         if(ans.ErrNo===0){
             this.data=ans.data as ITerms[];
+            this.PLog=undefined;
+            /*
             this.data.map(itm=>{
                 if(itm.ResultFmt){
                     console.log('getTerms',JSON.parse(itm.ResultFmt));
                 }
             })
+            */
         }
+        this.InProcess=false;
+        this.showInProcess=false;
     }
     Edit(v:ITerms){
         this.oldTerm=Object.assign({},v);
@@ -330,8 +355,16 @@ export default class TermManager extends Vue {
         this.term.ModifyID = this.User.id as number;
         this.isAddTerm = true;
     }
-    InputNum(v:ITerms){
-        this.nums=['','','','','','',''];
+    InputNum(v:ITerms,rlt?:string,spno?:string){
+        if(rlt){
+            this.nums=rlt.split(',');
+            if(spno){
+                this.nums.push(spno);
+            }
+            this.curResult=this.nums.join(',');
+        } else {
+            this.nums=['','','','','','',''];
+        }
         if(v.isSettled){
             this.curTermSettleStatus = v.isSettled;
         }
@@ -347,24 +380,63 @@ export default class TermManager extends Vue {
         //const nums:string[]=v.split(',');
     }
     async SendNums(){
+        this.isInputNum=false;
+        this.showInProcess=true;
+        if(this.curResult){
+            const tmp:ParamLog = {
+                id:0,
+                tb:'Terms',
+                uid: this.curTid,
+                mykey:'Result',
+                ovalue:this.curResult,
+                nvalue:this.nums.join(','),
+                adminid: this.User.id
+            }
+            if(!this.PLog) this.PLog=[];
+            this.PLog.push(tmp);
+        }
         const ax=this.store.ax;
-        const ans=await ax.saveNums(this.store.personal.id,this.store.personal.sid,this.curTid,this.term.GameID,this.nums.join(','),this.curTermSettleStatus);
+        const ans=await ax.saveNums(this.store.personal.id,this.store.personal.sid,this.curTid,this.term.GameID,this.nums.join(','),this.curTermSettleStatus,this.PLog);
         //console.log('SendNums',ans);
         if(ans.ErrNo===0){
+            this.showInProcess=false;  
             this.$q.dialog({
                 title: this.$t('Label.Save') as string,
                 message: 'OK!!'
             }).onOk(async ()=>{
                 await this.getTerms();
             });
-            this.isInputNum=false;
+            
+        } 
+    }
+    async DelTerm(tid:number){
+        const param:CommonParams={
+            UserID:this.User.id,
+            sid:this.User.sid,
+            tid
+        }
+        const msg:IMsg=await this.ax.getApi('DelTerm',param);
+        if(msg.ErrNo===0){
+            this.$q.dialog({
+                title: this.$t('Label.Delete') as string,
+                message: 'OK!!'
+            }).onOk(async ()=>{
+                await this.getTerms();
+            });            
+        } else {
+            this.$q.dialog({
+                title: this.$t('Label.Delete') as string,
+                message: this.$t(`Error.${msg.ErrNo}`) as string
+            })            
         }
     }
     getToday(){
         this.sdate = JDate.today.start;
+        this.getTerms();
     }
     getYesterday(){
         this.sdate = JDate.yesterday.start;
+        this.getTerms();
     }
     getBeforeday(){
         //console.log('getBeforeday',this.sdate);
@@ -373,6 +445,7 @@ export default class TermManager extends Vue {
         const ds=d.getTime()-86400000;
         const d1=new Date(ds);
         this.sdate=dateAddZero(d1.toLocaleDateString());
+        this.getTerms();
         //console.log('getBeforeday',this.sdate,d1.toJSON(),d.toUTCString(),d.toLocaleDateString(),d.toISOString());
     }
     mounted(){

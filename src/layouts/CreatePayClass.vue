@@ -83,7 +83,7 @@ import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import BTG from './data/defaultData';
-import {SelectOptions,CommonParams,IMsg, BasePayRateItm} from './data/if';
+import {SelectOptions,CommonParams,IMsg, BasePayRateItm,ILoginInfo} from './data/if';
 import { QDialogOptions } from 'quasar';
 import GameSelector from './components/GameSelector.vue';
 import {BaNum} from './components/func';
@@ -152,6 +152,9 @@ export default class BetClass extends Vue{
 		} 
 		return '';
     }
+    get PInfo():ILoginInfo{
+        return this.store.personal;
+    }
     expendPR(id:number){
         this.FuncSlted = id;
         this.Funcs.map(itm=>{
@@ -199,6 +202,8 @@ export default class BetClass extends Vue{
 
         }
         const param:CommonParams={
+            UserID:this.PInfo.id,
+            sid:this.PInfo.sid,
             GameID:this.curGameID,
             ModifyID: parseInt(this.UserID,10),
             data:RateData,
@@ -312,6 +317,8 @@ export default class BetClass extends Vue{
     async getBasePayRate(gid:number):Promise<BasePayRateItm[]>{
         let dta:BasePayRateItm[]=[];
         const param:CommonParams = {
+            UserID:this.PInfo.id,
+            sid:this.PInfo.sid,
             GameID: gid
         }
         let msg:IMsg = await this.store.ax.getApi('getBasePayRate',param);

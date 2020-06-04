@@ -147,6 +147,7 @@ export interface CommonParams {
     NameOrNick?:string;
     SDate?:string;
     UpId?:number;
+    ParamLog?:ParamLog[];
     [key:string]:number|string|ParamLog[]|undefined;
 }
 

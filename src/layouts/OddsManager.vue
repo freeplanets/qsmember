@@ -2,7 +2,17 @@
     <div>
         <div class='row'>
             <div class='col-2'><GS :store='store' @setGames="setCurGames"></GS></div>
-            <div class='col talign'
+            <div class="pbtn"><q-select outlined dense v-model="refSec" :options="refSecs" /></div><div class="talign">{{$t('Label.Sec')}}</div>
+            <div class="pbtn">
+                <q-chip
+                    clickable
+                    @click="refreshData(1)"
+                >
+                    <q-avatar color="red" text-color="white">{{CountDown}}</q-avatar>
+                    {{$t('Label.Refresh')}}                    
+                </q-chip>
+            </div>            
+            <div class='col talign1'
                  v-if="oddshow"
             >
                 <q-btn-group outline class='mtop'>
@@ -71,7 +81,7 @@
                                         :key="BT+'litm'+nidx"
                                     >
                                         <OB 
-                                            :UserID="store.personal.id"
+                                            :store="store"
                                             :tid="curTid"
                                             :GameID="curGameID"
                                             :Odds="getOdds(nItm.BT,nItm.Num)"
@@ -101,7 +111,7 @@
                             :key="'litm'+nidx"
                         >
                             <OB 
-                                :UserID="store.personal.id"
+                                :store="store"
                                 :tid="curTid"
                                 :GameID="curGameID"
                                 :Odds="getOdds(nItm.BT,nItm.Num)" 
@@ -125,7 +135,7 @@ import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 import OddsBlock from './components/OddsBlock.vue';
 import GameSelector from './components/GameSelector.vue';
-import {Odds, SelectOptions,IMsg, CommonParams} from './data/if';
+import {Odds, SelectOptions,IMsg, CommonParams,ILoginInfo} from './data/if';
 import Layouts,{Layout,contBlock,numBlock} from './components/layouts';
 import {CGame,IData} from './components/Games';
 
@@ -141,28 +151,34 @@ interface BTNs {
 
 @Component
 export default class OddsManager extends Vue {
-    private store = getModule(LayoutStoreModule);
-    private sltBtn:BTNs[]=[];
-    private dfLayout:Layout=[];
-    private dfColor:string[]=[];
-    private sltColor:string='light-blue'
-    private unSltColor:string='teal'
-    private curGameID:number=0;
-    private cont:contBlock[]=[];
-    private Game:CGame=new CGame();
-    private oddshow:boolean=false;
-    private curBt:number|null=null;
-    private curGType:string='';
-    private tab:string='';
-    private tmpItem;
-    private curTid:number=0;
-    private curInterval:number|null=null;
-    private curIdx:number=0;
-    private Steps:number[]=[];
+    store = getModule(LayoutStoreModule);
+    sltBtn:BTNs[]=[];
+    dfLayout:Layout=[];
+    dfColor:string[]=[];
+    sltColor:string='light-blue'
+    unSltColor:string='teal'
+    curGameID:number=0;
+    cont:contBlock[]=[];
+    Game:CGame=new CGame();
+    oddshow:boolean=false;
+    curBt:number|null=null;
+    curGType:string='';
+    tab:string='';
+    tmpItem;
+    curTid:number=0;
+    curInterval:number|null=null;
+    curIdx:number=0;
+    Steps:number[]=[];
+    refSecs:number[]=[5,10,15,30,60];
+    refSec:number=5;
+    CountDown:number=0;
     odds:Odds={
         Num:1,
         Odds:49,
         Risk:123456
+    }
+    get PInfo():ILoginInfo{
+        return this.store.personal;
     }
     async setCurGames(v:SelectOptions){
         //console.log('setGames:',v);
@@ -197,7 +213,13 @@ export default class OddsManager extends Vue {
             //this.cont = this.dfLayout[0].cont;
             //console.log('setCurGames',this.dfLayout);
             if(v.value){
-                let ans:IMsg=await this.store.ax.getApi('CurOddsInfo',{GameID:v.value,MaxOddsID:0});
+                const param:CommonParams={
+                    UserID:this.PInfo.id,
+                    sid:this.PInfo.sid,
+                    GameID:v.value,
+                    MaxOddsID:0
+                }
+                let ans:IMsg=await this.store.ax.getApi('CurOddsInfo',param);
                 //console.log('get CurOddsInfo:',ans);
                 if(ans.data){
                     /*
@@ -214,7 +236,9 @@ export default class OddsManager extends Vue {
                     if(this.curInterval){
                         window.clearInterval(this.curInterval);
                     }
-                    this.curInterval=window.setInterval(this.getCurOdds,3000);
+                    //this.curInterval=window.setInterval(this.getCurOdds,3000);
+                    this.CountDown = this.refSec;
+                    this.curInterval=window.setInterval(this.refreshData,1000);
                 }
             }
         }
@@ -222,8 +246,22 @@ export default class OddsManager extends Vue {
     getOdds(BT:number,Num:number){
         return this.Game.getOdds(BT,Num);
     }
+    refreshData(doitnow?:number){
+        if(doitnow){
+            this.CountDown=0;
+        } else {
+            this.CountDown--
+        }
+        if(this.CountDown==0){
+            this.CountDown = this.refSec;
+            this.getCurOdds();
+        }
+        console.log('refresh',this.refSec);
+    }
     async getCurOdds(){
         const param:CommonParams = {
+            UserID:this.PInfo.id,
+            sid:this.PInfo.sid,
             GameID:this.curGameID,
             MaxOddsID: this.Game.MaxOddsID
         }
@@ -278,11 +316,12 @@ export default class OddsManager extends Vue {
         //console.log('setStop',curCont,tmp);
         if(tmp.length>0) bt = tmp.join(',');
         const param:CommonParams = {
+            UserID:this.PInfo.id,
+            sid:this.PInfo.sid,
             GameID:this.curGameID,
             tid: this.curTid,
             isStop: stop,
             BetTypes: bt,
-            UserID: this.store.personal.id
         }
         let ans:IMsg=await this.store.ax.getApi('setStop',param);
         //console.log('setStop:',ans);
@@ -305,8 +344,16 @@ export default class OddsManager extends Vue {
 //})
 </script>
 <style scoped>
-.talign {
+.talign1 {
     line-height:48px;
     padding-left: 12px;
+}
+.pbtn {
+    padding: 6px 4px;
+}
+.talign {
+    text-align: center;
+    line-height:48px;
+    padding: 0 4px 0 4px;
 }
 </style>

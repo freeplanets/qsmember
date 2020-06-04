@@ -1,4 +1,15 @@
 export default {
+  Error : [
+    "OK!!",             //0
+    "低於最小下注金額",   //1
+    "高於最大下注金額",   //2
+    "單碼滿倉",          //3
+    "聯碼滿倉",           //4
+    "停押",               //5
+    "額度不足",           //6
+    "尚未登入",           //7
+    "已有注單,無法刪除",   //8
+  ],  
   Label: {
     GameName: '彩局名稱',
     ClassName: '類別名稱',
@@ -52,7 +63,10 @@ export default {
     BetLists:'注單查詢',
     NameOrNick:'名稱/代號',
     TotalN:'共 {N} 筆',
-    BetReport:'下注報表'
+    BetReport:'下注報表',
+    UseAvgMsg:'啟用為均賠率派彩。不啟用為最小賠率派彩。',
+    Sec:'秒',
+    Refresh:'更新'
   },
   Tip:{
     UserFind: "請輸入名稱或代號"
@@ -101,7 +115,8 @@ export default {
     Steps:"押碼點數",
     StepsGroup:"押碼級距",
     StopTimeS:"特碼下注截止時間",
-    StopTime:"下注截止時間"
+    StopTime:"下注截止時間",
+    Result:'開獎結果'
   },
   Title: {
     Dashboard: '大廳',

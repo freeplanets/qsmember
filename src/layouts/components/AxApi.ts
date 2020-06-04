@@ -138,7 +138,7 @@ export class AxApi {
         Object.keys(dta).map(key=>{
             param[key]=dta[key];
         })
-        const url:string=this.ApiUrl+'/api/UpdateGame';
+        //const url:string=this.ApiUrl+'/api/UpdateGame';
         return await this.getApi('UpdateGame',param,'post');
     }
 
@@ -212,7 +212,7 @@ export class AxApi {
         }       
         return await this.getApi('getPayClass',param);
     }
-    async saveNums(UserID:number,sid:string,tid:number,GameID:number|string,nums:string,isSettled?:number):Promise<IMsg>{
+    async saveNums(UserID:number,sid:string,tid:number,GameID:number|string,nums:string,isSettled?:number,PLog?:ParamLog[]):Promise<IMsg>{
         const param:CommonParams={
             UserID:UserID,
             sid:sid,
@@ -220,7 +220,10 @@ export class AxApi {
             GameID:GameID,
             Nums:nums,
             isSettled:isSettled,                        
-        }       
+        }
+        if(PLog){
+            param.ParamLog=PLog;
+        }
         return await this.getApi('SaveNums',param,'post');
         /*
         let ans;

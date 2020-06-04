@@ -18,7 +18,7 @@
         </div>
         <div class="row my-line-high">
             <div class="gamefield my-tb-head col-1">{{$t('Table.AutoOpen')}}</div>
-            <div  class="gamefield col-12 col-md-3"><q-toggle v-model="MyGame.AutoOpen" /></div>
+            <div class="gamefield col-12 col-md-3"><q-toggle v-model="MyGame.AutoOpen" /></div>
         </div>
         <div class="row my-line-high">
             <div class="gamefield my-tb-head col-1">{{$t('Table.TwoMoreGame')}}</div>
@@ -39,7 +39,7 @@
         </div>
         <div class="row my-line-high">
             <div class="gamefield my-tb-head col-1">{{$t('Table.UseAvgOdds')}}</div>
-            <div class="gamefield col-12 col-md-3"><q-toggle v-model="MyGame.UseAvgOdds" /></div>
+            <div class="gamefield col-12 col-md-3"><q-toggle v-model="MyGame.UseAvgOdds" />({{$t('Label.UseAvgMsg')}})</div>
         </div>        
         <div class="row my-line-high">
             <div class="gamefield my-tb-head col-1">{{$t('Table.GType')}}</div>
