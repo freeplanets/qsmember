@@ -58,10 +58,11 @@
         <td class="col-1 mytable-field-txt">{{itm.UPName}}</td>
       </tr>
       <tr class="linetotal">
-          <td class="col-1 mytable-field-txt" colspan="4">{{$t('Report.Total')}}</td>
+          <td class="col-1 mytable-field-txt" colspan="5">{{$t('Report.Total')}}</td>
           <td class="col-1 mytable-field-txt-right">{{`${$t('Label.TotalN')}`.replace('{N}',list.length)}}</td>
           <td class="col-1 mytable-field-num">{{total}}</td>
           <td :class="{'col-1 mytable-field-num':true,RedColor:winlose<0}">{{winlose.toFixed(2)}}</td>
+          <td class="col-1 mytable-field-txt"></td>
       </tr>
       </table>
       </div>
