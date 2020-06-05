@@ -9,20 +9,23 @@
       <div class="pbtn2"><q-input outlined dense v-model="BetID" :label="$t('Report.OrderNo')+'(n,1,2,3,...)'" /></div>
       <div class="tbox-pd"><q-input class="tbox-w" outlined dense v-model="dateSet" /></div>
       <div class="miniBtn-pd"><q-btn color="primary" dense icon="date_range" @click="DateSlt=true"/></div>      
-      <div v-if="showTimeEdit" class='pbtn2'><q-input outlined dense v-model="STime" label="##:##:##" mask="##:##:##"/></div>
-      <div v-if="showTimeEdit" class='pbtn2'><q-input outlined dense v-model="ETime" label="##:##:##" mask="##:##:##"/></div>      
+      <div v-if="showTimeEdit" class='pbtn2'><q-input outlined dense v-model="STime" label="hh:mm:ss" mask="##:##:##"/></div>
+      <div v-if="showTimeEdit" class='pbtn2'><q-input outlined dense v-model="ETime" label="hh:mm:ss" mask="##:##:##"/></div>      
     </div>
     <div class="row">
-      <div class="col-1">{{$t('Report.OdrAmt')}}</div>
+      <div class="talign2">{{$t('Report.OdrAmt')}}</div>
       <div class='row pbtn2'>
           <q-input outlined dense v-model="OrdAmtS" />
           <q-input outlined dense v-model="OrdAmtE" />
       </div>
-      <div class="col-1">{{$t('Report.WinLose')}}</div>
+      <div class="talign2">{{$t('Report.WinLose')}}</div>
       <div class='row pbtn2'>
           <q-input outlined dense v-model="WinLoseS" />
           <q-input outlined dense v-model="WinLoseE" />
-      </div>      
+      </div>
+      <div class='pbtn2'>
+        <q-select outlined dense v-model="sltedTS" :options="TStatus"  />
+      </div>
       <div class='pbtn'><q-btn dense color="green" icon-right="search" :label="$t('Button.Search')"  @click="SearchData()"/></div>      
       <div class='pbtn'><q-btn dense color="blue" icon-right="clear" :label="$t('Button.Clear')"  @click="ClearSearch()"/></div>
     </div>
@@ -31,24 +34,28 @@
       <table>
         <tr>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OrderNo')}}</td>
+          <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.Member')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OrderTime')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.GameName')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.TermID')}}</td>
           <td class="col mytable-head mytable-field-txt">{{$t('Report.OdrType')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OdrAmt')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.Result')}}</td>
+          <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.WebOwner')}}</td>
         </tr>
       <tr 
         v-for="(itm,idx) in list"
         :key="'bh'+idx"
         >
         <td class="col-1 mytable-field-txt">{{itm.id}}</td>
+        <td class="col-1 mytable-field-txt">{{itm.UName}}</td>
         <td class="col-1 mytable-field-txt">{{DTString(itm.CreateTime)}}</td>
         <td class="col-1 mytable-field-txt">{{itm.GameName}}</td>
         <td class="col-1 mytable-field-txt">{{itm.TermID}}</td>
         <td class="col mytable-field-txt wdbr" v-html="itm.BetContent"></td>
         <td class="col-1 mytable-field-num">{{itm.Total}}</td>
-        <td :class="{'col-1 mytable-field-num':true,RedColor:itm.WinLose<0}">{{itm.WinLose.toFixed(2)}}</td>        
+        <td :class="{'col-1 mytable-field-num':true,RedColor:itm.WinLose<0}">{{itm.WinLose.toFixed(2)}}</td>
+        <td class="col-1 mytable-field-txt">{{itm.UPName}}</td>
       </tr>
       <tr class="linetotal">
           <td class="col-1 mytable-field-txt" colspan="4">{{$t('Report.Total')}}</td>
@@ -73,7 +80,7 @@ import Component from 'vue-class-component';
 import {Watch} from 'vue-property-decorator';
 import LayoutStoreModule from './data/LayoutStoreModule'
 import {getModule} from 'vuex-module-decorators';
-import {SelectOptions,CommonParams,IMsg,BetHeader, ILoginInfo} from './data/if';
+import {SelectOptions,CommonParams,IMsg,BetHeader, ILoginInfo,MyUser} from './data/if';
 import {BHRemaster,datetime} from './components/func';
 import GameSelector from './components/GameSelector.vue';
 import TermIDSelector from './components/TermIDSelector.vue';
@@ -107,6 +114,8 @@ export default class BetLists extends Vue {
   DateSlt:boolean=false;
   showTimeEdit:boolean=false;
   dateSet:string='';
+  TStatus:SelectOptions[]=[];
+  sltedTS:SelectOptions|undefined;
   @Watch('dateSet',{immediate:true,deep:true})
   onDateSetChange(){
     //console.log('onDateSetChange',this.DateSlt);
@@ -138,7 +147,8 @@ export default class BetLists extends Vue {
     this.OrdAmtS=0;
     this.OrdAmtE=0;
     this.WinLoseS=0;
-    this.WinLoseE=0;    
+    this.WinLoseE=0;
+    this.sltedTS=this.TStatus[0];
   }
   async SearchData(){
     const param:CommonParams={
@@ -162,12 +172,21 @@ export default class BetLists extends Vue {
     if(this.OrdAmtE) param.OrdAmtE = this.OrdAmtE;
     if(this.WinLoseS) param.WinLoseS = this.WinLoseS;
     if(this.WinLoseE) param.WinLoseE = this.WinLoseE;
+    if(this.sltedTS) param.isCanceled = this.sltedTS.value;
     const msg:IMsg = await this.store.ax.getApi('getBetHeaders',param);
     //console.log('SearchData',msg);
     if(msg.ErrNo==0){
       const bhs:BetHeader[]=msg.data as BetHeader[];
       //console.log('GameList:',this.GameList);
       bhs.map(bh=>{
+        let f:MyUser|undefined=msg.users.find(itm=>itm.id===bh.UserID);
+        if(f){
+          bh.UName=f.Account;
+        }
+        f=msg.UpUser.find(itm=>itm.id===bh.UpId);
+        if(f){
+          bh.UPName = f.Account;
+        }
         bh.BetContent=JSON.parse(bh.BetContent);
         bh=BHRemaster(bh,this.GameList,this);
       })
@@ -199,6 +218,16 @@ export default class BetLists extends Vue {
       if(!this.store.isLogin){
           this.$router.push({path:'/login'});
       }
+      const Tmp = this.$t('Label.TicketStatus') as any;
+      Tmp.map((itm,idx)=>{
+        const so:SelectOptions={
+          value:idx,
+          label:itm
+        }
+        this.TStatus.push(so);
+      })
+      this.sltedTS=this.TStatus[0];
+      console.log('BetLists mounted',this.TStatus);
   }
 }
 </script>
@@ -270,5 +299,10 @@ export default class BetLists extends Vue {
   padding-top: 20px;
   width: 705px;
   max-width: 1000px;
+}
+.talign2 {
+    text-align: center;
+    line-height:40px;
+    padding: 0 4px 0 4px;
 }
 </style>

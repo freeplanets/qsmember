@@ -160,6 +160,7 @@ export interface PayClass {
 export interface BetHeader {
     id: number;
     UserID: number;
+    UpId:number;
     tid: number;
     GameID: number;
     BetContent: string;
@@ -173,6 +174,8 @@ export interface BetHeader {
     GameName?:string;
     UserName?:string;
     TermID?:string;
+    UName?:string;
+    UPName?:string;
 }
 
 export interface INumData {
@@ -210,3 +213,9 @@ export interface ParamLog {
     nvalue:string;
     adminid:number;
 }
+export interface MyUser {
+    id: number;  
+    Account: string;
+    Nickname: string;
+    Types?:number;
+  }

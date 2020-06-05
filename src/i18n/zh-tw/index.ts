@@ -66,7 +66,12 @@ export default {
     BetReport:'下注報表',
     UseAvgMsg:'啟用為均賠率派彩。不啟用為最小賠率派彩。',
     Sec:'秒',
-    Refresh:'更新'
+    Refresh:'更新',
+    TicketStatus: [
+      '成交',
+      '會員取消',
+      '系統註銷'
+    ]
   },
   Tip:{
     UserFind: "請輸入名稱或代號"

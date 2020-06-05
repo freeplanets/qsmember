@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="top row">
-        <div><GS :store="store" :AddAllItem='true' @setGames="setCurGames"></GS></div>
+        <div><GS :store="store" :AddAllItem='true' @setGames="setCurGames" :ReturnList='true' @setLists='setGameLists'></GS></div>
         <div class="tbox-pd">
           <q-btn-toggle
             v-model="Ledger"
@@ -20,7 +20,7 @@
         <div class='miniBtn-pd'><q-btn dense color="green" icon-right="search" :label="$t('Button.Search')"  @click="SearchData()"/></div>    
     </div>
     <q-separator inset />
-    <div v-if='list.length>0' class="mytable">
+    <div v-if='showTotal' class="mytable">
       <table>
         <tr>
           <td class="mytable-head mytable-field-txt">{{$t('Table.Account')}}</td>
@@ -29,11 +29,11 @@
           <td class="mytable-head mytable-field-txt">{{$t('Report.Result')}}</td>
         </tr>
       <tr 
-        v-for="(itm,idx) in list"
+        v-for="(itm,idx) in Tlist"
         :key="'bh'+idx"
         >
         <td class="mytable-field-txt">{{itm.Account}}</td>
-        <td v-if="hasBTField"  class="col-1 mytable-field-txt">{{itm.BTName}}</td>
+        <td v-if="hasBTField"  class="col-1 mytable-field-txt" ><q-btn dense flat @click="getBTDetail(itm.UpId,itm.BetType)" :label="itm.BTName" /></td>
         <td class="mytable-field-num">{{itm.Total.toFixed(2)}}</td>
         <td :class="{'mytable-field-num':true,RedColor:itm.WinLose<0}">{{itm.WinLose.toFixed(2)}}</td>        
       </tr>
@@ -44,6 +44,44 @@
       </tr>
       </table>          
     </div>
+    <!-- detail  //-->
+    <div v-if="showDetail" class="myDetail">
+      <q-btn round color="primary" icon="reply" @click="showTotal=true;showDetail=false" />
+      <table>
+        <tr>
+          <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OrderNo')}}</td>
+          <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.Member')}}</td>
+          <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OrderTime')}}</td>
+          <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.GameName')}}</td>
+          <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.TermID')}}</td>
+          <td class="col mytable-head mytable-field-txt">{{$t('Report.OdrType')}}</td>
+          <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OdrAmt')}}</td>
+          <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.Result')}}</td>
+          <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.WebOwner')}}</td>
+        </tr>
+      <tr 
+        v-for="(itm,idx) in list"
+        :key="'bh'+idx"
+        >
+        <td class="col-1 mytable-field-txt">{{itm.id}}</td>
+        <td class="col-1 mytable-field-txt">{{itm.UName}}</td>
+        <td class="col-1 mytable-field-txt">{{DTString(itm.CreateTime)}}</td>
+        <td class="col-1 mytable-field-txt">{{itm.GameName}}</td>
+        <td class="col-1 mytable-field-txt">{{itm.TermID}}</td>
+        <td class="col mytable-field-txt wdbr" v-html="itm.BetContent"></td>
+        <td class="col-1 mytable-field-num">{{itm.Total}}</td>
+        <td :class="{'col-1 mytable-field-num':true,RedColor:itm.WinLose<0}">{{itm.WinLose.toFixed(2)}}</td>
+        <td class="col-1 mytable-field-txt">{{itm.UPName}}</td>
+      </tr>
+      <tr class="linetotal">
+          <td class="col-1 mytable-field-txt" colspan="5">{{$t('Report.Total')}}</td>
+          <td class="col-1 mytable-field-txt-right">{{`${$t('Label.TotalN')}`.replace('{N}',list.length)}}</td>
+          <td class="col-1 mytable-field-num">{{total}}</td>
+          <td :class="{'col-1 mytable-field-num':true,RedColor:winlose<0}">{{winlose.toFixed(2)}}</td>
+          <td class="col-1 mytable-field-txt"></td>
+      </tr>
+      </table>
+      </div>    
     <q-dialog v-model="DateSlt">
       <q-card class='diaDate'>
         <q-card-section class="q-pt-none">
@@ -59,7 +97,8 @@ import Compnent from 'vue-class-component';
 import {Watch} from 'vue-property-decorator';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import { SelectOptions, CommonParams,IMsg, ILoginInfo } from './data/if';
+import {BHRemaster,datetime} from './components/func';
+import { SelectOptions, CommonParams,IMsg, ILoginInfo,BetHeader,MyUser } from './data/if';
 import GameSelector from './components/GameSelector.vue';
 import SEDate from './components/SEDate.vue';
 Vue.component('GS',GameSelector);
@@ -91,10 +130,15 @@ export default class BetReport extends Vue{
     //{value:0,label:'Report.GeneralLedger'},
     //{value:1,label:'Report.Ledger'}
   ];
-  list:TData[]=[];
+  Tlist:TData[]=[];
+  list:BetHeader[]=[];
+  GameList:SelectOptions[]=[];
   total:number=0;
   winlose:number=0;
   hasBTField:boolean=false;
+  curDateSet:string='';
+  showTotal:boolean=false;
+  showDetail:boolean=false;
   get Ledger(){
     return this.curLedger;
   }
@@ -106,11 +150,60 @@ export default class BetReport extends Vue{
   get PInfo():ILoginInfo {
     return this.store.personal;
   }
+  setGameLists(v:SelectOptions[]){
+    this.GameList = v;
+    console.log(this.GameList);
+  }
   setCurGames(v:SelectOptions){
     this.curGameID=v.value;
     this.curGType=v.GType ? v.GType : '';
-    if(this.curGameID){
+    if(!this.curGameID){
       this.curLedger=0;
+    }
+  }
+  DTString(v:string){
+    return datetime(v);
+  }
+  async getBTDetail(UpId:number,BetType:string){
+    const param:CommonParams={
+      UserID:this.PInfo.id,
+      sid:this.PInfo.sid,
+      Table:'BetTable',
+      UpId,
+      BetType
+    }
+    if(this.curDateSet){
+      const tmp:string[]=this.curDateSet.split('-');
+      if(tmp[0]) param.SDate = tmp[0];
+      if(tmp[1]) param.EDate = tmp[1];
+    }
+    console.log('getBTDetail',param);
+    const msg:IMsg=await this.store.ax.getApi('getBetHeaders',param);
+    if(msg.ErrNo===0){
+      const bhs:BetHeader[]=msg.data as BetHeader[];
+      bhs.map(bh=>{
+        let f:MyUser|undefined=msg.users.find(itm=>itm.id===bh.UserID);
+        if(f){
+          bh.UName=f.Account;
+        }
+        f=msg.UpUser.find(itm=>itm.id===bh.UpId);
+        if(f){
+          bh.UPName = f.Account;
+        }
+        bh.BetContent=JSON.parse(bh.BetContent);
+        bh=BHRemaster(bh,this.GameList,this);
+      })
+      //console.log('SearchData ok!!',bhs);
+      //this.list = msg.data as BetHeader[];
+      this.list = bhs;
+      this.total=0;
+      this.winlose=0;
+      this.list.map(itm=>{
+        this.total += itm.Total;
+        this.winlose += itm.WinLose ? itm.WinLose : 0;
+      })
+      this.showTotal=false;
+      this.showDetail=true;
     }
   }
   async SearchData(){
@@ -133,11 +226,12 @@ export default class BetReport extends Vue{
     }
     const msg:IMsg=await this.store.ax.getApi('getBetTotal',param);
     if(msg.ErrNo===0){
-      this.list = msg.data as TData[];
+      this.curDateSet=this.dateSet;
+      this.Tlist = msg.data as TData[];
       const User=msg.User;
       this.total=0;
       this.winlose=0;
-      this.list.map(itm=>{
+      this.Tlist.map(itm=>{
         this.total+=itm.Total;
         this.winlose+=itm.WinLose;
         const f=User.find(u=>u.id===itm.UpId);
@@ -151,6 +245,7 @@ export default class BetReport extends Vue{
           this.hasBTField=false;
         }
       })
+      this.showTotal=true;
       //console.log('SearchData:',this.list);
     }
   }
@@ -167,7 +262,7 @@ export default class BetReport extends Vue{
 }
 .diaDate {
   padding-top: 20px;
-  width: 705px;
+  width: 710px;
   max-width: 1000px;
 }
 .tbox-w {
@@ -176,16 +271,19 @@ export default class BetReport extends Vue{
 .my-custom-toggle {
   border: 1px solid #027be3
 }
-
+.myDetail {
+    max-width: 1400px; 
+    padding: 4px 0 8px 8px;
+}
 .mytable {
     max-width: 600px; 
     padding: 4px 0 8px 8px;
 }
-.mytable table {
+.mytable table,.myDetail table {
     border-collapse: collapse;
 }
 
-.mytable td {
+.mytable td,.myDetail td{
   width: 120px;
 }
 .mytable-head {
