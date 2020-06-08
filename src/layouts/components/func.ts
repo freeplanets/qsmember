@@ -169,8 +169,13 @@ export function dateString(DateS?:string):string{
     const reg1 = /(\d+)-(\d+)-(\d+).*/;
     return d.toJSON().replace(reg1, '$1-$2-$3');
 }
-export function datetime(v:string){
-    const dt:Date=new Date(v);
+export function datetime(v:string|number,style?:string){
+    const dt:Date=new Date(typeof(v)==='number' ? v*1000 : v);
+    if(style){
+        if(style==='date'){
+            return dt.toLocaleDateString('zh-TW', {timeZone: 'Asia/Taipei'});
+        }
+    }
     return dt.toLocaleString('zh-TW', {timeZone: 'Asia/Taipei',hour12:false});
 }
 export function dateAddZero(d:string):string{
@@ -178,8 +183,7 @@ export function dateAddZero(d:string):string{
     const dArr:string[]= d.split(sep);
     const newA=dArr.map(s=>{
         return addZeroIfUnderTen(s);
-    })
-    
+    })   
     return newA.join(sep);
 }
 function addZeroIfUnderTen(v:string|number):string{

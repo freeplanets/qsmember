@@ -225,7 +225,8 @@ export default {
     OdrAmt: '下注金額',
     Total: '合計',
     GeneralLedger:'總帳',
-    Ledger:'分類帳'
+    Ledger:'分類帳',
+    DayReport:'日報表'
   },
   Common: {
     AccHistory: '帳戶歷史',

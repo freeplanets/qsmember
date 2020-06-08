@@ -23,6 +23,7 @@
     <div v-if='showTotal' class="mytable">
       <table>
         <tr>
+          <td v-if="curLedger===2" class="mytable-head mytable-field-txt">{{$t('Label.Date')}}</td>
           <td class="mytable-head mytable-field-txt">{{$t('Table.Account')}}</td>
           <td v-if="hasBTField" class="col-1 mytable-head mytable-field-txt">{{$t('Report.OdrType')}}</td>
           <td class="mytable-head mytable-field-txt">{{$t('Report.OdrAmt')}}</td>
@@ -32,13 +33,14 @@
         v-for="(itm,idx) in Tlist"
         :key="'bh'+idx"
         >
+        <td v-if="curLedger===2" class="mytable-field-txt">{{itm.SDate}}</td>
         <td class="mytable-field-txt">{{itm.Account}}</td>
         <td v-if="hasBTField"  class="col-1 mytable-field-txt" ><q-btn dense flat @click="getBTDetail(itm.UpId,itm.BetType)" :label="itm.BTName" /></td>
         <td class="mytable-field-num">{{itm.Total.toFixed(2)}}</td>
         <td :class="{'mytable-field-num':true,RedColor:itm.WinLose<0}">{{itm.WinLose.toFixed(2)}}</td>        
       </tr>
       <tr class="linetotal">
-          <td class="mytable-field-txt" :colspan="hasBTField ? 2: 1">{{$t('Report.Total')}}</td>
+          <td class="mytable-field-txt" :colspan="hasBTField || curLedger===2 ? 2: 1">{{$t('Report.Total')}}</td>
           <td class="mytable-field-num">{{total.toFixed(2)}}</td>
           <td :class="{'mytable-field-num':true,RedColor:winlose<0}">{{winlose.toFixed(2)}}</td>
       </tr>
@@ -106,6 +108,8 @@ Vue.component('SED',SEDate);
 
 interface TData {
   UpId:number;
+  SDate?:string;
+  UXTimeStamp?:number;
   Account?:string;
   BetType?:string;
   BTName?:string;
@@ -143,9 +147,9 @@ export default class BetReport extends Vue{
     return this.curLedger;
   }
   set Ledger(v){
-    if(this.curGameID){
-      this.curLedger=v;
-    }
+    if(!this.curGameID && v===1) return;
+    this.showTotal=false;
+    this.curLedger=v;
   }
   get PInfo():ILoginInfo {
     return this.store.personal;
@@ -161,8 +165,8 @@ export default class BetReport extends Vue{
       this.curLedger=0;
     }
   }
-  DTString(v:string){
-    return datetime(v);
+  DTString(v:string|number,style?:string){
+    return datetime(v,style);
   }
   async getBTDetail(UpId:number,BetType:string){
     const param:CommonParams={
@@ -238,6 +242,7 @@ export default class BetReport extends Vue{
         if(f){
           itm.Account=f.Account;
         }
+        itm.SDate = this.DTString(itm.UXTimeStamp ? itm.UXTimeStamp : 0,'date');
         if(itm.BetType){
           this.hasBTField=true;
           itm.BTName=this.$t(`Game.${this.curGType}.Item.${itm.BetType}.title`)+'';
@@ -252,6 +257,7 @@ export default class BetReport extends Vue{
   mounted(){
     this.ledgers.push({value:0,label:`${this.$t('Report.GeneralLedger')}`});
     this.ledgers.push({value:1,label:`${this.$t('Report.Ledger')}`});
+    this.ledgers.push({value:2,label:`${this.$t('Report.DayReport')}`});
     //console.log('BetReport mounted:',this.ledgers);
   }
 }
