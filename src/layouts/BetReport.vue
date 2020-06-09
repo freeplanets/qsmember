@@ -242,7 +242,7 @@ export default class BetReport extends Vue{
         if(f){
           itm.Account=f.Account;
         }
-        itm.SDate = this.DTString(itm.UXTimeStamp ? itm.UXTimeStamp : 0,'date');
+        //itm.SDate = this.DTString(itm.UXTimeStamp ? itm.UXTimeStamp : 0,'date');
         if(itm.BetType){
           this.hasBTField=true;
           itm.BTName=this.$t(`Game.${this.curGType}.Item.${itm.BetType}.title`)+'';

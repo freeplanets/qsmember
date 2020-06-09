@@ -58,7 +58,9 @@ export default class GamePayClassSelector extends Vue {
       slted = JSON.parse(this.PayClass);
     }
     if(!this.store) return;
-    const ans:SelectOptions[] | undefined = await this.store.ax.getGames();
+    const UserID=this.store.personal.id;
+    const sid=this.store.personal.sid;
+    const ans:SelectOptions[] | undefined = await this.store.ax.getGames(UserID,sid);
     if(ans){
       ans.map(itm=>{
           const tmp:GamePayClass={
@@ -70,7 +72,7 @@ export default class GamePayClassSelector extends Vue {
           this.games.push(tmp);
       })
     }
-    const pans = await this.store.ax.getPayClass();
+    const pans = await this.store.ax.getPayClass(UserID,sid);
     if(pans.ErrNo==0){
       const pc:PayClass[] = pans.data as PayClass[];
       //console.log('PayClass:',pc);

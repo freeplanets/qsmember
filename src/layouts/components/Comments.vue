@@ -21,43 +21,53 @@
 import Vue from 'vue'
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
-import AxApi from './AxApi';
 import {CommonParams,IMsg} from '../data/if';
 import { QDialogOptions } from 'quasar';
+import LayoutStoreModule from '../data/LayoutStoreModule';
 @Component
 export default class Comments extends Vue {
     @Prop() readonly PageName?:string;
+    @Prop() readonly store?:LayoutStoreModule;
     private comment:string='';
     private page:string='';
     async saveWork(){
       if(this.comment==='') return;
-      let cp:CommonParams={
-        PageName:this.page,
-        Comments:this.comment
-      }
-      const ans:IMsg = await AxApi.getApi('saveComments',cp,'post');
-      if(ans.ErrNo===0){
-        let msg:QDialogOptions={
-          title: 'Save Comments',
-          message: 'Ok!!'
+      if(this.store){
+        let cp:CommonParams={
+          UserID:this.store.personal.id,
+          sid:this.store.personal.sid,
+          PageName:this.page,
+          Comments:this.comment
         }
-        this.$q.dialog(msg).onOk(()=>{}).onCancel(()=>{}).onDismiss(()=>{});
+        //const ans:IMsg = await AxApi.getApi('saveComments',cp,'post');
+        const ans:IMsg = await this.store.ax.getApi('saveComments',cp,'post');
+        if(ans.ErrNo===0){
+          let msg:QDialogOptions={
+            title: 'Save Comments',
+            message: 'Ok!!'
+          }
+          this.$q.dialog(msg).onOk(()=>{}).onCancel(()=>{}).onDismiss(()=>{});
+        }
       }
     }
     async getComment(){
       if(this.page==='') return;
-      let cp:CommonParams={
-        PageName:this.page
-      }
-      const ans:IMsg = await AxApi.getApi('getComments',cp,'post');
-      //console.log('getComment',ans);
-      if(ans.ErrNo===0){
-        const dta:any=ans.data;
-        if(dta.length>0){
-          this.comment=dta[0].Comments;
+      if(this.store){
+        let cp:CommonParams={
+          UserID:this.store.personal.id,
+          sid:this.store.personal.sid,          
+          PageName:this.page
+        }
+        //const ans:IMsg = await AxApi.getApi('getComments',cp,'post');
+        const ans:IMsg = await this.store.ax.getApi('getComments',cp,'post');
+        //console.log('getComment',ans);
+        if(ans.ErrNo===0){
+          const dta:any=ans.data;
+          if(dta.length>0){
+            this.comment=dta[0].Comments;
+          }
         }
       }
-      
     }
     mounted(){
         this.page=this.$route.path.replace('/',':');

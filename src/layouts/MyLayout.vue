@@ -185,7 +185,7 @@
     <q-page-container>
       <router-view />
       <q-dialog v-model="showComment" seamless position="bottom">
-          <CMMT style="width: 80%"></CMMT>
+          <CMMT style="width: 80%" :store='store'></CMMT>
       </q-dialog>      
     </q-page-container>
   </q-layout>
