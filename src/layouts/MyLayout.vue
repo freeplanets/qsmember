@@ -263,7 +263,7 @@ export default class MyLayout extends Vue {
       this.$q.dialog({
           title: this.$t('Title.ChangePassword') as string,
           message: this.$t('Title.PassChgMsg') as string
-      });
+      });    
       this.$router.push({path:'/login'});      
     }
   }
@@ -281,6 +281,7 @@ export default class MyLayout extends Vue {
     this.getSysInfo();
     if(!this.isLogin){
       //console.log('MyLayout:',this.$route);
+      this.store.ax.Router = this.$router;
       if(this.$route.path !== '/login'){
         this.$router.push({path:'/login'});
       }

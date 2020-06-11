@@ -280,14 +280,6 @@ export default class TermManager extends Vue {
         this.datePickerShow=!this.datePickerShow;
     }
     async SaveTerm(){
-        /*
-        const param:CBetItems={
-            GameID: this.model.value as number,
-            ModifyID: this.User.id as number,
-            data: JSON.stringify(BetItems)
-       
-        */
-        //const ans = await this.ax.createBetItems(param);
         if(this.oldTerm){
             const OLD=this.oldTerm;
             const adminid = this.User.id;

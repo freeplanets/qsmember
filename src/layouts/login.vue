@@ -62,10 +62,10 @@ export default class Login extends Vue {
     //const url:string=this.store.ax.Host+'/login';
     const msg:IMsg=await this.store.ax.getApi('/login',params);
     if(msg.ErrNo===0){
-      console.log(msg.data);
         this.Personal = msg.data as ILoginInfo;
         this.isLogin = true;
         //this.store.leftDrawerOpen=true;
+        console.log('Login PInfo:',this.Personal);
         this.$router.push({path:'/'});      
     } else {
       this.$q.dialog({

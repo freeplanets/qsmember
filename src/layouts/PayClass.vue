@@ -42,7 +42,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import axios,{ AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios,{AxiosResponse } from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import {IGames} from './data/schema';
@@ -159,7 +159,7 @@ export default class BetClass extends Vue{
         const btg=BTG[this.curGameID];
         const tmp:object=PayRateData[btg].data;
         const order:string[]=PayRateData[btg].order;
-        let itms:PayRateItm[];
+        let itms:PayRateItm[]=[];
         //console.log('tmp',tmp);
         order.map(key=>{
             let itm:PayRateItm[] = tmp[key];
@@ -173,8 +173,13 @@ export default class BetClass extends Vue{
             })
         });
         //console.log('BasePayR:',this.BasePayR)
-        itms=await this.getPayRate(this.curGameID,v);
-        //console.log('getPayRate itms:',itms);
+        const ans=await this.getPayRate(this.curGameID,v);
+        if(ans){
+            itms=ans as PayRateItm[];
+        } else {
+            console.log('getPayRate too slow',ans);
+        }
+        console.log('getPayRate itms:',itms);
         if(itms.length>0){
             itms.map(itm=>{
                 const e = this.PayR.find(elm => elm.BetType == itm.BetType && elm.SubType == itm.SubType)
@@ -202,24 +207,24 @@ export default class BetClass extends Vue{
             e1.ExtRate = e0.Rate ? e0.Rate : 0;
         }
     }    
-    async getPayRate(gid:string|number,v:number){
-        const url:string=this.store.ax.Host+'/api/getPayRate';
-		const config:AxiosRequestConfig = {
-            params: {
-                GameID: gid,
-                PayClassID: v
+    getPayRate(gid:string|number,v:number){
+        return new Promise(async(resolve,reject)=>{
+            const params:CommonParams= {
+                    UserID: this.PInfo.id,
+                    sid: this.PInfo.sid,
+                    GameID: gid,
+                    PayClassID: v
             }
-        }
-        let data;
-        await axios.get(url,config).then((res:AxiosResponse)=>{
-            //console.log('await ',res)
-            data= res.data;
-        }).catch(err=>{
-            console.error('getPayRate error',err);
-            data= false;
-        })
-        //console.log('await 1',data);
-        return data;
+            await this.store.ax.getApi('getPayRate',params).then(msg=>{
+                if(msg.ErrNo===0){
+                    resolve(msg.data);
+                } else {
+                    resolve(false);
+                }
+            }).catch(err=>{
+                reject(err);
+            });
+        });
     }
     SaveData(){
         const dtas:PayRateItm[] = [];
@@ -235,6 +240,8 @@ export default class BetClass extends Vue{
     sendData(dtas:PayRateItm[]){
         if(!this.curGameID) return;
  		const data = {
+            UserID: this.PInfo.id,
+            sid: this.PInfo.sid,
 			GameID: this.curGameID,
             ModifyID: this.UserID,
             //PayClassID: this.ClassName.value,
@@ -260,11 +267,11 @@ export default class BetClass extends Vue{
 			console.error(err);
 		})       
     }
-	setPayClass(pc:PayClass){
+	async setPayClass(pc:PayClass){
         this.curPayClass=pc;
         this.PayClassName=pc.PayClassName;
         this.PNChange = false;
-        this.chkdata(pc.id);
+        await this.chkdata(pc.id);
         //console.log('GreatePayClass setPayClass:',pc);
     }
     async EditPayClassName(){

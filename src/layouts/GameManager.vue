@@ -47,6 +47,7 @@
         </div>            
         <div class="row my-line-high">
             <div><q-btn color="green" icon-right="save" label="Save" @click="saveGame();" /></div>
+            <div v-if="PInfo.Levels==9"><q-btn color="red" icon-right="save" label="SaveDfOddsItem" @click="SaveDfOddsItem();" /></div>
         </div>        
     </div>
 </div> 
@@ -58,6 +59,7 @@ import {Game} from './data/schema';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 import { SelectOptions,IMsg, ILoginInfo,CommonParams} from './data/if';
+import getBetItems from './class/BetItems';
 import {GameM} from './class/GameM';
 import GameSelector from './components/GameSelector.vue';
 Vue.component('GS',GameSelector);
@@ -144,6 +146,32 @@ export default class GameManager extends Vue{
         }
         //console.log('saveGame',ans);
     }
+    async SaveDfOddsItem(){
+        if(this.MyGame){
+            const GameID = this.MyGame.Datas.id;
+            const BetItems=getBetItems(GameID);
+            if(!BetItems){
+                console.log('BetItems error');
+                return;
+            }
+            const param:CommonParams={
+                UserID:this.PInfo.id,
+                sid:this.PInfo.sid,
+                GameID,
+                ModifyID: this.PInfo.id,
+                data: JSON.stringify(BetItems)
+            }
+            const msg= await this.ax.getApi('createBetItems',param,'post');
+            //const ans = await this.ax.createBetItems(param);
+            console.log(msg);
+            if(msg.ErrNo===0){
+                this.$q.dialog({
+                    title: this.$t('Label.Save') as string,
+                    message: 'OK!!'
+                });                    
+            }
+        }
+    }    
     mounted(){
         if(!this.store.isLogin){
             this.$router.push({path:'/login'});

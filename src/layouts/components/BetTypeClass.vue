@@ -11,7 +11,7 @@
                     />
         </q-btn-group>                
     </div>    
-</template>`````````````    `
+</template>
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
@@ -33,7 +33,8 @@ export default class BetTypeClass extends Vue {
         let pinfo:ILoginInfo={
             id:0,
             Account:'',
-            sid:''
+            sid:'',
+            Levels:0
         }
         if(this.pinfo) pinfo=this.pinfo;
         this.BtClass=[];

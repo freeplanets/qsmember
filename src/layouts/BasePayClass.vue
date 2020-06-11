@@ -19,7 +19,7 @@
             @updateBetSteps="updateBetSteps"
         ></RCO>
         </div>
-        <div class="q-pa-md" v-if="models">
+        <div class="q-pa-md" v-if="showDataTable">
             <table>
               <tr class="testheader">
                 <td class="test">{{$t('Table.ItemName')}}</td>
@@ -94,13 +94,19 @@
         </q-card-actions>        
       </q-card>
     </q-dialog>
-    <q-circular-progress
-      reverse
-      :value="value"
-      size="50px"
-      color="light-blue"
-      class="q-ma-md"
-    />            
+    <q-dialog v-model="showProgress" persistent>
+        <q-card>
+            <q-card-section>
+                <q-circular-progress
+                indeterminate
+                :value="value"
+                size="50px"
+                color="light-blue"
+                class="q-ma-md"
+                />
+            </q-card-section>
+        </q-card>
+    </q-dialog>
 	</div>
 </template>
 <script lang="ts">
@@ -166,6 +172,8 @@ export default class BetClass extends Vue{
 		{value: 0,label:'default'}
     ]
     showBFCG:boolean=false;
+    showProgress:boolean=false;
+    showDataTable:boolean=false;
 	get UserID():string{
 		if(this.store.personal.id) {
 			return this.store.personal.id + '';
@@ -181,8 +189,10 @@ export default class BetClass extends Vue{
         } else {
             this.spArr = undefined;
         }
+        console.log('doGames',v);
+        this.showProgress=true;
+        this.showDataTable=false;
         this.chkdata(v);
-        //console.log('doGames',v);
     }
     async chkdata(v:SelectOptions){
         // console.log('chkdata:', v);
@@ -192,7 +202,8 @@ export default class BetClass extends Vue{
         const tmp:object=PayRateData[btg].data;
         const order:string[]=PayRateData[btg].order;
         let itms:BasePayRateItm[];
-        //console.log('tmp',tmp);
+        this.BasePayR=[];
+        //console.log('BasePayClass tmp',btg,tmp);
         order.map(key=>{
             let itm:BItem[] = tmp[key];
             //if(key=='1') console.log('itm',itm);
@@ -224,7 +235,8 @@ export default class BetClass extends Vue{
         //console.log('PayRateData',tmp);
         // console.log('BasePayR before if:', this.BasePayR, this.BasePayR.length);
         //if(this.BasePayR.length==0) return;
-
+        this.showDataTable=true;
+        this.showProgress=false;
     }
     chainEdit(bt:number){
         const e0 = this.BasePayR.find(elm => elm.BetType == bt && elm.SubType == 0);

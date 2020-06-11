@@ -156,7 +156,6 @@ export default class BetReport extends Vue{
   }
   setGameLists(v:SelectOptions[]){
     this.GameList = v;
-    console.log(this.GameList);
   }
   setCurGames(v:SelectOptions){
     this.curGameID=v.value;
@@ -211,6 +210,7 @@ export default class BetReport extends Vue{
     }
   }
   async SearchData(){
+    this.showDetail=false;
     const param:CommonParams={
       UserID:this.PInfo.id,
       sid:this.PInfo.sid

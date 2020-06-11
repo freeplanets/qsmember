@@ -12,12 +12,22 @@ const config:AxiosRequestConfig = {
     //headers: { 'Access-Control-Allow-Origin': '*' }
 }
 */
-export class AxApi { 
+export class AxApi {
+    private router; 
     constructor(private ApiUrl){
         console.log('AxApi created!!',ApiUrl);
     }
     get Host(){
         return this.ApiUrl;
+    }
+    set Router(v){
+        this.router=v;
+    }
+    gotoLoginPage(){
+        console.log('gotoLoginPage',typeof(this.router));
+        if(this.router){
+            this.router.push({path:'/login'});
+        }
     }
 	async getGames(UserID:number,sid:string):Promise<SelectOptions[] | undefined>{
         const params:CommonParams={
@@ -300,6 +310,9 @@ export class AxApi {
         }
         return new Promise((resolve,reject)=>{
             func.then((msg:IMsg)=>{
+                if(msg.ErrNo===7){
+                    this.gotoLoginPage();
+                }
                 resolve(msg);
             }).catch(err=>{
                 const msg:IMsg={

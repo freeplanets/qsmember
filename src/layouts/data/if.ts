@@ -202,6 +202,7 @@ export interface ILoginInfo {
     id: number;
     Account: string;
     sid: string;
+    Levels:number;
 }
 
 export interface ParamLog {

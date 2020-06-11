@@ -13,7 +13,7 @@ import {ILoginInfo} from './if';
 export default class LayoutStoreModule extends VuexModule {
     private isleftDrawerOpen = true;
     public isLogin = false;
-    public personal:ILoginInfo = {id:0,Account:'',sid:''};
+    public personal:ILoginInfo = {id:0,Account:'',sid:'',Levels:0};
     //public ApiUrl:string=myApiUrl;
     public ax=AxApi;
     private sInfo={};
