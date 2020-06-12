@@ -66,8 +66,10 @@ export default class PayClassSelector extends Vue {
                 }
               }
             } 
+        } else {
+          this.$emit('setPayClass');
         }
-      }
+      } 
   }
   async getPayCls(gid:string|number) {
       let data:PayClass[] = [];

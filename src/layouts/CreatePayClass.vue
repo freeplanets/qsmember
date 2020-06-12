@@ -224,8 +224,9 @@ export default class BetClass extends Vue{
         let pr:PayRate[]=[];
         this.BPR.map(itm=>{
             const DfRate:number = itm.DfRate as number;
-            const step:number = itm.Steps as number;
+            let step:number = itm.PerStep as number;
             const base = BaNum(step);
+            if(step==0) step=1;
             //const afr:number= (DfRate*r);
             //const afStep:number = Math.round(afr/step)*step;
             //const rate:number=Math.round((afStep - DfRate)*base)/base;
@@ -236,6 +237,7 @@ export default class BetClass extends Vue{
                 SubType: itm.SubType as number,
                 Rate:rate
             }
+            //console.log(`getRate0 base: ${base}`,tmp,DfRate,step);
             pr.push(tmp);
         })
         return pr;
@@ -245,7 +247,7 @@ export default class BetClass extends Vue{
         //console.log('getRate1:',r);
         this.BPR.map(itm=>{
             const DfRate:number = itm.DfRate as number;
-            const step:number = itm.Steps as number;
+            const step:number = itm.PerStep as number;
             const pf = r + (itm.Profit ? itm.Profit : 0)/100;
             const rt= (((1 - pf)/(itm.Probability ? itm.Probability : 1))/step)*step;
             const base = BaNum(step);
@@ -264,7 +266,7 @@ export default class BetClass extends Vue{
         let pr:PayRate[]=[];
         this.BPR.map(itm=>{
             const DfRate:number = itm.DfRate as number;
-            const step:number = itm.Steps as number;
+            const step:number = itm.PerStep as number;
             const rt= (((1 - r)/(itm.Probability ? itm.Probability : 1))/step)*step;
             const base = BaNum(step);
             const rate:number = Math.round((rt-DfRate)*base)/base;
@@ -281,7 +283,9 @@ export default class BetClass extends Vue{
         let pr:PayRate[]=[];
         this.BPR.map(itm=>{
             const DfRate:number = itm.DfRate as number;
-            const step:number = itm.Steps as number;
+            let step:number = itm.PerStep as number;
+            const base = BaNum(step);
+            if(step==0) step=1;
             const p = itm.Probability ? itm.Probability : 1;
             let f = this.RSteps.find(rs=>p > rs.Range.Min && p <= rs.Range.Max);
             let r=0;
@@ -289,7 +293,6 @@ export default class BetClass extends Vue{
                 r=(f.model ? f.model : 1)/100;
             }
             const rt= (((1 - r)/(itm.Probability ? itm.Probability : 1))/step)*step;
-            const base = BaNum(step);
             const rate:number = Math.round((rt-DfRate)*base)/base;
             const tmp:PayRate={
                 BetType: itm.BetType as number,

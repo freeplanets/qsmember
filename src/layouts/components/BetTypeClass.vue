@@ -15,7 +15,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {Prop} from 'vue-property-decorator';
+import {Prop,Watch} from 'vue-property-decorator';
 import LayoutStoreModule from '../data/LayoutStoreModule';
 import { IbtCls,ILoginInfo } from '../data/if';
 /**
@@ -26,8 +26,12 @@ import { IbtCls,ILoginInfo } from '../data/if';
 @Component
 export default class BetTypeClass extends Vue {
     @Prop() readonly store?:LayoutStoreModule;
-    @Prop() readonly GameID?:number;
     @Prop() readonly pinfo?:ILoginInfo;
+    @Prop() readonly GameID?:number;
+    @Watch('GameID',{ immediate: true, deep: true })
+    onGameIDChange(){
+        this.getBtClass()
+    }
     BtClass:IbtCls[]=[];
 	async getBtClass(){
         let pinfo:ILoginInfo={
@@ -57,7 +61,7 @@ export default class BetTypeClass extends Vue {
         this.$emit('SltBT',v);
     }
     mounted(){
-       this.getBtClass();
+       //this.getBtClass();
     }
 }
 </script>

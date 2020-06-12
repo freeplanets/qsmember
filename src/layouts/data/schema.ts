@@ -77,4 +77,5 @@ export interface Game {
     */
     UseAvgOdds:number;
     GType:string;
+    hasSPNO:number;
 }

@@ -121,7 +121,8 @@ export default {
     StepsGroup:"押碼級距",
     StopTimeS:"特碼下注截止時間",
     StopTime:"下注截止時間",
-    Result:'開獎結果'
+    Result:'開獎結果',
+    hasSPNO:'有開特碼'
   },
   Title: {
     Dashboard: '大廳',
@@ -170,7 +171,8 @@ export default {
     NumTotal: '和值',
     NumAllTotal: '總數',
     Attention: '注意',
-    DelBCMsg: '是否要刪除分類'
+    DelBCMsg: '是否要刪除分類',
+    NoSettle:'彩期未結'
   },
   InputSwitch: [
     { title: '一般', isActive: 'false' },

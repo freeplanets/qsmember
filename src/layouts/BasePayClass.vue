@@ -22,7 +22,7 @@
         <div class="q-pa-md" v-if="showDataTable">
             <table>
               <tr class="testheader">
-                <td class="test">{{$t('Table.ItemName')}}</td>
+                <td class="test ext">{{$t('Table.ItemName')}}</td>
                 <td class="test">{{$t('Table.SubName')}}</td>
                 <td class="test">{{$t('Table.Profit')}}(%)</td>
                 <td class="test">{{$t('Table.RateDefault')}}</td>
@@ -99,7 +99,6 @@
             <q-card-section>
                 <q-circular-progress
                 indeterminate
-                :value="value"
                 size="50px"
                 color="light-blue"
                 class="q-ma-md"
@@ -113,12 +112,12 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Watch} from 'vue-property-decorator';
-import axios, { AxiosResponse } from 'axios';
+//import axios, { AxiosResponse } from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import {IGames} from './data/schema';
 //import BTG from './data/defaultData';
-import {SelectOptions,BasePayRateItm,IbtCls,CommonParams,IMsg,StepG} from './data/if';
+import {SelectOptions,BasePayRateItm,IbtCls,CommonParams,IMsg,StepG, ILoginInfo} from './data/if';
 import BTG from './data/defaultData';
 import {PayRateData } from './data/PayRateList';
 import {BasePayRate} from './class/BasePayRate';
@@ -155,7 +154,6 @@ export default class BetClass extends Vue{
     curItem:BasePayRate<BasePayRateItm>|undefined;
     BtClass:IbtCls[] = [];
     BFCS:StepG[]=[];
-    value:number=50;
     spArr:number[] | undefined;
     @Watch('BFCS',{immediate:true,deep:true})
     onBFCSChange(){
@@ -178,7 +176,10 @@ export default class BetClass extends Vue{
 		if(this.store.personal.id) {
 			return this.store.personal.id + '';
 		} 
-		return '';
+        return '';
+    }
+    get PInfo():ILoginInfo{
+        return this.store.personal;
     }
     setCurGames(v:SelectOptions){
         this.models = v;
@@ -189,7 +190,6 @@ export default class BetClass extends Vue{
         } else {
             this.spArr = undefined;
         }
-        console.log('doGames',v);
         this.showProgress=true;
         this.showDataTable=false;
         this.chkdata(v);
@@ -239,6 +239,7 @@ export default class BetClass extends Vue{
         this.showProgress=false;
     }
     chainEdit(bt:number){
+        console.log('chainEdit',bt);
         const e0 = this.BasePayR.find(elm => elm.BetType == bt && elm.SubType == 0);
         const e1 = this.BasePayR.find(elm => elm.BetType == bt && elm.SubType == 1);
         if( e0 &&  e1){
@@ -249,7 +250,7 @@ export default class BetClass extends Vue{
         }
     }
     createBPRItem(p:BItem,BetType:number,SubType:number):BasePayRateItm{
-        let bpr:BasePayRateItm ={
+        let bpr:BasePayRateItm = Object.assign({},{
             Title:p.Title,
             SubTitle: p.SubTitle ? p.SubTitle : '',
             BetType: BetType,
@@ -270,7 +271,7 @@ export default class BetClass extends Vue{
             MaxHand:0,
             BetForChange:0,
             StepsGroup:''
-        }
+        });
         return bpr;
     }  
     async getBasePayRate(gid:number):Promise<BasePayRateItm[]>{
@@ -391,13 +392,41 @@ export default class BetClass extends Vue{
             this.sendData(dtas);
         }
     }
-    sendData(dtas:BasePayRateItm[]){
+    async sendData(dtas:BasePayRateItm[]){
         if(!this.models) return;
+        const param:CommonParams={
+            UserID:this.PInfo.id,
+            sid:this.PInfo.sid,
+			GameID: this.models.value,
+            ModifyID: this.PInfo.id,
+            data: JSON.stringify(dtas)            
+        }
+        /*
  		const data = {
 			GameID: this.models.value,
             ModifyID: this.UserID,
             data: JSON.stringify(dtas)
-		}
+        }
+        */
+        const msg:IMsg=await this.store.ax.getApi('batch/saveBasePayRate',param,'post');
+        if(msg.ErrNo===0){
+            this.$q.dialog({
+                title: this.$t('Label.Save') as string,
+                message: 'OK!!'
+            });
+            dtas.map(itm=>{
+                const tmp = this.BasePayR.find(elm => elm.BetType == itm.BetType && elm.SubType == itm.SubType)
+                if(tmp){
+                    tmp.DataChanged = false;
+                }
+            })            
+        } else {
+            this.$q.dialog({
+                title: this.$t('Label.Save') as string,
+                message: msg.ErrCon
+            });            
+        }
+        /*
         const url:string=this.store.ax.Host+'/api/batch/saveBasePayRate';
 		axios.post(url,data).then((res:AxiosResponse)=>{
             //console.log(res);
@@ -415,7 +444,8 @@ export default class BetClass extends Vue{
             })
 		}).catch(err=>{
 			console.log(err);
-		})       
+        })
+        */       
     }
     showStepGroup(itm:BasePayRate<BasePayRateItm>){
         this.BFCTitle=itm.Title + (itm.SubTitle ? ' / ' + itm.SubTitle : '');
@@ -440,7 +470,7 @@ export default class BetClass extends Vue{
     }
     */
     chkItem(itm){
-        console.log('chkItem',itm.BetType);
+        //console.log('chkItem',itm.BetType,this.spArr);
         if(this.spArr){
             const f = this.spArr.find(bt=>bt===itm.BetType)
             if(f){
@@ -468,7 +498,10 @@ table {
 .testheader td {
     background-color: cadetblue;
     color:white;
-    width: 100px;
+    width: 90px;
+}
+.testheader .ext {
+    width: 120px;
 }
 .test {
     border: 1px gray solid;

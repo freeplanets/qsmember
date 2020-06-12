@@ -56,12 +56,10 @@ export class BasePayRate<T>{
     }
     get Profit():any {
         //console.log('get Profit',this.data.Profit);
-        if(this.data.Profit){
+        if(!this.data.Profit){
             this.calProfit();
-            return Math.round(this.data.Profit*10000)/10000;
-        } else {
-            return this.data.Profit;
         }
+        return Math.round(this.data.Profit*10000)/10000;        
     }
     /*
     set Profit(v:any){
@@ -77,7 +75,7 @@ export class BasePayRate<T>{
     }
     set Rate(v:number | undefined) {
         this.data.DfRate = this.fetchValueToSteps(v);
-        if(this.data.DfRate > this.data.TopRate){
+        if(this.data.TopRate > 0 && this.data.DfRate > this.data.TopRate){
             this.data.DfRate = this.data.TopRate;
         }
         //this.calProfit();
@@ -208,7 +206,10 @@ export class BasePayRate<T>{
             if(itm.Step){
                 itm.Start = typeof(itm.Start)==='string' ?  parseInt(itm.Start,10) : itm.Start;
                 itm.Step = typeof(itm.Step)==='string' ?  parseInt(itm.Step,10) : itm.Step;
-                itm.Step = this.fetchValueToSteps(itm.Step);
+                const ans =  this.fetchValueToSteps(itm.Step);
+                if(ans){
+                    itm.Step = ans;
+                }
                 tmp.push(itm);
             } 
         })
@@ -297,7 +298,7 @@ export class BasePayRate<T>{
                 return parseFloat(a);
             }
         }
-        return 0;
+        return v;
     }
     private calTopRate(){
         if(this.Profit && this.Probability){

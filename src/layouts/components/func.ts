@@ -149,6 +149,7 @@ const padingZero=function(num:string|number,dtl:number):string{
 	return num;
 };
 export function BaNum(n: number): number {
+    if(n<=0) return 1;
     const s: string = n.toString();
     const p: number = s.length - (s.indexOf(".") + 1);
     return Math.pow(10, p);

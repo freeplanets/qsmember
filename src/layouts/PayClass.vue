@@ -10,13 +10,13 @@
                     <div class="pbtn2"><q-btn color="red" icon-right="delete_forever" :label="$t('Label.DeletePayClass')" @click="DelPayClass();" /></div>
     		    </div>
             </div>
-            <div v-if="curGameID" ><BTC :store="store" :GameID="curGameID" :pinfo='store.personal' @SltBT="SltBetTypes"></BTC></div>
             <div class="pbtn3"><q-btn color="green" icon-right="save" label="Save" @click="SaveData();" /></div>
 		</div>
         <div class="row">
-            <RCO @updateRateDefault="updateRateDefault"></RCO>
+            <div><RCO @updateRateDefault="updateRateDefault"></RCO></div>
+            <div v-if="curGameID" ><BTC :store="store" :GameID="curGameID" :pinfo='store.personal' @SltBT="SltBetTypes"></BTC></div>
         </div> 
-        <div class="q-pa-md" v-if="curGameID">
+        <div class="q-pa-md" v-if="showDataTable">
             <div class="row testheader">
                 <div class="col-1 test">{{$t('Table.ItemName')}}</div>
                 <div class="col-1 test">{{$t('Table.SubName')}}</div>
@@ -37,6 +37,18 @@
                 <div class="col-1 test">{{ itm.MaxHand }}</div>                
             </div>
         </div>
+    <q-dialog v-model="showProgress" persistent>
+        <q-card>
+            <q-card-section>
+                <q-circular-progress
+                indeterminate
+                size="50px"
+                color="light-blue"
+                class="q-ma-md"
+                />
+            </q-card-section>
+        </q-card>
+    </q-dialog>        
 	</div>
 </template>
 <script lang="ts">
@@ -77,6 +89,8 @@ export default class BetClass extends Vue{
     private curPayClass:PayClass={id:0,PayClassName:''};
     public PayR:PayRate[]=[];
     private PNChange:boolean=false;
+    showProgress:boolean=false;
+    showDataTable:boolean=false;
     spArr:number[]|undefined;
 	options:SelectOptions[] = [
 		{value: 0,label:'default'}
@@ -195,7 +209,8 @@ export default class BetClass extends Vue{
             }               
             //this.updateBPR(1);
         }
-
+        this.showProgress=false;
+        this.showDataTable=true;
     }
     chainEdit(bt:number){
         const e0 = this.PayR.find(elm => elm.BetType == bt && elm.SubType == 0);
@@ -267,11 +282,19 @@ export default class BetClass extends Vue{
 			console.error(err);
 		})       
     }
-	async setPayClass(pc:PayClass){
-        this.curPayClass=pc;
-        this.PayClassName=pc.PayClassName;
-        this.PNChange = false;
-        await this.chkdata(pc.id);
+	async setPayClass(pc?:PayClass){
+        if(pc){
+            this.curPayClass=pc;
+            this.PayClassName=pc.PayClassName;
+            this.PNChange = false;
+            this.showDataTable=false;
+            this.showProgress=true;
+            await this.chkdata(pc.id);
+        } else {
+            this.PayClassName='';
+            this.showDataTable=false;
+            this.showProgress=false;
+        }
         //console.log('GreatePayClass setPayClass:',pc);
     }
     async EditPayClassName(){

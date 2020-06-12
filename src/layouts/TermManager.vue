@@ -96,8 +96,8 @@
                 <div class="row q-pa-sm">
                     <div class="col-3"><q-chip square>{{ $t('Label.BetEndTime')}}</q-chip></div>
                     <div><q-input outlined dense v-model="term.StopTime" mask="fulltime" /></div>
-                    <div><q-chip square>{{ $t('Label.SpNo')}}</q-chip></div>
-                    <div><q-input outlined dense v-model="term.StopTimeS" mask="fulltime" /></div>
+                    <div v-if="hasSPNO"><q-chip square>{{ $t('Label.SpNo')}}</q-chip></div>
+                    <div v-if="hasSPNO"><q-input outlined dense v-model="term.StopTimeS" mask="fulltime" /></div>
                 </div>
                 <div class="row q-pa-sm">
                     <div class="col-3"><q-chip square>{{ $t('Label.TermID')}}</q-chip></div>
@@ -169,6 +169,7 @@ import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 import {SelectOptions,CommonParams,IMsg,ParamLog,ILoginInfo} from './data/if';
+import {Game} from './data/schema';
 import {ITerms} from './data/schema';
 import JDate from './components/Date/JDate'
 import {dateAddZero} from './components/func';
@@ -208,6 +209,9 @@ export default class TermManager extends Vue {
     curResult:string|undefined;
     showInProcess:boolean=false;
     InProcess:boolean=false;
+    curGame:Game|undefined;
+    hasSPNO:boolean=false;
+    NoSettleDate:string='';
     get ax(){
         return this.store.ax;
     }
@@ -230,6 +234,13 @@ export default class TermManager extends Vue {
         this.getTerms();
     }      
     ShowAdd(){
+        if(this.NoSettleDate){
+            this.$q.dialog({
+                title: this.$t('Dialog.NoSettle') as string,
+                message: this.NoSettleDate
+            })            
+            return;
+        }
         if(this.models){
             this.isAddTerm = !this.isAddTerm
             this.getLastTerm();
@@ -322,6 +333,15 @@ export default class TermManager extends Vue {
         const ans=await this.ax.getTerms(this.store.personal.id,this.store.personal.sid,GameID,this.sdate.split('/').join('-'))
         if(ans.ErrNo===0){
             this.data=ans.data as ITerms[];
+            if(ans.Game) {
+                this.curGame=ans.Game as Game;
+                this.hasSPNO = !!this.curGame.hasSPNO;
+            }
+            if(ans.PDate){
+                this.NoSettleDate=ans.PDate;
+            } else {
+                this.NoSettleDate = '';
+            }
             this.PLog=undefined;
             /*
             this.data.map(itm=>{

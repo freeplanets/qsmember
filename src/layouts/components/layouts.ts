@@ -7,6 +7,19 @@ export interface lineBlock {
     [key:number]:numBlock[];
 }
 */
+interface FastSltSubItem {
+    num:number;
+    isActive:boolean;
+}
+interface FastSltSub {
+    title?:string;
+    subitem:FastSltSubItem[][];
+    func: string;
+}
+export interface FastSlts {
+    title?:string;
+    subcont?:FastSltSub[];
+}
 export interface contBlock {
     title?:string;
     subtitle?:string;
@@ -18,7 +31,11 @@ export interface contBlock {
     end?:number;
     twOdds?:number[];
     colorExt?:number;
+    dgt?:number;
     item:numBlock[][] | Function;
+    fastSltItm?:string[];
+    FastSlt?:FastSlts[];
+    noSameNum?:boolean;
 }
 export interface layoutBlock {
     name:string;
@@ -467,6 +484,382 @@ const MarkSixLayout:Layout = [
         ]
     }           
 ];
+const D3:Layout =  [
+    {
+        name: "兩面",
+        cont: [
+            {
+                title : "Game.3D.Item.7.title",
+                item: [
+                    [{BT:9,Num:0},{BT:8,Num:0},{BT:36,Num:0}],
+                    [{BT:9,Num:1},{BT:8,Num:1},{BT:36,Num:1}]
+                ]
+            },
+            {
+                title : "Game.3D.Item.4.title",
+                item: [
+                    [{BT:6,Num:0},{BT:5,Num:0},{BT:35,Num:0}],
+                    [{BT:6,Num:1},{BT:5,Num:1},{BT:35,Num:1}]
+                ]
+            },
+            {
+                title : "Game.3D.Item.1.title",
+                item: [
+                    [{BT:3,Num:0},{BT:2,Num:0},{BT:34,Num:0}],
+                    [{BT:3,Num:1},{BT:2,Num:1},{BT:34,Num:1}]
+                ]
+            },
+            {
+                title : "Game.3D.Item.46.title",
+                item: [
+                    [{BT:49,Num:0},{BT:49,Num:1}]
+                ]
+            },
+            {
+                title : "Game.3D.Item.45.title",
+                item: [
+                    [{BT:48,Num:0},{BT:48,Num:1}]
+                ]
+            },
+            {
+                title : "Game.3D.Item.44.title",
+                item: [
+                    [{BT:47,Num:0},{BT:47,Num:1}]
+                ]
+            },
+            {
+                title : "Game.3D.Item.52.title",
+                item: [
+                    [{BT:55,Num:0},{BT:55,Num:1},{BT:58,Num:1},{BT:58,Num:1}]
+                ]
+            },
+            {
+                title : "Game.3D.Item.51.title",
+                item: [
+                    [{BT:54,Num:0},{BT:54,Num:1},{BT:57,Num:1},{BT:57,Num:1}]
+                ]
+            },
+            {
+                title : "Game.3D.Item.50.title",
+                item: [
+                    [{BT:53,Num:0},{BT:53,Num:1},{BT:56,Num:1},{BT:56,Num:1}]
+                ]
+            },
+            {
+                title : "Game.3D.Item.11.title",
+                item: [
+                    [{BT:12,Num:0},{BT:12,Num:1},{BT:13,Num:0},{BT:13,Num:1}]
+                ]
+            }
+        ]
+    },
+    {
+        name:"一字",       
+        cont:[
+            {
+                aBT:[10,7,4,1],
+                fastSltItm:["Odd","Even","Big","Small","Clear"],
+                sltedItem:0,
+                start: 0,
+                end:9,                
+                item:getNums
+            }
+        ]
+    },
+    {
+        name:"二字組合",
+        cont:[
+            {
+                dgt: 2, //位數
+                item:[
+                    [{BT:17,Num:0},{BT:17,Num:1},{BT:17,Num:2},{BT:17,Num:3},{BT:17,Num:4}],
+                    [{BT:17,Num:5},{BT:17,Num:6},{BT:17,Num:7},{BT:17,Num:8},{BT:17,Num:9}],
+                    [{BT:17,Num:11},{BT:17,Num:12},{BT:17,Num:13},{BT:17,Num:14},{BT:17,Num:15}],
+                    [{BT:17,Num:16},{BT:17,Num:17},{BT:17,Num:18},{BT:17,Num:19},{BT:17,Num:22}],
+                    [{BT:17,Num:23},{BT:17,Num:24},{BT:17,Num:25},{BT:17,Num:26},{BT:17,Num:27}],
+                    [{BT:17,Num:28},{BT:17,Num:29},{BT:17,Num:33},{BT:17,Num:34},{BT:17,Num:35}],
+                    [{BT:17,Num:36},{BT:17,Num:37},{BT:17,Num:38},{BT:17,Num:39},{BT:17,Num:44}],
+                    [{BT:17,Num:45},{BT:17,Num:46},{BT:17,Num:47},{BT:17,Num:48},{BT:17,Num:49}],
+                    [{BT:17,Num:55},{BT:17,Num:56},{BT:17,Num:57},{BT:17,Num:58},{BT:17,Num:59}],
+                    [{BT:17,Num:66},{BT:17,Num:67},{BT:17,Num:68},{BT:17,Num:69},{BT:17,Num:77}],
+                    [{BT:17,Num:78},{BT:17,Num:79},{BT:17,Num:88},{BT:17,Num:89},{BT:17,Num:99}]
+                ]
+            }
+        ]
+    },
+    {
+        name:"二定位",       
+        cont:[
+            {
+                aBT:[14,15,16],
+                sltedItem:0,
+                start: 0,
+                end:99,
+                dgt: 2, //位數                
+                item:getNums
+            }
+        ]
+    },
+    {
+        name: "二字合數",
+        cont: [
+            {
+                aBT:[44,45,46],
+                sltedItem:0,
+                start: 4,
+                end:14,
+                item:getNums
+            }
+        ]
+    },
+    {
+        name: "二字合尾",
+        cont: [
+            {
+                aBT:[50,51,52],
+                sltedItem:0,
+                start: 0,
+                end:9,
+                dgt: 1, //位數
+                item:getNums
+            }
+        ]
+    },
+    {
+        name: "三定位",
+        cont: [
+            {
+                BT:42,
+                FastSlt: [
+                    {
+                        title:'FastSlt.FastInput'
+                    },
+                    {
+                        title:'FastSlt.Box',
+                        subcont:[
+                            {
+                                title: 'FastSlt.Hundreds',
+                                subitem:[
+                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
+                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                ],
+                                func: 'hundreds'
+                            },
+                            {
+                                title: 'FastSlt.Tens',
+                                subitem:[
+                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
+                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                ],
+                                func:'tens'
+                            },
+                            {
+                                title: 'FastSlt.Units',
+                                subitem:[
+                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
+                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                ],
+                                func:'units'
+                            }                                                                        
+                        ]
+                    },
+                    {
+                        title:'FastSlt.Set3',
+                        subcont:[
+                            {
+                                subitem:[
+                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
+                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                ],
+                                func: 'set3'
+                            }                            
+                        ]
+                    },
+                    {
+                        title:'FastSlt.Set6',
+                        subcont:[
+                            {
+                                subitem:[
+                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
+                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                ],
+                                func: 'set6'
+                            }
+                        ]
+                    },
+                    {
+                        title:'FastSlt.Pair',
+                        subcont:[
+                            {
+                                subitem:[
+                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
+                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                ],
+                                func: 'pair'
+                            }
+                        ]
+                    }
+                ],
+                sltedItem:0,
+                dgt: 3, //位數
+                //NumDuplicate:true,     //數字可以重複
+                noSameNum: false,    //數字不可重複
+                item:[]
+            }
+        ]
+    },
+    {
+        name: "三字",
+        cont: [
+            {
+                BT:43,
+                FastSlt: [
+                    {
+                        title:'FastSlt.FastInput'                       
+                    },
+                    {
+                        title:'FastSlt.Box',
+                        subcont:[
+                            {
+                                title: 'FastSlt.Hundreds',
+                                subitem:[
+                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
+                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                ],
+                                func: 'hundreds'
+                            },
+                            {
+                                title: 'FastSlt.Tens',
+                                subitem:[
+                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
+                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                ],
+                                func:'tens'
+                            },
+                            {
+                                title: 'FastSlt.Units',
+                                subitem:[
+                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
+                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                ],
+                                func:'units'
+                            }                                                                        
+                        ]
+                    },
+                    {
+                        title:'FastSlt.Set3',
+                        subcont:[
+                            {
+                                subitem:[
+                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
+                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                ],
+                                func: 'set3'
+                            }                            
+                        ]
+                    },
+                    {
+                        title:'FastSlt.Set6',
+                        subcont:[
+                            {
+                                subitem:[
+                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
+                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                ],
+                                func: 'set6'
+                            }
+                        ]
+                    },
+                    {
+                        title:'FastSlt.Pair',
+                        subcont:[
+                            {
+                                subitem:[
+                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
+                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                ],
+                                func: 'pair'
+                            }
+                        ]
+                    }
+                ],               
+                dgt: 3, //位數
+                sltedItem:0,
+                //NumDuplicate:false,         //數字不可重複
+                noSameNum: true,    //數字不可重複
+                item:[]
+            }
+        ]
+    },
+    {
+        name: "組選 3",
+        cont: [
+            {
+                aBT:[19,20,21,22],
+                sltedItem:0,
+                start: 0,
+                end:9,
+                item:getNums
+            }
+        ]
+    },
+    {
+        name: "組選 6",
+        cont: [
+            {
+                aBT:[23,24,25,26,27],
+                sltedItem:0,
+                start: 0,
+                end:9,
+                item:getNums
+            }
+        ]
+    },
+    {
+        name: "過關",
+        cont: [
+            {
+                aBT:[37,38,39],
+                sltedItem:0,
+                start: 0,
+                end:7,
+                item:getNums
+            }
+        ]
+    },
+    {
+        name: "雜項",
+        cont: [
+            {
+                item: [
+                    [{BT:59,Num:0},{BT:60,Num:0},{BT:61,Num:0}],
+                    [{BT:63,Num:0},{BT:65,Num:0},{BT:18,Num:0}]
+                ]
+            },
+            {
+                title : "Game.3D.Item.11.title",
+                item: [
+                    [{BT:12,Num:0},{BT:12,Num:1},{BT:13,Num:0},{BT:13,Num:1}]
+                ]
+            }
+        ]
+    },
+    {
+        name: "其他",
+        cont: [
+            {
+                aBT:[66,62,64,40,41],
+                sltedItem:0,
+                start: 0,
+                end:9,
+                dgt:1,
+                item:getNums
+            }
+        ]
+    }
+
+]
 const Layouts:ILayouts= {}
 Layouts.MarkSix = MarkSixLayout;
+Layouts['3D'] = D3;
 export default Layouts;

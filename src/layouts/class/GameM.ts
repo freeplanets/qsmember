@@ -94,4 +94,11 @@ export class GameM extends BClass<Game> {
         this.data.GType=v;
         this.isDataChanged = true;
     }
+    get hasSPNO():boolean{
+        return !!this.data.hasSPNO;
+    }
+    set hasSPNO(v:boolean){
+        this.data.hasSPNO= v ? 1 : 0;
+        this.isDataChanged = true;
+    }
 }
