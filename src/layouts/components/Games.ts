@@ -72,7 +72,10 @@ export class CGame {
                     46, 47, 48, 49, 50, 51, 52, 53, 54, 55,
                     56, 57, 58, 59, 60, 61, 62, 63, 64, 65,
                     66, 67, 68, 69, 70]
-            }]
+            }],
+            '3D':[
+
+            ]
         }
     constructor(){
         this.member={}
@@ -81,6 +84,7 @@ export class CGame {
         return this.OID;
     }
     inidata(dta:IData){
+        this.member={};
         Object.keys(dta).map(bt=>{
             const BTItm:INum=dta[bt];
             this.member[bt]={
@@ -142,6 +146,10 @@ export class CGame {
             //console.log(this.member[sBT]);
             return {};
         }
+        if(!this.member[sBT].member[sNum]){
+            console.log('no perstep:',sBT,sNum,this.member[sBT]);
+            return {};
+        }    
         const tmp:IOdds=this.member[sBT].member[sNum];
         //const ba = BaNum(tmp.PerStep ? tmp.PerStep : 1);
         const ba = BaNum(tmp.PerStep);

@@ -102,6 +102,17 @@
                     v-if="!BItm.aBT"
                 > 
                     <div>{{ $t(BItm.title)+(BItm.subtitle ? $t(BItm.subtitle) : '') }}</div>
+                        <div class="row" v-if="BItm.FastSlt">
+                            <div>{{$t(BItm.FastSlt.title)}}</div>
+                            <div class="row" v-if="BItm.FastSlt.subcont">
+                                <div class="row" v-for="(itm,idx) in BItm.FastSlt.subcont" :key="'fast'+idx">
+                                    <div>{{$t(itm.title)}}</div>
+                                    <div v-for="(slt,sltidx) in  itm.subitem" :key="'fastsub'+idx+'-'+sltidx">
+                                        <q-btn outline size='sm' round color="primary" :label="slt.num" @click="BItm.item=itm.func(itm.key,slt.num,BItm.BT)"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <div class='row justify-left'
                         v-for="(LItm,Lidx) in BItm.item"
                         :key="'bitm'+Lidx"
@@ -181,7 +192,7 @@ export default class OddsManager extends Vue {
         return this.store.personal;
     }
     async setCurGames(v:SelectOptions){
-        //console.log('setGames:',v);
+        console.log('setGames:',v);
         if(v.value===this.curGameID) {
             return;
         }

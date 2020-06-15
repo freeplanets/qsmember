@@ -13,8 +13,9 @@ interface FastSltSubItem {
 }
 interface FastSltSub {
     title?:string;
-    subitem:FastSltSubItem[][];
-    func: string;
+    subitem:FastSltSubItem[];
+    key: string;
+    func?:Function;
 }
 export interface FastSlts {
     title?:string;
@@ -34,7 +35,7 @@ export interface contBlock {
     dgt?:number;
     item:numBlock[][] | Function;
     fastSltItm?:string[];
-    FastSlt?:FastSlts[];
+    FastSlt?:FastSlts;
     noSameNum?:boolean;
 }
 export interface layoutBlock {
@@ -73,6 +74,30 @@ const getNums = (BT:number,lastNums:number|undefined=undefined,
     }
     if(tmp.length>0) nums.push(tmp);
     return nums;
+}
+
+const getNum3D=(pos:string,num:number,bt:number)=>{
+    const str:string[]=['hundreds','tens','units'];
+    const idx=str.indexOf(pos);
+    const leftPos:number[]=[];
+    const mask='{pos0}{pos1}{pos2}';
+    for(let i=0;i<str.length;i++){
+      if(i==idx) continue;
+      leftPos.push(i);
+    }
+    //console.log(leftPos,idx);
+    const arr:numBlock[][]=[];
+    for(let n1=0;n1<10;n1++){
+      const ln:numBlock[]=[]
+      for(let n2=0;n2<10;n2++){
+        let sNum=mask.replace(`{pos${idx}}`,num+'').replace(`{pos${leftPos[0]}}`,n1+'').replace(`{pos${leftPos[1]}}`,n2+'');
+        //console.log(sNum,num,n1,n2);
+        let tmp:numBlock={BT:bt,Num:parseInt(sNum,10)}
+        ln.push(tmp);
+      }
+      arr.push(ln);
+    }
+    return arr;
 }
 
 const MarkSixLayout:Layout = [
@@ -486,7 +511,7 @@ const MarkSixLayout:Layout = [
 ];
 const D3:Layout =  [
     {
-        name: "兩面",
+        name: "Game.3D.Menu.Group.0.title",
         cont: [
             {
                 title : "Game.3D.Item.7.title",
@@ -554,7 +579,7 @@ const D3:Layout =  [
         ]
     },
     {
-        name:"一字",       
+        name:"Game.3D.Menu.Group.1.title",       
         cont:[
             {
                 aBT:[10,7,4,1],
@@ -567,28 +592,23 @@ const D3:Layout =  [
         ]
     },
     {
-        name:"二字組合",
+        name:"Game.3D.Menu.Group.2.title",
         cont:[
             {
                 dgt: 2, //位數
                 item:[
-                    [{BT:17,Num:0},{BT:17,Num:1},{BT:17,Num:2},{BT:17,Num:3},{BT:17,Num:4}],
-                    [{BT:17,Num:5},{BT:17,Num:6},{BT:17,Num:7},{BT:17,Num:8},{BT:17,Num:9}],
-                    [{BT:17,Num:11},{BT:17,Num:12},{BT:17,Num:13},{BT:17,Num:14},{BT:17,Num:15}],
-                    [{BT:17,Num:16},{BT:17,Num:17},{BT:17,Num:18},{BT:17,Num:19},{BT:17,Num:22}],
-                    [{BT:17,Num:23},{BT:17,Num:24},{BT:17,Num:25},{BT:17,Num:26},{BT:17,Num:27}],
-                    [{BT:17,Num:28},{BT:17,Num:29},{BT:17,Num:33},{BT:17,Num:34},{BT:17,Num:35}],
-                    [{BT:17,Num:36},{BT:17,Num:37},{BT:17,Num:38},{BT:17,Num:39},{BT:17,Num:44}],
-                    [{BT:17,Num:45},{BT:17,Num:46},{BT:17,Num:47},{BT:17,Num:48},{BT:17,Num:49}],
-                    [{BT:17,Num:55},{BT:17,Num:56},{BT:17,Num:57},{BT:17,Num:58},{BT:17,Num:59}],
-                    [{BT:17,Num:66},{BT:17,Num:67},{BT:17,Num:68},{BT:17,Num:69},{BT:17,Num:77}],
+                    [{BT:17,Num:0},{BT:17,Num:1},{BT:17,Num:2},{BT:17,Num:3},{BT:17,Num:4},{BT:17,Num:5},{BT:17,Num:6},{BT:17,Num:7},{BT:17,Num:8},{BT:17,Num:9}],
+                    [{BT:17,Num:11},{BT:17,Num:12},{BT:17,Num:13},{BT:17,Num:14},{BT:17,Num:15},{BT:17,Num:16},{BT:17,Num:17},{BT:17,Num:18},{BT:17,Num:19},{BT:17,Num:22}],
+                    [{BT:17,Num:23},{BT:17,Num:24},{BT:17,Num:25},{BT:17,Num:26},{BT:17,Num:27},{BT:17,Num:28},{BT:17,Num:29},{BT:17,Num:33},{BT:17,Num:34},{BT:17,Num:35}],
+                    [{BT:17,Num:36},{BT:17,Num:37},{BT:17,Num:38},{BT:17,Num:39},{BT:17,Num:44},{BT:17,Num:45},{BT:17,Num:46},{BT:17,Num:47},{BT:17,Num:48},{BT:17,Num:49}],
+                    [{BT:17,Num:55},{BT:17,Num:56},{BT:17,Num:57},{BT:17,Num:58},{BT:17,Num:59},{BT:17,Num:66},{BT:17,Num:67},{BT:17,Num:68},{BT:17,Num:69},{BT:17,Num:77}],
                     [{BT:17,Num:78},{BT:17,Num:79},{BT:17,Num:88},{BT:17,Num:89},{BT:17,Num:99}]
                 ]
             }
         ]
     },
     {
-        name:"二定位",       
+        name:"Game.3D.Menu.Group.3.title",       
         cont:[
             {
                 aBT:[14,15,16],
@@ -601,7 +621,7 @@ const D3:Layout =  [
         ]
     },
     {
-        name: "二字合數",
+        name: "Game.3D.Menu.Group.4.title",
         cont: [
             {
                 aBT:[44,45,46],
@@ -613,7 +633,7 @@ const D3:Layout =  [
         ]
     },
     {
-        name: "二字合尾",
+        name: "Game.3D.Menu.Group.5.title",
         cont: [
             {
                 aBT:[50,51,52],
@@ -626,163 +646,84 @@ const D3:Layout =  [
         ]
     },
     {
-        name: "三定位",
+        name: "Game.3D.Menu.Group.6.title",
         cont: [
             {
                 BT:42,
-                FastSlt: [
-                    {
-                        title:'FastSlt.FastInput'
-                    },
-                    {
+                FastSlt: {
                         title:'FastSlt.Box',
                         subcont:[
                             {
                                 title: 'FastSlt.Hundreds',
                                 subitem:[
-                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
-                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                    {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
+                                    {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
                                 ],
-                                func: 'hundreds'
+                                key: 'hundreds',
+                                func:getNum3D
                             },
                             {
                                 title: 'FastSlt.Tens',
                                 subitem:[
-                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
-                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                    {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
+                                    {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
                                 ],
-                                func:'tens'
+                                key:'tens',
+                                func:getNum3D
                             },
                             {
                                 title: 'FastSlt.Units',
                                 subitem:[
-                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
-                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                    {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
+                                    {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
                                 ],
-                                func:'units'
+                                key:'units',
+                                func:getNum3D
                             }                                                                        
                         ]
                     },
-                    {
-                        title:'FastSlt.Set3',
-                        subcont:[
-                            {
-                                subitem:[
-                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
-                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
-                                ],
-                                func: 'set3'
-                            }                            
-                        ]
-                    },
-                    {
-                        title:'FastSlt.Set6',
-                        subcont:[
-                            {
-                                subitem:[
-                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
-                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
-                                ],
-                                func: 'set6'
-                            }
-                        ]
-                    },
-                    {
-                        title:'FastSlt.Pair',
-                        subcont:[
-                            {
-                                subitem:[
-                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
-                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
-                                ],
-                                func: 'pair'
-                            }
-                        ]
-                    }
-                ],
                 sltedItem:0,
                 dgt: 3, //位數
                 //NumDuplicate:true,     //數字可以重複
                 noSameNum: false,    //數字不可重複
-                item:[]
+                item:getNum3D('nuits',0,34)
             }
         ]
     },
     {
-        name: "三字",
+        name: "Game.3D.Menu.Group.7.title",
         cont: [
             {
                 BT:43,
-                FastSlt: [
-                    {
-                        title:'FastSlt.FastInput'                       
-                    },
-                    {
+                FastSlt:{
                         title:'FastSlt.Box',
                         subcont:[
                             {
                                 title: 'FastSlt.Hundreds',
                                 subitem:[
-                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
-                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                    {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
+                                    {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
                                 ],
-                                func: 'hundreds'
+                                key: 'hundreds'
                             },
                             {
                                 title: 'FastSlt.Tens',
                                 subitem:[
-                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
-                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                    {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
+                                    {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
                                 ],
-                                func:'tens'
+                                key:'tens'
                             },
                             {
                                 title: 'FastSlt.Units',
                                 subitem:[
-                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
-                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
+                                    {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
+                                    {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
                                 ],
-                                func:'units'
+                                key:'units'
                             }                                                                        
                         ]
-                    },
-                    {
-                        title:'FastSlt.Set3',
-                        subcont:[
-                            {
-                                subitem:[
-                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
-                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
-                                ],
-                                func: 'set3'
-                            }                            
-                        ]
-                    },
-                    {
-                        title:'FastSlt.Set6',
-                        subcont:[
-                            {
-                                subitem:[
-                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
-                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
-                                ],
-                                func: 'set6'
-                            }
-                        ]
-                    },
-                    {
-                        title:'FastSlt.Pair',
-                        subcont:[
-                            {
-                                subitem:[
-                                    [{num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false}],
-                                    [{num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}]
-                                ],
-                                func: 'pair'
-                            }
-                        ]
-                    }
-                ],               
+                    },               
                 dgt: 3, //位數
                 sltedItem:0,
                 //NumDuplicate:false,         //數字不可重複
@@ -792,7 +733,7 @@ const D3:Layout =  [
         ]
     },
     {
-        name: "組選 3",
+        name: "Game.3D.Menu.Group.8.title",
         cont: [
             {
                 aBT:[19,20,21,22],
@@ -804,7 +745,7 @@ const D3:Layout =  [
         ]
     },
     {
-        name: "組選 6",
+        name: "Game.3D.Menu.Group.9.title",
         cont: [
             {
                 aBT:[23,24,25,26,27],
@@ -816,7 +757,7 @@ const D3:Layout =  [
         ]
     },
     {
-        name: "過關",
+        name: "Game.3D.Menu.Group.10.title",
         cont: [
             {
                 aBT:[37,38,39],
@@ -828,7 +769,7 @@ const D3:Layout =  [
         ]
     },
     {
-        name: "雜項",
+        name: "Game.3D.Menu.Group.11.title",
         cont: [
             {
                 item: [
@@ -845,7 +786,7 @@ const D3:Layout =  [
         ]
     },
     {
-        name: "其他",
+        name: "Game.3D.Menu.Group.12.title",
         cont: [
             {
                 aBT:[66,62,64,40,41],
