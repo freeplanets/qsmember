@@ -92,6 +92,7 @@ export class CGame {
                 Payouts:0,
                 member:{}
             }
+            const tmp:object[]=[];
             Object.keys(BTItm).map(num=>{
                 //this.member.
                 /*
@@ -101,6 +102,11 @@ export class CGame {
                     BTItm[num].PerStep=f.PerStep;
                 }
                 */
+               /*
+                if(bt==='43'){
+                    tmp.push({BT:parseInt(bt,10),Num:parseInt(num,10)})
+                }
+                */
                 this.member[bt].member[num]=BTItm[num];
                 this.member[bt].Total += BTItm[num].tolS;
                 this.member[bt].Payouts += BTItm[num].tolP;
@@ -108,6 +114,11 @@ export class CGame {
                     this.OID = BTItm[num].OID;
                 }
             })
+            /*
+            if(tmp.length>0){
+                console.log('OB',JSON.stringify(tmp));
+            }
+            */
             this.calRisk(bt);
         })
     }

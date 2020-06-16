@@ -84,6 +84,7 @@
                                             :store="store"
                                             :tid="curTid"
                                             :GameID="curGameID"
+                                            :dgt="BItm.dgt"
                                             :Odds="getOdds(nItm.BT,nItm.Num)"
                                             :ExtOdds="Game.getOdds(nItm.BT,nItm.Num,(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
                                             :rightLine="nidx==(LItm.length-1)"
@@ -102,13 +103,12 @@
                     v-if="!BItm.aBT"
                 > 
                     <div>{{ $t(BItm.title)+(BItm.subtitle ? $t(BItm.subtitle) : '') }}</div>
-                        <div class="row" v-if="BItm.FastSlt">
-                            <div>{{$t(BItm.FastSlt.title)}}</div>
+                        <div class="row FastSlt" v-if="BItm.FastSlt">
                             <div class="row" v-if="BItm.FastSlt.subcont">
                                 <div class="row" v-for="(itm,idx) in BItm.FastSlt.subcont" :key="'fast'+idx">
                                     <div>{{$t(itm.title)}}</div>
                                     <div v-for="(slt,sltidx) in  itm.subitem" :key="'fastsub'+idx+'-'+sltidx">
-                                        <q-btn outline size='sm' round color="primary" :label="slt.num" @click="BItm.item=itm.func(itm.key,slt.num,BItm.BT)"/>
+                                        <q-btn :outline="!slt.isActive" size='sm' class='btn-pad' color="primary" :label="slt.num" @click="BItm.item=itm.func(itm.key,slt.num,BItm.BT);setActive(BItm.FastSlt.subcont);slt.isActive=true"/>
                                     </div>
                                 </div>
                             </div>
@@ -121,10 +121,13 @@
                             v-for="(nItm,nidx) in LItm"
                             :key="'litm'+nidx"
                         >
+                            <div v-if="nItm.BT<1"></div>
                             <OB 
+                                v-if="nItm.BT>0"
                                 :store="store"
                                 :tid="curTid"
                                 :GameID="curGameID"
+                                :dgt="BItm.dgt"
                                 :Odds="getOdds(nItm.BT,nItm.Num)" 
                                 :rightLine="nidx==(LItm.length-1)"
                                 :bottomLine="Lidx==(BItm.item.length-1) || (nidx==(BItm.item[Lidx].length-1) && (BItm.item[Lidx+1] && BItm.item[Lidx+1].length<BItm.item[Lidx].length))"
@@ -147,7 +150,7 @@ import {getModule} from 'vuex-module-decorators';
 import OddsBlock from './components/OddsBlock.vue';
 import GameSelector from './components/GameSelector.vue';
 import {Odds, SelectOptions,IMsg, CommonParams,ILoginInfo} from './data/if';
-import Layouts,{Layout,contBlock,numBlock} from './components/layouts';
+import Layouts,{Layout,contBlock,numBlock,FastSltSub,FastSltSubItem} from './components/layouts';
 import {CGame,IData} from './components/Games';
 
 Vue.component('OB',OddsBlock);
@@ -200,6 +203,7 @@ export default class OddsManager extends Vue {
             window.clearInterval(this.curInterval);
         }
         if(v.GType){
+            this.oddshow=false;
             /*
             console.log(this.$t(`Game.${v.GType}.Menu.Group`))
             const tmp:any=this.$t(`Game.${v.GType}.Menu.Group`);
@@ -242,7 +246,6 @@ export default class OddsManager extends Vue {
                     this.Game.inidata(ans.data as IData);
                     //console.log('Game:',this.Game.Items)
                     this.curTid=ans.tid;
-                    this.oddshow=true;
                     //console.log('CGame MaxOddsID:',this.Game.MaxOddsID);
                     if(this.curInterval){
                         window.clearInterval(this.curInterval);
@@ -252,6 +255,7 @@ export default class OddsManager extends Vue {
                     this.curInterval=window.setInterval(this.refreshData,1000);
                 }
             }
+            this.oddshow=true;
         }
     }
     getOdds(BT:number,Num:number){
@@ -340,6 +344,13 @@ export default class OddsManager extends Vue {
             this.getCurOdds();
         }
     }
+    setActive(subcont:FastSltSub[]){
+        subcont.map(itm=>{
+            itm.subitem.map((subitm:FastSltSubItem)=>{
+                subitm.isActive=false;
+            })
+        })
+    }
     showinfo(num,v) {
         console.log('showinfo',num,v);
     }
@@ -366,5 +377,11 @@ export default class OddsManager extends Vue {
     text-align: center;
     line-height:48px;
     padding: 0 4px 0 4px;
+}
+.btn-pad {
+    padding: 4px 12px;
+}
+.FastSlt {
+    padding-bottom: 5px;
 }
 </style>

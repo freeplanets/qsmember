@@ -7,11 +7,11 @@ export interface lineBlock {
     [key:number]:numBlock[];
 }
 */
-interface FastSltSubItem {
+export interface FastSltSubItem {
     num:number;
     isActive:boolean;
 }
-interface FastSltSub {
+export interface FastSltSub {
     title?:string;
     subitem:FastSltSubItem[];
     key: string;
@@ -97,6 +97,7 @@ const getNum3D=(pos:string,num:number,bt:number)=>{
       }
       arr.push(ln);
     }
+    //console.log('getNum3D',arr);
     return arr;
 }
 
@@ -598,11 +599,15 @@ const D3:Layout =  [
                 dgt: 2, //位數
                 item:[
                     [{BT:17,Num:0},{BT:17,Num:1},{BT:17,Num:2},{BT:17,Num:3},{BT:17,Num:4},{BT:17,Num:5},{BT:17,Num:6},{BT:17,Num:7},{BT:17,Num:8},{BT:17,Num:9}],
-                    [{BT:17,Num:11},{BT:17,Num:12},{BT:17,Num:13},{BT:17,Num:14},{BT:17,Num:15},{BT:17,Num:16},{BT:17,Num:17},{BT:17,Num:18},{BT:17,Num:19},{BT:17,Num:22}],
-                    [{BT:17,Num:23},{BT:17,Num:24},{BT:17,Num:25},{BT:17,Num:26},{BT:17,Num:27},{BT:17,Num:28},{BT:17,Num:29},{BT:17,Num:33},{BT:17,Num:34},{BT:17,Num:35}],
-                    [{BT:17,Num:36},{BT:17,Num:37},{BT:17,Num:38},{BT:17,Num:39},{BT:17,Num:44},{BT:17,Num:45},{BT:17,Num:46},{BT:17,Num:47},{BT:17,Num:48},{BT:17,Num:49}],
-                    [{BT:17,Num:55},{BT:17,Num:56},{BT:17,Num:57},{BT:17,Num:58},{BT:17,Num:59},{BT:17,Num:66},{BT:17,Num:67},{BT:17,Num:68},{BT:17,Num:69},{BT:17,Num:77}],
-                    [{BT:17,Num:78},{BT:17,Num:79},{BT:17,Num:88},{BT:17,Num:89},{BT:17,Num:99}]
+                    [{BT:-1,Num:0},{BT:17,Num:11},{BT:17,Num:12},{BT:17,Num:13},{BT:17,Num:14},{BT:17,Num:15},{BT:17,Num:16},{BT:17,Num:17},{BT:17,Num:18},{BT:17,Num:19}],
+                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:22},{BT:17,Num:23},{BT:17,Num:24},{BT:17,Num:25},{BT:17,Num:26},{BT:17,Num:27},{BT:17,Num:28},{BT:17,Num:29}],
+                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:33},{BT:17,Num:34},{BT:17,Num:35},{BT:17,Num:36},{BT:17,Num:37},{BT:17,Num:38},{BT:17,Num:39}],
+                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:44},{BT:17,Num:45},{BT:17,Num:46},{BT:17,Num:47},{BT:17,Num:48},{BT:17,Num:49}],
+                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:55},{BT:17,Num:56},{BT:17,Num:57},{BT:17,Num:58},{BT:17,Num:59}],
+                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:66},{BT:17,Num:67},{BT:17,Num:68},{BT:17,Num:69}],
+                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:77},{BT:17,Num:78},{BT:17,Num:79}],
+                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:88},{BT:17,Num:89}],
+                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:99}]
                 ]
             }
         ]
@@ -656,7 +661,7 @@ const D3:Layout =  [
                             {
                                 title: 'FastSlt.Hundreds',
                                 subitem:[
-                                    {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
+                                    {num:0,isActive:true},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
                                     {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
                                 ],
                                 key: 'hundreds',
@@ -686,7 +691,7 @@ const D3:Layout =  [
                 dgt: 3, //位數
                 //NumDuplicate:true,     //數字可以重複
                 noSameNum: false,    //數字不可重複
-                item:getNum3D('nuits',0,34)
+                item:getNum3D('nuits',0,42)
             }
         ]
     },
@@ -695,40 +700,34 @@ const D3:Layout =  [
         cont: [
             {
                 BT:43,
-                FastSlt:{
-                        title:'FastSlt.Box',
-                        subcont:[
-                            {
-                                title: 'FastSlt.Hundreds',
-                                subitem:[
-                                    {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
-                                    {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
-                                ],
-                                key: 'hundreds'
-                            },
-                            {
-                                title: 'FastSlt.Tens',
-                                subitem:[
-                                    {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
-                                    {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
-                                ],
-                                key:'tens'
-                            },
-                            {
-                                title: 'FastSlt.Units',
-                                subitem:[
-                                    {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
-                                    {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
-                                ],
-                                key:'units'
-                            }                                                                        
-                        ]
-                    },               
                 dgt: 3, //位數
                 sltedItem:0,
                 //NumDuplicate:false,         //數字不可重複
                 noSameNum: true,    //數字不可重複
-                item:[]
+                item:[
+                    [{BT:43,Num:0},{BT:43,Num:1},{BT:43,Num:2},{BT:43,Num:3},{BT:43,Num:4},{BT:43,Num:5},{BT:43,Num:6},{BT:43,Num:7},{BT:43,Num:8},{BT:43,Num:9}],
+                    [{BT:43,Num:11},{BT:43,Num:12},{BT:43,Num:13},{BT:43,Num:14},{BT:43,Num:15},{BT:43,Num:16},{BT:43,Num:17},{BT:43,Num:18},{BT:43,Num:19},{BT:43,Num:22}],
+                    [{BT:43,Num:23},{BT:43,Num:24},{BT:43,Num:25},{BT:43,Num:26},{BT:43,Num:27},{BT:43,Num:28},{BT:43,Num:29},{BT:43,Num:33},{BT:43,Num:34},{BT:43,Num:35}],
+                    [{BT:43,Num:36},{BT:43,Num:37},{BT:43,Num:38},{BT:43,Num:39},{BT:43,Num:44},{BT:43,Num:45},{BT:43,Num:46},{BT:43,Num:47},{BT:43,Num:48},{BT:43,Num:49}],
+                    [{BT:43,Num:55},{BT:43,Num:56},{BT:43,Num:57},{BT:43,Num:58},{BT:43,Num:59},{BT:43,Num:66},{BT:43,Num:67},{BT:43,Num:68},{BT:43,Num:69},{BT:43,Num:77}],
+                    [{BT:43,Num:78},{BT:43,Num:79},{BT:43,Num:88},{BT:43,Num:89},{BT:43,Num:99},{BT:43,Num:111},{BT:43,Num:112},{BT:43,Num:113},{BT:43,Num:114},{BT:43,Num:115}],
+                    [{BT:43,Num:116},{BT:43,Num:117},{BT:43,Num:118},{BT:43,Num:119},{BT:43,Num:122},{BT:43,Num:123},{BT:43,Num:124},{BT:43,Num:125},{BT:43,Num:126},{BT:43,Num:127}],
+                    [{BT:43,Num:128},{BT:43,Num:129},{BT:43,Num:133},{BT:43,Num:134},{BT:43,Num:135},{BT:43,Num:136},{BT:43,Num:137},{BT:43,Num:138},{BT:43,Num:139},{BT:43,Num:144}],
+                    [{BT:43,Num:145},{BT:43,Num:146},{BT:43,Num:147},{BT:43,Num:148},{BT:43,Num:149},{BT:43,Num:155},{BT:43,Num:156},{BT:43,Num:157},{BT:43,Num:158},{BT:43,Num:159}],
+                    [{BT:43,Num:166},{BT:43,Num:167},{BT:43,Num:168},{BT:43,Num:169},{BT:43,Num:177},{BT:43,Num:178},{BT:43,Num:179},{BT:43,Num:188},{BT:43,Num:189},{BT:43,Num:199}],
+                    [{BT:43,Num:222},{BT:43,Num:223},{BT:43,Num:224},{BT:43,Num:225},{BT:43,Num:226},{BT:43,Num:227},{BT:43,Num:228},{BT:43,Num:229},{BT:43,Num:233},{BT:43,Num:234}],
+                    [{BT:43,Num:235},{BT:43,Num:236},{BT:43,Num:237},{BT:43,Num:238},{BT:43,Num:239},{BT:43,Num:244},{BT:43,Num:245},{BT:43,Num:246},{BT:43,Num:247},{BT:43,Num:248}],
+                    [{BT:43,Num:249},{BT:43,Num:255},{BT:43,Num:256},{BT:43,Num:257},{BT:43,Num:258},{BT:43,Num:259},{BT:43,Num:266},{BT:43,Num:267},{BT:43,Num:268},{BT:43,Num:269}],
+                    [{BT:43,Num:277},{BT:43,Num:278},{BT:43,Num:279},{BT:43,Num:288},{BT:43,Num:289},{BT:43,Num:299},{BT:43,Num:333},{BT:43,Num:334},{BT:43,Num:335},{BT:43,Num:336}],
+                    [{BT:43,Num:337},{BT:43,Num:338},{BT:43,Num:339},{BT:43,Num:344},{BT:43,Num:345},{BT:43,Num:346},{BT:43,Num:347},{BT:43,Num:348},{BT:43,Num:349},{BT:43,Num:355}],
+                    [{BT:43,Num:356},{BT:43,Num:357},{BT:43,Num:358},{BT:43,Num:359},{BT:43,Num:366},{BT:43,Num:367},{BT:43,Num:368},{BT:43,Num:369},{BT:43,Num:377},{BT:43,Num:378}],
+                    [{BT:43,Num:379},{BT:43,Num:388},{BT:43,Num:389},{BT:43,Num:399},{BT:43,Num:444},{BT:43,Num:445},{BT:43,Num:446},{BT:43,Num:447},{BT:43,Num:448},{BT:43,Num:449}],
+                    [{BT:43,Num:455},{BT:43,Num:456},{BT:43,Num:457},{BT:43,Num:458},{BT:43,Num:459},{BT:43,Num:466},{BT:43,Num:467},{BT:43,Num:468},{BT:43,Num:469},{BT:43,Num:477}],
+                    [{BT:43,Num:478},{BT:43,Num:479},{BT:43,Num:488},{BT:43,Num:489},{BT:43,Num:499},{BT:43,Num:555},{BT:43,Num:556},{BT:43,Num:557},{BT:43,Num:558},{BT:43,Num:559}],
+                    [{BT:43,Num:566},{BT:43,Num:567},{BT:43,Num:568},{BT:43,Num:569},{BT:43,Num:577},{BT:43,Num:578},{BT:43,Num:579},{BT:43,Num:588},{BT:43,Num:589},{BT:43,Num:599}],
+                    [{BT:43,Num:666},{BT:43,Num:667},{BT:43,Num:668},{BT:43,Num:669},{BT:43,Num:677},{BT:43,Num:678},{BT:43,Num:679},{BT:43,Num:688},{BT:43,Num:689},{BT:43,Num:699}],
+                    [{BT:43,Num:777},{BT:43,Num:778},{BT:43,Num:779},{BT:43,Num:788},{BT:43,Num:789},{BT:43,Num:799},{BT:43,Num:888},{BT:43,Num:889},{BT:43,Num:899},{BT:43,Num:999}]
+                ]
             }
         ]
     },

@@ -78,10 +78,15 @@ export default class OddsBlock extends Vue {
     @Prop() readonly GType?:string;
     @Prop() readonly colorWave?:boolean;
     @Prop() readonly colorExt?:number;
+    @Prop() readonly dgt?:number;
     NewOdds:number=0;
     EditMode:boolean=false;
     NewOdds1:number=0;
     EditMode1:boolean=false;
+    get digital(){
+        if(this.dgt) return this.dgt;
+        return 1;
+    }
     getColor(){
         //console.log(this.Num,this.GType,this.colorWave,this.colorExt)
         const num=this.Odds ? (this.Odds.Num ? this.Odds.Num : 0) : 0;
@@ -94,7 +99,12 @@ export default class OddsBlock extends Vue {
     getItemName(){
         const num=this.Odds ? (this.Odds.Num ? this.Odds.Num : 0) : 0;  
         const bt=this.Odds ? (this.Odds.BT ? this.Odds.BT : 0) : 0;
-        return itemName(bt,num,this);
+        /*
+        if(this.GType==='3D' && bt===14){
+            console.log('getItemName:',this.GType,bt,this.digital,this.dgt);
+        }
+        */
+        return itemName(bt,num,this,this.digital);
     }
     async setOdds(BT:number,Num:number,add?:number,step?:number){
         //console.log('setOdds:',BT,Num,step);
