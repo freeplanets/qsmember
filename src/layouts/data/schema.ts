@@ -1,3 +1,6 @@
+export interface commObj {
+    [key:string]:number;
+}
 export interface IUser {
     TableName:'User';
     id: number;
@@ -10,7 +13,7 @@ export interface IUser {
     DfKey?: string;
     UpId?: number;
     PayClassID?: number;
-    Payclass?:string;
+    PayClass?:string;
     Deposit?:number;
     Withdraw?:number;
     CreateDate?: string;

@@ -5,7 +5,6 @@
       v-for="(game,idx) in games"
       :key="'game'+idx"
       :class="{'my-card':true,'bg-primary':game.isSelected,'bg-info':!game.isSelected,'text-white':true,'my-card-min-w':true}"
-      @click="setSelect(game)"
     >
       <q-card-section>
         <div class="text-subtitle2">{{ game.title }}</div>
@@ -14,7 +13,7 @@
 
       <q-card-actions
       >
-        <q-select dense outlined v-model="game.PayClass" :options="game.PayClassList" />
+        <q-select dense outlined v-model="game.PayClass" :options="game.PayClassList"/>
       </q-card-actions>
     </q-card>
   </div>
@@ -22,9 +21,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component';
-import {Prop} from 'vue-property-decorator';
+import {Prop,Watch} from 'vue-property-decorator';
 import {SelectOptions} from '../data/if';
 import LayoutStoreModule from '../data/LayoutStoreModule';
+import { cloneDeep } from 'lodash';
 /**
  * :store='yourvalue'
  * @setGames="functionName"
@@ -51,11 +51,45 @@ export default class GamePayClassSelector extends Vue {
   @Prop() readonly store?:LayoutStoreModule;
   @Prop() readonly uid?:number;
   @Prop() readonly PayClass?:string;
-	games:GamePayClass[] = []
-	async getGames(){
-    let slted:GamePC[]=[]
+  @Prop() readonly emptyitem?:boolean;
+  @Watch('PayClass',{immediate:true,deep:true})
+  onPayClassChange(){
+    console.log('onPayClassChange',this.PayClass);
     if(this.PayClass){
-      slted = JSON.parse(this.PayClass);
+      this.slted=JSON.parse(this.PayClass);
+    } 
+  }
+  @Watch('games',{immediate:true,deep:true})
+  onGamesChange(o,n){
+    if(o===n){
+      this.games=cloneDeep(this.games);
+      this.games.map(game=>{
+          this.setSelect(game);
+      })
+    } 
+  }
+  slted:GamePC[]=[];
+  games:GamePayClass[] = [];
+  setSelected(){
+    if(this.slted.length>0){
+      this.slted.map(gpc=>{
+        let f = this.games.find(g=>g.id===gpc.GameID);
+        if(f){
+          if(f.PayClass){
+            if(f.PayClass.value!=gpc.PayClassID){
+              let fpc = f.PayClassList.find(pcl=>pcl.value===gpc.PayClassID);
+              if(fpc){
+                f.PayClass=Object.assign({},fpc);
+              }
+            }
+          }
+        }
+      })
+    }
+  }
+	async getGames(){
+    if(this.PayClass){
+      this.slted = JSON.parse(this.PayClass);
     }
     if(!this.store) return;
     const UserID=this.store.personal.id;
@@ -68,6 +102,9 @@ export default class GamePayClassSelector extends Vue {
             title: itm.label as string,
             isSelected: false,
             PayClassList:[]
+          }
+          if(this.emptyitem){
+            tmp.PayClassList.push({value:0,label:''});
           }
           this.games.push(tmp);
       })
@@ -85,32 +122,44 @@ export default class GamePayClassSelector extends Vue {
           }
           f.PayClassList.push(tmp);
           if(!f.PayClass){
-            f.PayClass=Object.assign({},tmp);  
+            f.PayClass={value:0,label:''};  
           }
         }
       })
     }
-    if(slted.length>0){
-      slted.map(gpc=>{
-        let f = this.games.find(g=>g.id===gpc.GameID);
-        if(f){
-          if(f.PayClass){
-            if(f.PayClass.value!=gpc.PayClassID){
-              let fpc = f.PayClassList.find(pcl=>pcl.value===gpc.PayClassID);
-              if(fpc){
-                f.PayClass=Object.assign({},fpc);
-              }
-            }
-          }
-        }
-      })
-    }
+    this.setSelected();
   }
   setSelect(game:GamePayClass){
     //if(game.PayClass){
-      game.isSelected = !game.isSelected;
-      this.$emit('setPayClass',game);
+      //game.isSelected = !game.isSelected;
+      if(game.PayClass){
+        const tmp:GamePC={
+          GameID: game.id,
+          PayClassID: game.PayClass.value
+        }
+        let fidx:number|undefined;
+        let ridx:number|undefined;
+        this.slted.find((itm,idx)=>{
+          if(itm.GameID===tmp.GameID){
+            itm.PayClassID = tmp.PayClassID;
+            fidx=idx;
+            if(itm.PayClassID===0){
+              ridx=idx;
+            }
+          }
+        })
+        if(fidx===undefined){
+          this.slted.push(tmp);
+        }
+        if(ridx){
+          this.slted.splice(ridx,1);
+        }
+        this.$emit('setPayClass',JSON.stringify(this.slted));
+      }
     //}
+  }
+  doit(){
+    console.log('change doit');
   }
   async mounted(){
       await this.getGames();

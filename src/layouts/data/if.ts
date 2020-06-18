@@ -1,5 +1,3 @@
-import { BasePayRate } from "../class/BasePayRate"
-
 export interface SelectOptions {
     value:number;
 	label?:string;
@@ -219,4 +217,4 @@ export interface MyUser {
     Account: string;
     Nickname: string;
     Types?:number;
-  }
+ }

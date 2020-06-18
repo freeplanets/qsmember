@@ -229,7 +229,7 @@ export class AxApi {
             tid:tid,
             GameID:GameID,
             Nums:nums,
-            isSettled:isSettled,                        
+            isSettled:isSettled                
         }
         if(PLog){
             param.ParamLog=PLog;

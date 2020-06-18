@@ -87,7 +87,7 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <GPCS :store="store" :uid="curUserID" :PayClass="curPayClass" @setPayClass="setPayClass"></GPCS>
+          <GPCS :store="store" :uid="curUserID" :emptyitem="true" :PayClass="curPayClass" @setPayClass="setPayClass"></GPCS>
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
@@ -106,7 +106,7 @@ import {getModule} from 'vuex-module-decorators';
 import {IUser} from './data/schema'
 import { SelectOptions,ITableHeader,CommonParams, ILoginInfo, IMsg} from './data/if';
 import {UserTypes} from './class/Users'
-import GamePayClassSelector,{GamePayClass} from './components/GamePayClassSelector.vue';
+import GamePayClassSelector from './components/GamePayClassSelector.vue';
 Vue.component('GPCS',GamePayClassSelector);
 interface Ans {
   affectedRow?:number;
@@ -131,7 +131,7 @@ export default class UserManager extends Vue{
     curUserID:number=0;
     curPayClass:string='';
     showPayClass:boolean=false;
-    PayClassSlted:GamePayClass[]=[];
+    PayClassSlted:string='';
     cols:ITableHeader[]=[
       {
         name:'Account',
@@ -212,17 +212,22 @@ export default class UserManager extends Vue{
         id:this.curUserID
       }
       //let payclass:string='';
-      const ugpc:UserGPC={};
+      //const ugpc:UserGPC={};
+      /*
       this.PayClassSlted.map(itm=>{
         const p:SelectOptions=itm.PayClass as SelectOptions;
         const gid:string = itm.id +'';
           ugpc[gid]=p.value as number;
       })
       User.Payclass = JSON.stringify(ugpc);
+      */
+      User.PayClass = this.PayClassSlted;
       this.saveUser(User);
       this.showPayClass=false;
     }
-    setPayClass(game:GamePayClass){
+    setPayClass(slted:string){
+      this.PayClassSlted = slted;
+      /*
       let fidx:number|undefined;
       const f = this.PayClassSlted.find((itm,idx)=>{
         if(itm.id===game.id){
@@ -239,6 +244,7 @@ export default class UserManager extends Vue{
           this.PayClassSlted.push(game);
         }
       }
+      */
     }
     SetupGames(uid:number,PayClass:string){
       this.curUserID=uid;
@@ -316,6 +322,9 @@ export default class UserManager extends Vue{
       if(ans.ErrNo===0){
         this.data = ans.data as [];
         this.data.map(u=>{
+          if(u.PayClass){
+            u.PayClass = u.PayClass.replace(/\\/g,'')
+          }
           const tmp=this.typesOption.find(itm => itm.value===u.Types);
           if(tmp){
             u.TypeName = tmp.label;

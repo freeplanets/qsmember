@@ -10,6 +10,7 @@ import Happy8 from './data/Happy8';
 const jObj:any[]=[];
 jObj[1]=JSON.parse(MarkSixData);
 jObj[2]=JSON.parse(D3);
+jObj[3]=JSON.parse(D3);
 jObj[12]=JSON.parse(Happy);
 jObj[19]=JSON.parse(Always);
 jObj[20]=JSON.parse(Cars);
