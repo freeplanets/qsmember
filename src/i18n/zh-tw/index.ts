@@ -122,7 +122,8 @@ export default {
     StopTimeS:"特碼下注截止時間",
     StopTime:"下注截止時間",
     Result:'開獎結果',
-    hasSPNO:'有開特碼'
+    hasSPNO:'有開特碼',
+    OpenNums:'開出獎號'
   },
   Title: {
     Dashboard: '大廳',

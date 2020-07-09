@@ -59,7 +59,9 @@ export class BasePayRate<T>{
         if(!this.data.Profit){
             this.calProfit();
         }
-        return Math.round(this.data.Profit*10000)/10000;        
+        const p:number=this.data.Profit
+        return parseFloat(p.toFixed(4));
+        //return Math.round(this.data.Profit*10000)/10000;        
     }
     /*
     set Profit(v:any){
@@ -74,17 +76,21 @@ export class BasePayRate<T>{
         return this.data.DfRate;
     }
     set Rate(v:number | undefined) {
+        v=this.checkNum(v);
+        if((v || v===0) && v<=0) return;
         this.data.DfRate = this.fetchValueToSteps(v);
         if(this.data.TopRate > 0 && this.data.DfRate > this.data.TopRate){
             this.data.DfRate = this.data.TopRate;
         }
-        //this.calProfit();
+        this.calProfit();
         this.isDataChanged = true;
     }
     get TopRate():number | undefined{
         return this.data.TopRate;
     }
     set TopRate(v:number | undefined){
+        v=this.checkNum(v);
+        if((v || v===0) && v<=0) return;
         this.data.TopRate = this.fetchValueToSteps(v);
         this.isDataChanged = true;
     }
@@ -323,5 +329,8 @@ export class BasePayRate<T>{
                 this.data.Profit=p;
             }
         }
+    }
+    protected checkNum(v:any){
+		return v.replace(/[^0-9.]/g,'');
     }
 }

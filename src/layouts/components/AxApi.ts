@@ -44,7 +44,8 @@ export class AxApi {
                 const t:SelectOptions={
                     label: itm.name,
                     value: itm.id,
-                    GType: itm.GType
+                    GType: itm.GType,
+                    OpenNums:itm.OpenNums
                 }
                 tmp.push(t);                
             })

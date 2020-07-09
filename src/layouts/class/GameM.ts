@@ -101,4 +101,11 @@ export class GameM extends BClass<Game> {
         this.data.hasSPNO= v ? 1 : 0;
         this.isDataChanged = true;
     }
+    get OpenNums():number {
+        return this.data.OpenNums;
+    }
+    set OpenNums(v:number) {
+        this.data.OpenNums=v;
+        this.isDataChanged = true;
+    }
 }

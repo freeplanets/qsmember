@@ -231,6 +231,7 @@ export default class TermManager extends Vue {
     setCurGames(v:SelectOptions){
         this.models = v;
         this.term.GameID = v.value as number;
+        this.nums=new Array(v.OpenNums);
         this.getTerms();
     }      
     ShowAdd(){
@@ -374,9 +375,7 @@ export default class TermManager extends Vue {
                 this.nums.push(spno);
             }
             this.curResult=this.nums.join(',');
-        } else {
-            this.nums=['','','','','','',''];
-        }
+        } 
         if(v.isSettled){
             this.curTermSettleStatus = v.isSettled;
         }

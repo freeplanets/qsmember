@@ -2,6 +2,7 @@ export interface SelectOptions {
     value:number;
 	label?:string;
     GType?:string;
+    OpenNums?:number;
 }
 export interface Btg { 
 	title: string;

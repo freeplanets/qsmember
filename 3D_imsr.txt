@@ -1,0 +1,52 @@
+{
+  Nums: [ 1, 2, 3 ],
+  RGNums: [
+    { Num: 1, OddEven: 0, BigSmall: 1, Prime: 0 },
+    { Num: 2, OddEven: 1, BigSmall: 1, Prime: 0 },
+    { Num: 3, OddEven: 0, BigSmall: 1, Prime: 0 }
+  ],
+  Sum: 6,
+  Pos12: {
+    Num: 23,
+    SumPos: 5,
+    SumOE: 0,
+    SumTail: 5,
+    SumTailBS: 0,
+    SumTailPrime: 0
+  },
+  Pos02: {
+    Num: 13,
+    SumPos: 4,
+    SumOE: 1,
+    SumTail: 4,
+    SumTailBS: 1,
+    SumTailPrime: 1
+  },
+  Pos01: {
+    Num: 12,
+    SumPos: 4,
+    SumOE: 0,
+    SumTail: 3,
+    SumTailBS: 1,
+    SumTailPrime: 0
+  },
+  Sum3: { Num: 6, OddEven: 1, BigSmall: 1, SumPos: 6, Tail: 6 },
+  TwoNums: [ 12, 13, 23 ],
+  Set3All: 1,
+  OddEvenPass: 3,
+  BigSmallPass: 4,
+  PrimePass: 0,
+  D3Pos: 123,
+  D3NotPos: 123,
+  CrossN: 2,
+  Straight: 0,
+  Same3: 1,
+  Pairs: 1,
+  PairsNum: -1,
+  StraightPart: 1,
+  Not6: 1,
+  KillNum: [
+    3, 0, 0, 0, 3,
+    3, 3, 2, 3, 3
+  ]
+}
