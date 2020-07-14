@@ -116,7 +116,7 @@ export default class BetLists extends Vue {
   showTimeEdit:boolean=false;
   dateSet:string='';
   TStatus:SelectOptions[]=[];
-  sltedTS:SelectOptions|undefined;
+  sltedTS:SelectOptions={value:0};
   @Watch('dateSet',{immediate:true,deep:true})
   onDateSetChange(){
     //console.log('onDateSetChange',this.DateSlt);

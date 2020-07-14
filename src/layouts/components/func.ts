@@ -230,8 +230,12 @@ function RemasterCon(BC:any,GType:string,vue:Vue):string{
                 }
                 let tmp:string;
                 let numtitle:string='';
-                let bt:number = btc.BetType ? btc.BetType : (itm.BetType ? itm.BetType : 0);                   
-                numtitle=itemNameNew(GType, bt,itm.Num,vue,1,true);
+                let bt:number = btc.BetType ? btc.BetType : (itm.BetType ? itm.BetType : 0);
+                if(typeof(itm.Num)==='number'){
+                    numtitle=itemNameNew(GType, bt,itm.Num,vue,1,true);
+                } else {
+                    numtitle=rgM3Pos(itm.Num);
+                }
                 const Odds = fixP(itm.Odds)
                 tmp=`${subBt}<span class="Nums">${numtitle}</span>${Odds ? '(<span class="Odds">'+Odds+'</span>)' :''}`;
                 SNum.push(tmp);
@@ -241,6 +245,13 @@ function RemasterCon(BC:any,GType:string,vue:Vue):string{
         return `${tItm ? '<span class="BetType">'+tItm.title+'</span><br>' : '' }${SNum.join(",")}`;
     }
     return BC;
+}
+function rgM3Pos(nums:string){
+    const tmpN=nums.split(':');
+    tmpN.map((itm,idx)=>{
+        tmpN[idx]=itm.replace(/[htu]\s[htu]/g,',').replace(/[htu]/g,'').replace(' ','');
+    })
+    return `(${tmpN.join('),(')})`;
 }
 function fixP(v?:number|string):string|undefined{
     let n:number | undefined;
