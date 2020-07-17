@@ -809,8 +809,8 @@ export default {
           shortT: '尾數',
           subtitle: [ '大', '小' ]
         },
-        '7': { title: '方位' },
-        '9': { title: '中發白' },
+        '7': { title: '方位', subtitle: [ '東','南','西','北' ] },
+        '9': { title: '中發白', subtitle: [ '中','發','白' ] },
         '10': { title: '總和大小', shortT: '總和', subtitle: [ '大', '小' ] },
         '11': { title: '總和單雙', shortT: '總和', subtitle: [ '單', '雙' ] },
         '12': { title: '總和尾數大小', shortT: '和尾', subtitle: [ '大', '小' ] },

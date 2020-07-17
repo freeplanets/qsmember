@@ -42,7 +42,63 @@
             <div class='q-pa-md'
                 v-for="(BItm,bidx) in cont"
                 :key="'cont'+bidx"
-            >   
+            >
+                <div
+                    v-if="BItm.Selects"
+                    class="q-gutter-y-md"
+                >
+                    <q-card>
+                        <q-tabs
+                        v-model="tab"
+                        dense
+                        class="text-grey"
+                        active-color="primary"
+                        indicator-color="primary"
+                        align="left"
+                        narrow-indicator
+                        >
+                            <q-tab 
+                                v-for="(title,idx) in BItm.Selects"
+                                :key="'Select'+idx"
+                                :name="'tab'+idx" 
+                                :label="$t(title)" 
+                                />
+                        </q-tabs>
+
+                        <q-separator />
+
+                        <q-tab-panels v-model="tab" animated>
+                            <q-tab-panel 
+                                v-for="(lnItem,idx) in BItm.items"
+                                :key="'BTab'+idx"                                
+                                :name="'tab'+idx">
+                                <div class='row justify-left'
+                                    v-for="(LItm,Lidx) in lnItem"
+                                    :key="'litm'+Lidx"
+                                >
+                                    <div class='col-10 col-md-1'
+                                        v-for="(nItm,nidx) in LItm"
+                                        :key="'nitm'+nidx"
+                                    >
+                                        <OB 
+                                            :store="store"
+                                            :tid="curTid"
+                                            :GameID="curGameID"
+                                            :dgt="BItm.dgt"
+                                            :Odds="getOdds(nItm.BT,nItm.Num)"
+                                            :ExtOdds="Game.getOdds(nItm.BT,nItm.Num,(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
+                                            :rightLine="nidx==(LItm.length-1)"
+                                            :bottomLine="Lidx==(LItm.length-1) || (nidx==9 && (LItm[Lidx+1] && LItm[Lidx+1].length<10))"
+                                            :GType="curGType"
+                                            :colorWave="BItm.colorWave"
+                                            :colorExt="BItm.colorExt"
+                                            @OddChange="getCurOdds"></OB>
+                                    </div>
+                                </div>
+                            </q-tab-panel>
+                        </q-tab-panels>
+                    </q-card>
+                </div>               
                 <div
                     v-if="BItm.aBT"
                     class="q-gutter-y-md"
@@ -293,6 +349,9 @@ export default class OddsManager extends Vue {
         if(this.cont != v){
             if(v[0].aBT){
                 this.tab='tab'+v[0].aBT[0];
+            }
+            if(v[0].Selects){
+                this.tab='tab'+0;
             }
         }
         this.cont = v;

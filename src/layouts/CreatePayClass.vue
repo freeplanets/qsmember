@@ -201,6 +201,8 @@ export default class BetClass extends Vue{
             }
 
         }
+        console.log('SavePayClass',inp,RateData);
+        if(RateData.length<1) return;
         const param:CommonParams={
             UserID:this.PInfo.id,
             sid:this.PInfo.sid,

@@ -264,8 +264,12 @@ export class BasePayRate<T>{
         }
     }
     updateDefaultRateByProfit(pft:number){
+        //console.log('updateDefaultRateByProfit:',pft)
+        if(typeof(pft)==='string') pft=parseFloat(pft);
         if(this.Probability){
+            //console.log('updateDefaultRateByProfit cal:',(1-pft/100)/this.Probability,typeof(pft),typeof(this.Probability));
             this.Rate = (1-pft/100)/this.Probability;
+            //console.log('updateDefaultRateByProfit Rate:',this.Rate,this.Probability)
         }
     }
     //單碼滿倉=風險金額 (    )/不含本金賠率
@@ -331,6 +335,7 @@ export class BasePayRate<T>{
         }
     }
     protected checkNum(v:any){
-		return v.replace(/[^0-9.]/g,'');
+        if(typeof(v)==='number') v=v+'';
+		return parseFloat(v.replace(/[^0-9.]/g,''));
     }
 }

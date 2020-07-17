@@ -48,8 +48,7 @@ const chkColorOther=(v,GType)=>{
     }
 };
 
-export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle:boolean|undefined=undefined)=>{
-    //console.log('itemName:',bt,num,GType);
+export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle?:boolean)=>{
     let n = num % 10
     let h 
     if(num > 100 && V.GType != 'Cars'){
@@ -89,7 +88,7 @@ export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle:boolean|u
     //let subT = V.$t('Game.' + V.GType + '.Item.'+bt+'.subtitle').length
     if(typeof(btitem.subtitle)!='undefined'){
       let ext = num % btitem.subtitle.length
-      if(V.GType=='MarkSix' && bt==14) {
+      if((V.GType==='MarkSix' && bt==14) || V.GType==='Happy' ) {
           ext = num % 10
       }
       if(typeof(btitem.shortT)!='undefined'){
@@ -103,7 +102,8 @@ export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle:boolean|u
     if(dgt>1){
       return padingZero(num,dgt)
     }
-    if(num > 100 && typeof(dgt)=='undefined') num = num % 100
+    //if(num > 100 && typeof(dgt)=='undefined') num = num % 100
+    if(num > 100 ) num = num % 100
     if(V.GType=='Always') return num %10
     if(V.GType=='Cars'){
         return n

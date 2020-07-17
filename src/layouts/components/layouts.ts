@@ -33,10 +33,12 @@ export interface contBlock {
     twOdds?:number[];
     colorExt?:number;
     dgt?:number;
-    item:numBlock[][] | Function;
+    item?:numBlock[][] | Function ;
+    items?:numBlock[][][];
     fastSltItm?:string[];
     FastSlt?:FastSlts;
     noSameNum?:boolean;
+    Selects?:string[];
 }
 export interface layoutBlock {
     name:string;
@@ -48,8 +50,7 @@ export interface Layout {
 interface ILayouts {
     [key:string]:Layout;
 }
-const getNums = (BT:number,lastNums:number|undefined=undefined,
-    startAt:number|undefined=undefined,extF:number|undefined=undefined)=>{
+const getNums = (BT:number,lastNums?:number,startAt?:number,extF?:number,addArr?:numBlock[][])=>{
     if(!lastNums) lastNums = 49;
     if(startAt!==0){
         if(!startAt) startAt = 1;
@@ -73,6 +74,11 @@ const getNums = (BT:number,lastNums:number|undefined=undefined,
         tmp.push({BT: BT,Num:base+i});
     }
     if(tmp.length>0) nums.push(tmp);
+    if(addArr){
+        addArr.map(lnObj=>{
+            nums.push(lnObj);
+        })
+    }
     return nums;
 }
 
@@ -771,6 +777,7 @@ const D3:Layout =  [
         name: "Game.3D.Menu.Group.11.title",
         cont: [
             {
+                title : "Game.3D.Menu.Group.11.title",
                 item: [
                     [{BT:59,Num:0},{BT:60,Num:0},{BT:61,Num:0}],
                     [{BT:63,Num:0},{BT:65,Num:0},{BT:18,Num:0}]
@@ -797,9 +804,153 @@ const D3:Layout =  [
             }
         ]
     }
+]
+const Happy:Layout =  [
+    {
+        name: "Game.Happy.Menu.Group.0.title",
+        cont:[
+            {
+                title: "Game.Happy.Item.10.shortT",
+                item:[
+                    [{BT:10,Num:0},{BT:11,Num:0},{BT:12,Num:0}],
+                    [{BT:10,Num:1},{BT:11,Num:1},{BT:12,Num:1}]
+                ]
+            },
+            {
+                title: "Game.Happy.Ball.1",
+                item:[
+                    [{BT:3,Num:10},{BT:2,Num:10},{BT:5,Num:10},{BT:4,Num:10},{BT:13,Num:10}],
+                    [{BT:3,Num:11},{BT:2,Num:11},{BT:5,Num:11},{BT:4,Num:11},{BT:13,Num:11}]
+                ]                
+            },
+            {
+                title: "Game.Happy.Ball.2",
+                item:[
+                    [{BT:3,Num:20},{BT:2,Num:20},{BT:5,Num:20},{BT:4,Num:20},{BT:13,Num:20}],
+                    [{BT:3,Num:21},{BT:2,Num:21},{BT:5,Num:21},{BT:4,Num:21},{BT:13,Num:21}]
+                ]                
+            },
+            {
+                title: "Game.Happy.Ball.3",
+                item:[
+                    [{BT:3,Num:30},{BT:2,Num:30},{BT:5,Num:30},{BT:4,Num:30},{BT:13,Num:30}],
+                    [{BT:3,Num:31},{BT:2,Num:31},{BT:5,Num:31},{BT:4,Num:31},{BT:13,Num:31}]
+                ]                
+            },
+            {
+                title: "Game.Happy.Ball.4",
+                item:[
+                    [{BT:3,Num:40},{BT:2,Num:40},{BT:5,Num:40},{BT:4,Num:40},{BT:13,Num:40}],
+                    [{BT:3,Num:41},{BT:2,Num:41},{BT:5,Num:41},{BT:4,Num:41},{BT:13,Num:41}]
+                ]                
+            },
+            {
+                title: "Game.Happy.Ball.5",
+                item:[
+                    [{BT:3,Num:50},{BT:2,Num:50},{BT:5,Num:50},{BT:4,Num:50},{BT:13,Num:50}],
+                    [{BT:3,Num:51},{BT:2,Num:51},{BT:5,Num:51},{BT:4,Num:51},{BT:13,Num:51}]
+                ]                
+            },
+            {
+                title: "Game.Happy.Ball.6",
+                item:[
+                    [{BT:3,Num:60},{BT:2,Num:60},{BT:5,Num:60},{BT:4,Num:60},{BT:13,Num:60}],
+                    [{BT:3,Num:61},{BT:2,Num:61},{BT:5,Num:61},{BT:4,Num:61},{BT:13,Num:61}]
+                ]                
+            },
+            {
+                title: "Game.Happy.Ball.7",
+                item:[
+                    [{BT:3,Num:70},{BT:2,Num:70},{BT:5,Num:70},{BT:4,Num:70},{BT:13,Num:70}],
+                    [{BT:3,Num:71},{BT:2,Num:71},{BT:5,Num:71},{BT:4,Num:71},{BT:13,Num:71}]
+                ]                
+            },
+            {
+                title: "Game.Happy.Ball.8",
+                item:[
+                    [{BT:3,Num:80},{BT:2,Num:80},{BT:5,Num:80},{BT:4,Num:80},{BT:13,Num:80}],
+                    [{BT:3,Num:81},{BT:2,Num:81},{BT:5,Num:81},{BT:4,Num:81},{BT:13,Num:81}]
+                ]                
+            }
+        ]
+    },
+    {
+        name: "Game.Happy.Menu.Group.1.title",
+        cont: [
+            {
+                BT:1,
+                Selects: [
+                    "Game.Happy.Ball.1",
+                    "Game.Happy.Ball.2",
+                    "Game.Happy.Ball.3",
+                    "Game.Happy.Ball.4",
+                    "Game.Happy.Ball.5",
+                    "Game.Happy.Ball.6",
+                    "Game.Happy.Ball.7",
+                    "Game.Happy.Ball.8",
+                ],
+                items:[ 
+                    getNums(1,20,1,100,[
+                        [{BT:3,Num:10},{BT:3,Num:11},{BT:2,Num:10},{BT:2,Num:11},{BT:5,Num:10},{BT:5,Num:11},{BT:4,Num:10},{BT:4,Num:11},{BT:13,Num:10},{BT:13,Num:11}],
+                        [{BT:7,Num:10},{BT:7,Num:11},{BT:7,Num:12},{BT:7,Num:13},{BT:9,Num:10},{BT:9,Num:11},{BT:9,Num:12}]
 
+                    ]),
+                    getNums(2,20,1,100,[
+                        [{BT:3,Num:20},{BT:3,Num:21},{BT:2,Num:20},{BT:2,Num:21},{BT:5,Num:20},{BT:5,Num:21},{BT:4,Num:20},{BT:4,Num:21},{BT:13,Num:20},{BT:13,Num:21}],
+                        [{BT:7,Num:20},{BT:7,Num:21},{BT:7,Num:22},{BT:7,Num:23},{BT:9,Num:20},{BT:9,Num:21},{BT:9,Num:22}]
+                    ]),
+                    getNums(3,20,1,100,[
+                        [{BT:3,Num:30},{BT:3,Num:31},{BT:2,Num:30},{BT:2,Num:31},{BT:5,Num:30},{BT:5,Num:31},{BT:4,Num:30},{BT:4,Num:31},{BT:13,Num:30},{BT:13,Num:31}],
+                        [{BT:7,Num:30},{BT:7,Num:31},{BT:7,Num:32},{BT:7,Num:33},{BT:9,Num:30},{BT:9,Num:31},{BT:9,Num:32}]
+                    ]),
+                    getNums(4,20,1,100,[
+                        [{BT:3,Num:40},{BT:3,Num:41},{BT:2,Num:40},{BT:2,Num:41},{BT:5,Num:40},{BT:5,Num:41},{BT:4,Num:40},{BT:4,Num:41},{BT:13,Num:40},{BT:13,Num:41}],
+                        [{BT:7,Num:40},{BT:7,Num:41},{BT:7,Num:42},{BT:7,Num:43},{BT:9,Num:40},{BT:9,Num:41},{BT:9,Num:42}]
+                    ]),
+                    getNums(5,20,1,100,[
+                        [{BT:3,Num:50},{BT:3,Num:51},{BT:2,Num:50},{BT:2,Num:51},{BT:5,Num:50},{BT:5,Num:51},{BT:4,Num:50},{BT:4,Num:51},{BT:13,Num:50},{BT:13,Num:51}],
+                        [{BT:7,Num:50},{BT:7,Num:51},{BT:7,Num:52},{BT:7,Num:53},{BT:9,Num:50},{BT:9,Num:51},{BT:9,Num:52}]
+                    ]),
+                    getNums(6,20,1,100,[
+                        [{BT:3,Num:60},{BT:3,Num:61},{BT:2,Num:60},{BT:2,Num:61},{BT:5,Num:60},{BT:5,Num:61},{BT:4,Num:60},{BT:4,Num:61},{BT:13,Num:60},{BT:13,Num:61}],
+                        [{BT:7,Num:60},{BT:7,Num:61},{BT:7,Num:62},{BT:7,Num:63},{BT:9,Num:60},{BT:9,Num:61},{BT:9,Num:62}]
+                    ]),
+                    getNums(7,20,1,100,[
+                        [{BT:3,Num:70},{BT:3,Num:71},{BT:2,Num:70},{BT:2,Num:71},{BT:5,Num:70},{BT:5,Num:71},{BT:4,Num:70},{BT:4,Num:71},{BT:13,Num:70},{BT:13,Num:71}],
+                        [{BT:7,Num:70},{BT:7,Num:71},{BT:7,Num:72},{BT:7,Num:73},{BT:9,Num:70},{BT:9,Num:71},{BT:9,Num:72}]
+                    ]),
+                    getNums(8,20,1,100,[
+                        [{BT:3,Num:80},{BT:3,Num:81},{BT:2,Num:80},{BT:2,Num:81},{BT:5,Num:80},{BT:5,Num:81},{BT:4,Num:80},{BT:4,Num:81},{BT:13,Num:80},{BT:13,Num:81}],
+                        [{BT:7,Num:80},{BT:7,Num:81},{BT:7,Num:82},{BT:7,Num:83},{BT:9,Num:80},{BT:9,Num:81},{BT:9,Num:82}]
+                    ]),
+                ]
+            }
+        ]
+    },
+    {
+        name: "Game.Happy.Menu.Group.2.title",
+        cont:[
+            {
+                item:getNums(14,20,1)
+            }
+        ]
+    },
+    {
+        name: "Game.Happy.Menu.Group.3.title",
+        cont: [
+            {
+                aBT: [15,16,17,18,19,20],
+                sltedItem:0,
+                start: 1,
+                end:20,                
+                item: getNums                
+            }
+        ]
+
+    }
 ]
 const Layouts:ILayouts= {}
 Layouts.MarkSix = MarkSixLayout;
 Layouts['3D'] = D3;
+Layouts.Happy = Happy;
 export default Layouts;
