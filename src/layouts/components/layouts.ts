@@ -804,7 +804,7 @@ const D3:Layout =  [
             }
         ]
     }
-]
+];
 const Happy:Layout =  [
     {
         name: "Game.Happy.Menu.Group.0.title",
@@ -948,9 +948,227 @@ const Happy:Layout =  [
         ]
 
     }
-]
+];
+const Cars:Layout = [
+    {
+        name: "Game.Cars.Menu.Group.0.title",
+        cont:[
+            {
+                item:[
+                    [{BT:5,Num:0},{BT:5,Num:1},{BT:6,Num:0},{BT:6,Num:1}],
+                    [{BT:2,Num:10},{BT:2,Num:11},{BT:3,Num:10},{BT:3,Num:11}],
+                    [{BT:2,Num:20},{BT:2,Num:21},{BT:3,Num:20},{BT:3,Num:21}],
+                    [{BT:2,Num:30},{BT:2,Num:31},{BT:3,Num:30},{BT:3,Num:31}],
+                    [{BT:2,Num:40},{BT:2,Num:41},{BT:3,Num:40},{BT:3,Num:41}],
+                    [{BT:2,Num:50},{BT:2,Num:51},{BT:3,Num:50},{BT:3,Num:51}],
+                    [{BT:2,Num:60},{BT:2,Num:61},{BT:3,Num:60},{BT:3,Num:61}],
+                    [{BT:2,Num:70},{BT:2,Num:71},{BT:3,Num:70},{BT:3,Num:71}],
+                    [{BT:2,Num:80},{BT:2,Num:81},{BT:3,Num:80},{BT:3,Num:81}],
+                    [{BT:2,Num:90},{BT:2,Num:91},{BT:3,Num:90},{BT:3,Num:91}],
+                    [{BT:2,Num:100},{BT:2,Num:101},{BT:3,Num:100},{BT:3,Num:101}],
+                    [{BT:4,Num:10},{BT:4,Num:20},{BT:4,Num:30},{BT:4,Num:40},{BT:4,Num:50}],
+                    [{BT:4,Num:11},{BT:4,Num:21},{BT:4,Num:31},{BT:4,Num:41},{BT:4,Num:51}]
+                ]
+            }
+        ]
+    },
+    {    
+        name: "Game.Cars.Menu.Group.1.title",
+        cont: [
+            {
+                Selects: [
+                    "Game.Cars.Ball.1",
+                    "Game.Cars.Ball.2",
+                    "Game.Cars.Ball.3",
+                    "Game.Cars.Ball.4",
+                    "Game.Cars.Ball.5",
+                    "Game.Cars.Ball.6",
+                    "Game.Cars.Ball.7",
+                    "Game.Cars.Ball.8",
+                    "Game.Cars.Ball.9",
+                    "Game.Cars.Ball.10",
+                ],
+                items:[ 
+                        getNums(1,10,1,10,[
+                            [{BT:2,Num:10},{BT:2,Num:11}],
+                            [{BT:3,Num:10},{BT:3,Num:11}],
+                            [{BT:4,Num:10},{BT:4,Num:11}]
+                        ]),
+                        getNums(2,10,1,10,
+                            [
+                                [{BT:2,Num:20},{BT:2,Num:21}],
+                                [{BT:3,Num:20},{BT:3,Num:21}],
+                                [{BT:4,Num:20},{BT:4,Num:21}]
+                            ]),
+                        getNums(3,10,1,10,
+                            [
+                                [{BT:2,Num:30},{BT:2,Num:31}],
+                                [{BT:3,Num:30},{BT:3,Num:31}],
+                                [{BT:4,Num:30},{BT:4,Num:31}]
+                            ]),
+                        getNums(4,10,1,10,
+                            [
+                                [{BT:2,Num:40},{BT:2,Num:41}],
+                                [{BT:3,Num:40},{BT:3,Num:41}],
+                                [{BT:4,Num:40},{BT:4,Num:41}]
+                            ]),
+                        getNums(5,10,1,10,
+                            [
+                                [{BT:2,Num:50},{BT:2,Num:51}],
+                                [{BT:3,Num:50},{BT:3,Num:51}],
+                                [{BT:4,Num:50},{BT:4,Num:51}]
+                            ]),
+                        getNums(6,10,1,10,
+                            [
+                                [{BT:2,Num:60},{BT:2,Num:61}],
+                                [{BT:3,Num:60},{BT:3,Num:61}]
+                            ]),
+                        getNums(7,10,1,10,
+                            [
+                                [{BT:2,Num:70},{BT:2,Num:71}],
+                                [{BT:3,Num:70},{BT:3,Num:71}]
+                            ]),
+                        getNums(8,10,1,10,
+                            [
+                                [{BT:2,Num:80},{BT:2,Num:81}],
+                                [{BT:3,Num:80},{BT:3,Num:81}]
+                            ]),
+                        getNums(9,10,1,10,
+                            [
+                                [{BT:2,Num:90},{BT:2,Num:91}],
+                                [{BT:3,Num:90},{BT:3,Num:91}]
+                            ]),
+                        getNums(10,10,1,10,
+                            [
+                                [{BT:2,Num:100},{BT:2,Num:101}],
+                                [{BT:3,Num:100},{BT:3,Num:101}]
+                            ]),
+                ]
+            }
+        ]
+    },
+    {
+        name:"Game.Cars.Menu.Group.2.title",
+        cont: [
+            {
+                Selects:[],
+                items:[
+                    getNums(7,19,3,0,
+                        [[{BT:5,Num:0},{BT:5,Num:1}]])
+                ] 
+            }
+        ]
+    },
+    {
+        name: "Game.Cars.Menu.Group.3.title",
+        cont: [
+            {
+                aBT: [8,9,10],
+                sltedItem:0,
+                start: 1,
+                end:10,                
+                item: getNums                
+            }
+        ]               
+    }
+];
+const Always:Layout = [
+    {
+        name: "Game.Always.Menu.Group.0.title",
+        cont:[
+            {
+                title: "Game.Always.Item.5.title",
+                subtitle: "Game.Always.Item.7.title",
+                item:[
+                    [{BT:5,Num:0},{BT:6,Num:0},{BT:7,Num:0},{BT:8,Num:0}],
+                    [{BT:5,Num:1},{BT:6,Num:1},{BT:7,Num:1}]
+                ]
+            },
+            {
+                title: "Game.Always.Ball.1",
+                item:[
+                    [{BT:2,Num:10},{BT:2,Num:11},{BT:3,Num:10},{BT:3,Num:11}]
+                ]                
+            },
+            {
+                title: "Game.Always.Ball.2",
+                item:[
+                    [{BT:2,Num:20},{BT:2,Num:21},{BT:3,Num:20},{BT:3,Num:21}]
+                ]                
+            },
+            {
+                title: "Game.Always.Ball.3",
+                item:[
+                    [{BT:2,Num:30},{BT:2,Num:31},{BT:3,Num:30},{BT:3,Num:31}]
+                ]                
+            },
+            {
+                title: "Game.Always.Ball.4",
+                item:[
+                    [{BT:2,Num:40},{BT:2,Num:41},{BT:3,Num:40},{BT:3,Num:41}]
+                ]
+            },
+            {
+                title: "Game.Always.Ball.5",
+                item:[
+                    [{BT:2,Num:50},{BT:2,Num:51},{BT:3,Num:50},{BT:3,Num:51}]
+                ]
+            }
+        ]
+    },
+    {
+        name: "Game.Always.Menu.Group.1.title",
+        cont: [
+            {
+                BT:1,
+                Selects: [
+                    "Game.Always.Ball.1",
+                    "Game.Always.Ball.2",
+                    "Game.Always.Ball.3",
+                    "Game.Always.Ball.4",
+                    "Game.Always.Ball.5",
+                ],
+                fastSltItm:["Odd","Even","Big","Small","Clear"],
+                start: 0,
+                end:9,                
+                items:[ 
+                    getNums(1,9,0,10,[[{BT:2,Num:10},{BT:2,Num:11},{BT:3,Num:10},{BT:3,Num:11}]]),
+                    getNums(2,9,0,10,[[{BT:2,Num:20},{BT:2,Num:21},{BT:3,Num:20},{BT:3,Num:21}]]),
+                    getNums(3,9,0,10,[[{BT:2,Num:30},{BT:2,Num:31},{BT:3,Num:30},{BT:3,Num:31}]]),
+                    getNums(4,9,0,10,[[{BT:2,Num:40},{BT:2,Num:41},{BT:3,Num:40},{BT:3,Num:41}]]),
+                    getNums(5,9,0,10,[[{BT:2,Num:50},{BT:2,Num:51},{BT:3,Num:50},{BT:3,Num:51}]])
+                ]
+            }
+        ]
+    },
+    {
+        name: "Game.Always.Menu.Group.2.title",
+        cont: [
+            {
+                title: "Game.Always.Item.12.title",
+                item:[
+                    [{BT:12,Num:1},{BT:12,Num:2},{BT:12,Num:3},{BT:12,Num:4},{BT:12,Num:5}]
+                ]
+            },
+            {
+                title: "Game.Always.Item.13.title",
+                item:[
+                    [{BT:13,Num:1},{BT:13,Num:2},{BT:13,Num:3},{BT:13,Num:4},{BT:13,Num:5}]
+                ]
+            },
+            {
+                title: "Game.Always.Item.14.title",
+                item:[
+                    [{BT:14,Num:1},{BT:14,Num:2},{BT:14,Num:3},{BT:14,Num:4},{BT:14,Num:5}]
+                ]
+            }                        
+        ]
+
+    }
+];
 const Layouts:ILayouts= {}
 Layouts.MarkSix = MarkSixLayout;
 Layouts['3D'] = D3;
 Layouts.Happy = Happy;
+Layouts.Cars = Cars;
 export default Layouts;

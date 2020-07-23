@@ -3,7 +3,7 @@ import {PayRateItm} from '../data/if';
 import {BasePayRate} from './BasePayRate';
 export class PayRate extends BasePayRate<PayRateItm> {
     constructor(v:PayRateItm){
-        v.Profit=1;
+        v.Profit=0;
         super(v);
     }
     /*

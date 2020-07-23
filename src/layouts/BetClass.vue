@@ -94,7 +94,8 @@ export default class BetClass extends Vue{
 			const itm:Btg = tmp[key];
 			const ibtg:ItmBtg = {
 				id:key,
-				title: itm.title + (itm.shortT && key !=='74' ? ( itm.subtitle ? itm.subtitle.join('') : '' ): ''),
+				//title: itm.title + (itm.shortT && key !=='74' ? ( itm.subtitle ? itm.subtitle.join('') : '' ): ''),
+				title:itm.title,
 				chk:false,
 				ungrouped:false
 			}

@@ -55,7 +55,7 @@ export class BasePayRate<T>{
         //console.log('set NoAdjust:',v,this.data.NoAdjust);
     }
     get Profit():any {
-        //console.log('get Profit',this.data.Profit);
+        //console.log('Profit',this.data.Profit);
         if(!this.data.Profit){
             this.calProfit();
         }
@@ -329,6 +329,7 @@ export class BasePayRate<T>{
                     p = Math.round((1 - (this.Probability * this.Rate + this.extProbability*this.extRate))*1000000)/10000;
                 } else {
                     p = Math.round((1 - this.Probability * this.Rate)*1000000)/10000;
+                    console.log('calProfit',p,this.Probability,this.Rate);
                 }
                 this.data.Profit=p;
             }
