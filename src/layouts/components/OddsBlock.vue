@@ -1,9 +1,12 @@
 <template>
     <table :class="{oddblock:true,oddblockRightLine:rightLine,oddblockBottomLine:bottomLine,Stoped:Odds.isStop===1}">
         <tr>
-            <td class='col nums'>
-                <q-btn round size="sm" :color="getColor()" :label="getItemName()" />
+            <td class='col nums' :style="'backgroup-color:'+getColor()" v-if="titleLen>4">
+                {{title}}
             </td>
+            <td class='col nums' v-if="titleLen<5">
+                <q-btn  round size="sm" :color="getColor()" :label="title" />
+            </td>            
             <td class='col data'>
                 <div class='row' v-if="!EditMode" @dblclick="SwitchMode(Odds.Odds)">
                     <div class='col btnpos'>
@@ -83,6 +86,8 @@ export default class OddsBlock extends Vue {
     EditMode:boolean=false;
     NewOdds1:number=0;
     EditMode1:boolean=false;
+    title:string='';
+    titleLen:number=0;
     get digital(){
         if(this.dgt) return this.dgt;
         return 1;
@@ -104,7 +109,21 @@ export default class OddsBlock extends Vue {
             console.log('getItemName:',this.GType,bt,this.digital,this.dgt);
         }
         */
-        return itemName(bt,num,this,this.digital);
+        this.title=itemName(bt,num,this,this.digital);
+        this.titleLen= this.TitleLen(this.title);
+        //console.log('getItemName:',title,title.length,this.TitleLen(title));
+        //return title;
+    }
+    TitleLen(t:string){
+        let len=0
+        for(let i=0,n=t.length;i<n;i++){
+            let code=t.charCodeAt(i);
+            while(code > 0){
+                len++;
+                code = code >> 8;
+            }
+        }
+        return len;
     }
     async setOdds(BT:number,Num:number,add?:number,step?:number){
         //console.log('setOdds:',BT,Num,step);
@@ -163,7 +182,7 @@ export default class OddsBlock extends Vue {
     }    
     mounted(){
         //console.log('OddsBlock mounted:',this.Odds);
-
+        this.getItemName()
     }
 }
 //export default Vue.extend({

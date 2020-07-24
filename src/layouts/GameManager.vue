@@ -41,7 +41,7 @@
             <div class="gamefield my-tb-head col-1">{{$t('Table.UseAvgOdds')}}</div>
             <div class="gamefield col-12 col-md-3"><q-toggle v-model="MyGame.UseAvgOdds" />({{$t('Label.UseAvgMsg')}})</div>
         </div>        
-        <div class="row my-line-high">
+        <div class="row my-line-high" v-if="PInfo.Levels==9">
             <div class="gamefield my-tb-head col-1">{{$t('Table.GType')}}</div>
             <div class="gamefield col-12 col-md-3"><q-input outlined dense v-model="MyGame.GType"/></div>
         </div>

@@ -88,11 +88,12 @@ export class CGame {
             ],
             Happy:[
 
-            ],
-
-            
+            ],           
             Cars: [
 
+            ],
+            Always:[
+                
             ]
         }
     constructor(){

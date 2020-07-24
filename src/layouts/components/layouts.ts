@@ -1171,4 +1171,5 @@ Layouts.MarkSix = MarkSixLayout;
 Layouts['3D'] = D3;
 Layouts.Happy = Happy;
 Layouts.Cars = Cars;
+Layouts.Always = Always;
 export default Layouts;

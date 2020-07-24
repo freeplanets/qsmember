@@ -49,7 +49,7 @@ const chkColorOther=(v,GType)=>{
 };
 
 export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle?:boolean)=>{
-    let n = num % 10
+    let n = V.GType==='Happy' && bt===1 ? num % 100 : num % 10;
     let h 
     if(num > 100 && V.GType != 'Cars'){
         h=Math.floor(num/100)
@@ -279,7 +279,7 @@ function fixP(v?:number|string):string|undefined{
 }
 function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1,showScTitle:boolean|undefined=undefined){
     //console.log('itemName:',bt,num,V.GType);
-    let n = num % 10
+    let n = GType==='Happy' && bt===1 ? num % 100 : num % 10;
     let h 
     if(num > 100 && GType != 'Cars'){
         h=Math.floor(num/100)
