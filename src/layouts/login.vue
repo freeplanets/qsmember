@@ -91,8 +91,9 @@ export default class Login extends Vue {
     //console.log('login',this.Account,this.Password);
   }
   mounted(){
-    console.log('login SysInfo:',this.store.SysInfo);
-    //console.log('login:',this.$store.state.layout);
+    //console.log('login SysInfo:',this.store.SysInfo);
+    //console.log('login locale:',this.$i18n);
+    //this.$i18n.locale='zh-cn';
     //console.log('login user agent',navigator.userAgent);
 
   }

@@ -1166,10 +1166,121 @@ const Always:Layout = [
 
     }
 ];
+const Speed3:Layout=[
+    {
+        name: "Game.Speed3.Menu.Group.0.title",
+        cont:[
+            {
+                item:[
+                    [{BT:2,Num:0},{BT:2,Num:1},{BT:4,Num:0}],
+                ]
+            }
+        ]
+    },
+    {
+        name: "Game.Speed3.Menu.Group.1.title",
+        cont: [
+            {
+                item:[
+                    [{BT:1,Num:1},{BT:1,Num:2},{BT:1,Num:3}],
+                    [{BT:1,Num:4},{BT:1,Num:5},{BT:1,Num:6}]
+                ]                
+            }
+        ]
+    },
+    {
+        name: "Game.Speed3.Menu.Group.2.title",
+        cont: [
+            {
+                item:[
+                    [{BT:3,Num:1},{BT:3,Num:2},{BT:3,Num:3}],
+                    [{BT:3,Num:4},{BT:3,Num:5},{BT:3,Num:6}]
+                ]                
+            }                       
+        ]
+    },
+    {
+        name: "Game.Speed3.Menu.Group.3.title",
+        cont: [
+            {
+                item:[
+                    [{BT:7,Num:1},{BT:7,Num:2},{BT:7,Num:3}],
+                    [{BT:7,Num:4},{BT:7,Num:5},{BT:7,Num:6}]
+                ]                
+            }
+        ]
+    },
+    {
+        name: "Game.Speed3.Menu.Group.4.title",
+        cont: [
+            {
+                item:[
+                    [{BT:5,Num:4},{BT:5,Num:5},{BT:5,Num:6},{BT:5,Num:7},{BT:5,Num:8}],
+                    [{BT:5,Num:9},{BT:5,Num:10},{BT:5,Num:11},{BT:5,Num:12},{BT:5,Num:13}],
+                    [{BT:5,Num:14},{BT:5,Num:15},{BT:5,Num:16},{BT:5,Num:17}]
+                ]
+            }
+        ]
+    },
+    {
+        name: "Game.Speed3.Menu.Group.5.title",
+        cont: [
+            {
+                item:[
+                    [{BT:6,Num:0},{BT:6,Num:1},{BT:6,Num:2},{BT:6,Num:3},{BT:6,Num:4}],
+                    [{BT:6,Num:5},{BT:6,Num:6},{BT:6,Num:7},{BT:6,Num:8},{BT:6,Num:9}],
+                    [{BT:6,Num:10},{BT:6,Num:11},{BT:6,Num:12},{BT:6,Num:13},{BT:6,Num:14}]
+                ]
+            }
+        ]
+    }    
+]
+const Happy8:Layout=[
+    {
+        name: "Game.Happy8.Menu.Group.0.title",
+        cont:[
+            {
+                title : "Game.Happy8.Item.2.shortT",
+                item:[
+                    [{BT:2,Num:0},{BT:2,Num:1},{BT:3,Num:0},{BT:3,Num:1},{BT:4,Num:0}],
+                    [{BT:5,Num:0},{BT:5,Num:1},{BT:5,Num:2},{BT:5,Num:3}]
+                ]
+            },
+            {
+                title : "Game.Happy8.Item.6.title",
+                item:[
+                    [{BT:6,Num:0},{BT:6,Num:1},{BT:6,Num:2}]
+                ]                
+            },
+            {
+                title : "Game.Happy8.Item.7.title",
+                item:[
+                    [{BT:7,Num:0},{BT:7,Num:1},{BT:7,Num:2}]
+                ]                
+            },
+            {
+                title : "Game.Happy8.Item.8.title",
+                item:[
+                    [{BT:8,Num:0},{BT:8,Num:1},{BT:8,Num:2},{BT:8,Num:3},{BT:8,Num:4}]
+                ]                
+            }
+        ]
+    },
+    {
+        name: "Game.Happy8.Menu.Group.1.title",
+        cont: [
+            {
+                item:getNums(1,80,1)
+            }
+        ]
+    }    
+]
 const Layouts:ILayouts= {}
 Layouts.MarkSix = MarkSixLayout;
 Layouts['3D'] = D3;
 Layouts.Happy = Happy;
 Layouts.Cars = Cars;
 Layouts.Always = Always;
+Layouts.Speed3 = Speed3;
+Layouts.Happy8 = Happy8;
 export default Layouts;

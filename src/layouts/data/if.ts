@@ -42,7 +42,7 @@ export interface BasePayRateItm {
     BetForChange?:number;
     ChangeStart?:number;
     PerStep?:number;    
-    StepsGroup?:string;    
+    StepsGroup?:string | object;    
 }
 export interface StepG {
     Start:number;

@@ -111,7 +111,7 @@ export default class OddsBlock extends Vue {
         */
         this.title=itemName(bt,num,this,this.digital);
         this.titleLen= this.TitleLen(this.title);
-        //console.log('getItemName:',title,title.length,this.TitleLen(title));
+        //console.log('getItemName:',bt,num,this.title);
         //return title;
     }
     TitleLen(t:string){

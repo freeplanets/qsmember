@@ -175,7 +175,7 @@
                     >
                         <div class='col-10 col-md-1'
                             v-for="(nItm,nidx) in LItm"
-                            :key="'litm'+nidx"
+                            :key="nItm.BT+'litm'+nidx"
                         >
                             <div v-if="nItm.BT<1"></div>
                             <OB 

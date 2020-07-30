@@ -55,7 +55,8 @@
         </div>        
         <div class="row my-line-high">
             <div><q-btn color="green" icon-right="save" label="Save" @click="saveGame();" /></div>
-            <div v-if="PInfo.Levels==9"><q-btn color="red" icon-right="save" label="SaveDfOddsItem" @click="SaveDfOddsItem();" /></div>
+            <div v-if="PInfo.Levels==999"><q-btn color="red" icon-right="save" label="SaveDfOddsItem" @click="SaveDfOddsItem();" /></div>
+            <div v-if="PInfo.Levels==9"><q-btn color="red" icon-right="save" label="SaveGameCaption" @click="saveGameCaption();" /></div>
         </div>        
     </div>
 </div> 
@@ -67,10 +68,23 @@ import {Game} from './data/schema';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 import { SelectOptions,IMsg, ILoginInfo,CommonParams} from './data/if';
+import {itemNameNew} from './components/func';
 import getBetItems from './class/BetItems';
 import {GameM} from './class/GameM';
 import GameSelector from './components/GameSelector.vue';
 Vue.component('GS',GameSelector);
+interface OddsItem {
+    GType:string;
+    BetType:number;
+    Num:string;
+    [key:string]:string|number;
+}
+interface ItemSub {
+    title:string;
+    sctitle?:string[];
+    shortT?:string;
+    subTitle?:string[];
+}
 @Component
 export default class GameManager extends Vue{
     store=getModule(LayoutStoreModule);
@@ -153,6 +167,107 @@ export default class GameManager extends Vue{
             }
         }
         //console.log('saveGame',ans);
+    }
+    async saveGameCaption(){
+        const param:CommonParams={
+            UserID:this.PInfo.id,
+            sid:this.PInfo.sid,
+            Game: '',
+            BetType:''
+        }
+        const lang:string[] = ['zh-tw','zh-cn'];
+        console.log('saveGameCaption');
+        let dod=await this.getDfOddsItem();
+        let gc = {};
+        let btc = {};
+        let chk = {};
+        this.gamelist.map((itm:Game)=>{
+            if(itm.GType){
+                if(chk[`${itm.GType}`]){
+                    console.log(`${itm.id} ${itm.GType} done!!`);
+                    return;
+                } 
+                let gm={};
+                gm['type']=itm.GType;
+                btc[`${itm.GType}`]={};
+                lang.map(ln=>{
+                    this.$i18n.locale=ln;
+                    gm[ln]=this.$t(`GameTitle.${itm.id}`);
+                    if(dod[`${itm.GType}`]){
+                       dod[`${itm.GType}`].map((dta,bt)=>{
+                           if(typeof(btc[`${itm.GType}`][`${bt}`])==='undefined') btc[`${itm.GType}`][`${bt}`]={};
+                           btc[`${itm.GType}`][`${bt}`][`${ln}`]={
+                               name: this.$t(`Game.${itm.GType}.Item.${bt}.title`)
+                           }
+                           if(dta){
+                                let nums={};
+                                dta.map(num=>{
+                                    let aNum=itemNameNew(itm.GType,bt,num,this);
+                                    if(itm.GType==='MarkSix' && bt===15){
+                                        let tBT=Math.floor(num/100);
+                                        let tPos= Math.floor((num-tBT*100)/10);
+                                        aNum= this.$t(`Game.${itm.GType}.Item.${tBT}.sctitle.${tPos}`)+'-'+aNum;
+                                    } else {
+                                        const chkTemp:any = this.$t(`Game.${itm.GType}.Item.${bt}`);
+                                        let chkItem:ItemSub= chkTemp as ItemSub;
+                                        if(chkItem.sctitle){
+                                            let base=10;
+                                            if(itm.GType==='Happy' && bt===1){
+                                                base=100;
+                                                aNum=aNum % 100;
+                                            }
+                                            let scPos=Math.floor(num/base);
+                                            if(!(itm.GType==='Cars' && bt !==1)){
+                                                aNum= this.$t(`Game.${itm.GType}.Item.${bt}.sctitle.${scPos}`)+'-'+aNum;
+                                            }
+                                        }
+                                    }
+                                    if(num !== parseInt(aNum,10)) nums[`${num}`]=aNum;
+                                });
+                                let chkLen=Object.keys(nums).length
+                                if(chkLen>0){
+                                    btc[`${itm.GType}`][`${bt}`][`${ln}`]['values']=nums;
+                                }
+                           }
+                       }) 
+                    }
+                })
+                gc[`${itm.id}`]=gm;
+                chk[`${itm.GType}`]=true;                
+            }
+        })
+        this.$i18n.locale='zh-tw';
+        console.log('saveGameCaption:',gc);
+        console.log('saveGameCaption:',btc);
+        param.Game = JSON.stringify(gc);
+        param.BetType = JSON.stringify(btc);
+        //let GC=this.$t('GameTitle');
+
+        const msg= await this.ax.getApi('saveGameCaption',param,'post');
+        //const ans = await this.ax.createBetItems(param);
+        console.log(msg);
+        this.$q.dialog({
+            title: this.$t('Label.Save') as string,
+            message: msg.ErrNo===0 ? 'OK!!' : 'Error!!'
+        });
+    }
+    async getDfOddsItem(){
+        const param:CommonParams={
+            UserID:this.PInfo.id,
+            sid:this.PInfo.sid,
+        }
+        const msg= await this.ax.getApi('getDfOddsItem',param);
+        let tmp:number[][][]=[];
+        if(msg.data){
+            let data:OddsItem[]=msg.data as OddsItem[];
+            data.map(itm=>{
+                if(typeof(tmp[itm.GType])==='undefined') tmp[itm.GType]=[];
+                if(typeof(tmp[itm.GType][itm.BetType])==='undefined') tmp[itm.GType][itm.BetType]=[];
+                tmp[itm.GType][itm.BetType].push(parseInt(itm.Num,10))
+            })
+        }
+        console.log(tmp);
+        return tmp;        
     }
     async SaveDfOddsItem(){
         if(this.MyGame){

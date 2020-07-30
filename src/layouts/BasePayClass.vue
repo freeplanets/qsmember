@@ -49,7 +49,7 @@
                 <td :class="{'test':true,redColor:itm.Profit<0}">{{ itm.Profit }}</td>
                 <td class="test"><input type="text" size='4' v-model="itm.Rate" @change="chkItem(itm)" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.TopRate"  /></td>
-                <td class="test"><input type="text" size='4' v-model="itm.Probability" @change="chkItem(itm)" /></td>
+                <td class="test">{{itm.Probability}}</td>
                 <td class="test"><input type="text" size='4' v-model="itm.TotalNums" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.SingleNum" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.UnionNum" /></td>
@@ -199,6 +199,10 @@ export default class BetClass extends Vue{
         //const gid:string = v.value as string;
         this.curGameID = v.value as number;
         const btg=BTG[this.curGameID];
+        if(!PayRateData[btg]){
+            this.showProgress=false;
+            return;
+        }
         const tmp:object=PayRateData[btg].data;
         const order:string[]=PayRateData[btg].order;
         let itms:BasePayRateItm[];
@@ -385,6 +389,9 @@ export default class BetClass extends Vue{
         const dtas:BasePayRateItm[] = [];
         this.BasePayR.map(itm=>{
             if(itm.DataChanged) {
+                if(itm.Datas.StepsGroup){
+                    itm.Datas.StepsGroup = JSON.parse(itm.Datas.StepsGroup as string);
+                }
                 dtas.push(itm.Datas);
             }
         })
@@ -397,7 +404,8 @@ export default class BetClass extends Vue{
         const param:CommonParams={
             UserID:this.PInfo.id,
             sid:this.PInfo.sid,
-			GameID: this.models.value,
+            GameID: this.models.value,
+            GType: this.models.GType,
             ModifyID: this.PInfo.id,
             data: JSON.stringify(dtas)            
         }

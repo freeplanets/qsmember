@@ -94,6 +94,12 @@ export class CGame {
             ],
             Always:[
                 
+            ],
+            Speed3: [
+
+            ],
+            Happy8: [
+                
             ]
         }
     constructor(){

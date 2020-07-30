@@ -28,7 +28,7 @@
                 <div class='col-2 mytable-field'>{{itm.PDate + ' ' + itm.PTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTimeS}}</div>
-                <div class='col-2 mytable-field'>{{itm.Result}}{{ itm.SpNo ? `+${itm.SpNo}`:'' }}</div>
+                <div class='col-2 mytable-field'><div style='word-break: break-all;'>{{itm.Result}}{{ itm.SpNo ? `+${itm.SpNo}`:'' }}</div></div>
                 <div class='col-1 mytable-field'>{{$t(`Label.Settled.${itm.isSettled}`)}}</div>
                 <div class='col mytable-field'>
                     <div class="row">
@@ -57,7 +57,7 @@
         </q-dialog>
         </div>
         <q-dialog v-model="isInputNum" persistent>
-        <q-card style="min-width: 350px">
+        <q-card style="min-width: 350px; max-width: 500px;">
             <q-card-section>
             <div class="text-h6">{{$t('Label.InputNums')}}</div>
             </q-card-section>

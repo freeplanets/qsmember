@@ -97,7 +97,7 @@ export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle?:boolean)
         exTitle = btitem.subtitle[ext]
       }
       //exTitle = V.$t('Game.' + V.GType + '.Item.'+bt+'.shortT') + V.$t('Game.' + V.GType + '.Item.'+bt+'.subtitle.' + ext)
-      return exTitle
+      return exTitle;
     }
     if(dgt>1){
       return padingZero(num,dgt)
@@ -270,14 +270,22 @@ function fixP(v?:number|string):string|undefined{
         n = parseFloat(v);
     } 
     else n=v;
+    /*
     if(n){
         const ba:number=BaNum(n)/10;
-        if(ba<100) return n+'';
+        //if(ba<100) return n+'';
+        console.log(n,ba);
         return (Math.round(n*ba)/ba)+'';
+    } else {
+        console.log('pass',n);
+    }
+    */
+    if(n){
+       return parseFloat(n.toFixed(6))+'';
     }
     return n+'';
 }
-function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1,showScTitle:boolean|undefined=undefined){
+export function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1,showScTitle:boolean|undefined=undefined){
     //console.log('itemName:',bt,num,V.GType);
     let n = GType==='Happy' && bt===1 ? num % 100 : num % 10;
     let h 

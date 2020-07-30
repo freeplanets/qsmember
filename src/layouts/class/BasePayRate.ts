@@ -97,12 +97,14 @@ export class BasePayRate<T>{
     get Probability():number |undefined{
         return this.data.Probability;
     }
+    /*
     set Probability(v:number |undefined){
         this.data.Probability = v;
         //this.calTopRate();
         //this.calProfit();
         this.isDataChanged = true;
     }
+    */
     set ExtProb(v:number){
         this.extProbability = v;
     }
@@ -211,7 +213,7 @@ export class BasePayRate<T>{
         val.map(itm=>{
             if(itm.Step){
                 itm.Start = typeof(itm.Start)==='string' ?  parseInt(itm.Start,10) : itm.Start;
-                itm.Step = typeof(itm.Step)==='string' ?  parseInt(itm.Step,10) : itm.Step;
+                itm.Step = typeof(itm.Step)==='string' ?  parseFloat(itm.Step) : itm.Step;
                 const ans =  this.fetchValueToSteps(itm.Step);
                 if(ans){
                     itm.Step = ans;
@@ -329,7 +331,7 @@ export class BasePayRate<T>{
                     p = Math.round((1 - (this.Probability * this.Rate + this.extProbability*this.extRate))*1000000)/10000;
                 } else {
                     p = Math.round((1 - this.Probability * this.Rate)*1000000)/10000;
-                    console.log('calProfit',p,this.Probability,this.Rate);
+                   // console.log('calProfit',p,this.Probability,this.Rate);
                 }
                 this.data.Profit=p;
             }
