@@ -176,6 +176,15 @@ import {dateAddZero} from './components/func';
 import GameSelector from './components/GameSelector.vue';
 Vue.component('GS',GameSelector);
 
+interface GameType {
+    GType:string;
+    OpenNums:number;
+    OpenSP:number;
+    StartNum:number;
+    EndNum:number;
+    SameNum:number;
+}
+
 @Component
 export default class TermManager extends Vue {
     private store = getModule(LayoutStoreModule);
@@ -212,6 +221,8 @@ export default class TermManager extends Vue {
     curGame:Game|undefined;
     hasSPNO:boolean=false;
     NoSettleDate:string='';
+    GTypes:GameType[]=[];
+    curGType:GameType|undefined;
     get ax(){
         return this.store.ax;
     }
@@ -231,7 +242,11 @@ export default class TermManager extends Vue {
     setCurGames(v:SelectOptions){
         this.models = v;
         this.term.GameID = v.value as number;
-        this.nums=new Array(v.OpenNums);
+        this.curGType = this.GTypes.find(itm=>itm.GType===v.GType);
+        if(this.curGType){
+            this.nums=new Array(this.curGType.OpenNums);
+        }
+        //this.nums=new Array(v.OpenNums);
         this.getTerms();
     }      
     ShowAdd(){
@@ -392,7 +407,40 @@ export default class TermManager extends Vue {
         }
         //const nums:string[]=v.split(',');
     }
+    chkNums(nums:string[]):boolean{
+        if(this.curGType){
+            if(nums.length != this.curGType.OpenNums)  return false;
+            const GT=this.curGType;
+            const tmpA:number[]=[];
+            let hasSpace = false
+            nums.map(num=>{
+                if(hasSpace) return;
+                if(num==='') {
+                    hasSpace = true;
+                    return;
+                }
+                const iNum:number = parseInt(num,10);
+                if(iNum < GT.StartNum) return false;
+                if(iNum > GT.EndNum) return false;
+                if(tmpA.indexOf(iNum)===-1) tmpA.push(iNum);
+            })
+            if(hasSpace) return false;
+            if(!GT.SameNum){
+                if(nums.length !== tmpA.length) return false;
+            }
+        } else {
+            return true;
+        }
+        return false;
+    }
     async SendNums(){
+        if(!this.chkNums(this.nums)) {
+            this.$q.dialog({
+                title: this.$t('Label.InputNums') as string,
+                message: 'Error!!'
+            }) 
+            return ;
+        }
         this.isInputNum=false;
         this.showInProcess=true;
         if(this.curResult){
@@ -443,6 +491,17 @@ export default class TermManager extends Vue {
             })            
         }
     }
+    async getGameType(){
+        const param:CommonParams={
+            UserID:this.User.id,
+            sid:this.User.sid,
+        }
+        let ans:IMsg=await this.ax.getApi('getGameType',param);
+        if(ans.ErrNo===0){
+            this.GTypes = ans.data as GameType[];
+            console.log('getGameType:',this.GTypes);
+        }
+    }
     getToday(){
         this.sdate = JDate.today.start;
         this.getTerms();
@@ -467,6 +526,7 @@ export default class TermManager extends Vue {
         }     
         this.term.PDate=this.dateString;
         this.getToday();
+        this.getGameType();
         //console.log(this.$t(`Label.Settled`),this.$t(`Label.Settled.${1}`));
     }
 }
