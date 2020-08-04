@@ -28,7 +28,7 @@
                 <div class='col-2 mytable-field'>{{itm.PDate + ' ' + itm.PTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTimeS}}</div>
-                <div class='col-2 mytable-field'><div style='word-break: break-all;'>{{itm.Result}}{{ itm.SpNo ? `+${itm.SpNo}`:'' }}</div></div>
+                <div class='col-2 mytable-field'><div style='word-break: normal;'>{{itm.Result.replace(/\,/g,', ')}} {{ itm.SpNo ? `+${itm.SpNo}`:'' }}</div></div>
                 <div class='col-1 mytable-field'>{{$t(`Label.Settled.${itm.isSettled}`)}}</div>
                 <div class='col mytable-field'>
                     <div class="row">
@@ -431,7 +431,7 @@ export default class TermManager extends Vue {
         } else {
             return true;
         }
-        return false;
+        return true;
     }
     async SendNums(){
         if(!this.chkNums(this.nums)) {
