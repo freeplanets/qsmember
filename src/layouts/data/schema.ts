@@ -60,6 +60,7 @@ export interface ITerms {
     ResultFmt?:string;
     SpNo?:string;
     isSettled?:number;
+    isCanceled?: number;
     ModifyID:number;
 }
 

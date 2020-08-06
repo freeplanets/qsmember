@@ -12,7 +12,7 @@
 		</div>
         <div v-if="data.length>0" class='mytable'>
             <div class="row">
-                <div class='col-1 mytable-head mytable-field'>{{$t('Label.TermID')}}</div>
+                <div class='col-2 mytable-head mytable-field'>{{$t('Label.TermID')}}</div>
                 <div class='col-2 mytable-head mytable-field'>{{$t('Label.OpenDate')+$t('Label.Time')}}</div>
                 <div class='col-1 mytable-head mytable-field'>{{$t('Label.BetEndTime')}}</div>
                 <div class='col-1 mytable-head mytable-field'>{{$t('Label.SPEndTime')}}</div>
@@ -24,7 +24,7 @@
                 v-for="(itm,idx) in data"
                 :key="idx"
             >
-                <div class='col-1 mytable-field'>{{itm.TermID}}</div>
+                <div class='col-2 mytable-field'>{{itm.TermID}}</div>
                 <div class='col-2 mytable-field'>{{itm.PDate + ' ' + itm.PTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTimeS}}</div>
@@ -32,10 +32,11 @@
                 <div class='col-1 mytable-field'>{{$t(`Label.Settled.${itm.isSettled}`)}}</div>
                 <div class='col mytable-field'>
                     <div class="row">
-                        <div class='col'><q-btn color="blue" dense :label="$t('Button.Edit')" @click="Edit(itm)" /></div>
-                        <div class='col'><q-btn color="green" dense :label="$t('Label.InputNums')" @click="InputNum(itm,itm.Result,itm.SpNo)" /></div>
+                        <div class='col' v-if="itm.isSettled===0 && itm.isCanceled===0"><q-btn color="blue" dense :label="$t('Button.Edit')" @click="Edit(itm)" /></div>
+                        <div class='col' v-if="itm.isCanceled===0"><q-btn color="green" dense :label="$t('Label.InputNums')" @click="InputNum(itm,itm.Result,itm.SpNo)" /></div>
                         <div class='col'><q-btn color="blue" dense :label="$t('Button.EditRecord')" @click="getEditRecord(itm.id);" /></div>
-                        <div class='col' v-if="itm.isSettled===0"><q-btn color="red" dense :label="$t('Label.Delete')" @click="DelTerm(itm.id);" /></div>
+                        <div class='col' v-if="itm.isSettled===0 && itm.isCanceled===0"><q-btn color="red" dense :label="$t('Label.Delete')" @click="DelTerm(itm.id);" /></div>
+                        <div class='col' v-if="itm.isSettled===0 && itm.isCanceled===0"><q-btn color="red" dense :label="$t('Label.Cancel')" @click="CancelTerm(itm.id,itm.TermID);" /></div>
                     </div>
                 </div>             
             </div>
@@ -242,13 +243,18 @@ export default class TermManager extends Vue {
     setCurGames(v:SelectOptions){
         this.models = v;
         this.term.GameID = v.value as number;
-        this.curGType = this.GTypes.find(itm=>itm.GType===v.GType);
-        if(this.curGType){
-            this.nums=new Array(this.curGType.OpenNums);
+        if(v.GType){
+            this.setCurGType(v.GType);
         }
         //this.nums=new Array(v.OpenNums);
         this.getTerms();
-    }      
+    }
+    setCurGType(GType:string){
+        this.curGType = this.GTypes.find(itm=>itm.GType===GType);
+        if(this.curGType){
+            this.nums=new Array(this.curGType.OpenNums);
+        }        
+    }
     ShowAdd(){
         if(this.NoSettleDate){
             this.$q.dialog({
@@ -491,6 +497,42 @@ export default class TermManager extends Vue {
             })            
         }
     }
+    CancelTerm(tid:number,TermID:string){
+        let GTitle =this.models ? this.models.label : '';
+        this.$q.dialog({
+            title: this.$t('Label.Cancel') as string,
+            message: `${this.$t('Label.Cancel')} ${GTitle} ${this.$t('Label.TermID')} : ${TermID} ?`,
+            ok: true,
+            cancel: true
+        }).onCancel( ()=>{
+            console.log('cancel');
+            return;
+        }).onOk(async ()=>{
+            await this.doCancelTerm(tid);
+        });
+        console.log('after cancel');
+    }
+    async doCancelTerm(tid:number){
+        const param:CommonParams={
+            UserID:this.User.id,
+            sid:this.User.sid,
+            tid
+        }
+        const msg:IMsg=await this.ax.getApi('CancelTerm',param);
+        if(msg.ErrNo===0){
+            this.$q.dialog({
+                title: this.$t('Label.Cancel') as string,
+                message: 'OK!!'
+            }).onOk(async ()=>{
+                await this.getTerms();
+            });            
+        } else {
+            this.$q.dialog({
+                title: this.$t('Label.Cancel') as string,
+                message: this.$t(`Error.${msg.ErrNo}`) as string
+            })            
+        }
+    }    
     async getGameType(){
         const param:CommonParams={
             UserID:this.User.id,
@@ -499,6 +541,11 @@ export default class TermManager extends Vue {
         let ans:IMsg=await this.ax.getApi('getGameType',param);
         if(ans.ErrNo===0){
             this.GTypes = ans.data as GameType[];
+            if(!this.curGType){
+                if(this.models){
+                    this.setCurGType(this.models.GType ? this.models.GType : '')
+                }
+            }
             console.log('getGameType:',this.GTypes);
         }
     }
@@ -550,7 +597,7 @@ td {
     vertical-align: middle;
 }
 .mytable {
-    max-width: 1000px; 
+    max-width: 1350px; 
     padding-left: 8px;
 }
 .mytable-head {
