@@ -14,12 +14,10 @@ export interface IUser {
     UpId?: number;
     PayClassID?: number;
     PayClass?:string;
-    Deposit?:number;
-    Withdraw?:number;
-    CreateDate?: string;
-    ModifyDate?: string;
+    forcePWChange?:number;
+    CreateTime?: string;
+    ModifyTime?: string;
     ModifyID?:number;
-    CDate?: Date;
 }
 
 export interface IPayRate {
@@ -48,7 +46,7 @@ export interface IGames {
 }
 
 export interface ITerms {
-    id?:number;
+    id:number;
     GameID:number;
     TermID:string;
     TCenterID?:string;

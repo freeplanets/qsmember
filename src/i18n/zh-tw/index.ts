@@ -71,7 +71,8 @@ export default {
       '成交',
       '會員取消',
       '系統註銷'
-    ]
+    ],
+    GAMsg:'請用手機APP-Google Authenticator 掃瞄後存檔.'
   },
   Tip:{
     UserFind: "請輸入名稱或代號"
@@ -101,6 +102,7 @@ export default {
     PayClassID: '盤口',
     Account: '帳號',
     Password: '密碼',
+    Pass2OrNot: '設定二階段密碼',
     Nickname: '暱稱',
     Types: '類別',
     Levels: '層級',

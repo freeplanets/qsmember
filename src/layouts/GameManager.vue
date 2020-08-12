@@ -183,16 +183,17 @@ export default class GameManager extends Vue{
         let chk = {};
         this.gamelist.map((itm:Game)=>{
             if(itm.GType){
-                if(chk[`${itm.GType}`]){
-                    console.log(`${itm.id} ${itm.GType} done!!`);
-                    return;
-                } 
                 let gm={};
                 gm['type']=itm.GType;
-                btc[`${itm.GType}`]={};
+                if(!btc[`${itm.GType}`]) btc[`${itm.GType}`]={};
                 lang.map(ln=>{
                     this.$i18n.locale=ln;
+                    console.log('Lang:',ln);
                     gm[ln]=this.$t(`GameTitle.${itm.id}`);
+                    if(chk[`${itm.GType}`]){
+                        console.log(`${itm.id} ${itm.GType} done!!`);
+                        return;
+                    }                     
                     if(dod[`${itm.GType}`]){
                        dod[`${itm.GType}`].map((dta,bt)=>{
                            if(typeof(btc[`${itm.GType}`][`${bt}`])==='undefined') btc[`${itm.GType}`][`${bt}`]={};
@@ -218,7 +219,10 @@ export default class GameManager extends Vue{
                                             }
                                             let scPos=Math.floor(num/base);
                                             if(!(itm.GType==='Cars' && bt !==1)){
-                                                aNum= this.$t(`Game.${itm.GType}.Item.${bt}.sctitle.${scPos}`)+'-'+aNum;
+                                                if(itm.GType==='Cars' && bt ===1){
+                                                    if(aNum===10 || aNum===0) scPos=scPos-1
+                                                }
+                                                aNum= this.$t(`Game.${itm.GType}.Item.${bt}.sctitle.${scPos}`)+'-'+aNum;                                             
                                             }
                                         }
                                     }
@@ -232,13 +236,14 @@ export default class GameManager extends Vue{
                        }) 
                     }
                 })
+                console.log('gc:',itm.id,gm);
                 gc[`${itm.id}`]=gm;
                 chk[`${itm.GType}`]=true;                
             }
         })
         this.$i18n.locale='zh-tw';
-        console.log('saveGameCaption:',gc);
-        console.log('saveGameCaption:',btc);
+        //console.log('saveGameCaption:',gc);
+        //console.log('saveGameCaption:',btc);
         param.Game = JSON.stringify(gc);
         param.BetType = JSON.stringify(btc);
         //let GC=this.$t('GameTitle');

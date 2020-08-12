@@ -202,6 +202,8 @@ export interface ILoginInfo {
     Account: string;
     sid: string;
     Levels:number;
+    isTwoPassAsked:number;
+    isChkGA:number;
 }
 
 export interface ParamLog {

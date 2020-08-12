@@ -1,0 +1,26 @@
+insert into BasePayRate(
+	GameID,GType,BetType,SubType,isParlay,NoAdjust,Profit,DfRate,TopRate,Steps,TopPay,OneHand,PlusRate,
+	TotalNums,UseAvg,SingleNum,UnionNum,MinHand,MaxHand,BetForChange,ChangeStart,PerStep,StepsGroup)
+select 30,GType,BetType,SubType,isParlay,NoAdjust,Profit,DfRate,TopRate,Steps,TopPay,OneHand,PlusRate,
+	TotalNums,UseAvg,SingleNum,UnionNum,MinHand,MaxHand,BetForChange,ChangeStart,PerStep,StepsGroup
+from BasePayRate where GameID=22;
+
+1=>27 =>pc 27 => 6
+2=>26 =>pc 28 => 16
+20=>23 =>pc 29 => 23
+12=>25 =>pc 30  =>19
+21=>28 =>pc 31 =>24
+19=>24 =>pc 32 =>26
+22=>29 =>pc 33 =>25
+22=>30 =>pc 34 =>25
+
+insert into PayClass(GameID,PayClassName) 
+values(27,'A'),(26,'A'),(23,'A'),(25,'A'),(28,'A'),(24,'A'),(29,'A'),(30,'A')
+
+insert into PayRate(PayClassID,GameID,BetType,SubType,Rate)
+select 34,30,BetType,SubType,Rate from PayRate
+where GameID=22 and PayClassID=25
+
+insert into BetClass(GameID,BCName,BetTypes)
+select 30,BCName,BetTypes from BetClass
+where GameID=22

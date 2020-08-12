@@ -13,7 +13,7 @@
         <div v-if="data.length>0" class='mytable'>
             <div class="row">
                 <div class='col-2 mytable-head mytable-field'>{{$t('Label.TermID')}}</div>
-                <div class='col-2 mytable-head mytable-field'>{{$t('Label.OpenDate')+$t('Label.Time')}}</div>
+                <div class='col-2 mytable-head mytable-field'>{{`${$t('Label.OpenDate')} ${$t('Label.Time')}`}}</div>
                 <div class='col-1 mytable-head mytable-field'>{{$t('Label.BetEndTime')}}</div>
                 <div class='col-1 mytable-head mytable-field'>{{$t('Label.SPEndTime')}}</div>
                 <div class='col-2 mytable-head mytable-field'>{{$t('Dialog.OpenResult')}}</div>
@@ -28,7 +28,7 @@
                 <div class='col-2 mytable-field'>{{itm.PDate + ' ' + itm.PTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTimeS}}</div>
-                <div class='col-2 mytable-field'><div style='word-break: normal;'>{{itm.Result.replace(/\,/g,', ')}} {{ itm.SpNo ? `+${itm.SpNo}`:'' }}</div></div>
+                <div class='col-2 mytable-field'><div style='word-break: normal;'>{{itm.Result ? itm.Result.replace(/\,/g,', ') : ''}} {{ itm.SpNo ? `+${itm.SpNo}`:'' }}</div></div>
                 <div class='col-1 mytable-field'>{{$t(`Label.Settled.${itm.isSettled}`)}}</div>
                 <div class='col mytable-field'>
                     <div class="row">

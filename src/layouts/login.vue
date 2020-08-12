@@ -66,12 +66,16 @@ export default class Login extends Vue {
         this.isLogin = true;
         //this.store.leftDrawerOpen=true;
         console.log('Login PInfo:',this.Personal);
-        this.$router.push({path:'/'});      
+        if(this.Personal.isChkGA){
+          
+        } else {
+          this.$router.push({path:'/'});      
+        }
     } else {
       this.$q.dialog({
           title: this.$t('Title.PersonalInfo') as string,
           message: this.$t('Title.LoginERR') as string
-      })      
+      });      
     }
     //console.log('login:',url);
     /*

@@ -13,19 +13,30 @@ import {ILoginInfo} from './if';
 export default class LayoutStoreModule extends VuexModule {
     private isleftDrawerOpen = true;
     public isLogin = false;
-    public personal:ILoginInfo = {id:0,Account:'',sid:'',Levels:0};
+    public personal:ILoginInfo = {
+        id:0,
+        Account:'',
+        sid:'',
+        Levels:0,
+        isTwoPassAsked:0,
+        isChkGA:0
+    };
+    private showGA = false;
     //public ApiUrl:string=myApiUrl;
     public ax=AxApi;
-    private sInfo={};
+    private sInfo='';
+    get isShowGA(){
+        return this.showGA;
+    }
     @Mutation
-    private SET_SYSINFO(info:object){
-        Object.assign(this.sInfo,info);
+    private SET_SYSINFO(info:string){
+        this.sInfo=info;
     }
     @Action 
-    public setSysInfo(info:object){
+    public setSysInfo(info:string){
         this.SET_SYSINFO(info);
     }
-    get SysInfo():object{
+    get SysInfo():string{
         return this.sInfo;
     }
     @Mutation
@@ -59,5 +70,15 @@ export default class LayoutStoreModule extends VuexModule {
     @Action
     public setIsLogin(value:boolean){
         this.SET_IS_LOGIN(value);
+    }
+
+    @Mutation
+    public SET_SHOW_GA(value:boolean){
+        this.showGA = value;
+    }
+
+    @Action
+    public setShowGA(value:boolean){
+        this.SET_SHOW_GA(value);
     }
 }

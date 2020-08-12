@@ -288,7 +288,7 @@ function fixP(v?:number|string):string|undefined{
 export function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1,showScTitle:boolean|undefined=undefined){
     //console.log('itemName:',bt,num,V.GType);
     let n = GType==='Happy' && bt===1 ? num % 100 : num % 10;
-    let h 
+    let h;
     if(num > 100 && GType != 'Cars'){
         h=Math.floor(num/100)
     } else {
@@ -307,8 +307,6 @@ export function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1
             const tmp2:string=V.$t(`Game.Cars.Item.${bt}.subTitle[${n}]`)+'';
             return tmp1+tmp2;
         } 
-        //if(bt==1) return V.$t('Game.Cars.Item.' + bt +'.sctitle[' + h +']') + ' ' + n 
-        //return V.$t('Game.Cars.Item.' + bt +'.sctitle[' + h +']') + V.$t('Game.Cars.Item.' + bt +'.subTitle[' + n +']')
     }
     if(GType=='MarkSix' && bt==53) return Num7(bt,num,V)
     if(GType=='MarkSix' && bt==15) return NumPass(num,V,showScTitle,bt)

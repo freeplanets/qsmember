@@ -67,7 +67,7 @@
 
                         <q-separator />
 
-                        <q-tab-panels v-model="tab" animated>
+                        <q-tab-panels v-model="tab" animated v-if="BItm.items">
                             <q-tab-panel 
                                 v-for="(lnItem,idx) in BItm.items"
                                 :key="'BTab'+idx"                                
@@ -88,7 +88,7 @@
                                             :Odds="getOdds(nItm.BT,nItm.Num)"
                                             :ExtOdds="Game.getOdds(nItm.BT,nItm.Num,(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
                                             :rightLine="nidx==(LItm.length-1)"
-                                            :bottomLine="Lidx==(LItm.length-1) || (nidx==9 && (LItm[Lidx+1] && LItm[Lidx+1].length<10))"
+                                            :bottomLine="Lidx==(LItm.length-1) || nidx==9"
                                             :GType="curGType"
                                             :colorWave="BItm.colorWave"
                                             :colorExt="BItm.colorExt"
@@ -128,6 +128,7 @@
                                 v-for="(BT,idx) in BItm.aBT"
                                 :key="'BTab'+idx"                                
                                 :name="'tab'+BT">
+                                <div v-if="BItm.item && typeof(BItm.item)==='function'">
                                 <div class='row justify-left'
                                     v-for="(LItm,Lidx) in tmpItem=BItm.item(BT,BItm.end,BItm.start)"
                                     :key="BT+'bitm'+Lidx"
@@ -151,20 +152,21 @@
                                             @OddChange="getCurOdds"></OB>
                                     </div>
                                 </div>
+                                </div>
                             </q-tab-panel>
                         </q-tab-panels>
                     </q-card>
                 </div>
                 <div
-                    v-if="!BItm.aBT"
+                    v-if="!BItm.aBT && BItm.item"
                 > 
-                    <div>{{ $t(BItm.title)+(BItm.subtitle ? $t(BItm.subtitle) : '') }}</div>
+                    <div>{{ `${BItm.title ? $t(BItm.title) : '' } ${(BItm.subtitle ? $t(BItm.subtitle) : '')}` }}</div>
                         <div class="row FastSlt" v-if="BItm.FastSlt">
                             <div class="row" v-if="BItm.FastSlt.subcont">
                                 <div class="row" v-for="(itm,idx) in BItm.FastSlt.subcont" :key="'fast'+idx">
-                                    <div>{{$t(itm.title)}}</div>
+                                    <div>{{itm.title ? $t(itm.title) : ''}}</div>
                                     <div v-for="(slt,sltidx) in  itm.subitem" :key="'fastsub'+idx+'-'+sltidx">
-                                        <q-btn :outline="!slt.isActive" size='sm' class='btn-pad' color="primary" :label="slt.num" @click="BItm.item=itm.func(itm.key,slt.num,BItm.BT);setActive(BItm.FastSlt.subcont);slt.isActive=true"/>
+                                        <q-btn :outline="!slt.isActive" size='sm' class='btn-pad' color="primary" :label="slt.num" @click="BItm.item=(itm.func? itm.func(itm.key,slt.num,BItm.BT):'');setActive(BItm.FastSlt ? BItm.FastSlt.subcont : []);slt.isActive=true"/>
                                     </div>
                                 </div>
                             </div>
@@ -179,14 +181,14 @@
                         >
                             <div v-if="nItm.BT<1"></div>
                             <OB 
-                                v-if="nItm.BT>0"
+                                v-if="nItm.BT>0 && BItm.item"
                                 :store="store"
                                 :tid="curTid"
                                 :GameID="curGameID"
                                 :dgt="BItm.dgt"
                                 :Odds="getOdds(nItm.BT,nItm.Num)" 
                                 :rightLine="nidx==(LItm.length-1)"
-                                :bottomLine="Lidx==(BItm.item.length-1) || (nidx==(BItm.item[Lidx].length-1) && (BItm.item[Lidx+1] && BItm.item[Lidx+1].length<BItm.item[Lidx].length))"
+                                :bottomLine="parseInt(Lidx,10)==BItm.item.length-1 || (nidx==(BItm.item[Lidx].length-1) && (BItm.item[Lidx+1] && BItm.item[Lidx+1].length<BItm.item[Lidx].length))"
                                 :GType="curGType"
                                 :colorWave="BItm.colorWave"
                                 :colorExt="BItm.colorExt"
@@ -345,7 +347,8 @@ export default class OddsManager extends Vue {
             this.changePage(this.cont,this.curIdx);
         }
     }
-    changePage(v:contBlock[],key:number){
+    changePage(v:contBlock[],key:number|string){
+        if(typeof(key)==='string') key=parseInt(key,10);
         if(this.cont != v){
             if(v[0].aBT){
                 this.tab='tab'+v[0].aBT[0];
@@ -403,7 +406,8 @@ export default class OddsManager extends Vue {
             this.getCurOdds();
         }
     }
-    setActive(subcont:FastSltSub[]){
+    setActive(subcont?:FastSltSub[]){
+        if(!subcont) subcont=[];
         subcont.map(itm=>{
             itm.subitem.map((subitm:FastSltSubItem)=>{
                 subitm.isActive=false;

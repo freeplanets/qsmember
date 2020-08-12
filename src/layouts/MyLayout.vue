@@ -18,9 +18,9 @@
         <div v-if="Personal.Account">
           <q-btn-dropdown flat icon="account_circle" :label="Personal.Account">
             <q-list>
-              <q-item clickable v-close-popup @click="logout">
+              <q-item clickable v-close-popup @click="showGA=true">
                 <q-item-section>
-                  <q-item-label>Photos</q-item-label>
+                  <q-item-label>{{$t('Table.Pass2OrNot')}}</q-item-label>
                 </q-item-section>
               </q-item>
 
@@ -51,7 +51,7 @@
     >
       <q-list>
         <q-item-label header>Essential Links</q-item-label>
-        <q-item to="/basepayclass"  @click="ProName=$t('Label.BasePayClassManage');showComment=false" clickable >
+        <q-item to="/basepayclass"  @click="ProName=$t('Label.BasePayClassManage')+'';showComment=false" clickable >
           <q-item-section avatar>
             <q-icon name="school" />
           </q-item-section>
@@ -59,7 +59,7 @@
             <q-item-label>{{ $t('Label.BasePayClassManage') }}</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/payclass"  @click="ProName=$t('Label.PayClassManage');showComment=false" clickable >
+        <q-item to="/payclass"  @click="ProName=$t('Label.PayClassManage')+'';showComment=false" clickable >
           <q-item-section avatar>
             <q-icon name="school" />
           </q-item-section>
@@ -67,7 +67,7 @@
             <q-item-label>{{ $t('Label.PayClassManage') }}</q-item-label>
           </q-item-section>
         </q-item>        
-        <q-item to="/betclass" @click="ProName=$t('Label.ClassName');showComment=false" exact>
+        <q-item to="/betclass" @click="ProName=$t('Label.ClassName')+'';showComment=false" exact>
           <q-item-section avatar>
             <q-icon name="home" />
           </q-item-section>
@@ -75,7 +75,7 @@
             <q-item-label>{{ $t('Label.ClassName')}}</q-item-label>
           </q-item-section>          
         </q-item>
-        <q-item to="/createpayclass" @click="ProName=$t('Label.CratePayClass');showComment=false">
+        <q-item to="/createpayclass" @click="ProName=$t('Label.CratePayClass')+'';showComment=false">
           <q-item-section avatar>
             <q-icon name="code" />
           </q-item-section>
@@ -83,7 +83,7 @@
             <q-item-label>{{$t('Label.CratePayClass')}}</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/termsmanager" @click="ProName=$t('Label.TermManager');showComment=false">
+        <q-item to="/termsmanager" @click="ProName=$t('Label.TermManager')+'';showComment=false">
           <q-item-section avatar>
             <q-icon name="chat" />
           </q-item-section>
@@ -91,7 +91,7 @@
             <q-item-label>{{$t('Label.TermManager')}}</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/gamemanager" @click="ProName=$t('Label.GameManager');showComment=false">
+        <q-item to="/gamemanager" @click="ProName=$t('Label.GameManager')+'';showComment=false">
           <q-item-section avatar>
             <q-icon name="chat" />
           </q-item-section>
@@ -99,7 +99,7 @@
             <q-item-label>{{$t('Label.GameManager')}}</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/adduser" @click="ProName=$t('Label.UserManager');showComment=false">
+        <q-item to="/adduser" @click="ProName=$t('Label.UserManager')+'';showComment=false">
           <q-item-section avatar>
             <q-icon name="people" />
           </q-item-section>
@@ -117,7 +117,7 @@
           </q-item-section>
         </q-item>
         -->
-        <q-item to="/oddsmanager" @click="ProName=$t('Label.OddsManager');showComment=false">
+        <q-item to="/oddsmanager" @click="ProName=$t('Label.OddsManager')+'';showComment=false">
           <q-item-section avatar>
             <q-icon name="emoji_symbols" />
           </q-item-section>
@@ -125,7 +125,7 @@
             <q-item-label>{{$t('Label.OddsManager')}}</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/betlists" @click="ProName=$t('Label.BetLists');showComment=false">
+        <q-item to="/betlists" @click="ProName=$t('Label.BetLists')+'';showComment=false">
           <q-item-section avatar>
             <q-icon name="receipt" />
           </q-item-section>
@@ -133,7 +133,7 @@
             <q-item-label>{{$t('Label.BetLists')}}</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/betreport" @click="ProName=$t('Label.BetReport');showComment=false">
+        <q-item to="/betreport" @click="ProName=$t('Label.BetReport')+'';showComment=false">
           <q-item-section avatar>
             <q-icon name="receipt" />
           </q-item-section>
@@ -177,11 +177,25 @@
           </q-item-section>
         </q-item>
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat :label="$t('Label.Cancel')" v-close-popup />
           <q-btn flat :label="$t('Button.Confirm')" @click="ChangePW" />
         </q-card-actions>        
       </q-card>
     </q-dialog>
+    <q-dialog v-model="showGA">
+      <q-card class="my-card">
+        <q-card-section>
+          <div class="text-h6">{{$t('Label.GAMsg')}}</div>
+        </q-card-section>        
+        <q-separator />
+        <div v-html="GAIMG">
+          </div>
+        <q-separator />
+        <q-card-actions align="right">
+          <q-btn v-close-popup flat color="primary" :label="$t('Label.Cancel')" />
+          <q-btn v-close-popup flat color="primary" :label="$t('Label.Save')" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>    
     <q-page-container>
       <router-view />
       <q-dialog v-model="showComment" seamless position="bottom">
@@ -197,6 +211,7 @@ import Component from 'vue-class-component';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {IMsg,ILoginInfo, CommonParams} from './data/if';
+import {Watch} from 'vue-property-decorator';
 //import {IUser} from './data/schema';
 import Comments from './components/Comments.vue';
 Vue.component('CMMT',Comments);
@@ -210,6 +225,7 @@ export default class MyLayout extends Vue {
   OPassword:string='';
   NPassword:string='';
   CPassword:string='';
+  GAIMG:string='';
   get leftDrawerOpen() {
     //console.log('leftDrawerOpen get:',this.store.leftDrawerOpen);
     return this.store.leftDrawerOpen;
@@ -218,12 +234,48 @@ export default class MyLayout extends Vue {
     //console.log('leftDrawerOpen set:');
     this.store.setLeftDrawerOpen(value);
   }
+  get showGA(){
+    return this.store.isShowGA;
+  }
+  set showGA(v:boolean){
+    this.store.setShowGA(v);    
+  }
+  @Watch('showGA',{immediate:true,deep:true})
+  onShowGAChange(){
+    //console.log('onShowGAChange',this.store.SysInfo);
+    if(this.store.isShowGA){
+      this.getGAImg();
+    }
+  }
   get isLogin(){
     return this.store.isLogin;
   }
   get Personal():ILoginInfo{
     return this.store.personal as ILoginInfo;
   }
+  async getGAImg(){
+    const param:CommonParams={
+      UserID:this.store.personal.id,
+      sid:this.store.personal.sid,
+      AppName:this.store.SysInfo
+    }
+    const msg:IMsg=await this.store.ax.getApi('getGAImg',param);
+    if(msg.ErrNo===0){
+      this.GAIMG=msg.ErrCon ? msg.ErrCon : '';
+    } 
+    //console.log(msg);
+  }
+  async SaveGAImg(){
+    const param:CommonParams={
+      UserID:this.store.personal.id,
+      sid:this.store.personal.sid
+    }
+    const msg:IMsg=await this.store.ax.getApi('SaveGAImg',param);
+    if(msg.ErrNo===0){
+      this.GAIMG=msg.ErrCon ? msg.ErrCon : '';
+    } 
+    //console.log(msg);
+  }  
   async getSysInfo(){
     const param:CommonParams={
       UserID:0,
@@ -233,7 +285,8 @@ export default class MyLayout extends Vue {
     //console.log(msg);
     if(msg.ErrNo===0){
       //Object.assign(this.store.SysInfo,msg.data);
-      this.store.setSysInfo(msg.data as object);
+      let a:any=msg.data;
+      this.store.setSysInfo(a.SysName);
     }
   }
   cleanPW(){
@@ -279,13 +332,15 @@ export default class MyLayout extends Vue {
   mounted() {
     //console.log('MyLayout mounted isLogin:',this.isLogin);
     this.getSysInfo();
-    if(!this.isLogin){
+    if(!this.isLogin){      
       //console.log('MyLayout:',this.$route);
       this.store.ax.Router = this.$router;
       if(this.$route.path !== '/login'){
         this.$router.push({path:'/login'});
       }
-    } 
+    } else {
+         this.$router.push({path:'/'});
+    }
   }
 }
 
