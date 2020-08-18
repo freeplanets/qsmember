@@ -14,6 +14,23 @@
       </q-input>
       <q-btn color="red" icon-right="send" label="Login" @click="login()" />  
     </div>
+    <q-dialog v-model="prompt" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">{{$t('Label.InputGA')}}</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input dense v-model="Pin" autofocus />
+        </q-card-section>
+        <q-card-section class="q-pt-none" v-if="GAError">
+          {{$t('Label.GAError')}}
+        </q-card-section>
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat :label="$t('Button.Confirm')" v-close-popup @click="GAValidate"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>    
   </div>
 </template>
 <script lang="ts">
@@ -30,6 +47,9 @@ export default class Login extends Vue {
   store = getModule(LayoutStoreModule);
   Account='';
   Password='';
+  Pin='';
+  prompt=false;
+  GAError=false;
   set Personal(value:ILoginInfo){
     this.store.setPersonal(value);
   }
@@ -67,7 +87,7 @@ export default class Login extends Vue {
         //this.store.leftDrawerOpen=true;
         console.log('Login PInfo:',this.Personal);
         if(this.Personal.isChkGA){
-          
+          this.prompt=true;
         } else {
           this.$router.push({path:'/'});      
         }
@@ -93,6 +113,23 @@ export default class Login extends Vue {
     })
     */
     //console.log('login',this.Account,this.Password);
+  }
+  async GAValidate(){
+    const param:CommonParams={
+      UserID:this.store.personal.id,
+      sid:this.store.personal.sid,
+      Pin:this.Pin
+    }
+    const msg:IMsg=await this.store.ax.getApi('GAValidate',param);
+    console.log('GAValidate:',msg);
+    if(msg.ErrNo===0){
+      //this.GAIMG=msg.ErrCon ? msg.ErrCon : '';
+      this.$router.push({path:'/'});  
+    } else {
+      this.Pin = '';
+      this.GAError=true;
+      this.prompt=true;
+    }
   }
   mounted(){
     //console.log('login SysInfo:',this.store.SysInfo);

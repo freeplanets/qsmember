@@ -150,18 +150,6 @@
         </q-card-section>
       </q-card>
         </q-dialog>
-        <q-dialog v-model="showInProcess">
-            <q-card>
-            <q-card-section>
-                <q-circular-progress
-                indeterminate
-                size="50px"
-                color="lime"
-                class="q-ma-md"
-                />                
-            </q-card-section>
-            </q-card>
-        </q-dialog>
     </div>    
 </template>
 <script lang="ts">
@@ -217,13 +205,18 @@ export default class TermManager extends Vue {
     showEditRecord:boolean=false;
     EditRecord:ParamLog[]=[];
     curResult:string|undefined;
-    showInProcess:boolean=false;
     InProcess:boolean=false;
     curGame:Game|undefined;
     hasSPNO:boolean=false;
     NoSettleDate:string='';
     GTypes:GameType[]=[];
     curGType:GameType|undefined;
+    get showProgress(){
+        return this.store.showProgress;
+    }
+    set showProgress(v:boolean){
+        this.store.setShowProgress(v);
+    }    
     get ax(){
         return this.store.ax;
     }
@@ -351,7 +344,7 @@ export default class TermManager extends Vue {
         if(this.InProcess) return;
         if(!this.term.GameID) return;
         this.InProcess=true;
-        this.showInProcess=true;
+        this.showProgress=true;
         const GameID:number=this.term.GameID;
         this.data=[];
         const ans=await this.ax.getTerms(this.store.personal.id,this.store.personal.sid,GameID,this.sdate.split('/').join('-'))
@@ -376,7 +369,7 @@ export default class TermManager extends Vue {
             */
         }
         this.InProcess=false;
-        this.showInProcess=false;
+        this.showProgress=false;
     }
     Edit(v:ITerms){
         this.oldTerm=Object.assign({},v);
@@ -448,7 +441,7 @@ export default class TermManager extends Vue {
             return ;
         }
         this.isInputNum=false;
-        this.showInProcess=true;
+        this.showProgress=true;
         if(this.curResult){
             const tmp:ParamLog = {
                 id:0,
@@ -466,7 +459,7 @@ export default class TermManager extends Vue {
         const ans=await ax.saveNums(this.store.personal.id,this.store.personal.sid,this.curTid,this.term.GameID,this.nums.join(','),this.curTermSettleStatus,this.PLog);
         //console.log('SendNums',ans);
         if(ans.ErrNo===0){
-            this.showInProcess=false;  
+            this.showProgress=false;  
             this.$q.dialog({
                 title: this.$t('Label.Save') as string,
                 message: 'OK!!'

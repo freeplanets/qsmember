@@ -36,19 +36,7 @@
                 <div class="col-1 test">{{ itm.MinHand }}</div>
                 <div class="col-1 test">{{ itm.MaxHand }}</div>                
             </div>
-        </div>
-    <q-dialog v-model="showProgress" persistent>
-        <q-card>
-            <q-card-section>
-                <q-circular-progress
-                indeterminate
-                size="50px"
-                color="light-blue"
-                class="q-ma-md"
-                />
-            </q-card-section>
-        </q-card>
-    </q-dialog>        
+        </div>     
 	</div>
 </template>
 <script lang="ts">
@@ -89,7 +77,13 @@ export default class BetClass extends Vue{
     private curPayClass:PayClass={id:0,PayClassName:''};
     public PayR:PayRate[]=[];
     private PNChange:boolean=false;
-    showProgress:boolean=false;
+    get showProgress(){
+        return this.store.showProgress;
+    }
+    set showProgress(v:boolean){
+        this.store.setShowProgress(v);
+    }
+
     showDataTable:boolean=false;
     spArr:number[]|undefined;
 	options:SelectOptions[] = [

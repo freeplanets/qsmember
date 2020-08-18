@@ -94,18 +94,6 @@
         </q-card-actions>        
       </q-card>
     </q-dialog>
-    <q-dialog v-model="showProgress" persistent>
-        <q-card>
-            <q-card-section>
-                <q-circular-progress
-                indeterminate
-                size="50px"
-                color="light-blue"
-                class="q-ma-md"
-                />
-            </q-card-section>
-        </q-card>
-    </q-dialog>
 	</div>
 </template>
 <script lang="ts">
@@ -170,8 +158,14 @@ export default class BetClass extends Vue{
 		{value: 0,label:'default'}
     ]
     showBFCG:boolean=false;
-    showProgress:boolean=false;
+    //showProgress:boolean=false;
     showDataTable:boolean=false;
+    get showProgress(){
+        return this.store.showProgress;
+    }
+    set showProgress(v:boolean){
+        this.store.setShowProgress(v);
+    }
 	get UserID():string{
 		if(this.store.personal.id) {
 			return this.store.personal.id + '';

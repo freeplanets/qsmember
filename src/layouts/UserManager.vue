@@ -51,7 +51,8 @@
             <div class='col-1 test lnh'>{{ itm.Account }}</div>
             <div class='col-1 test lnh'>{{ itm.Nickname }}</div>
             <div class='col-1 test lnh'>{{ itm.TypeName }}</div>
-            <div class='col-1 test lnh'><q-btn  flat round dense v-if='itm.Types===1 || itm.Types===2' :label="$t('Common.Setup')" @click="SetupGames(itm.id,itm.PayClass)" /></div>
+            <div class='col-1 test lnh'><q-btn  flat round dense v-if='itm.Types===1 || itm.Types===2' :label="$t('Common.Setup')" @click="SetupGames(itm.id,itm.PayClass ? itm.PayClass : '')" /></div>
+            <div class='col-1 test lnh'><q-btn  flat round dense :label="$t('Common.Setup')" @click="SetupPrograms(itm.id,itm.Programs)" /></div>
         </div>
     </div>
     <div class='UserModify'
@@ -95,6 +96,34 @@
           <q-btn flat :label="$t('Label.Cancel')" v-close-popup />
         </q-card-actions>
       </q-card>
+    </q-dialog>
+    <q-dialog 
+      v-model="showPrograms">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">{{$t('Label.ProgramsSlt')}}</div>
+        </q-card-section>
+        <q-card-section>
+        <q-list bordered>
+          <q-item clickable v-ripple
+            v-for="(itm,idx) in Programs"
+            :key="`progs-${idx}`"
+          >
+            <q-item-section avatar>
+              <q-checkbox v-model="itm.isChecked" />
+            </q-item-section>          
+            <q-item-section avatar>
+              <q-icon color="primary" :name="itm.Icon" />
+            </q-item-section>
+            <q-item-section>{{ $t(`Label.${itm.Title}`)}}</q-item-section>          
+          </q-item>
+        </q-list>
+        </q-card-section>
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat :label="$t('Label.Save')" @click="SavePrograms" />
+          <q-btn flat :label="$t('Label.Cancel')" v-close-popup />
+        </q-card-actions>
+      </q-card>
     </q-dialog>    
   </div>
 </template>
@@ -104,7 +133,7 @@ import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule'
 import {getModule} from 'vuex-module-decorators';
 import {IUser} from './data/schema'
-import { SelectOptions,ITableHeader,CommonParams, ILoginInfo, IMsg} from './data/if';
+import { SelectOptions,ITableHeader,CommonParams, ILoginInfo, IMsg,IProgs} from './data/if';
 import {UserTypes} from './class/Users'
 import GamePayClassSelector from './components/GamePayClassSelector.vue';
 Vue.component('GPCS',GamePayClassSelector);
@@ -115,6 +144,9 @@ interface Ans {
 }
 interface UserGPC {
   [key:string]:number;
+}
+interface EPrograms extends IProgs{
+  isChecked:boolean;
 }
 @Component
 export default class UserManager extends Vue{
@@ -132,6 +164,9 @@ export default class UserManager extends Vue{
     curPayClass:string='';
     showPayClass:boolean=false;
     PayClassSlted:string='';
+    Programs:EPrograms[]=[];
+    showPrograms:boolean=false;
+    SetUid:number=0;
     cols:ITableHeader[]=[
       {
         name:'Account',
@@ -152,6 +187,11 @@ export default class UserManager extends Vue{
         name:'GameItems',
         label: 'GameItems',
         field:'GameItems'
+      },
+      {
+        name:'Programs',
+        label: 'Programs',
+        field: 'Programs'
       }
     ]
     private typesOption:SelectOptions[]=[]
@@ -251,6 +291,27 @@ export default class UserManager extends Vue{
       this.curPayClass=PayClass;
       this.showPayClass=true;
     }
+    async SetupPrograms(uid:number,Programs?:string){
+      this.SetUid = uid;
+      if(this.Programs.length==0){
+        await this.getPrograms();
+      }
+      this.Programs.map(itm=>{
+        itm.isChecked=false;
+      })
+      if(Programs){
+        let progs=Programs.split(',').map(v=>{
+          return parseInt(v,10);
+        })
+        progs.map(v=>{
+          const f=this.Programs.find(itm=>itm.id===v);
+          if(f){
+            f.isChecked=true;
+          }
+        })
+      }
+      this.showPrograms = true;
+    }
     setTypes(v?:number,n?:string){
         this.curType = v;
         this.curTypeName = this.typeNameTip;
@@ -269,7 +330,53 @@ export default class UserManager extends Vue{
         }
       })
     }
-    async saveUser(user:IUser|undefined){
+    async SavePrograms(){
+      const ax=this.store.ax;
+      const param:CommonParams={
+        UserID:this.PInfo.id,
+        sid:this.PInfo.sid,
+        SetUserID: this.SetUid
+      };
+      const prog:number[]=[];
+      this.Programs.map(itm=>{
+        if(itm.isChecked) prog.push(itm.id);
+      })
+      if(prog.length===0) return;
+      param.Programs = prog.join(',');
+      const msg:IMsg=await ax.getApi('SetUser',param);
+      this.$q.dialog({
+        title: this.$t('Label.ProgramsSet')+'',
+        message: msg.ErrNo ? msg.ErrCon : 'Ok!!'
+      });
+      if(msg.ErrNo===0){
+        const fuser=this.data.find(itm=>itm.id===this.SetUid);
+        if(fuser){
+          fuser.Programs = param.Programs;
+          console.log(fuser)
+        } else {
+          console.log('not found');
+        }
+      } else {
+        console.log(msg);
+      }
+      this.showPrograms=false;
+    }
+    async getPrograms(){
+      const ax=this.store.ax;
+      const param:CommonParams={
+        UserID:this.PInfo.id,
+        sid:this.PInfo.sid
+      };
+      const msg:IMsg=await ax.getApi('getPrograms',param);
+      if(msg.ErrNo===0){
+        let data = msg.data as EPrograms[];
+        data.map(itm=>{
+          itm.isChecked=false;
+          this.Programs.push(itm);
+        })
+      }
+    }
+    async saveUser(user?:IUser){
       let curUser:IUser;
       if(user){
         curUser=user;

@@ -72,7 +72,11 @@ export default {
       '會員取消',
       '系統註銷'
     ],
-    GAMsg:'請用手機APP-Google Authenticator 掃瞄後存檔.'
+    GAMsg:'請用手機APP-Google Authenticator 掃瞄後存檔.',
+    InputGA:'請輸入Google 認証碼(6位數).',
+    GAError:'認証碼錯誤!!',
+    ProgramsSlt:'請選擇程式',
+    ProgramsSet:'程式設定'
   },
   Tip:{
     UserFind: "請輸入名稱或代號"
@@ -104,6 +108,7 @@ export default {
     Password: '密碼',
     Pass2OrNot: '設定二階段密碼',
     Nickname: '暱稱',
+    Programs: '程式',
     Types: '類別',
     Levels: '層級',
     CreateDate: '新增日期',

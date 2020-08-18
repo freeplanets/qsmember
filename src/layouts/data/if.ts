@@ -197,6 +197,13 @@ export interface OSteps {
     PerStep:number;
     Steps:number;
 }
+export interface IProgs {
+    id:number;
+    Title:string;
+    Paths:string;
+    Icon:string;
+    Funcs:string;
+}
 export interface ILoginInfo {
     id: number;
     Account: string;
@@ -204,6 +211,7 @@ export interface ILoginInfo {
     Levels:number;
     isTwoPassAsked:number;
     isChkGA:number;
+    Progs:IProgs[];
 }
 
 export interface ParamLog {

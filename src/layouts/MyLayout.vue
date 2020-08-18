@@ -51,6 +51,19 @@
     >
       <q-list>
         <q-item-label header>Essential Links</q-item-label>
+        <q-item 
+          v-for="(func,idx) in Funcs"
+          :key="`func${idx}`"
+          :to="`/${func.Paths}`"
+          @click="ProName=$t(`Label.${func.Title}`)+'';showComment=false" clickable >
+          <q-item-section avatar>
+            <q-icon :name="func.Icon" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ $t(`Label.${func.Title}`) }}</q-item-label>
+          </q-item-section>
+        </q-item>        
+        <!--
         <q-item to="/basepayclass"  @click="ProName=$t('Label.BasePayClassManage')+'';showComment=false" clickable >
           <q-item-section avatar>
             <q-icon name="school" />
@@ -107,16 +120,6 @@
             <q-item-label>{{$t('Label.UserManager')}}</q-item-label>
           </q-item-section>
         </q-item>
-        <!--
-        <q-item to="/openparams" @click="ProName=$t('Label.OpenParams');showComment=false">
-          <q-item-section avatar>
-            <q-icon name="emoji_symbols" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{$t('Label.OpenParams')}}</q-item-label>
-          </q-item-section>
-        </q-item>
-        -->
         <q-item to="/oddsmanager" @click="ProName=$t('Label.OddsManager')+'';showComment=false">
           <q-item-section avatar>
             <q-icon name="emoji_symbols" />
@@ -140,19 +143,8 @@
           <q-item-section>
             <q-item-label>{{$t('Label.BetReport')}}</q-item-label>
           </q-item-section>
-        </q-item>                    
-        <!--
-          
-        <q-item clickable tag="a" target="_blank" href="https://facebook.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="public" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Facebook</q-item-label>
-            <q-item-label caption>@QuasarFramework</q-item-label>
-          </q-item-section>
         </q-item>
-        // !-->
+        // -->                    
       </q-list>
     </q-drawer>
     <q-dialog v-model="showCp">
@@ -177,11 +169,12 @@
           </q-item-section>
         </q-item>
         <q-card-actions align="right" class="text-primary">
+          <q-btn v-close-popup flat :label="$t('Label.Cancel')" />
           <q-btn flat :label="$t('Button.Confirm')" @click="ChangePW" />
         </q-card-actions>        
       </q-card>
     </q-dialog>
-    <q-dialog v-model="showGA">
+    <q-dialog v-model="showGAPop">
       <q-card class="my-card">
         <q-card-section>
           <div class="text-h6">{{$t('Label.GAMsg')}}</div>
@@ -191,7 +184,6 @@
           </div>
         <q-separator />
         <q-card-actions align="right">
-          <q-btn v-close-popup flat color="primary" :label="$t('Label.Cancel')" />
           <q-btn v-close-popup flat color="primary" :label="$t('Label.Save')" />
         </q-card-actions>
       </q-card>
@@ -202,6 +194,18 @@
           <CMMT style="width: 80%" :store='store'></CMMT>
       </q-dialog>      
     </q-page-container>
+    <q-dialog v-model="showProgress" persistent>
+        <q-card>
+            <q-card-section>
+                <q-circular-progress
+                indeterminate
+                size="50px"
+                color="light-blue"
+                class="q-ma-md"
+                />
+            </q-card-section>
+        </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
@@ -210,7 +214,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
-import {IMsg,ILoginInfo, CommonParams} from './data/if';
+import {IMsg,ILoginInfo, CommonParams,IProgs} from './data/if';
 import {Watch} from 'vue-property-decorator';
 //import {IUser} from './data/schema';
 import Comments from './components/Comments.vue';
@@ -226,6 +230,17 @@ export default class MyLayout extends Vue {
   NPassword:string='';
   CPassword:string='';
   GAIMG:string='';
+  showGAPop:boolean=false;
+  get Funcs():IProgs[] {
+    return this.store.personal.Progs;
+  }
+  get showProgress(){
+    return this.store.showProgress;
+  }
+  @Watch('showProgress',{immediate:true,deep:true})
+  onShowProgressChange(){
+    console.log('onShowProgressChange',this.showProgress);
+  }
   get leftDrawerOpen() {
     //console.log('leftDrawerOpen get:',this.store.leftDrawerOpen);
     return this.store.leftDrawerOpen;
@@ -262,6 +277,7 @@ export default class MyLayout extends Vue {
     const msg:IMsg=await this.store.ax.getApi('getGAImg',param);
     if(msg.ErrNo===0){
       this.GAIMG=msg.ErrCon ? msg.ErrCon : '';
+      this.showGAPop = true;
     } 
     //console.log(msg);
   }

@@ -15,6 +15,7 @@ export interface IUser {
     PayClassID?: number;
     PayClass?:string;
     forcePWChange?:number;
+    Programs?:string;
     CreateTime?: string;
     ModifyTime?: string;
     ModifyID?:number;

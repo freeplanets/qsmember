@@ -19,12 +19,15 @@ export default class LayoutStoreModule extends VuexModule {
         sid:'',
         Levels:0,
         isTwoPassAsked:0,
-        isChkGA:0
+        isChkGA:0,
+        Progs:[]
     };
     private showGA = false;
     //public ApiUrl:string=myApiUrl;
     public ax=AxApi;
     private sInfo='';
+    public showProgress=false;
+
     get isShowGA(){
         return this.showGA;
     }
@@ -80,5 +83,14 @@ export default class LayoutStoreModule extends VuexModule {
     @Action
     public setShowGA(value:boolean){
         this.SET_SHOW_GA(value);
+    }
+
+    @Mutation
+    public SET_SHOWPROGRESS(value:boolean){
+        this.showProgress=value;
+    }
+    @Action
+    public setShowProgress(value:boolean){
+        this.SET_SHOWPROGRESS(value);
     }
 }
