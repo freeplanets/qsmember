@@ -204,14 +204,21 @@ export interface IProgs {
     Icon:string;
     Funcs:string;
 }
+export interface IPClass {
+    GameID:number;
+    PayClassID:number;
+}
 export interface ILoginInfo {
     id: number;
     Account: string;
     sid: string;
     Levels:number;
+    Types:number;
     isTwoPassAsked:number;
+    forcePWChange:number;
     isChkGA:number;
     Progs:IProgs[];
+    PayClass?:IPClass[];
 }
 
 export interface ParamLog {

@@ -34,6 +34,14 @@ export default class GameSelector extends Vue {
     models:SelectOptions = {value: 0,label:''};
     options:SelectOptions[] = []
     AllItem:SelectOptions = {value:0,label:'ALL'};
+    get UserPayClass(){
+        if(this.store){
+            if(this.store.personal.PayClass){
+                return this.store.personal.PayClass;
+            }
+        }
+        return [];
+    }
 	set model(v:SelectOptions){
         this.models = v;
         if(!this.ChangeFromUp) this.$emit('setGames',v);
@@ -46,8 +54,17 @@ export default class GameSelector extends Vue {
 	async getGames(){
         //console.log('getGames AddAllItem:',this.AddAllItem);
         if(!this.store) return;
-        const ans:SelectOptions[] | undefined = await this.store.ax.getGames(this.store.personal.id,this.store.personal.sid)
+        let ans:SelectOptions[] | undefined = await this.store.ax.getGames(this.store.personal.id,this.store.personal.sid)
         if(ans){
+            if(this.UserPayClass.length>0){
+                let tmp:SelectOptions[]=ans;
+                let tmpWK:SelectOptions[]=[];
+                this.UserPayClass.map(itm=>{
+                    const f=tmp.find(sl=>sl.value===itm.GameID && itm.PayClassID>0);
+                    if(f) tmpWK.push(f);
+                })
+                ans = tmpWK;
+            }
             if(this.AddAllItem){
                 this.options = [this.AllItem].concat(ans);
                 this.model = this.AllItem;

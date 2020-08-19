@@ -147,7 +147,7 @@
         // -->                    
       </q-list>
     </q-drawer>
-    <q-dialog v-model="showCp">
+    <q-dialog v-model="showCp" persistent>
       <q-card style="width: 300px" class="q-px-sm q-pb-md">
         <q-card-section>
           <div class="text-h6">{{$t('Title.ChangePassword')}}</div>
@@ -241,6 +241,13 @@ export default class MyLayout extends Vue {
   onShowProgressChange(){
     console.log('onShowProgressChange',this.showProgress);
   }
+  get chgPW(){
+    return this.store.chgPW;
+  }
+  @Watch('chgPW',{immediate:true,deep:true})
+  onChgPW(){
+    this.showCp = this.store.chgPW;
+  }
   get leftDrawerOpen() {
     //console.log('leftDrawerOpen get:',this.store.leftDrawerOpen);
     return this.store.leftDrawerOpen;
@@ -333,7 +340,8 @@ export default class MyLayout extends Vue {
           title: this.$t('Title.ChangePassword') as string,
           message: this.$t('Title.PassChgMsg') as string
       });    
-      this.$router.push({path:'/login'});      
+      //this.$router.push({path:'/login'});
+      await this.logout();
     }
   }
   async logout(){
@@ -343,7 +351,10 @@ export default class MyLayout extends Vue {
     }
     const msg:IMsg= await this.store.ax.getApi('logout',param);
     console.log(msg);
-    this.$router.push({path:'/login'});
+    this.store.clearPInfo();
+    this.$router.push({path:'/login'}).catch(err=>{
+      console.log('router error',err);
+    });
   }
   mounted() {
     //console.log('MyLayout mounted isLogin:',this.isLogin);

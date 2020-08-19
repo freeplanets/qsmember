@@ -82,11 +82,15 @@ export default class Login extends Vue {
     //const url:string=this.store.ax.Host+'/login';
     const msg:IMsg=await this.store.ax.getApi('/login',params);
     if(msg.ErrNo===0){
+        this.Account='';
+        this.Password='';
         this.Personal = msg.data as ILoginInfo;
         this.isLogin = true;
         //this.store.leftDrawerOpen=true;
         console.log('Login PInfo:',this.Personal);
-        if(this.Personal.isChkGA){
+        if(this.Personal.forcePWChange){
+          this.store.setCghPW(true);
+        } else if(this.Personal.isChkGA){
           this.prompt=true;
         } else {
           this.$router.push({path:'/'});      
@@ -115,6 +119,7 @@ export default class Login extends Vue {
     //console.log('login',this.Account,this.Password);
   }
   async GAValidate(){
+    this.store.setShowProgress(true);
     const param:CommonParams={
       UserID:this.store.personal.id,
       sid:this.store.personal.sid,
@@ -130,6 +135,7 @@ export default class Login extends Vue {
       this.GAError=true;
       this.prompt=true;
     }
+    this.store.setShowProgress(false);
   }
   mounted(){
     //console.log('login SysInfo:',this.store.SysInfo);

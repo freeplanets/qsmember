@@ -18,7 +18,9 @@ export default class LayoutStoreModule extends VuexModule {
         Account:'',
         sid:'',
         Levels:0,
+        Types:0,
         isTwoPassAsked:0,
+        forcePWChange:0,
         isChkGA:0,
         Progs:[]
     };
@@ -27,6 +29,8 @@ export default class LayoutStoreModule extends VuexModule {
     public ax=AxApi;
     private sInfo='';
     public showProgress=false;
+    public chgPW=false;
+    public doLogout=false;
 
     get isShowGA(){
         return this.showGA;
@@ -64,7 +68,21 @@ export default class LayoutStoreModule extends VuexModule {
     public setPersonal(value:ILoginInfo){
         this.SET_PERSONAL(value);
     }
-
+    @Action
+    public clearPInfo(){
+        const personal:ILoginInfo = {
+            id:0,
+            Account:'',
+            sid:'',
+            Levels:0,
+            Types:0,
+            isTwoPassAsked:0,
+            forcePWChange:0,
+            isChkGA:0,
+            Progs:[]
+        };
+        this.SET_PERSONAL(personal);
+    }
     @Mutation
     public SET_IS_LOGIN(value:boolean){
         this.isLogin = value;
@@ -93,4 +111,20 @@ export default class LayoutStoreModule extends VuexModule {
     public setShowProgress(value:boolean){
         this.SET_SHOWPROGRESS(value);
     }
+    @Mutation
+    public SET_CHG_PW(value:boolean){
+        this.chgPW=value;
+    }
+    @Action
+    public setCghPW(value:boolean){
+        this.SET_CHG_PW(value);
+    }    
+    @Mutation
+    public SET_LOGOUT(value:boolean){
+        this.doLogout=value;
+    }
+    @Action
+    public Logout(value:boolean){
+        this.SET_LOGOUT(value);
+    }  
 }

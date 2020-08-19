@@ -72,12 +72,12 @@
         <td class="col-1 mytable-field-txt">{{itm.TermID}}</td>
         <td class="col mytable-field-txt wdbr" v-html="itm.BetContent"></td>
         <td class="col-1 mytable-field-num">{{itm.Total}}</td>
-        <td :class="{'col-1 mytable-field-num':true,RedColor:itm.WinLose<0}">{{itm.WinLose.toFixed(2)}}</td>
+        <td :class="{'col-1 mytable-field-num':true,RedColor:itm.WinLose ? itm.WinLose<0 : false}">{{itm.WinLose? itm.WinLose.toFixed(2): 0}}</td>
         <td class="col-1 mytable-field-txt">{{itm.UPName}}</td>
       </tr>
       <tr class="linetotal">
           <td class="col-1 mytable-field-txt" colspan="5">{{$t('Report.Total')}}</td>
-          <td class="col-1 mytable-field-txt-right">{{`${$t('Label.TotalN')}`.replace('{N}',list.length)}}</td>
+          <td class="col-1 mytable-field-txt-right">{{`${$t('Label.TotalN')}`.replace('{N}',list.length+'')}}</td>
           <td class="col-1 mytable-field-num">{{total}}</td>
           <td :class="{'col-1 mytable-field-num':true,RedColor:winlose<0}">{{winlose.toFixed(2)}}</td>
           <td class="col-1 mytable-field-txt"></td>
@@ -164,10 +164,11 @@ export default class BetReport extends Vue{
       this.curLedger=0;
     }
   }
-  DTString(v:string|number,style?:string){
+  DTString(v?:string|number,style?:string){
+    if(!v) v='';
     return datetime(v,style);
   }
-  async getBTDetail(UpId:number,BetType:string){
+  async getBTDetail(UpId:number,BetType?:string){
     const param:CommonParams={
       UserID:this.PInfo.id,
       sid:this.PInfo.sid,
@@ -213,8 +214,11 @@ export default class BetReport extends Vue{
     this.showDetail=false;
     const param:CommonParams={
       UserID:this.PInfo.id,
-      sid:this.PInfo.sid
+      sid:this.PInfo.sid,
     };
+    if(this.PInfo.Types===1){
+      param.UpId=this.PInfo.id;
+    }
     if(this.dateSet){
       const tmp:string[]=this.dateSet.split('-');
       if(tmp[0]) param.SDate=tmp[0];

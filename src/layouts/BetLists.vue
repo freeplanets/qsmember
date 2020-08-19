@@ -54,12 +54,12 @@
         <td class="col-1 mytable-field-txt">{{itm.TermID}}</td>
         <td class="col mytable-field-txt wdbr" v-html="itm.BetContent"></td>
         <td class="col-1 mytable-field-num">{{itm.Total}}</td>
-        <td :class="{'col-1 mytable-field-num':true,RedColor:itm.WinLose<0}">{{itm.WinLose.toFixed(2)}}</td>
+        <td :class="{'col-1 mytable-field-num':true,RedColor:itm.WinLose ? itm.WinLose<0 : false}">{{itm.WinLose? itm.WinLose.toFixed(2):0}}</td>
         <td class="col-1 mytable-field-txt">{{itm.UPName}}</td>
       </tr>
       <tr class="linetotal">
           <td class="col-1 mytable-field-txt" colspan="5">{{$t('Report.Total')}}</td>
-          <td class="col-1 mytable-field-txt-right">{{`${$t('Label.TotalN')}`.replace('{N}',list.length)}}</td>
+          <td class="col-1 mytable-field-txt-right">{{`${$t('Label.TotalN')}`.replace('{N}', list.length+'')}}</td>
           <td class="col-1 mytable-field-num">{{total}}</td>
           <td :class="{'col-1 mytable-field-num':true,RedColor:winlose<0}">{{winlose.toFixed(2)}}</td>
           <td class="col-1 mytable-field-txt"></td>
@@ -154,7 +154,8 @@ export default class BetLists extends Vue {
   async SearchData(){
     const param:CommonParams={
       UserID: this.PInfo.id,
-      sid: this.PInfo.sid
+      sid: this.PInfo.sid,
+      Types: this.PInfo.Types
     }
     param.findString = this.NameOrNick;
     param.GameID=this.curGameID;
@@ -206,7 +207,8 @@ export default class BetLists extends Vue {
   setGameLists(v:SelectOptions[]){
     this.GameList = v;
   }
-  DTString(v:string){
+  DTString(v?:string){
+    if(!v) v='';
     return datetime(v);
   }
   setTermID(v:number){

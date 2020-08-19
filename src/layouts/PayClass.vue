@@ -3,16 +3,16 @@
 		<div class="row q-pa-sm">
             <div class="col-2"><GS :store="store" @setGames="setCurGames"></GS></div>
             <div class="pcls">
-                <div class="row" v-if="curGameID">
+                <div class="row" v-if="curGameID && !isAgent">
                     <div class='pbtn'><PCS :store='store' :GameID='curGameID' :itmChange="PNChange" @setPayClass="setPayClass"></PCS></div>
                     <div class="pbtn"><q-input outlined dense v-model="PayClassName" /></div>
                     <div class="pbtn2"><q-btn color="green" icon-right="save" :label="$t('Label.EditPayClassName')" @click="EditPayClassName();" /></div>
                     <div class="pbtn2"><q-btn color="red" icon-right="delete_forever" :label="$t('Label.DeletePayClass')" @click="DelPayClass();" /></div>
     		    </div>
             </div>
-            <div class="pbtn3"><q-btn color="green" icon-right="save" label="Save" @click="SaveData();" /></div>
+            <div class="pbtn3"><q-btn v-if="!isAgent" color="green" icon-right="save" label="Save" @click="SaveData();" /></div>
 		</div>
-        <div class="row">
+        <div class="row" v-if="!isAgent">
             <div><RCO @updateRateDefault="updateRateDefault"></RCO></div>
             <div v-if="curGameID" ><BTC :store="store" :GameID="curGameID" :pinfo='store.personal' @SltBT="SltBetTypes"></BTC></div>
         </div> 
@@ -32,7 +32,7 @@
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.Title }}</div>
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.SubTitle }}</div>
                 <div :class="{'col-1 test':true,redColor: itm.Profit<0 }">{{ itm.Profit }}</div>
-                <div class="col-1 test"><q-input square standout dense v-model="itm.Rate" /></div>
+                <div class="col-1 test"><q-input square standout dense :readonly="isAgent" v-model="itm.Rate" /></div>
                 <div class="col-1 test">{{ itm.MinHand }}</div>
                 <div class="col-1 test">{{ itm.MaxHand }}</div>                
             </div>
@@ -77,13 +77,21 @@ export default class BetClass extends Vue{
     private curPayClass:PayClass={id:0,PayClassName:''};
     public PayR:PayRate[]=[];
     private PNChange:boolean=false;
+    public isAgent:boolean=false;
     get showProgress(){
         return this.store.showProgress;
     }
     set showProgress(v:boolean){
         this.store.setShowProgress(v);
     }
-
+    get UserPayClass(){
+        if(this.store){
+            if(this.store.personal.PayClass){
+                return this.store.personal.PayClass;
+            }
+        }
+        return [];
+    }    
     showDataTable:boolean=false;
     spArr:number[]|undefined;
 	options:SelectOptions[] = [
@@ -118,7 +126,7 @@ export default class BetClass extends Vue{
             this.ExpendPayClass = true;
         }
     }
-    setCurGames(v:SelectOptions){
+    async setCurGames(v:SelectOptions){
         this.curGameID = v.value as number;
         if(v.GType==='MarkSix'){
             // 8,72 三中二
@@ -126,7 +134,19 @@ export default class BetClass extends Vue{
             this.spArr=[8,72,10,73];
         } else {
             this.spArr = undefined;
-        }        
+        }
+        if(this.isAgent){
+            let pc:PayClass={
+                id:0,
+                PayClassName:''
+            }
+            const f=this.UserPayClass.find(itm=>itm.GameID===this.curGameID);
+            if(f){
+                pc.id=f.PayClassID;
+                await this.setPayClass(pc);
+                //await this.chkdata(f.PayClassID);
+            }
+        }
         //console.log('doGames',v);
     }
     SltBetTypes(slt:string){
@@ -355,10 +375,13 @@ export default class BetClass extends Vue{
     }
     */
   mounted(){
-        if(!this.store.isLogin){
+    if(!this.store.isLogin){
         this.$router.push({path:'/login'});
-        }         
-        this.PayR=[];
+    }
+    if(this.PInfo.Types===1){
+        this.isAgent=true;
+    }
+    this.PayR=[];
   }
 }
 </script>
