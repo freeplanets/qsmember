@@ -87,7 +87,7 @@ export default class Login extends Vue {
         this.Personal = msg.data as ILoginInfo;
         this.isLogin = true;
         //this.store.leftDrawerOpen=true;
-        console.log('Login PInfo:',this.Personal);
+        //console.log('Login PInfo:',this.Personal);
         if(this.Personal.forcePWChange){
           this.store.setCghPW(true);
         } else if(this.Personal.isChkGA){

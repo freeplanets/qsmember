@@ -52,7 +52,7 @@
             <div class='col-1 test lnh'>{{ itm.Nickname }}</div>
             <div class='col-1 test lnh'>{{ itm.TypeName }}</div>
             <div class='col-1 test lnh'><q-btn  flat round dense v-if='itm.Types===1 || itm.Types===2' :label="$t('Common.Setup')" @click="SetupGames(itm.id,itm.PayClass ? itm.PayClass : '')" /></div>
-            <div class='col-1 test lnh'><q-btn  flat round dense :label="$t('Common.Setup')" @click="SetupPrograms(itm.id,itm.Programs)" /></div>
+            <div class='col-1 test lnh'><q-btn  flat round dense  v-if='itm.Types !==0' :label="$t('Common.Setup')" @click="SetupPrograms(itm.id,itm.Programs)" /></div>
         </div>
     </div>
     <div class='UserModify'

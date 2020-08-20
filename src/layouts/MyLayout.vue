@@ -20,7 +20,7 @@
             <q-list>
               <q-item clickable v-close-popup @click="showGA=true">
                 <q-item-section>
-                  <q-item-label>{{$t('Table.Pass2OrNot')}}</q-item-label>
+                  <q-item-label>{{$t('Label.Pass2Lvl')}}</q-item-label>
                 </q-item-section>
               </q-item>
 
@@ -29,7 +29,11 @@
                   <q-item-label>{{$t('Title.ChangePassword')}}</q-item-label>
                 </q-item-section>
               </q-item>
-
+              <q-item clickable v-close-popup @click="CancelPass2">
+                <q-item-section>
+                  <q-item-label>{{$t('Label.CancelPass2')}}</q-item-label>
+                </q-item-section>
+              </q-item>
               <q-item clickable v-close-popup @click="logout">
                 <q-item-section>
                   <q-item-label>{{$t('Common.Logout')}}</q-item-label>
@@ -184,7 +188,7 @@
           </div>
         <q-separator />
         <q-card-actions align="right">
-          <q-btn v-close-popup flat color="primary" :label="$t('Label.Save')" />
+          <q-btn v-close-popup flat color="primary" :label="$t('Label.Close')" />
         </q-card-actions>
       </q-card>
     </q-dialog>    
@@ -237,9 +241,8 @@ export default class MyLayout extends Vue {
   get showProgress(){
     return this.store.showProgress;
   }
-  @Watch('showProgress',{immediate:true,deep:true})
-  onShowProgressChange(){
-    console.log('onShowProgressChange',this.showProgress);
+  set showProgress(v:boolean){
+    this.store.setShowProgress(v);
   }
   get chgPW(){
     return this.store.chgPW;
@@ -276,6 +279,7 @@ export default class MyLayout extends Vue {
     return this.store.personal as ILoginInfo;
   }
   async getGAImg(){
+    this.showProgress=true;
     const param:CommonParams={
       UserID:this.store.personal.id,
       sid:this.store.personal.sid,
@@ -284,6 +288,7 @@ export default class MyLayout extends Vue {
     const msg:IMsg=await this.store.ax.getApi('getGAImg',param);
     if(msg.ErrNo===0){
       this.GAIMG=msg.ErrCon ? msg.ErrCon : '';
+      this.showProgress=false;
       this.showGAPop = true;
     } 
     //console.log(msg);
@@ -355,6 +360,38 @@ export default class MyLayout extends Vue {
     this.$router.push({path:'/login'}).catch(err=>{
       console.log('router error',err);
     });
+  }
+  CancelPass2(){
+      this.$q.dialog({
+          title: this.$t('Label.Pass2Lvl') + '',
+          message: this.$t('Label.CancelPass2') + '?',
+          cancel:true,
+          persistent:true
+      }).onOk(async()=>{
+        await this.doCancelPass2();
+      });       
+  }
+  async doCancelPass2(){
+    const param:CommonParams={
+      UserID:this.Personal.id,
+      sid: this.Personal.sid,
+      isChkGA: '0'
+    };
+    const msg:IMsg=await this.store.ax.getApi('SetUser',param);
+    if(msg.ErrNo===0){
+      this.$q.dialog({
+          title: this.$t('Label.CancelPass2') + '',
+          message: 'OK',
+          ok:true
+      }).onOk(()=>{
+        this.logout();
+      });
+    } else {
+      this.$q.dialog({
+          title: this.$t('Label.CancelPass2') + '(Error)',
+          message: msg.ErrCon
+      });
+    }
   }
   mounted() {
     //console.log('MyLayout mounted isLogin:',this.isLogin);

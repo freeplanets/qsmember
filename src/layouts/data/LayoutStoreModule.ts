@@ -11,7 +11,7 @@ import {ILoginInfo} from './if';
     store: Store
 })
 export default class LayoutStoreModule extends VuexModule {
-    private isleftDrawerOpen = true;
+    private isleftDrawerOpen = false;
     public isLogin = false;
     public personal:ILoginInfo = {
         id:0,

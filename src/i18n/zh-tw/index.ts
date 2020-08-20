@@ -76,7 +76,10 @@ export default {
     InputGA:'請輸入Google 認証碼(6位數).',
     GAError:'認証碼錯誤!!',
     ProgramsSlt:'請選擇程式',
-    ProgramsSet:'程式設定'
+    ProgramsSet:'程式設定',
+    Pass2Lvl: '設定二階段密碼',
+    CancelPass2: '取消二階段密碼',
+    Close: '關閉'
   },
   Tip:{
     UserFind: "請輸入名稱或代號"
@@ -106,7 +109,6 @@ export default {
     PayClassID: '盤口',
     Account: '帳號',
     Password: '密碼',
-    Pass2OrNot: '設定二階段密碼',
     Nickname: '暱稱',
     Programs: '程式',
     Types: '類別',

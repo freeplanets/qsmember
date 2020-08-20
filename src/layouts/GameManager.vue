@@ -40,19 +40,7 @@
         <div class="row my-line-high">
             <div class="gamefield my-tb-head col-1">{{$t('Table.UseAvgOdds')}}</div>
             <div class="gamefield col-12 col-md-3"><q-toggle v-model="MyGame.UseAvgOdds" />({{$t('Label.UseAvgMsg')}})</div>
-        </div>        
-        <div class="row my-line-high" v-if="PInfo.Levels==9">
-            <div class="gamefield my-tb-head col-1">{{$t('Table.GType')}}</div>
-            <div class="gamefield col-12 col-md-3"><q-input outlined dense v-model="MyGame.GType"/></div>
-        </div>
-        <div class="row my-line-high">
-            <div class="gamefield my-tb-head col-1">{{$t('Table.hasSPNO')}}</div>
-            <div class="gamefield col-12 col-md-3"><q-toggle v-model="MyGame.hasSPNO" /></div>
-        </div>
-        <div class="row my-line-high">
-            <div class="gamefield my-tb-head col-1">{{$t('Table.OpenNums')}}</div>
-            <div class="gamefield col-12 col-md-3"><q-input outlined dense v-model="MyGame.OpenNums" /></div>
-        </div>        
+        </div>      
         <div class="row my-line-high">
             <div><q-btn color="green" icon-right="save" label="Save" @click="saveGame();" /></div>
             <div v-if="PInfo.Levels==999"><q-btn color="red" icon-right="save" label="SaveDfOddsItem" @click="SaveDfOddsItem();" /></div>
