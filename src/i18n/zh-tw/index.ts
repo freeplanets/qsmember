@@ -55,6 +55,7 @@ export default {
     Agent:'代理',
     WebOwner:'網站站主',
     Operator:'操盤手',
+    Programmer: '工程師',
     InputNums:'輸入號碼',
     Status:'狀態',
     Settled:['','己結帳','','己重結'],
@@ -132,7 +133,8 @@ export default {
     StopTime:"下注截止時間",
     Result:'開獎結果',
     hasSPNO:'有開特碼',
-    OpenNums:'開出獎號'
+    OpenNums:'開出獎號',
+    ChaseNum:'追號'
   },
   Title: {
     Dashboard: '大廳',

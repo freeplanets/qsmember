@@ -222,7 +222,14 @@ export class BasePayRate<T>{
             } 
         })
         this.data.StepsGroup = JSON.stringify(tmp);
-    }   
+    }
+    get ChaseNum(){
+        return !!this.data.ChaseNum; 
+    }
+    set ChaseNum(v:boolean){
+        this.data.ChaseNum=v ? 1 : 0;
+        this.isDataChanged=true;
+    }
     get Datas():T {
         return this.data;
     }

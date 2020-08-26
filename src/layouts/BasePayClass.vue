@@ -39,6 +39,7 @@
                 <td class="test">{{$t('Table.Steps')}}</td>
                 <td class="test">{{$t('Table.NoAdjust')}}</td>
                 <td class="test">{{$t('Table.UseAvg')}}</td>
+                <td class="test">{{$t('Table.ChaseNum')}}</td>
               </tr>
               <tr class="datas"
                 v-for="(itm,idx) in BasePayR"
@@ -64,6 +65,7 @@
                 </td>
                 <td class="test1"><input type="checkbox" v-model="itm.NoAdjust" /></td>
                 <td class="test1"><input type="checkbox" v-model="itm.UseAvg" /></td>
+                <td class="test1"><input type="checkbox" v-model="itm.ChaseNum" /></td>
               </tr>
             </table>
         </div>

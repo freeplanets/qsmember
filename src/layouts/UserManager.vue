@@ -52,7 +52,7 @@
             <div class='col-1 test lnh'>{{ itm.Nickname }}</div>
             <div class='col-1 test lnh'>{{ itm.TypeName }}</div>
             <div class='col-1 test lnh'><q-btn  flat round dense v-if='itm.Types===1 || itm.Types===2' :label="$t('Common.Setup')" @click="SetupGames(itm.id,itm.PayClass ? itm.PayClass : '')" /></div>
-            <div class='col-1 test lnh'><q-btn  flat round dense  v-if='itm.Types !==0' :label="$t('Common.Setup')" @click="SetupPrograms(itm.id,itm.Programs)" /></div>
+            <div class='col-1 test lnh'><q-btn  flat round dense  v-if='itm.Types > 0 && itm.Types < 9' :label="$t('Common.Setup')" @click="SetupPrograms(itm.id,itm.Programs)" /></div>
         </div>
     </div>
     <div class='UserModify'
@@ -151,7 +151,7 @@ interface EPrograms extends IProgs{
 @Component
 export default class UserManager extends Vue{
     store=getModule(LayoutStoreModule);
-    NewUser:IUser = {TableName:'User',id:0}
+    NewUser:IUser = {TableName:'User',id:0,Types:0}
     slt:SelectOptions={value:0}
     showList=true;
     showEdit=false;
@@ -249,7 +249,8 @@ export default class UserManager extends Vue{
     SavePayClass(){
       const User:IUser={
         TableName:'User',
-        id:this.curUserID
+        id:this.curUserID,
+        Types:0
       }
       //let payclass:string='';
       //const ugpc:UserGPC={};
@@ -412,7 +413,7 @@ export default class UserManager extends Vue{
       }
     }
     Cancel(){
-      this.NewUser={TableName:'User',id:0};
+      this.NewUser={TableName:'User',id:0,Types:0};
       this.showList=true;
       this.showEdit=false;
     }

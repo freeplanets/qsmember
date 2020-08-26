@@ -4,7 +4,8 @@ export const UserTypes = [
     {title:'Member',value:0},
     {title:'Agent',value:1},
     {title:'WebOwner',value:2},
-    {title:'Operator',value:3}
+    {title:'Operator',value:3},
+    {title:'Programmer',value:9}
 ]
 export default class Users{
     constructor(private Data:IUser){ }
