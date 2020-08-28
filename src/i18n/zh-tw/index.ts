@@ -1134,6 +1134,65 @@ export default {
           subtitle: [ '金', '木', '水', '火', '土' ]
         }
       }
+    },
+    BTCHsh: {
+      Menu: {
+        Group: [
+          { title: '兩面盤', SubItem: [] },
+          { title: '數字盤', SubItem: [], SubMenu: [] },
+          { title: '雜項', SubMenu: [] }
+        ]
+      },
+      Item: {
+        '1': { title: '個位-單雙',shortT: '個位', subtitle: [ '單', '雙' ] },
+        '2': { title: '十位-單雙',shortT: '十位', subtitle: [ '單', '雙' ] },
+        '3': { title: '百位-單雙',shortT: '百位', subtitle: [ '單', '雙' ] },
+        '4': { title: '千位-單雙',shortT: '千位', subtitle: [ '單', '雙' ] },
+        '5': { title: '萬位-單雙',shortT: '萬位', subtitle: [ '單', '雙' ] },
+        '6': { title: '個位-大小',shortT: '個位', subtitle: [ '大', '小' ] },
+        '7': { title: '十位-大小',shortT: '十位', subtitle: [ '大', '小' ] },
+        '8': { title: '百位-大小',shortT: '百位', subtitle: [ '大', '小' ] },
+        '9': { title: '千位-大小',shortT: '千位', subtitle: [ '大', '小' ] },
+        '10': { title: '萬位-大小',shortT: '萬位', subtitle: [ '大', '小' ] },
+        '11': { title: '個位-質合',shortT: '個位', subtitle: [ '質', '合' ] },
+        '12': { title: '十位-質合',shortT: '十位', subtitle: [ '質', '合' ] },
+        '13': { title: '百位-質合',shortT: '百位', subtitle: [ '質', '合' ] },
+        '14': { title: '千位-質合',shortT: '千位', subtitle: [ '質', '合' ] },
+        '15': { title: '萬位-質合',shortT: '萬位', subtitle: [ '質', '合' ] },
+        '16': {title: '總和-單雙',shortT:'總和',  subtitle: [ '單', '雙' ]},
+        '17': {title: '總和-大小',shortT:'總和',  subtitle: [ '大', '小' ]},
+        '18': {title: '前3和-單雙',shortT:'前3和',  subtitle: [ '單', '雙' ]},
+        '19': {title: '前3和-大小',shortT:'前3和',  subtitle: [ '大', '小' ]},
+        '20': {title: '中3和-單雙',shortT:'中3和',  subtitle: [ '單', '雙' ]},
+        '21': {title: '中3和-大小',shortT:'中3和',  subtitle: [ '大', '小' ]},
+        '22': {title: '後3和-單雙',shortT:'後3和',  subtitle: [ '單', '雙' ]},
+        '23': {title: '後3和-大小',shortT:'後3和',  subtitle: [ '大', '小' ]},
+        '24': {title: '一定位-個',shortT:'個位'},
+        '25': {title: '一定位-十',shortT:'十位'},
+        '26': {title: '一定位-百',shortT:'百位'},
+        '27': {title: '一定位-千',shortT:'千位'},
+        '28': {title: '一定位-萬',shortT:'萬位'},
+        '29': {title: '一字現'},
+        '30': {title: '一字現-前3'},
+        '31': {title: '一字現-中3'},
+        '32': {title: '一字現-後3'},
+        '33': {title: '二字現'},
+        '34': {title: '二字現-前3'},
+        '35': {title: '二字現-中3'},
+        '36': {title: '二字現-後3'},
+        '37': {title: '三字現'},
+        '38': {title: '三字現-前3'},
+        '39': {title: '三字現-中3'},
+        '40': {title: '三字現-後3'},
+        '41': {title: '四字現'},
+        '42': {title: '五字現'},
+        '43': {title: '雜項-前3',subtitle:['豹子','順子','對子','半順','雜六']},
+        '44': {title: '雜項-中3',subtitle:['豹子','順子','對子','半順','雜六']},
+        '45': {title: '雜項-後3',subtitle:['豹子','順子','對子','半順','雜六']},
+        '46': {title: '炸金花',subtitle:['五同號','四條','葫蘆','順子','三條','兩對','一對','雜牌']},
+        '47': {title: '牛牛',subtitle:['牛牛','有牛','無牛']},
+        '48': {title: '兩面過關'}
+      }
     }
   }
 }

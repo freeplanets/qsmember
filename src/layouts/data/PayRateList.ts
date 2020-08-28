@@ -336,5 +336,91 @@ export const PayRateData = {
                   {Title: '五行', SubTitle: '火'},
                   {Title: '五行', SubTitle: '土'}]
             }
+      },
+      'BTCHash':{
+            order:['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33',
+            '34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49'],
+            data:{
+                  '1': [{ Title: '個位-單雙'}],
+                  '2': [{ Title: '十位-單雙'}],
+                  '3': [{ Title: '百位-單雙'}],
+                  '4': [{ Title: '千位-單雙'}],
+                  '5': [{ Title: '萬位-單雙'}],
+                  '6': [{ Title: '個位-大小'}],
+                  '7': [{ Title: '十位-大小'}],
+                  '8': [{ Title: '百位-大小'}],
+                  '9': [{ Title: '千位-大小'}],
+                  '10': [{ Title: '萬位-大小'}],
+                  '11': [{ Title: '個位-質合'}],
+                  '12': [{ Title: '十位-質合'}],
+                  '13': [{ Title: '百位-質合'}],
+                  '14': [{ Title: '千位-質合'}],
+                  '15': [{ Title: '萬位-質合'}],
+                  '16': [{Title: '總和-單雙'}],
+                  '17': [{Title: '總和-大小'}],
+                  '18': [{Title: '前3和-單雙'}],
+                  '19': [{Title: '前3和-大小'}],
+                  '20': [{Title: '中3和-單雙'}],
+                  '21': [{Title: '中3和-大小'}],
+                  '22': [{Title: '後3和-單雙'}],
+                  '23': [{Title: '後3和-大小'}],
+                  '24': [{Title: '一定位-個'}],
+                  '25': [{Title: '一定位-十'}],
+                  '26': [{Title: '一定位-百'}],
+                  '27': [{Title: '一定位-千'}],
+                  '28': [{Title: '一定位-萬'}],
+                  '29': [{Title: '一字現'}],
+                  '30': [{Title: '一字現-前3'}],
+                  '31': [{Title: '一字現-中3'}],
+                  '32': [{Title: '一字現-後3'}],
+                  '33': [{Title: '二字現',SubTitle:'同號'},{Title: '二字現',SubTitle:'不同號'}],
+                  '34': [{Title: '二字現-前3',SubTitle:'同號'},{Title: '二字現-前3',SubTitle:'不同號'}],
+                  '35': [{Title: '二字現-中3',SubTitle:'同號'},{Title: '二字現-中3',SubTitle:'不同號'}],
+                  '36': [{Title: '二字現-後3',SubTitle:'同號'},{Title: '二字現-後3',SubTitle:'不同號'}],
+                  '37': [{Title: '三字現',SubTitle:'三同號'},{Title: '三字現',SubTitle:'兩同號'},{Title: '三字現',SubTitle:'不同號'}],
+                  '38': [{Title: '三字現-前3',SubTitle:'三同號'},{Title: '三字現-前3',SubTitle:'兩同號'},{Title: '三字現-前3',SubTitle:'不同號'}],
+                  '39': [{Title: '三字現-中3',SubTitle:'三同號'},{Title: '三字現-中3',SubTitle:'兩同號'},{Title: '三字現-中3',SubTitle:'不同號'}],
+                  '40': [{Title: '三字現-後3',SubTitle:'三同號'},{Title: '三字現-後3',SubTitle:'兩同號'},{Title: '三字現-後3',SubTitle:'不同號'}],
+                  '41': [{Title: '四字現',SubTitle:'現三'},{Title: '四字現',SubTitle:'現四',Filter:'>100000'}],
+                  '42': [{Title: '五字現',SubTitle:'現四'},{Title: '五字現',SubTitle:'現五',
+                  Filter:'>100000'}],
+                  '43': [
+                        {Title: '雜項-前3',SubTitle:'豹子'},
+                        {Title: '雜項-前3',SubTitle:'順子'},
+                        {Title: '雜項-前3',SubTitle:'對子'},
+                        {Title: '雜項-前3',SubTitle:'半順'},
+                        {Title: '雜項-前3',SubTitle:'雜六'}
+                  ],
+                  '44': [
+                        {Title: '雜項-中3',SubTitle:'豹子'},
+                        {Title: '雜項-中3',SubTitle:'順子'},
+                        {Title: '雜項-中3',SubTitle:'對子'},
+                        {Title: '雜項-中3',SubTitle:'半順'},
+                        {Title: '雜項-中3',SubTitle:'雜六'},
+                  ],
+                  '45': [
+                        {Title: '雜項-後3',SubTitle:'豹子'},
+                        {Title: '雜項-後3',SubTitle:'順子'},
+                        {Title: '雜項-後3',SubTitle:'對子'},
+                        {Title: '雜項-後3',SubTitle:'半順'},
+                        {Title: '雜項-後3',SubTitle:'雜六'}
+                  ],
+                  '46': [
+                        {Title: '炸金花',SubTitle:'五同號'},
+                        {Title: '炸金花',SubTitle:'四條'},
+                        {Title: '炸金花',SubTitle:'葫蘆'},
+                        {Title: '炸金花',SubTitle:'順子'},
+                        {Title: '炸金花',SubTitle:'三條'},
+                        {Title: '炸金花',SubTitle:'兩對'},
+                        {Title: '炸金花',SubTitle:'一對'},
+                        {Title: '炸金花',SubTitle:'雜牌'}
+                  ],
+                  '47': [
+                        {Title: '牛牛',SubTitle:'牛牛'},
+                        {Title: '牛牛',SubTitle:'有牛'},
+                        {Title: '牛牛',SubTitle:'無牛'}
+                  ],
+                  '48': {Title: '兩面過關'}
+            }
       }
 }
