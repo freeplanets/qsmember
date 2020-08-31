@@ -54,6 +54,10 @@ const routes: RouteConfig[] = [
         path: '/betreport',
         component: () => import('layouts/BetReport.vue')
       },                          
+      {
+        path: '/probabilitytable',
+        component: () => import('layouts/Probability.vue')
+      }
     ],
   }
 

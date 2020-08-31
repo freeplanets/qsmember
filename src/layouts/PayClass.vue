@@ -49,7 +49,7 @@ import {getModule} from 'vuex-module-decorators';
 //import BTG from './data/defaultData';
 import {SelectOptions,PayRateItm,IMsg,PayClass, CommonParams,ILoginInfo} from './data/if';
 import BTG from './data/defaultData';
-import {PayRateData } from './data/PayRateList';
+import PayRateData from './data/PayRateList';
 import {PayRate} from './class/PayRate'
 import { cloneDeep } from 'lodash'
 //import { QDialogOptions } from 'quasar';

@@ -109,7 +109,7 @@ import {getModule} from 'vuex-module-decorators';
 //import BTG from './data/defaultData';
 import {SelectOptions,BasePayRateItm,IbtCls,CommonParams,IMsg,StepG, ILoginInfo} from './data/if';
 import BTG from './data/defaultData';
-import {PayRateData } from './data/PayRateList';
+import PayRateData from './data/PayRateList';
 import {BasePayRate} from './class/BasePayRate';
 import { cloneDeep } from 'lodash';
 import GameSelector from './components/GameSelector.vue';

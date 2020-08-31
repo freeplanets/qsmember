@@ -80,7 +80,19 @@ export default {
     ProgramsSet:'程式設定',
     Pass2Lvl: '設定二階段密碼',
     CancelPass2: '取消二階段密碼',
-    Close: '關閉'
+    Close: '關閉',
+    ProbabilityManage: '機率管理',
+    Game: {
+      MarkSix: '六合彩',
+      '3D' : '3D',
+      Happy: '快樂10分',
+      Always: '時時彩',
+      Cars: '賽車',
+      Speed3 : '骰寶',
+      Happy8 : '快樂8',
+      BTCHash : '雜湊'   
+    },
+    PlsSlt: '請選擇....'
   },
   Tip:{
     UserFind: "請輸入名稱或代號"
@@ -1190,8 +1202,7 @@ export default {
         '44': {title: '雜項-中3',subtitle:['豹子','順子','對子','半順','雜六']},
         '45': {title: '雜項-後3',subtitle:['豹子','順子','對子','半順','雜六']},
         '46': {title: '炸金花',subtitle:['五同號','四條','葫蘆','順子','三條','兩對','一對','雜牌']},
-        '47': {title: '牛牛',subtitle:['牛牛','有牛','無牛']},
-        '48': {title: '兩面過關'}
+        '47': {title: '兩面過關'}
       }
     }
   }

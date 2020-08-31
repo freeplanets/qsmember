@@ -11,7 +11,7 @@
                     />
         </q-btn-group>                
     </div>    
-</template>`````````````    `
+</template>
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
@@ -31,7 +31,7 @@ export default class BtClass extends Vue {
 	async getBtClass(){
         this.BtClass=[];
         if(this.GameID && this.store){
-			const ans = await this.store.ax.getBtClass(this.GameID)
+			const ans = await this.store.ax.getBtClass(0,'',this.GameID);
 			if(ans){
 				ans.map((itm:IbtCls)=>{
 					this.BtClass.push(itm)

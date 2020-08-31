@@ -55,7 +55,7 @@ import {getModule} from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {SelectOptions,IMsg,CommonParams} from './data/if';
 import OpParams,{IOParam} from './class/OpParams';
-import {PayRateData} from './data/PayRateList';
+import PayRateData from './data/PayRateList';
 import GameSelector from './components/GameSelector.vue';
 Vue.component('GS',GameSelector);
 interface SItem  { 

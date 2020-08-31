@@ -1,4 +1,3 @@
-import { ifError } from "assert";
 /*
 interface T {
     [n:string]: string | number | undefined;

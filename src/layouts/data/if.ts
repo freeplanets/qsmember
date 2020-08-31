@@ -237,3 +237,11 @@ export interface MyUser {
     Nickname: string;
     Types?:number;
  }
+
+ export interface ProbTable {
+    id:number;
+    GType:string;
+    BetType:number;
+    SubType:number;
+    Probability:number;
+ }
