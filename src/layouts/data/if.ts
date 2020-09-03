@@ -244,6 +244,4 @@ export interface MyUser {
     BetType:number;
     SubType:number;
     Probability:number;
-    title?:string;
-    subtitle?:string;
  }

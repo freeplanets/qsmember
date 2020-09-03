@@ -38,7 +38,12 @@ export default class BetTypeClass extends Vue {
             id:0,
             Account:'',
             sid:'',
-            Levels:0
+            Levels:0,
+            isTwoPassAsked:0,
+            Types:0,
+            forcePWChange:0,
+            isChkGA:0,
+            Progs:[]
         }
         if(this.pinfo) pinfo=this.pinfo;
         this.BtClass=[];

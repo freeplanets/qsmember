@@ -2,6 +2,8 @@ import {ProbTable} from '../data/if'
 import BClass from './BClass'
 
 export default class ProbabilityTable extends BClass<ProbTable>{
+  private title='';
+  private subtitle='';
     constructor(data:ProbTable){
       super(data);
     }
@@ -9,7 +11,7 @@ export default class ProbabilityTable extends BClass<ProbTable>{
       return this.data.id;
     }
     set id(v:number) {
-      this.id=v;
+      this.data.id=v;
     }
     get BetType(){
       return this.data.BetType;
@@ -18,13 +20,22 @@ export default class ProbabilityTable extends BClass<ProbTable>{
       return this.data.SubType;
     }    
     get Title(){
-      return this.data.title ?　this.data.title : '';
+      return this.title;
+    }
+    set Title(v:string){
+      this.title = v;
     }
     get SubTitle(){
-      return this.data.subtitle ? this.data.subtitle : '';
+      return this.subtitle;
+    }
+    set SubTitle(v:string){
+      this.subtitle = v;
     }
     get Probability(){
       return this.data.Probability;
+    }
+    get Selected(){
+      return false;
     }
     set Probability(v:number){
       this.data.Probability=v;

@@ -429,6 +429,7 @@ export default class UserManager extends Vue{
       const ans:IMsg=await ax.getUsers(param);
       if(ans.ErrNo===0){
         this.data = ans.data as [];
+        console.log('getUsers',this.data);
         this.data.map(u=>{
           if(u.PayClass){
             u.PayClass = u.PayClass.replace(/\\/g,'')

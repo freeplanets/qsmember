@@ -414,7 +414,7 @@ const PayRateData = {
                         {Title: '炸金花',SubTitle:'一對'},
                         {Title: '炸金花',SubTitle:'雜牌'}
                   ],
-                  '47': {Title: '兩面過關'}
+                  '47': [{Title: '兩面過關'}]
             }
       }
 }
