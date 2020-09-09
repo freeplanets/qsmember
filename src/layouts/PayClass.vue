@@ -46,9 +46,7 @@ import axios,{AxiosResponse } from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import {IGames} from './data/schema';
-//import BTG from './data/defaultData';
 import {SelectOptions,PayRateItm,IMsg,PayClass, CommonParams,ILoginInfo} from './data/if';
-import BTG from './data/defaultData';
 import PayRateData from './data/PayRateList';
 import {PayRate} from './class/PayRate'
 import { cloneDeep } from 'lodash'
@@ -78,6 +76,7 @@ export default class BetClass extends Vue{
     public PayR:PayRate[]=[];
     private PNChange:boolean=false;
     public isAgent:boolean=false;
+    private curGType:string='';
     get showProgress(){
         return this.store.showProgress;
     }
@@ -128,6 +127,7 @@ export default class BetClass extends Vue{
     }
     async setCurGames(v:SelectOptions){
         this.curGameID = v.value as number;
+        this.curGType = v.GType ? v.GType : '';
         if(v.GType==='MarkSix'){
             // 8,72 三中二
             // 10,73 二中特
@@ -184,9 +184,9 @@ export default class BetClass extends Vue{
         this.PayR=[];
         //const gid:string = this.models.value as string;
         if(!this.curGameID) return;
-        const btg=BTG[this.curGameID];
-        const tmp:object=PayRateData[btg].data;
-        const order:string[]=PayRateData[btg].order;
+        //const btg=BTG[this.curGameID];
+        const tmp:object=PayRateData[this.curGType].data;
+        const order:string[]=PayRateData[this.curGType].order;
         let itms:PayRateItm[]=[];
         //console.log('tmp',tmp);
         order.map(key=>{

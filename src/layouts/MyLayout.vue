@@ -59,7 +59,7 @@
           v-for="(func,idx) in Funcs"
           :key="`func${idx}`"
           :to="`/${func.Paths}`"
-          @click="ProName=$t(`Label.${func.Title}`)+'';showComment=false" clickable >
+          @click="setProName(func.Title)" clickable >
           <q-item-section avatar>
             <q-icon :name="func.Icon" />
           </q-item-section>
@@ -256,7 +256,7 @@ export default class MyLayout extends Vue {
     return this.store.leftDrawerOpen;
   }
   set leftDrawerOpen(value:boolean){
-    //console.log('leftDrawerOpen set:');
+    console.log('MyLayout leftDrawerOpen set:',value,this.store.isLogin);
     this.store.setLeftDrawerOpen(value);
   }
   get showGA(){
@@ -277,6 +277,10 @@ export default class MyLayout extends Vue {
   }
   get Personal():ILoginInfo{
     return this.store.personal as ILoginInfo;
+  }
+  setProName(v:string){
+    this.ProName=this.$t(`Label.${v}`)+'';
+    this.showComment=false;
   }
   async getGAImg(){
     this.showProgress=true;

@@ -13,7 +13,7 @@ const config:AxiosRequestConfig = {
 }
 */
 export class AxApi {
-    private router; 
+    private router;
     constructor(private ApiUrl){
         console.log('AxApi created!!',ApiUrl);
     }

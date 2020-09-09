@@ -82,7 +82,6 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-//import BTG from './data/defaultData';
 import {SelectOptions,CommonParams,IMsg, BasePayRateItm,ILoginInfo} from './data/if';
 import { QDialogOptions } from 'quasar';
 import GameSelector from './components/GameSelector.vue';

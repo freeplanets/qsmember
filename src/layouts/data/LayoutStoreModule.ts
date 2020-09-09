@@ -1,6 +1,5 @@
-import { Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
+import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 import Store from '../../store/index';
-import {IUser} from './schema';
 import AxApi from '../components/AxApi';
 import {ILoginInfo} from './if';
 
@@ -31,7 +30,6 @@ export default class LayoutStoreModule extends VuexModule {
     public showProgress=false;
     public chgPW=false;
     public doLogout=false;
-
     get isShowGA(){
         return this.showGA;
     }
@@ -48,6 +46,9 @@ export default class LayoutStoreModule extends VuexModule {
     }
     @Mutation
     public SET_LEFT_DRAWER_OPEN(value: boolean){
+        if(value){
+            if(!this.isLogin) return;
+        }
         this.isleftDrawerOpen = value;
     }
     get leftDrawerOpen(){

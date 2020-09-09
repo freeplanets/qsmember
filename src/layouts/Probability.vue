@@ -20,6 +20,7 @@
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.SubTitle }}</div>
                 <div class='col-1 alignR'><input type="text" size='8' v-model="itm.Probability" /></div>            
             </div>
+            <div v-if="PInfo.Levels==9"><q-btn color="red" icon-right="save" label="Save Odds Item" @click="saveDfOddsItems(GType);" /></div>            
         </div>         
   </div>
 </template>
@@ -33,9 +34,17 @@ import PayRateData from './data/PayRateList';
 import {Watch} from 'vue-property-decorator'
 import { CommonParams,IMsg ,ProbTable} from './data/if';
 import ProbT from './class/ProbabilityTable';
+import BaseOddsItem,{CondOfBetType} from './data/defaultData';
 interface Slt {
   label:string;
   value:string;
+}
+interface DfOddsItems {
+    GType: string;
+    BetType: number;
+    SubType: number;
+    Num: string;
+    ModifyID?: number;
 }
 @Component
 export default class Probability extends Vue {
@@ -43,20 +52,22 @@ export default class Probability extends Vue {
     PR:Slt[]=[];
     slted:Slt={label:'',value:''};
     list:ProbT[]=[];
+    GType:string='';
     @Watch('slted',{immediate:true,deep:true})
     onSltedChange(){
       //console.log('onSltedChange',this.slted);
       if(this.slted.value){
-        this.getProbData(this.slted.value);
+        this.GType=this.slted.value;
+        this.getProbData(this.GType);
       }
     }
-    get pInfo(){
+    get PInfo(){
       return this.store.personal;
     }
     async getProbData(GType:string){
       const param:CommonParams={
-        sid:this.pInfo.sid,
-        UserID: this.pInfo.id,
+        sid:this.PInfo.sid,
+        UserID: this.PInfo.id,
         GType
       }
       this.list=[];
@@ -102,6 +113,79 @@ export default class Probability extends Vue {
         this.$q.dialog(opts);
       }
     }
+    async saveDfOddsItems(GType:string){
+      if(!BaseOddsItem[GType]){
+        return;
+      }
+      let data:DfOddsItems[]=[];
+      //let chkdata:DfOddsItems[]=[];
+      Object.keys(BaseOddsItem[GType]).map(bt=>{
+        let itm:CondOfBetType = BaseOddsItem[GType][bt];
+        if(itm.UserOtherBTOdds) return;     
+        for(let i=itm.Min;i<=itm.Max;i++){
+          let SubType=0;
+          let Num=i+'';
+          if(itm.SubTypeAsNum) SubType=i;
+          let tmp:DfOddsItems={
+            GType,
+            BetType: parseInt(bt,10),
+            SubType,
+            Num,
+            ModifyID: this.PInfo.id
+          }
+          if(itm.SameAsDigitalOrder){
+            const anum=Num.split('');
+            const chk:string[]=[];
+            const dgt= itm.Digital ? itm.Digital : 0;
+            while(anum.length<dgt){
+              anum.push('0');
+            }
+            anum.map(nu=>{
+              if(chk.indexOf(nu)===-1){
+                chk.push(nu);
+              }
+            });
+            if(dgt==3){
+              if(chk.length===1) tmp.SubType=2;
+              if(chk.length===2) tmp.SubType=1;
+            } else {
+              if(chk.length===1) tmp.SubType=1;
+            }
+            const tnum=parseInt(anum.sort().join(''),10)+'';                       
+            //if(tmp.BetType===33){
+            //  console.log('anum.chk:',tnum,anum.join(''));
+            //}
+            const f=data.find(elm=>elm.BetType===tmp.BetType && elm.Num===tnum)
+            if(f) continue;
+            //else {
+            //  if(tmp.BetType===33) chkdata.push(tmp);
+           //}
+          } 
+          data.push(tmp);
+        }
+      });
+      //console.log('chkdata:',chkdata);
+      ///*
+        const param:CommonParams={
+            UserID:this.PInfo.id,
+            sid:this.PInfo.sid,
+            ModifyID: this.PInfo.id,        
+            data: JSON.stringify(data)
+        }
+        const msg:IMsg=await this.store.ax.getApi('SaveDfOddsItem',param,'post');
+        if(msg.ErrNo===0){
+            this.$q.dialog({
+                title: this.$t('Label.Save') as string,
+                message: 'OK!!'
+            });         
+        } else {
+            this.$q.dialog({
+                title: this.$t('Label.Save') as string,
+                message: 'Error!!'
+            });            
+        }
+        //*/
+    }
     SaveData(){
         const dtas:ProbTable[] = [];
         this.list.map(itm=>{
@@ -115,18 +199,11 @@ export default class Probability extends Vue {
     }
     async sendData(dtas:ProbTable[]){
         const param:CommonParams={
-            UserID:this.pInfo.id,
-            sid:this.pInfo.sid,
-            ModifyID: this.pInfo.id,
+            UserID:this.PInfo.id,
+            sid:this.PInfo.sid,
+            ModifyID: this.PInfo.id,
             data: JSON.stringify(dtas)            
         }
-        /*
- 		const data = {
-			GameID: this.models.value,
-            ModifyID: this.UserID,
-            data: JSON.stringify(dtas)
-        }
-        */
         const msg:IMsg=await this.store.ax.getApi('batch/saveProbTable',param,'post');
         if(msg.ErrNo===0){
             this.$q.dialog({
@@ -145,7 +222,7 @@ export default class Probability extends Vue {
                 message: msg.ErrCon
             });            
         } 
-    }    
+    }
     mounted(){
       if(!this.store.isLogin){
           this.$router.push({path:'/login'});

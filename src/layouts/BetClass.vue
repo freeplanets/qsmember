@@ -32,7 +32,6 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-//import BTG from './data/defaultData';
 import { SelectOptions, ItmBtg, IbtCls,Btg,CommonParams, ILoginInfo} from './data/if';
 import GameSelector from './components/GameSelector.vue';
 Vue.component('GS',GameSelector);

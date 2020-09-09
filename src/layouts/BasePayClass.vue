@@ -106,9 +106,7 @@ import {Watch} from 'vue-property-decorator';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 //import {IGames} from './data/schema';
-//import BTG from './data/defaultData';
 import {SelectOptions,BasePayRateItm,IbtCls,CommonParams,IMsg,StepG, ILoginInfo} from './data/if';
-import BTG from './data/defaultData';
 import PayRateData from './data/PayRateList';
 import {BasePayRate} from './class/BasePayRate';
 import { cloneDeep } from 'lodash';
@@ -179,7 +177,8 @@ export default class BetClass extends Vue{
     }
     setCurGames(v:SelectOptions){
         this.models = v;
-        if(this.models.GType==='MarkSix'){
+        let GType:string = this.models.GType ? this.models.GType : '';
+        if(GType==='MarkSix'){
             // 8,72 三中二
             // 10,73 二中特
             this.spArr=[8,72,10,73];
@@ -188,19 +187,19 @@ export default class BetClass extends Vue{
         }
         this.showProgress=true;
         this.showDataTable=false;
-        this.chkdata(v);
+        this.chkdata(v,GType);
     }
-    async chkdata(v:SelectOptions){
+    async chkdata(v:SelectOptions,GType:string){
         // console.log('chkdata:', v);
         //const gid:string = v.value as string;
         this.curGameID = v.value as number;
-        const btg=BTG[this.curGameID];
-        if(!PayRateData[btg]){
+        //const btg=BTG[this.curGameID];
+        if(!PayRateData[GType]){
             this.showProgress=false;
             return;
         }
-        const tmp:object=PayRateData[btg].data;
-        const order:string[]=PayRateData[btg].order;
+        const tmp:object=PayRateData[GType].data;
+        const order:string[]=PayRateData[GType].order;
         let itms:BasePayRateItm[];
         this.BasePayR=[];
         //console.log('BasePayClass tmp',btg,tmp);
