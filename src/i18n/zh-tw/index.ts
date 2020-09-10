@@ -1147,7 +1147,7 @@ export default {
         }
       }
     },
-    BTCHsh: {
+    BTCHash: {
       Menu: {
         Group: [
           { title: '兩面盤', SubItem: [] },

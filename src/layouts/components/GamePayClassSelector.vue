@@ -50,11 +50,11 @@ interface GamePC {
 export default class GamePayClassSelector extends Vue {
   @Prop() readonly store?:LayoutStoreModule;
   @Prop() readonly uid?:number;
-  @Prop() readonly PayClass?:string;
   @Prop() readonly emptyitem?:boolean;
+  @Prop() readonly PayClass?:string;
   @Watch('PayClass',{immediate:true,deep:true})
   onPayClassChange(){
-    console.log('onPayClassChange',this.PayClass);
+    //console.log('onPayClassChange',this.PayClass);
     if(this.PayClass){
       this.slted=JSON.parse(this.PayClass);
     } 

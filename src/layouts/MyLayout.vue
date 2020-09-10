@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          App {{ ProName }}
+          App {{ ProName }} v0.01
         </q-toolbar-title>
         <q-btn flat round dense icon="edit" @click="showComment=!showComment" />
         <div v-if="Personal.Account">
@@ -256,7 +256,7 @@ export default class MyLayout extends Vue {
     return this.store.leftDrawerOpen;
   }
   set leftDrawerOpen(value:boolean){
-    console.log('MyLayout leftDrawerOpen set:',value,this.store.isLogin);
+    //console.log('MyLayout leftDrawerOpen set:',value,this.store.isLogin);
     this.store.setLeftDrawerOpen(value);
   }
   get showGA(){
@@ -398,7 +398,7 @@ export default class MyLayout extends Vue {
     }
   }
   mounted() {
-    //console.log('MyLayout mounted isLogin:',this.isLogin);
+    //console.log('MyLayout mounted');
     this.getSysInfo();
     if(!this.isLogin){      
       //console.log('MyLayout:',this.$route);

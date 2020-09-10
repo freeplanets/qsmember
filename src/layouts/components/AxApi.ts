@@ -29,10 +29,11 @@ export class AxApi {
             this.router.push({path:'/login'});
         }
     }
-	async getGames(UserID:number,sid:string):Promise<SelectOptions[] | undefined>{
+	async getGames(UserID:number,sid:string,showall?:boolean):Promise<SelectOptions[] | undefined>{
         const params:CommonParams={
             UserID:UserID,
-            sid:sid
+            sid:sid,
+            showall: showall ? 1 : 0
         }        
         const ans=await this.getApi('getGames',params);
         const tmp:SelectOptions[]=[];

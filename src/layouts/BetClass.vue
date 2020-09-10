@@ -85,6 +85,7 @@ export default class BetClass extends Vue{
 		}	
 	}
 	listBetTypes(btg:string):void{
+		console.log('listBetTypes:',btg);
 		this.btList = [];
 		this.clss = [];
 		//this.clear();

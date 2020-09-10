@@ -7,7 +7,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component';
-import {Prop, Watch} from 'vue-property-decorator';
+import {Prop} from 'vue-property-decorator';
 import {SelectOptions} from '../data/if';
 import LayoutStoreModule from '../data/LayoutStoreModule';
 /**
@@ -19,17 +19,21 @@ export default class GameSelector extends Vue {
     @Prop() readonly store?:LayoutStoreModule;
     @Prop() AddAllItem?:boolean;   //增加GameID=0的選項=> Select ALL
     @Prop() ReturnList?:boolean;
+    @Prop() readonly showall?:boolean;  
+    /*
     @Prop() GameID?:number;
     @Watch('GameID',{ immediate: true, deep: true })
     onGameIDChange(val:number){
         //console.log('onGameIDChange:',this.GameID,val,typeof val);
         if(val===undefined) return;
         this.ChangeFromUp=true;
+        console.log('GameSelector onGameIDChange:',this.options);
         const f=this.options.find(itm=>itm.value===val)
         if(f){
             this.model=f;
         }
     }
+    */
     ChangeFromUp:boolean=false;
     models:SelectOptions = {value: 0,label:''};
     options:SelectOptions[] = []
@@ -52,9 +56,9 @@ export default class GameSelector extends Vue {
 		return this.models as SelectOptions;
     }
 	async getGames(){
-        //console.log('getGames AddAllItem:',this.AddAllItem);
+        //console.log('GameSelector getGames AddAllItem:',this.AddAllItem);
         if(!this.store) return;
-        let ans:SelectOptions[] | undefined = await this.store.ax.getGames(this.store.personal.id,this.store.personal.sid)
+        let ans:SelectOptions[] | undefined = await this.store.ax.getGames(this.store.personal.id,this.store.personal.sid,this.showall)
         if(ans){
             if(this.UserPayClass.length>0){
                 let tmp:SelectOptions[]=ans;
@@ -76,9 +80,11 @@ export default class GameSelector extends Vue {
         if(this.ReturnList){
             this.$emit('setLists',this.options);
         }
+        //console.log('GameSelector getGames:',this.options);
     }    
-    mounted(){
-        this.getGames();
+    async mounted(){
+        //console.log('GameSelector mounted');
+        await this.getGames();
     }
 }
 </script>

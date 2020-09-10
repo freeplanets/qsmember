@@ -238,7 +238,7 @@ export default class BetClass extends Vue{
         this.showProgress=false;
     }
     chainEdit(bt:number){
-        console.log('chainEdit',bt);
+        //console.log('chainEdit',bt);
         const e0 = this.BasePayR.find(elm => elm.BetType == bt && elm.SubType == 0);
         const e1 = this.BasePayR.find(elm => elm.BetType == bt && elm.SubType == 1);
         if( e0 &&  e1){

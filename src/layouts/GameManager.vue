@@ -1,7 +1,7 @@
 <template>
 <div class="gametable">
     <div class="row q-pa-sm">
-        <div class="col-2"><GS :store='store' @setGames="setCurGames"></GS></div>
+        <div class="col-2"><GS :store='store' :showall='true' @setGames="setCurGames"></GS></div>
     </div>
     <div v-if="MyGame" class='my-pa-left'>
         <div class="row my-line-high">
