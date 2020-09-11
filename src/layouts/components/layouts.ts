@@ -50,7 +50,7 @@ export interface Layout {
 interface ILayouts {
     [key:string]:Layout;
 }
-const getNums = (BT:number,lastNums?:number,startAt?:number,extF?:number,addArr?:numBlock[][])=>{
+const getNums = (BT:number,lastNums?:number,startAt?:number,extF?:number,addArr?:numBlock[][]):numBlock[][]=>{
     if(!lastNums) lastNums = 49;
     if(startAt!==0){
         if(!startAt) startAt = 1;
@@ -81,7 +81,20 @@ const getNums = (BT:number,lastNums?:number,startAt?:number,extF?:number,addArr?
     }
     return nums;
 }
-
+const getTwoDgt=(bt:number):numBlock[][]=>{
+    return [
+        [{BT:bt,Num:0},{BT:bt,Num:1},{BT:bt,Num:2},{BT:bt,Num:3},{BT:bt,Num:4},{BT:bt,Num:5},{BT:bt,Num:6},{BT:bt,Num:7},{BT:bt,Num:8},{BT:bt,Num:9}],
+        [{BT:-1,Num:0},{BT:bt,Num:11},{BT:bt,Num:12},{BT:bt,Num:13},{BT:bt,Num:14},{BT:bt,Num:15},{BT:bt,Num:16},{BT:bt,Num:bt},{BT:bt,Num:18},{BT:bt,Num:19}],
+        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:22},{BT:bt,Num:23},{BT:bt,Num:24},{BT:bt,Num:25},{BT:bt,Num:26},{BT:bt,Num:27},{BT:bt,Num:28},{BT:bt,Num:29}],
+        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:33},{BT:bt,Num:34},{BT:bt,Num:35},{BT:bt,Num:36},{BT:bt,Num:37},{BT:bt,Num:38},{BT:bt,Num:39}],
+        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:44},{BT:bt,Num:45},{BT:bt,Num:46},{BT:bt,Num:47},{BT:bt,Num:48},{BT:bt,Num:49}],
+        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:55},{BT:bt,Num:56},{BT:bt,Num:57},{BT:bt,Num:58},{BT:bt,Num:59}],
+        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:66},{BT:bt,Num:67},{BT:bt,Num:68},{BT:bt,Num:69}],
+        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:77},{BT:bt,Num:78},{BT:bt,Num:79}],
+        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:88},{BT:bt,Num:89}],
+        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:99}]
+    ];
+}
 const getNum3D=(pos:string,num:number,bt:number)=>{
     const str:string[]=['hundreds','tens','units'];
     const idx=str.indexOf(pos);
@@ -1275,6 +1288,113 @@ const Happy8:Layout=[
         ]
     }    
 ]
+const BTCHash:Layout=[
+    {
+        name: "Game.BTCHash.Menu.Group.0.title",
+        cont:[
+            {
+                title : "Game.BTCHash.Item.1.shortT",
+                item:[
+                    [{BT:1,Num:0},{BT:1,Num:1},{BT:6,Num:0},{BT:6,Num:1},{BT:11,Num:0},{BT:11,Num:1}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.2.shortT",
+                item:[
+                    [{BT:2,Num:0},{BT:2,Num:1},{BT:7,Num:0},{BT:7,Num:1},{BT:12,Num:0},{BT:12,Num:1}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.3.shortT",
+                item:[
+                    [{BT:3,Num:0},{BT:3,Num:1},{BT:8,Num:0},{BT:8,Num:1},{BT:13,Num:0},{BT:13,Num:1}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.4.shortT",
+                item:[
+                    [{BT:4,Num:0},{BT:4,Num:1},{BT:9,Num:0},{BT:9,Num:1},{BT:14,Num:0},{BT:14,Num:1}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.5.shortT",
+                item:[
+                    [{BT:5,Num:0},{BT:5,Num:1},{BT:10,Num:0},{BT:10,Num:1},{BT:15,Num:0},{BT:15,Num:1}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.16.shortT",
+                item:[
+                    [{BT:16,Num:0},{BT:16,Num:1},{BT:17,Num:0},{BT:17,Num:1}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.18.shortT",
+                item:[
+                    [{BT:18,Num:0},{BT:18,Num:1},{BT:19,Num:0},{BT:19,Num:1}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.20.shortT",
+                item:[
+                    [{BT:20,Num:0},{BT:20,Num:1},{BT:21,Num:0},{BT:21,Num:1}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.22.shortT",
+                item:[
+                    [{BT:22,Num:0},{BT:22,Num:1},{BT:23,Num:0},{BT:23,Num:1}]
+                ]
+            },
+        ]
+    },
+    {
+        name: "Game.BTCHash.Menu.Group.1.title",
+        cont:[
+            {
+                colorWave: true,
+                aBT:[24,25,26,27,28],
+                sltedItem:0,
+                start: 0,
+                end:9,                
+                item:getNums
+            }
+        ]
+    },
+    {
+        name: "Game.BTCHash.Menu.Group.2.title",
+        cont:[
+            {
+                colorWave: true,
+                aBT:[29,30,31,32],
+                sltedItem:0,
+                start: 0,
+                end:9,                
+                item:getNums
+            }
+        ]
+    },
+    {
+        name:"Game.BTCHash.Menu.Group.3.title",       
+        cont:[
+            {
+                dgt: 2, //位數
+                Selects: [
+                    "Game.BTCHash.Item.33.title",
+                    "Game.BTCHash.Item.34.title",
+                    "Game.BTCHash.Item.35.title",
+                    "Game.BTCHash.Item.36.title",
+                ],          
+                items:[
+                    getTwoDgt(33),
+                    getTwoDgt(34),
+                    getTwoDgt(35),
+                    getTwoDgt(36),
+                ]
+            }
+        ]
+    },           
+]
 const Layouts:ILayouts= {}
 Layouts.MarkSix = MarkSixLayout;
 Layouts['3D'] = D3;
@@ -1283,4 +1403,5 @@ Layouts.Cars = Cars;
 Layouts.Always = Always;
 Layouts.Speed3 = Speed3;
 Layouts.Happy8 = Happy8;
+Layouts.BTCHash = BTCHash;
 export default Layouts;

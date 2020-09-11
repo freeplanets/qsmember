@@ -7,7 +7,7 @@ export interface IUser {
     Account?: string;
     Password?: string;
     Nickname?: string;
-    Types: number;
+    Types?: number;
     TypeName?: string;
     Levels?: number;
     DfKey?: string;

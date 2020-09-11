@@ -1151,7 +1151,12 @@ export default {
       Menu: {
         Group: [
           { title: '兩面盤', SubItem: [] },
-          { title: '數字盤', SubItem: [], SubMenu: [] },
+          { title: '一定位', SubItem: [] },
+          { title: '一字', SubItem: [] },
+          { title: '二字', SubItem: [] },
+          { title: '三字', SubItem: [] },
+          { title: '四字', SubItem: [] },
+          { title: '五字', SubItem: [] },
           { title: '雜項', SubMenu: [] }
         ]
       },
