@@ -69,7 +69,7 @@ export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle?:boolean)
         //return V.$t('Game.Cars.Item.' + bt +'.sctitle[' + h +']') + V.$t('Game.Cars.Item.' + bt +'.subTitle[' + n +']')
     }
     if(V.GType=='MarkSix' && bt==53) return Num7(bt,num,V)
-    if(V.GType=='MarkSix' && bt==15) return NumPass(num,V,showScTitle,bt)
+    if((V.GType=='MarkSix' && bt==15) || (V.GType==='BTCHash' && bt==47)) return NumPass(num,V,showScTitle,bt)
     if(V.GType=='MarkSix' && bt==68) return DragonTiger(bt,num,V) /* 龍虎 */
     //let subtt = V.$t('Game.'+V.GType+'.Item.' + bt +'.subTitle')
     let btitem = V.$t('Game.'+V.GType+'.Item.' + bt)
@@ -88,7 +88,7 @@ export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle?:boolean)
     //let subT = V.$t('Game.' + V.GType + '.Item.'+bt+'.subtitle').length
     if(typeof(btitem.subtitle)!='undefined'){
       let ext = num % btitem.subtitle.length
-      if((V.GType==='MarkSix' && bt==14) || V.GType==='Happy' ) {
+      if((V.GType==='MarkSix' && bt==14) || V.GType==='Happy') {
           ext = num % 10
       }
       if(typeof(btitem.shortT)!='undefined'){
@@ -117,17 +117,19 @@ const Num7=function(bt,num,V){
     return V.$t(`Game.MarkSix.Item.${bt}.subtitle.${t}`) + n
 };
 const NumPass=function(num,V,sct,bt){
-    let t = Math.floor(num/100)
+    let base=10;
+    if(V.GType==='MarkSix') base=100;
+    let t = Math.floor(num/base);
     let n = num % 10
     /*
     if(typeof(V.$t('Game.MarkSix.Item.'+t+'.subtitle.'+n))=='undefined'){
         console.log('Game.MarkSix.Item.'+t+'.subtitle.'+n)
     }
     */
-    let tmp = V.$t(`Game.MarkSix.Item.${t}.subtitle.${n}`)
+    let tmp = V.$t(`Game.${V.GType}.Item.${t}.subtitle.${n}`)
     if(sct) {
         let k =Math.floor((num % 100) / 10)
-        tmp = V.$t(`Game.MarkSix.Item.${bt}.sctitle.${k}`) + ' ' + tmp
+        tmp = V.$t(`Game.${V.GType}.Item.${bt}.sctitle.${k}`) + ' ' + tmp
     }
     return tmp
 };
@@ -309,7 +311,7 @@ export function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1
         } 
     }
     if(GType=='MarkSix' && bt==53) return Num7(bt,num,V)
-    if(GType=='MarkSix' && bt==15) return NumPass(num,V,showScTitle,bt)
+    if(GType=='MarkSix' && bt==15 || (GType==='BTCHash' && bt==47)) return NumPass(num,V,showScTitle,bt)
     if(GType=='MarkSix' && bt==68) return DragonTiger(bt,num,V) /* 龍虎 */
     //let subtt = V.$t('Game.'+GType+'.Item.' + bt +'.subTitle')
     const tmpT:any=V.$t('Game.'+GType+'.Item.' + bt);

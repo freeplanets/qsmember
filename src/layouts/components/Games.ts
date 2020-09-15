@@ -100,6 +100,9 @@ export class CGame {
             ],
             Happy8: [
                 
+            ],
+            BTCHash: [
+                
             ]
         }
     constructor(){
@@ -188,9 +191,11 @@ export class CGame {
         }    
         const tmp:IOdds=this.member[sBT].member[sNum];
         //const ba = BaNum(tmp.PerStep ? tmp.PerStep : 1);
-        const ba = BaNum(tmp.PerStep);
-        tmp.Odds= Math.round(tmp.Odds*ba)/ba;
-        //console.log('getOdds:',sBT,tmp.Odds,tmp.Steps);
+        if(tmp.PerStep>0){
+            const ba = BaNum(tmp.PerStep);
+            tmp.Odds= Math.round(tmp.Odds*ba)/ba;
+        }
+        //if(this.GType==='BTCHash' &&　BT===47) console.log('getOdds:',sBT,tmp.Odds,tmp.Steps);
         tmp.BT = BT;
         tmp.Num = num;
         //if(Steps) tmp.Steps = Steps;

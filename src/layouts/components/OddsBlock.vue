@@ -1,10 +1,10 @@
 <template>
     <table :class="{oddblock:true,oddblockRightLine:rightLine,oddblockBottomLine:bottomLine,Stoped:Odds.isStop===1}">
         <tr>
-            <td class='col nums' :style="'backgroup-color:'+getColor()" v-if="titleLen>4">
+            <td class='col nums' :style="'backgroup-color:'+getColor()" v-if="titleLen>5">
                 {{title}}
             </td>
-            <td class='col nums' v-if="titleLen<5">
+            <td class='col nums' v-if="titleLen<6">
                 <q-btn  round size="sm" :color="getColor()" :label="title" />
             </td>            
             <td class='col data'>
@@ -55,7 +55,7 @@
                     <div class='col'>{{Math.round(Odds.tolS)}}</div>
                 </div>
                 <div class='row'>
-                    <div class='col' :class="{redcolor:Odds.Risk<0}">{{Odds.Risk}}</div>
+                    <div class='col' :class="{redcolor:Odds.Risk ? Odds.Risk<0 : false}">{{Odds.Risk}}</div>
                 </div>
             </td>
         </tr>
@@ -74,8 +74,8 @@ export default class OddsBlock extends Vue {
     @Prop() readonly store?:LayoutStoreModule;
     @Prop() readonly tid?:number;
     @Prop() readonly GameID?:number;
-    @Prop({}) readonly Odds?:IOdds;
-    @Prop({}) readonly ExtOdds?:IOdds;
+    @Prop() readonly Odds!:IOdds;
+    @Prop() readonly ExtOdds!:IOdds;
     @Prop() readonly rightLine?:boolean;
     @Prop() readonly bottomLine?:boolean;
     @Prop() readonly GType?:string;
@@ -125,7 +125,7 @@ export default class OddsBlock extends Vue {
         }
         return len;
     }
-    async setOdds(BT:number,Num:number,add?:number,step?:number){
+    async setOdds(BT?:number,Num?:number,add?:number,step?:number){
         //console.log('setOdds:',BT,Num,step);
         if(this.store){
             /*
@@ -136,8 +136,8 @@ export default class OddsBlock extends Vue {
             const params:CommonParams={
                 tid:this.tid,
                 GameID:this.GameID,
-                BT:BT,
-                Num:Num,
+                BT,
+                Num,
                 Add:add,
                 Step:step,
                 UserID:this.store.personal.id,

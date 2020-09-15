@@ -48,6 +48,7 @@ export default class GameSelector extends Vue {
     }
 	set model(v:SelectOptions){
         this.models = v;
+        console.log('GameSelector',this.ChangeFromUp);
         if(!this.ChangeFromUp) this.$emit('setGames',v);
         this.ChangeFromUp=false;
 	}

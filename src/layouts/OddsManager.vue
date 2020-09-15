@@ -80,7 +80,9 @@
                                         v-for="(nItm,nidx) in LItm"
                                         :key="'nitm'+nidx"
                                     >
-                                        <OB 
+                            <div v-if="nItm.BT<1"></div>
+                            <OB 
+                                v-if="nItm.BT>=0"
                                             :store="store"
                                             :tid="curTid"
                                             :GameID="curGameID"
@@ -329,7 +331,7 @@ export default class OddsManager extends Vue {
             this.CountDown = this.refSec;
             this.getCurOdds();
         }
-        console.log('refresh',this.refSec);
+        //console.log('refresh',this.refSec);
     }
     async getCurOdds(){
         const param:CommonParams = {

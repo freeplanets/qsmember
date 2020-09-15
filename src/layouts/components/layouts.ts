@@ -95,6 +95,32 @@ const getTwoDgt=(bt:number):numBlock[][]=>{
         [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:99}]
     ];
 }
+const getThreeDgt=(bt:number):numBlock[][]=>{
+    return [
+        [{BT:bt,Num:0},{BT:bt,Num:1},{BT:bt,Num:2},{BT:bt,Num:3},{BT:bt,Num:4},{BT:bt,Num:5},{BT:bt,Num:6},{BT:bt,Num:7},{BT:bt,Num:8},{BT:bt,Num:9}],
+        [{BT:bt,Num:11},{BT:bt,Num:12},{BT:bt,Num:13},{BT:bt,Num:14},{BT:bt,Num:15},{BT:bt,Num:16},{BT:bt,Num:17},{BT:bt,Num:18},{BT:bt,Num:19},{BT:bt,Num:22}],
+        [{BT:bt,Num:23},{BT:bt,Num:24},{BT:bt,Num:25},{BT:bt,Num:26},{BT:bt,Num:27},{BT:bt,Num:28},{BT:bt,Num:29},{BT:bt,Num:33},{BT:bt,Num:34},{BT:bt,Num:35}],
+        [{BT:bt,Num:36},{BT:bt,Num:37},{BT:bt,Num:38},{BT:bt,Num:39},{BT:bt,Num:44},{BT:bt,Num:45},{BT:bt,Num:46},{BT:bt,Num:47},{BT:bt,Num:48},{BT:bt,Num:49}],
+        [{BT:bt,Num:55},{BT:bt,Num:56},{BT:bt,Num:57},{BT:bt,Num:58},{BT:bt,Num:59},{BT:bt,Num:66},{BT:bt,Num:67},{BT:bt,Num:68},{BT:bt,Num:69},{BT:bt,Num:77}],
+        [{BT:bt,Num:78},{BT:bt,Num:79},{BT:bt,Num:88},{BT:bt,Num:89},{BT:bt,Num:99},{BT:bt,Num:111},{BT:bt,Num:112},{BT:bt,Num:113},{BT:bt,Num:114},{BT:bt,Num:115}],
+        [{BT:bt,Num:116},{BT:bt,Num:117},{BT:bt,Num:118},{BT:bt,Num:119},{BT:bt,Num:122},{BT:bt,Num:123},{BT:bt,Num:124},{BT:bt,Num:125},{BT:bt,Num:126},{BT:bt,Num:127}],
+        [{BT:bt,Num:128},{BT:bt,Num:129},{BT:bt,Num:133},{BT:bt,Num:134},{BT:bt,Num:135},{BT:bt,Num:136},{BT:bt,Num:137},{BT:bt,Num:138},{BT:bt,Num:139},{BT:bt,Num:144}],
+        [{BT:bt,Num:145},{BT:bt,Num:146},{BT:bt,Num:147},{BT:bt,Num:148},{BT:bt,Num:149},{BT:bt,Num:155},{BT:bt,Num:156},{BT:bt,Num:157},{BT:bt,Num:158},{BT:bt,Num:159}],
+        [{BT:bt,Num:166},{BT:bt,Num:167},{BT:bt,Num:168},{BT:bt,Num:169},{BT:bt,Num:177},{BT:bt,Num:178},{BT:bt,Num:179},{BT:bt,Num:188},{BT:bt,Num:189},{BT:bt,Num:199}],
+        [{BT:bt,Num:222},{BT:bt,Num:223},{BT:bt,Num:224},{BT:bt,Num:225},{BT:bt,Num:226},{BT:bt,Num:227},{BT:bt,Num:228},{BT:bt,Num:229},{BT:bt,Num:233},{BT:bt,Num:234}],
+        [{BT:bt,Num:235},{BT:bt,Num:236},{BT:bt,Num:237},{BT:bt,Num:238},{BT:bt,Num:239},{BT:bt,Num:244},{BT:bt,Num:245},{BT:bt,Num:246},{BT:bt,Num:247},{BT:bt,Num:248}],
+        [{BT:bt,Num:249},{BT:bt,Num:255},{BT:bt,Num:256},{BT:bt,Num:257},{BT:bt,Num:258},{BT:bt,Num:259},{BT:bt,Num:266},{BT:bt,Num:267},{BT:bt,Num:268},{BT:bt,Num:269}],
+        [{BT:bt,Num:277},{BT:bt,Num:278},{BT:bt,Num:279},{BT:bt,Num:288},{BT:bt,Num:289},{BT:bt,Num:299},{BT:bt,Num:333},{BT:bt,Num:334},{BT:bt,Num:335},{BT:bt,Num:336}],
+        [{BT:bt,Num:337},{BT:bt,Num:338},{BT:bt,Num:339},{BT:bt,Num:344},{BT:bt,Num:345},{BT:bt,Num:346},{BT:bt,Num:347},{BT:bt,Num:348},{BT:bt,Num:349},{BT:bt,Num:355}],
+        [{BT:bt,Num:356},{BT:bt,Num:357},{BT:bt,Num:358},{BT:bt,Num:359},{BT:bt,Num:366},{BT:bt,Num:367},{BT:bt,Num:368},{BT:bt,Num:369},{BT:bt,Num:377},{BT:bt,Num:378}],
+        [{BT:bt,Num:379},{BT:bt,Num:388},{BT:bt,Num:389},{BT:bt,Num:399},{BT:bt,Num:444},{BT:bt,Num:445},{BT:bt,Num:446},{BT:bt,Num:447},{BT:bt,Num:448},{BT:bt,Num:449}],
+        [{BT:bt,Num:455},{BT:bt,Num:456},{BT:bt,Num:457},{BT:bt,Num:458},{BT:bt,Num:459},{BT:bt,Num:466},{BT:bt,Num:467},{BT:bt,Num:468},{BT:bt,Num:469},{BT:bt,Num:477}],
+        [{BT:bt,Num:478},{BT:bt,Num:479},{BT:bt,Num:488},{BT:bt,Num:489},{BT:bt,Num:499},{BT:bt,Num:555},{BT:bt,Num:556},{BT:bt,Num:557},{BT:bt,Num:558},{BT:bt,Num:559}],
+        [{BT:bt,Num:566},{BT:bt,Num:567},{BT:bt,Num:568},{BT:bt,Num:569},{BT:bt,Num:577},{BT:bt,Num:578},{BT:bt,Num:579},{BT:bt,Num:588},{BT:bt,Num:589},{BT:bt,Num:599}],
+        [{BT:bt,Num:666},{BT:bt,Num:667},{BT:bt,Num:668},{BT:bt,Num:669},{BT:bt,Num:677},{BT:bt,Num:678},{BT:bt,Num:679},{BT:bt,Num:688},{BT:bt,Num:689},{BT:bt,Num:699}],
+        [{BT:bt,Num:777},{BT:bt,Num:778},{BT:bt,Num:779},{BT:bt,Num:788},{BT:bt,Num:789},{BT:bt,Num:799},{BT:bt,Num:888},{BT:bt,Num:889},{BT:bt,Num:899},{BT:bt,Num:999}]
+    ];
+}
 const getNum3D=(pos:string,num:number,bt:number)=>{
     const str:string[]=['hundreds','tens','units'];
     const idx=str.indexOf(pos);
@@ -527,7 +553,7 @@ const MarkSixLayout:Layout = [
                 ]
             }            
         ]
-    }           
+    }
 ];
 const D3:Layout =  [
     {
@@ -1293,55 +1319,55 @@ const BTCHash:Layout=[
         name: "Game.BTCHash.Menu.Group.0.title",
         cont:[
             {
-                title : "Game.BTCHash.Item.1.shortT",
+                title : "Game.BTCHash.Item.1.shortT1",
                 item:[
                     [{BT:1,Num:0},{BT:1,Num:1},{BT:6,Num:0},{BT:6,Num:1},{BT:11,Num:0},{BT:11,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.2.shortT",
+                title : "Game.BTCHash.Item.2.shortT1",
                 item:[
                     [{BT:2,Num:0},{BT:2,Num:1},{BT:7,Num:0},{BT:7,Num:1},{BT:12,Num:0},{BT:12,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.3.shortT",
+                title : "Game.BTCHash.Item.3.shortT1",
                 item:[
                     [{BT:3,Num:0},{BT:3,Num:1},{BT:8,Num:0},{BT:8,Num:1},{BT:13,Num:0},{BT:13,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.4.shortT",
+                title : "Game.BTCHash.Item.4.shortT1",
                 item:[
                     [{BT:4,Num:0},{BT:4,Num:1},{BT:9,Num:0},{BT:9,Num:1},{BT:14,Num:0},{BT:14,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.5.shortT",
+                title : "Game.BTCHash.Item.5.shortT1",
                 item:[
                     [{BT:5,Num:0},{BT:5,Num:1},{BT:10,Num:0},{BT:10,Num:1},{BT:15,Num:0},{BT:15,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.16.shortT",
+                title : "Game.BTCHash.Item.16.shortT1",
                 item:[
                     [{BT:16,Num:0},{BT:16,Num:1},{BT:17,Num:0},{BT:17,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.18.shortT",
+                title : "Game.BTCHash.Item.18.shortT1",
                 item:[
                     [{BT:18,Num:0},{BT:18,Num:1},{BT:19,Num:0},{BT:19,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.20.shortT",
+                title : "Game.BTCHash.Item.20.shortT1",
                 item:[
                     [{BT:20,Num:0},{BT:20,Num:1},{BT:21,Num:0},{BT:21,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.22.shortT",
+                title : "Game.BTCHash.Item.22.shortT1",
                 item:[
                     [{BT:22,Num:0},{BT:22,Num:1},{BT:23,Num:0},{BT:23,Num:1}]
                 ]
@@ -1393,7 +1419,113 @@ const BTCHash:Layout=[
                 ]
             }
         ]
-    },           
+    },
+    {
+        name:"Game.BTCHash.Menu.Group.4.title",       
+        cont:[
+            {
+                dgt: 3, //位數
+                Selects: [
+                    "Game.BTCHash.Item.37.title",
+                    "Game.BTCHash.Item.38.title",
+                    "Game.BTCHash.Item.39.title",
+                    "Game.BTCHash.Item.40.title",
+                ],          
+                items:[
+                    getThreeDgt(37),
+                    getThreeDgt(38),
+                    getThreeDgt(39),
+                    getThreeDgt(40),
+                ]
+            }
+        ]
+    },
+    {
+        name:"Game.BTCHash.Menu.Group.5.title",       
+        cont:[
+            {
+                dgt: 4, //位數     
+                item:[
+                    [{BT:41,Num:0}]
+                ]
+            }
+        ]
+    },
+    {
+        name:"Game.BTCHash.Menu.Group.6.title",       
+        cont:[
+            {
+                dgt: 5, //位數
+                item:[
+                    [{BT:42,Num:0}]
+                ]
+            }
+        ]
+    },
+    {
+        name: "Game.BTCHash.Menu.Group.7.title",
+        cont:[
+            {
+                title : "Game.BTCHash.Item.43.shortT1",
+                item:[
+                    [{BT:43,Num:0},{BT:43,Num:1},{BT:43,Num:2},{BT:43,Num:3},{BT:43,Num:4}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.44.shortT1",
+                item:[
+                    [{BT:44,Num:0},{BT:44,Num:1},{BT:44,Num:2},{BT:44,Num:3},{BT:44,Num:4}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.45.shortT1",
+                item:[
+                    [{BT:45,Num:0},{BT:45,Num:1},{BT:45,Num:2},{BT:45,Num:3},{BT:45,Num:4}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.46.title",
+                item:[
+                    [{BT:46,Num:0},{BT:46,Num:1},{BT:46,Num:2},{BT:46,Num:3},{BT:46,Num:4},{BT:46,Num:5}]
+                ]
+            }
+        ]
+    },
+    {
+        name: "Game.BTCHash.Menu.Group.8.title",
+        cont:[
+            {
+                title : "Game.BTCHash.Item.1.shortT1",
+                item:[
+                    [{BT:47,Num:10},{BT:47,Num:11},{BT:47,Num:60},{BT:47,Num:61},{BT:47,Num:110},{BT:47,Num:111}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.2.shortT1",
+                item:[
+                    [{BT:47,Num:20},{BT:47,Num:21},{BT:47,Num:70},{BT:47,Num:71},{BT:47,Num:120},{BT:47,Num:121}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.3.shortT1",
+                item:[
+                    [{BT:47,Num:30},{BT:47,Num:31},{BT:47,Num:80},{BT:47,Num:81},{BT:47,Num:130},{BT:47,Num:131}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.4.shortT1",
+                item:[
+                    [{BT:47,Num:40},{BT:47,Num:41},{BT:47,Num:90},{BT:47,Num:91},{BT:47,Num:140},{BT:47,Num:141}]
+                ]
+            },
+            {
+                title : "Game.BTCHash.Item.5.shortT1",
+                item:[
+                    [{BT:47,Num:50},{BT:47,Num:51},{BT:47,Num:100},{BT:47,Num:101},{BT:47,Num:150},{BT:47,Num:151}]
+                ]
+            }
+        ]
+    }
 ]
 const Layouts:ILayouts= {}
 Layouts.MarkSix = MarkSixLayout;

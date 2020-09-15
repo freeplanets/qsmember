@@ -24,7 +24,7 @@ export class AxApi {
         this.router=v;
     }
     gotoLoginPage(){
-        console.log('gotoLoginPage',typeof(this.router));
+        //console.log('gotoLoginPage',typeof(this.router));
         if(this.router){
             this.router.push({path:'/login'});
         }
