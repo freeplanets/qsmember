@@ -80,21 +80,21 @@
                                         v-for="(nItm,nidx) in LItm"
                                         :key="'nitm'+nidx"
                                     >
-                            <div v-if="nItm.BT<1"></div>
-                            <OB 
-                                v-if="nItm.BT>=0"
-                                            :store="store"
-                                            :tid="curTid"
-                                            :GameID="curGameID"
-                                            :dgt="BItm.dgt"
-                                            :Odds="getOdds(nItm.BT,nItm.Num)"
-                                            :ExtOdds="Game.getOdds(nItm.BT,nItm.Num,(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
-                                            :rightLine="nidx==(LItm.length-1)"
-                                            :bottomLine="Lidx==(LItm.length-1) || nidx==9"
-                                            :GType="curGType"
-                                            :colorWave="BItm.colorWave"
-                                            :colorExt="BItm.colorExt"
-                                            @OddChange="getCurOdds"></OB>
+                                    <div v-if="nItm.BT<1"></div>
+                                    <OB 
+                                        v-if="nItm.BT>=0"
+                                        :store="store"
+                                        :tid="curTid"
+                                        :GameID="curGameID"
+                                        :dgt="BItm.dgt"
+                                        :Odds="getOdds(nItm.BT,nItm.Num)"
+                                        :ExtOdds="Game.getOdds(nItm.BT,nItm.Num,(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
+                                        :rightLine="nidx==(LItm.length-1)"
+                                        :bottomLine="Lidx==(LItm.length-1) || nidx==9 || (lnItem[Lidx+1] && lnItem[Lidx+1][nidx].BT<0)"
+                                        :GType="curGType"
+                                        :colorWave="BItm.colorWave"
+                                        :colorExt="BItm.colorExt"
+                                        @OddChange="getCurOdds"></OB>
                                     </div>
                                 </div>
                             </q-tab-panel>
@@ -190,7 +190,7 @@
                                 :dgt="BItm.dgt"
                                 :Odds="getOdds(nItm.BT,nItm.Num)" 
                                 :rightLine="nidx==(LItm.length-1)"
-                                :bottomLine="parseInt(Lidx,10)==BItm.item.length-1 || (nidx==(BItm.item[Lidx].length-1) && (BItm.item[Lidx+1] && BItm.item[Lidx+1].length<BItm.item[Lidx].length))"
+                                :bottomLine="parseInt(Lidx,10)==BItm.item.length-1 || (nidx==(BItm.item[Lidx].length-1) && (BItm.item[Lidx+1] && BItm.item[Lidx+1].length<BItm.item[Lidx].length)) || (BItm.item[Lidx+1] && BItm.item[Lidx+1][nidx].BT<0)"
                                 :GType="curGType"
                                 :colorWave="BItm.colorWave"
                                 :colorExt="BItm.colorExt"
