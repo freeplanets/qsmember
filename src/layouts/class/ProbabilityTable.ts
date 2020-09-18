@@ -34,9 +34,6 @@ export default class ProbabilityTable extends BClass<ProbTable>{
     get Probability(){
       return this.data.Probability;
     }
-    get Selected(){
-      return false;
-    }
     set Probability(v:number){
       this.data.Probability=v;
       if(this.data.Probability !== this.oldData.Probability){
@@ -45,4 +42,14 @@ export default class ProbabilityTable extends BClass<ProbTable>{
         this.isDataChanged = false;
       }
     }
+    get isParlay():boolean{
+      return !!this.data.isParlay;
+    }
+    set isParlay(v:boolean){
+      this.data.isParlay=v ? 1 : 0;
+      this.isDataChanged=true;
+    }
+    get Selected(){
+      return false;
+    }    
 }

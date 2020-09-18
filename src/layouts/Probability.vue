@@ -11,6 +11,7 @@
                 <div class="col-1 test">{{$t('Table.ItemName')}}</div>
                 <div class="col-1 test">{{$t('Table.SubName')}}</div>
                 <div class="col-1 test">{{$t('Table.Probability')}}(%)</div>
+                <div class="col-1 test">{{$t('Table.isParlay')}}</div>
             </div>
             <div class="row"
                 v-for="(itm,idx) in list"
@@ -18,7 +19,8 @@
             >
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.Title }}</div>
                 <div :class="{'col-1':true,test:true,bgc:itm.Selected}">{{ itm.SubTitle }}</div>
-                <div class='col-1 alignR'><input type="text" size='8' v-model="itm.Probability" /></div>            
+                <div class='col-1 alignR'><input type="text" size='8' v-model="itm.Probability" /></div>
+                <div class='col-1 test'><input type="checkbox" v-model="itm.isParlay" /></div>
             </div>
             <div v-if="PInfo.Levels==9"><q-btn color="red" icon-right="save" label="Save Odds Item" @click="saveDfOddsItems(GType);" /></div>            
         </div>         
@@ -84,7 +86,8 @@ export default class Probability extends Vue {
               //subtitle: itm.SubTitle ? itm.SubTitle : '',
               BetType: parseInt(bt,10),
               SubType: sbt,
-              Probability:0
+              Probability:0,
+              isParlay:0
             }
             const pt=new ProbT(elm);
             pt.Title = itm.Title;
@@ -95,7 +98,7 @@ export default class Probability extends Vue {
       const msg:IMsg = await this.store.ax.getApi('getProbTable',param);
       if(msg.ErrNo===0){
         const rlt=msg.data as ProbTable[];
-        //console.log(rlt,this.list);
+        console.log('getProbData:',rlt);
         rlt.map(itm=>{
           const f = this.list.find(el=> el.BetType===itm.BetType && el.SubType === itm.SubType);
           if(f){

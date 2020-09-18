@@ -244,4 +244,5 @@ export interface MyUser {
     BetType:number;
     SubType:number;
     Probability:number;
+    isParlay:number;
  }

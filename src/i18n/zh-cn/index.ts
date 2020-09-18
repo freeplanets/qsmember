@@ -55,6 +55,7 @@ export default {
     Agent:'代理',
     WebOwner:'网站站主',
     Operator:'操盘手',
+    Programmer: '工程师',
     InputNums:'输入号码',
     Status:'状态',
     Settled:['','己结账','','己重结'],
@@ -71,7 +72,27 @@ export default {
       '成交',
       '会员取消',
       '系统注销'
-    ]
+    ],
+    GAMsg:'请用手机APP-Google Authenticator 扫瞄后存档.',
+    InputGA:'请输入Google 认证码(6位数).',
+    GAError:'认证码错误!!',
+    ProgramsSlt:'请选择程序',
+    ProgramsSet:'程序设定',
+    Pass2Lvl: '设定二阶段密码',
+    CancelPass2: '取消二阶段密码',
+    Close: '关闭',
+    ProbabilityManage: '机率管理',
+    Game: {
+      MarkSix: '六合彩',
+      '3D' : '3D',
+      Happy: '快乐10分',
+      Always: '时时彩',
+      Cars: '赛车',
+      Speed3 : '骰宝',
+      Happy8 : '快乐8',
+      BTCHash : '哈希'   
+    },
+    PlsSlt: '请选择....'
   },
   Tip:{
     UserFind: "请输入名称或代号"
@@ -102,6 +123,7 @@ export default {
     Account: '账号',
     Password: '密码',
     Nickname: '昵称',
+    Programs: '程序',
     Types: '类别',
     Levels: '层级',
     CreateDate: '新增日期',
@@ -123,7 +145,9 @@ export default {
     StopTime:"下注截止时间",
     Result:'开奖结果',
     hasSPNO:'有开特码',
-    OpenNums:'开出奖号'
+    OpenNums:'开出奖号',
+    ChaseNum:'追号',
+    isParlay:'连码'
   },
   Title: {
     Dashboard: '大厅',
@@ -270,6 +294,7 @@ export default {
     '6': '上海时时乐',
     '7': '旧重庆时时彩',
     '8': '天津时时彩',
+    '9' : '哈希彩',
     '11': '新疆时时彩',
     '12': '广东快乐10分',
     '13': '天津快乐10分',
@@ -1123,8 +1148,70 @@ export default {
           subtitle: [ '金', '木', '水', '火', '土' ]
         }
       }
+    },
+    BTCHash: {
+      Menu: {
+        Group: [
+          { title: '两面盘', SubItem: [] },
+          { title: '一定位', SubItem: [] },
+          { title: '一字', SubItem: [] },
+          { title: '二字', SubItem: [] },
+          { title: '三字', SubItem: [] },
+          { title: '四字', SubItem: [] },
+          { title: '五字', SubItem: [] },
+          { title: '杂项', SubMenu: [] },
+          { title: '过关', SubMenu: [] },
+        ]
+      },
+      Item: {
+        '1': { title: '个位-单双',sctitle: ['个位'], subtitle: [ '单', '双' ] },
+        '2': { title: '十位-单双',sctitle: ['十位'], subtitle: [ '单', '双' ] },
+        '3': { title: '百位-单双',sctitle: ['百位'], subtitle: [ '单', '双' ] },
+        '4': { title: '千位-单双',sctitle: ['千位'], subtitle: [ '单', '双' ] },
+        '5': { title: '万位-单双',sctitle: ['万位'], subtitle: [ '单', '双' ] },
+        '6': { title: '个位-大小',sctitle: ['个位'], subtitle: [ '大', '小' ] },
+        '7': { title: '十位-大小',sctitle: ['十位'], subtitle: [ '大', '小' ] },
+        '8': { title: '百位-大小',sctitle: ['百位'], subtitle: [ '大', '小' ] },
+        '9': { title: '千位-大小',sctitle: ['千位'], subtitle: [ '大', '小' ] },
+        '10': { title: '万位-大小',sctitle: ['万位'], subtitle: [ '大', '小' ] },
+        '11': { title: '个位-质合',sctitle: ['个位'], subtitle: [ '质', '合' ] },
+        '12': { title: '十位-质合',sctitle: ['十位'], subtitle: [ '质', '合' ] },
+        '13': { title: '百位-质合',sctitle: ['百位'], subtitle: [ '质', '合' ] },
+        '14': { title: '千位-质合',sctitle: ['千位'], subtitle: [ '质', '合' ] },
+        '15': { title: '万位-质合',sctitle: ['万位'], subtitle: [ '质', '合' ] },
+        '16': {title: '总和-单双',sctitle: ['总和'],  subtitle: [ '单', '双' ]},
+        '17': {title: '总和-大小',sctitle: ['总和'],  subtitle: [ '大', '小' ]},
+        '18': {title: '前3和-单双',sctitle: ['前3和'],  subtitle: [ '单', '双' ]},
+        '19': {title: '前3和-大小',sctitle: ['前3和'],  subtitle: [ '大', '小' ]},
+        '20': {title: '中3和-单双',sctitle: ['中3和'],  subtitle: [ '单', '双' ]},
+        '21': {title: '中3和-大小',sctitle: ['中3和'],  subtitle: [ '大', '小' ]},
+        '22': {title: '后3和-单双',sctitle: ['后3和'],  subtitle: [ '单', '双' ]},
+        '23': {title: '后3和-大小',sctitle: ['后3和'],  subtitle: [ '大', '小' ]},
+        '24': {title: '一定位-个',shortT:'个位'},
+        '25': {title: '一定位-十',shortT:'十位'},
+        '26': {title: '一定位-百',shortT:'百位'},
+        '27': {title: '一定位-千',shortT:'千位'},
+        '28': {title: '一定位-万',shortT:'万位'},
+        '29': {title: '一字现'},
+        '30': {title: '一字现-前3'},
+        '31': {title: '一字现-中3'},
+        '32': {title: '一字现-后3'},
+        '33': {title: '二字现'},
+        '34': {title: '二字现-前3'},
+        '35': {title: '二字现-中3'},
+        '36': {title: '二字现-后3'},
+        '37': {title: '三字现'},
+        '38': {title: '三字现-前3'},
+        '39': {title: '三字现-中3'},
+        '40': {title: '三字现-后3'},
+        '41': {title: '四字现'},
+        '42': {title: '五字现'},
+        '43': {title: '杂项-前3',sctitle: ['前3'],subtitle:['豹子','顺子','对子','半顺','杂六']},
+        '44': {title: '杂项-中3',sctitle: ['中3'],subtitle:['豹子','顺子','对子','半顺','杂六']},
+        '45': {title: '杂项-后3',sctitle: ['后3'],subtitle:['豹子','顺子','对子','半顺','杂六']},
+        '46': {title: '炸金花',subtitle:['五同号','四条','葫芦','顺子','三条','两对','一对','杂牌']},
+        '47': {title: '两面过关'}
+      }
     }
   }
 }
-
-

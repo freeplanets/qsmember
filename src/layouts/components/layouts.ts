@@ -1319,55 +1319,55 @@ const BTCHash:Layout=[
         name: "Game.BTCHash.Menu.Group.0.title",
         cont:[
             {
-                title : "Game.BTCHash.Item.1.shortT1",
+                title : "Game.BTCHash.Item.1.sctitle.0",
                 item:[
                     [{BT:1,Num:0},{BT:1,Num:1},{BT:6,Num:0},{BT:6,Num:1},{BT:11,Num:0},{BT:11,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.2.shortT1",
+                title : "Game.BTCHash.Item.2.sctitle.0",
                 item:[
                     [{BT:2,Num:0},{BT:2,Num:1},{BT:7,Num:0},{BT:7,Num:1},{BT:12,Num:0},{BT:12,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.3.shortT1",
+                title : "Game.BTCHash.Item.3.sctitle.0",
                 item:[
                     [{BT:3,Num:0},{BT:3,Num:1},{BT:8,Num:0},{BT:8,Num:1},{BT:13,Num:0},{BT:13,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.4.shortT1",
+                title : "Game.BTCHash.Item.4.sctitle.0",
                 item:[
                     [{BT:4,Num:0},{BT:4,Num:1},{BT:9,Num:0},{BT:9,Num:1},{BT:14,Num:0},{BT:14,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.5.shortT1",
+                title : "Game.BTCHash.Item.5.sctitle.0",
                 item:[
                     [{BT:5,Num:0},{BT:5,Num:1},{BT:10,Num:0},{BT:10,Num:1},{BT:15,Num:0},{BT:15,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.16.shortT1",
+                title : "Game.BTCHash.Item.16.sctitle.0",
                 item:[
                     [{BT:16,Num:0},{BT:16,Num:1},{BT:17,Num:0},{BT:17,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.18.shortT1",
+                title : "Game.BTCHash.Item.18.sctitle.0",
                 item:[
                     [{BT:18,Num:0},{BT:18,Num:1},{BT:19,Num:0},{BT:19,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.20.shortT1",
+                title : "Game.BTCHash.Item.20.sctitle.0",
                 item:[
                     [{BT:20,Num:0},{BT:20,Num:1},{BT:21,Num:0},{BT:21,Num:1}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.22.shortT1",
+                title : "Game.BTCHash.Item.22.sctitle.0",
                 item:[
                     [{BT:22,Num:0},{BT:22,Num:1},{BT:23,Num:0},{BT:23,Num:1}]
                 ]
@@ -1466,19 +1466,19 @@ const BTCHash:Layout=[
         name: "Game.BTCHash.Menu.Group.7.title",
         cont:[
             {
-                title : "Game.BTCHash.Item.43.shortT1",
+                title : "Game.BTCHash.Item.43.sctitle.0",
                 item:[
                     [{BT:43,Num:0},{BT:43,Num:1},{BT:43,Num:2},{BT:43,Num:3},{BT:43,Num:4}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.44.shortT1",
+                title : "Game.BTCHash.Item.44.sctitle.0",
                 item:[
                     [{BT:44,Num:0},{BT:44,Num:1},{BT:44,Num:2},{BT:44,Num:3},{BT:44,Num:4}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.45.shortT1",
+                title : "Game.BTCHash.Item.45.sctitle.0",
                 item:[
                     [{BT:45,Num:0},{BT:45,Num:1},{BT:45,Num:2},{BT:45,Num:3},{BT:45,Num:4}]
                 ]
@@ -1495,31 +1495,31 @@ const BTCHash:Layout=[
         name: "Game.BTCHash.Menu.Group.8.title",
         cont:[
             {
-                title : "Game.BTCHash.Item.1.shortT1",
+                title : "Game.BTCHash.Item.1.sctitle.0",
                 item:[
                     [{BT:47,Num:10},{BT:47,Num:11},{BT:47,Num:60},{BT:47,Num:61},{BT:47,Num:110},{BT:47,Num:111}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.2.shortT1",
+                title : "Game.BTCHash.Item.2.sctitle.0",
                 item:[
                     [{BT:47,Num:20},{BT:47,Num:21},{BT:47,Num:70},{BT:47,Num:71},{BT:47,Num:120},{BT:47,Num:121}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.3.shortT1",
+                title : "Game.BTCHash.Item.3.sctitle.0",
                 item:[
                     [{BT:47,Num:30},{BT:47,Num:31},{BT:47,Num:80},{BT:47,Num:81},{BT:47,Num:130},{BT:47,Num:131}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.4.shortT1",
+                title : "Game.BTCHash.Item.4.sctitle.0",
                 item:[
                     [{BT:47,Num:40},{BT:47,Num:41},{BT:47,Num:90},{BT:47,Num:91},{BT:47,Num:140},{BT:47,Num:141}]
                 ]
             },
             {
-                title : "Game.BTCHash.Item.5.shortT1",
+                title : "Game.BTCHash.Item.5.sctitle.0",
                 item:[
                     [{BT:47,Num:50},{BT:47,Num:51},{BT:47,Num:100},{BT:47,Num:101},{BT:47,Num:150},{BT:47,Num:151}]
                 ]

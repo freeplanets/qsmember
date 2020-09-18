@@ -187,18 +187,23 @@ export default class GameManager extends Vue{
                         return;
                     }                     
                     if(dod[`${itm.GType}`]){
+                        if(itm.GType==='BTCHash') {
+                            console.log(`dod ${itm.GType}:`,dod[`${itm.GType}`]);
+                        }
                        dod[`${itm.GType}`].map((dta,bt)=>{
                            if(typeof(btc[`${itm.GType}`][`${bt}`])==='undefined') btc[`${itm.GType}`][`${bt}`]={};
-                           btc[`${itm.GType}`][`${bt}`][`${ln}`]={
-                               name: this.$t(`Game.${itm.GType}.Item.${bt}.title`)
-                           }
+                            btc[`${itm.GType}`][`${bt}`][`${ln}`]={
+                                name: this.$t(`Game.${itm.GType}.Item.${bt}.title`)
+                            }
                            if(dta){
                                 let nums={};
                                 dta.map(num=>{
                                     let aNum=itemNameNew(itm.GType,bt,num,this);
-                                    if(itm.GType==='MarkSix' && bt===15){
-                                        let tBT=Math.floor(num/100);
-                                        let tPos= Math.floor((num-tBT*100)/10);
+                                    if((itm.GType==='MarkSix' && bt===15) || (itm.GType==='BTCHash' && bt===47)){
+                                        let base=100;
+                                        if(itm.GType==='BTCHash') base=10;
+                                        let tBT=Math.floor(num/base);
+                                        let tPos= Math.floor((num-tBT*base)/10);
                                         aNum= this.$t(`Game.${itm.GType}.Item.${tBT}.sctitle.${tPos}`)+'-'+aNum;
                                     } else {
                                         const chkTemp:any = this.$t(`Game.${itm.GType}.Item.${bt}`);
@@ -228,7 +233,7 @@ export default class GameManager extends Vue{
                        }) 
                     }
                 })
-                console.log('gc:',itm.id,gm);
+                console.log('gc:',itm.id,gm,btc[`${itm.GType}`]);
                 gc[`${itm.id}`]=gm;
                 chk[`${itm.GType}`]=true;                
             }
