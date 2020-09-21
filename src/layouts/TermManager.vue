@@ -286,12 +286,12 @@ export default class TermManager extends Vue {
             if(msg.data){
                 const lsTerm:ITerms=msg.data[0] as ITerms;
                 this.term.PDate = this.dateString;
-                if(lsTerm.PTime){
+                if(lsTerm && lsTerm.PTime){
                     this.term.PTime = lsTerm.PTime;
+                    this.term.StopTime = lsTerm.StopTime;
+                    this.term.StopTimeS = lsTerm.StopTimeS;
+                    this.term.TermID = this.TermIDAdd(lsTerm.TermID)
                 }
-                this.term.StopTime = lsTerm.StopTime;
-                this.term.StopTimeS = lsTerm.StopTimeS;
-                this.term.TermID = this.TermIDAdd(lsTerm.TermID)
             }
 
         }
