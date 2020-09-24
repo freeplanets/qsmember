@@ -57,6 +57,10 @@ const routes: RouteConfig[] = [
       {
         path: '/probabilitytable',
         component: () => import('layouts/Probability.vue')
+      },
+      {
+        path: '/btchash',
+        component: () => import('layouts/BTCHashDataAna.vue')
       }
     ],
   }

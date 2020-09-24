@@ -92,7 +92,8 @@ export default {
       Happy8 : '快樂8',
       BTCHash : '雜湊'   
     },
-    PlsSlt: '請選擇....'
+    PlsSlt: '請選擇....',
+    BTCHashDataAna:'雜湊數分析'
   },
   Tip:{
     UserFind: "請輸入名稱或代號"

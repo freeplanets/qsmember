@@ -226,6 +226,14 @@ export default class Probability extends Vue {
             });            
         } 
     }
+    async getBTCHashData(){
+        const param:CommonParams={
+            UserID:this.PInfo.id,
+            sid:this.PInfo.sid
+        }
+        const msg:IMsg=await this.store.ax.getApi('getBTCHashTable',param);
+        console.log('getBTCHashData',msg);
+    }
     mounted(){
       if(!this.store.isLogin){
           this.$router.push({path:'/login'});
