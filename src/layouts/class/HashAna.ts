@@ -3,7 +3,7 @@ class HashAna {
   private aHash:string[]=[];
   private re=/[a-zA-Z]/g;
   private dgt:number=0;
-  constructor(private hash:string,private Max:number,private min:number,private pos:number,private allowSameNum:boolean=false,private OnlyDigital:boolean=true){
+  constructor(private hash:string,private Max:number,private Min:number,private pos:number,private allowSameNum:boolean=false,private OnlyDigital:boolean=true){
     let str;
     if(OnlyDigital){
       str=this.hash.replace(this.re,'');
@@ -20,6 +20,7 @@ class HashAna {
     while(n>0){
       if(this.aHash.length<this.dgt) break;
       const tnum=this.Pop();
+      if(tnum < this.Min) continue;
       if(this.allowSameNum){
         tmp.push(tnum);
       } else {

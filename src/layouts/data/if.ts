@@ -3,6 +3,7 @@ export interface SelectOptions {
 	label?:string;
     GType?:string;
     OpenNums?:number;
+    data?:any;
 }
 export interface Btg { 
 	title: string;
@@ -246,3 +247,9 @@ export interface MyUser {
     Probability:number;
     isParlay:number;
  }
+
+ export interface HashAna {
+    id: number;
+    Cond: string;
+    AnaData: string;
+}

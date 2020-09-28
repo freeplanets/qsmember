@@ -1,6 +1,10 @@
 <template>
   <div>
     <div class="row">
+      <div class='col-5'><q-select outlined v-model="model" :options="options" label="歷史分析記錄" /></div>
+      <q-btn color="negative" label="刪除"  @click="delHashAna()" />
+    </div>
+    <div class="row">
       <q-input standout="bg-teal text-white" v-model="Min" label="最小值" />
       <q-input standout="bg-teal text-white" v-model="Max" label="最大值" />
       <q-input standout="bg-teal text-white" v-model="Pos" label="字數" />
@@ -9,7 +13,21 @@
       <q-btn color="primary" label="分析"  @click="doHashAna()" />
     </div>
     <div class="row">
-      <div>總筆數: {{HNum.Counter}}</div>
+      <div>
+      <q-chip>
+        <q-avatar icon="save_alt" color="indigo" text-color="white" />
+        {{HNum.Counter}}
+      </q-chip>        
+      </div>
+      <div v-if="HNum.fails.length>0">
+          <q-chip
+            v-for="(itm,idx) in HNum.fails"
+            :key="'fail'+idx"
+          >
+            <q-avatar color="warning" text-color="white">{{itm.pos}}</q-avatar>
+            {{itm.Counter}}
+          </q-chip>
+      </div>
     </div>
     <div class="row">
       <q-btn-group>
@@ -20,9 +38,9 @@
           glossy :label="itm.title" @click="chgTitle(itm.title)" />
       </q-btn-group>
     </div>
-    <div v-if="SNum.length>0">
+    <div v-if="TB.SNum.length>0">
       <div 
-        v-for="(itm,idx) in SNum"
+        v-for="(itm,idx) in TB.SNum"
         :key="'numline'+idx" 
         class="row"
       >
@@ -31,8 +49,8 @@
           :key="'block'+nidx"
         >
           <q-chip>
-            <q-avatar :color="num.color" text-color="white">{{num.Num}}</q-avatar>
-            {{num.Rate}}
+            <q-avatar :color="`${TB.Color}-${Math.floor((num.Rate-TB.MinR)/TB.RateDf*10)+1 > 10 ? 10 : Math.floor((num.Rate-TB.MinR)/TB.RateDf*10)+1}`" text-color="white">{{num.Num}}</q-avatar>
+            {{num.Rate.toFixed(2)}}
           </q-chip>
         </div>
       </div>
@@ -42,11 +60,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component';
-//import {Watch} from 'vue-property-decorator'
+import {Watch} from 'vue-property-decorator'
 import LayoutStoreModule from './data/LayoutStoreModule';
 //import { QDialogOptions } from 'quasar';
 import {getModule} from 'vuex-module-decorators';
-import {CommonParams,IMsg} from './data/if';
+import {CommonParams,IMsg, SelectOptions,HashAna} from './data/if';
 import HASH from './class/HashAna';
 interface KeyObj {
   [key:string]:number;
@@ -67,8 +85,14 @@ interface NumH {
 }
 interface NumBlock {
   Num:string;
-  Rate:string;
-  color:string;
+  Rate:number;
+}
+interface TBlock {
+  MaxR:number;
+  MinR:number;
+  RateDf:number;
+  Color:string;
+  SNum:NumBlock[][];
 }
 @Component
 export default class MyLayout extends Vue {
@@ -77,11 +101,31 @@ export default class MyLayout extends Vue {
     StopDo:boolean=false;
     steps:number=10000;
     curSteps:number=0;
-    Max:string='49';
     Min:string='0';
+    Max:string='49';
     Pos:string='6';
+    allowSameNum:boolean=false;
+    NotOnlyDigital:boolean=false;
     dfColor:string='secondary';
     sltColor:string='primary';
+    options:SelectOptions[]=[];
+    model:SelectOptions={value:0,label:'none'};
+    @Watch('model',{immediate:true,deep:true})
+    onModelChange(newVal:SelectOptions){
+      //console.log('onModelChange:',newVal);
+      if(newVal.data){
+        if(newVal.label){
+          let tmp=newVal.label.split('-');
+          this.Min=tmp[0];
+          this.Max=tmp[1];
+          this.Pos=tmp[2];
+          this.allowSameNum=tmp[3]==='1';
+          this.NotOnlyDigital=tmp[4]==='1';
+        }
+        this.HNum=JSON.parse(newVal.data);
+        this.setBlock(this.HNum.TNum);
+      }
+    }
     Btns=[
       {title:'All',color:'primary'},
       {title:'1',color:'secondary'},
@@ -100,10 +144,15 @@ export default class MyLayout extends Vue {
         Nums:{}
       }
     };
+    TB:TBlock={
+      MaxR:0,
+      MinR:0,
+      RateDf:0,
+      Color:'red',
+      SNum:[]
+    }
     SNum:NumBlock[][]=[];
     Cols:number=10;
-    allowSameNum:boolean=false;
-    NotOnlyDigital:boolean=false;
     /*
     @Watch('allowSameNum',{ immediate: true, deep: true })
     onAllowSameNum(val:number){
@@ -120,24 +169,11 @@ export default class MyLayout extends Vue {
       return this.store.personal;
     }
     async doHashAna(){
+      console.log('doHashAna start:',new Date().toLocaleTimeString());
       this.showProgress=true;
       this.StopDo=false;
-      this.setBtns();
-      //while(!this.StopDo){
-        await this.getBTCHashData();
-      //}
-      this.setBlock(this.HNum.TNum);
-      this.showProgress=false;
-    }
-    async getBTCHashData(){
-        /*
-        if(this.curSteps===0){
-          this.curSteps=this.steps;
-        } else {
-          this.dStart=this.curSteps;
-          this.curSteps+=this.steps;
-        }
-        */
+      this.dStart=0;
+      this.curSteps=0;
         this.HNum={
           fails:[],
           Counter:0,
@@ -146,7 +182,24 @@ export default class MyLayout extends Vue {
             Counter:0,
             Nums:{}
           }
-        };       
+        };
+      this.setBtns();
+      while(!this.StopDo){
+        await this.getBTCHashData();
+      }
+      this.setBlock(this.HNum.TNum);
+      await this.saveHashAna();
+      await this.getHashAna();
+      this.showProgress=false;
+      console.log('doHashAna end:',new Date().toLocaleTimeString());
+    }
+    async getBTCHashData(){
+        if(this.curSteps===0){
+          this.curSteps=this.steps;
+        } else {
+          this.dStart=this.curSteps;
+          this.curSteps+=this.steps;
+        } 
         const param:CommonParams={
             UserID:this.PInfo.id,
             sid:this.PInfo.sid,
@@ -235,16 +288,75 @@ export default class MyLayout extends Vue {
         return itm;
       })
     }
+    async saveHashAna(){
+      const param:CommonParams={
+        UserID:this.PInfo.id,
+        sid:this.PInfo.sid,
+        Cond: `${this.Min}-${this.Max}-${this.Pos}-${this.allowSameNum ? 1 : 0}-${this.NotOnlyDigital ? 1 : 0}`,
+        AnaData: JSON.stringify(this.HNum)
+      }
+      const msg:IMsg=await this.store.ax.getApi('saveHashAna',param,'post');
+      if(msg.ErrNo!==0){
+        console.log('saveHashAna',msg);
+      } 
+    }
+    async delHashAna(){
+      if(!this.model.value) return;
+      this.showProgress=true;
+      const param:CommonParams={
+        UserID:this.PInfo.id,
+        sid:this.PInfo.sid,
+        id:this.model.value
+      }
+      const msg:IMsg=await this.store.ax.getApi('delHashAna',param);
+      if(msg.ErrNo!==0){
+        console.log('delHashAna',msg);
+        this.showProgress=false;
+      } else {
+        await this.getHashAna();
+        this.showProgress=false;
+        this.$q.dialog({
+            title: this.$t('Label.Delete') as string,
+            message:'OK!!'
+        });
+      }      
+    }
+    async getHashAna(){
+      const param:CommonParams={
+        UserID:this.PInfo.id,
+        sid:this.PInfo.sid
+      }
+      this.options=[{value:0,label:'none'}];
+      this.model = {value:0,label:'none'};
+      const msg:IMsg=await this.store.ax.getApi('getHashAna',param);
+      if(msg.ErrNo!==0){
+        console.log('saveHashAna',msg);
+      } else {
+        if(msg.data){
+          let dta=msg.data as HashAna[];
+          dta.map(itm=>{
+            const tmp:SelectOptions={
+              value: itm.id,
+              label: itm.Cond,
+              data: itm.AnaData
+            }
+            this.options.push(tmp);
+          })
+        }
+      }
+    }    
     setBlock(pn:PosNum){
-      console.log('Set Block:',pn);
+      //console.log('Set Block:',pn);
+      this.TB={MaxR:0,MinR:999,RateDf:0,Color:'red',SNum:[]};
       let nb:NumBlock[][]=[];
       let nn:NumBlock[]=[];
       Object.keys(pn.Nums).map(key=>{
         const r = pn.Nums[key]/pn.Counter*100;
+        if(r<this.TB.MinR) this.TB.MinR = r;
+        else if(r>this.TB.MaxR) this.TB.MaxR = r;
         const tmp:NumBlock = {
           Num: key,
-          Rate: r.toFixed(2),
-          color: `red-${Math.floor(r*1.5)+1}`
+          Rate: r
         }
         nn.push(tmp);
         if(nn.length===this.Cols){
@@ -254,7 +366,12 @@ export default class MyLayout extends Vue {
       })
       if(nn.length > 0) nb.push(nn);
       this.SNum=nb;
-      console.log('Set Block:',this.SNum);
+      this.TB.RateDf = this.TB.MaxR - this.TB.MinR;
+      this.TB.SNum = nb;
+      //console.log('Set Block:',this.TB);
+    }
+    mounted(){
+      this.getHashAna();
     }
 }
 </script>
