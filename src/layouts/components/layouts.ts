@@ -1441,10 +1441,10 @@ const BTCHash:Layout=[
         ]
     },
     {
-        name:"Game.BTCHash.Menu.Group.5.title",       
+        name:"Game.BTCHash.Menu.Group.5.title",
         cont:[
             {
-                dgt: 4, //位數     
+                dgt: 4, //位數
                 item:[
                     [{BT:41,Num:0}]
                 ]

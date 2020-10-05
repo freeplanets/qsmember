@@ -190,7 +190,7 @@
                                 :dgt="BItm.dgt"
                                 :Odds="getOdds(nItm.BT,nItm.Num)" 
                                 :rightLine="nidx==(LItm.length-1)"
-                                :bottomLine="parseInt(Lidx,10)==BItm.item.length-1 || (nidx==(BItm.item[Lidx].length-1) && (BItm.item[Lidx+1] && BItm.item[Lidx+1].length<BItm.item[Lidx].length)) || (BItm.item[Lidx+1] && BItm.item[Lidx+1][nidx].BT<0)"
+                                :bottomLine="parseInt(Lidx,10)==BItm.item.length-1 || (nidx==(BItm.item[Lidx].length-1) && (BItm.item[Lidx+1] && BItm.item[Lidx+1].length<BItm.item[Lidx].length)) || (BItm.item[Lidx+1] && (!BItm.item[Lidx+1][nidx] || BItm.item[Lidx+1][nidx].BT<0))"
                                 :GType="curGType"
                                 :colorWave="BItm.colorWave"
                                 :colorExt="BItm.colorExt"
@@ -303,7 +303,7 @@ export default class OddsManager extends Vue {
                         Steps=ans.Steps;
                     }
                     */
-                    this.Game.inidata(ans.data as IData);
+                    this.Game.inidata(ans.data as IData,this);
                     //console.log('Game:',this.Game.Items)
                     this.curTid=ans.tid;
                     //console.log('CGame MaxOddsID:',this.Game.MaxOddsID);
@@ -342,7 +342,7 @@ export default class OddsManager extends Vue {
         }
         let ans:IMsg=await this.store.ax.getApi('CurOddsInfo',param);
         if(ans.data){
-            this.Game.updateData(ans.data as IData);
+            this.Game.updateData(ans.data as IData,this);
             this.curTid=ans.tid;
             //this.$forceUpdate();
             //console.log('do changePage');

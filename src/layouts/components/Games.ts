@@ -1,5 +1,6 @@
 import {BaNum} from './func';
-import {OSteps} from '../data/if';
+//import {OSteps} from '../data/if';
+import {numBlock} from './layouts';
 export interface IOdds {
     OID:number;
     Odds:number;
@@ -40,6 +41,14 @@ interface RiskGroup {
 interface RGS {
     [key:string]:RiskGroup[];
 }
+interface NTemp extends numBlock {
+    TolS:number;
+}
+function sortTolS(a:NTemp,b:NTemp){
+    return b.TolS - a.TolS;
+}
+const FOUR_DIGITAL = 'Game.BTCHash.Menu.Group.5.title';
+const FIVE_DIGITAL = 'Game.BTCHash.Menu.Group.6.title';
 export class CGame {
     private member:IBetTypes;
     private OID:number=0;
@@ -111,10 +120,22 @@ export class CGame {
     get MaxOddsID(){
         return this.OID;
     }
-    inidata(dta:IData){
+    inidata(dta:IData,OM){
         this.member={};
         Object.keys(dta).map(bt=>{
             const BTItm:INum=dta[bt];
+            let chk45:boolean=false;
+            let chkString='';
+            const TNT:NTemp[]=[];
+            if(this.GType==='BTCHash'){
+                if (bt==='41'){
+                    chk45=true;
+                    chkString=FOUR_DIGITAL;
+                } else if(bt==='42'){
+                    chk45=true;
+                    chkString=FIVE_DIGITAL;
+                }
+            }            
             this.member[bt]={
                 Total:0,
                 Payouts:0,
@@ -122,6 +143,10 @@ export class CGame {
             }
             const tmp:object[]=[];
             Object.keys(BTItm).map(num=>{
+                if(chk45){
+                    const nt:NTemp = this.getNTemp(BTItm,bt,num);
+                    TNT.push(nt);
+                }                
                 //this.member.
                 /*
                 const f=Steps.find(itm=>itm.BetType===parseInt(bt,10) && itm.SubType===BTItm[num].SubType);
@@ -141,7 +166,10 @@ export class CGame {
                 if(BTItm[num].OID > this.OID) {
                     this.OID = BTItm[num].OID;
                 }
-            })
+            });
+            if(TNT.length>0){
+                this.ExtendLayoutsBlock(TNT,chkString,OM);
+            }            
             /*
             if(tmp.length>0){
                 console.log('OB',JSON.stringify(tmp));
@@ -150,25 +178,90 @@ export class CGame {
             this.calRisk(bt);
         })
     }
-    updateData(dta:IData){
+    updateData(dta:IData,OM){
         Object.keys(dta).map(bt=>{
-            Object.keys(dta[bt]).map(num=>{
-                this.member[bt].Total -= this.member[bt].member[num].tolS
-                this.member[bt].Payouts -= this.member[bt].member[num].tolP
+            const BTItm:INum=dta[bt];
+            let chk45:boolean=false;
+            let chkString='';
+            const TNT:NTemp[]=[];
+            if(this.GType==='BTCHash'){
+                if (bt==='41'){
+                    chk45=true;
+                    chkString=FOUR_DIGITAL;
+                } else if(bt==='42'){
+                    chk45=true;
+                    chkString=FIVE_DIGITAL;
+                }
+            }
+            Object.keys(BTItm).map(num=>{
+                if(chk45){
+                    const nt:NTemp = this.getNTemp(BTItm,bt,num);
+                    TNT.push(nt);
+                }
+                if(this.member[bt].member[num]){
+                    this.member[bt].Total -= this.member[bt].member[num].tolS
+                    this.member[bt].Payouts -= this.member[bt].member[num].tolP
+                }
                 //dta[bt][num].PerStep=this.member[bt].member[num].PerStep;
                 //dta[bt][num].Steps=this.member[bt].member[num].Steps;
-                this.member[bt].member[num]=dta[bt][num];
+                this.member[bt].member[num]=BTItm[num];
                 //this.member[bt].member[num]=Object.assign(this.member[bt].member[num],dta[bt][num])
                 //console.log('game updateData',this.member[bt].member[num])
                 if(dta[bt][num].OID > this.OID) {
-                    this.OID = dta[bt][num].OID;
+                    this.OID = BTItm[num].OID;
                 }
                 this.member[bt].Total += this.member[bt].member[num].tolS
                 this.member[bt].Payouts += this.member[bt].member[num].tolP
             })
+            if(TNT.length>0){
+                this.ExtendLayoutsBlock(TNT,chkString,OM);
+            }
             this.calRisk(bt);
             this.isUpdated = true;
         })
+    }
+    getNTemp(BTItm:INum,bt:string,num:string):NTemp{
+        return {
+            Num:parseInt(num,10),
+            BT:parseInt(bt,10),
+            TolS: BTItm[num].tolS
+        }
+    }
+    ExtendLayoutsBlock(TNT:NTemp[],chkString:string,OM){
+        //TNT.sort(sortTolS);
+        const f=OM.dfLayout.find(itm=> itm.name===chkString)
+        if(f){
+            let olddata:numBlock[]=[];
+            f.cont[0].item.map(line=>{
+                line.map(blk=>{
+                    olddata.push(blk);
+                })
+            })
+            const len=TNT.length<100 ? TNT.length : 100;
+            for(let i=0;i<len;i++){
+                let f=olddata.find(itm=>itm.BT===TNT[i].BT && itm.Num===TNT[i].Num);
+                if(!f){
+                    let block:numBlock={
+                        BT:TNT[i].BT,
+                        Num:TNT[i].Num
+                    }
+                    olddata.push(block);
+                }
+                //console.log('block',block);
+            }
+            f.cont[0].item=[];
+            let tmp:numBlock[]=[];
+            olddata.map((blk,idx)=>{
+                tmp.push(blk)
+                if(idx % 10 ===9){
+                    f.cont[0].item.push(tmp);
+                    tmp=[];
+                }
+            })
+            if(tmp.length>0) f.cont[0].item.push(tmp);
+            //console.log('ExtendLayoutsBlock',f);
+        }
+        console.log('ExtendLayoutsBlock',OM.dfLayout);
     }
     getOdds(BT:number,num:number,extOdds?:number){
         //console.log('CGame getOdds',BT,num);

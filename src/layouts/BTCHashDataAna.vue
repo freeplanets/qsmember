@@ -124,6 +124,7 @@ export default class MyLayout extends Vue {
         }
         this.HNum=JSON.parse(newVal.data);
         this.setBlock(this.HNum.TNum);
+        this.setBtns();
       }
     }
     Btns=[
