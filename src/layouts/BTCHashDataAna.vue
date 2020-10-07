@@ -10,6 +10,8 @@
       <q-input standout="bg-teal text-white" v-model="Pos" label="字數" />
       <q-checkbox v-model="allowSameNum" label="可重複" />
       <q-checkbox v-model="NotOnlyDigital" label="包含英文字(16進位)" />
+      <q-checkbox v-model="NoZero" label="去除前導 0" />
+      <q-checkbox v-model="RepetLastOne" label="疊字" />
       <q-btn color="primary" label="分析"  @click="doHashAna()" />
     </div>
     <div class="row">
@@ -23,6 +25,7 @@
           <q-chip
             v-for="(itm,idx) in HNum.fails"
             :key="'fail'+idx"
+            clickable @click="fails=itm;alert=true" 
           >
             <q-avatar color="warning" text-color="white">{{itm.pos}}</q-avatar>
             {{itm.Counter}}
@@ -50,11 +53,37 @@
         >
           <q-chip>
             <q-avatar :color="`${TB.Color}-${Math.floor((num.Rate-TB.MinR)/TB.RateDf*10)+1 > 10 ? 10 : Math.floor((num.Rate-TB.MinR)/TB.RateDf*10)+1}`" text-color="white">{{num.Num}}</q-avatar>
-            {{num.Rate.toFixed(2)}}
+            {{num.Rate.toFixed(4)}}
           </q-chip>
         </div>
       </div>
-    </div> 
+    </div>
+    <q-dialog v-model="alert">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">{{fails.pos}}個數字{{fails.Counter}}組</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-list bordered separator style="max-width: 558px">
+            <q-item 
+              v-for="(itm,idx) in fails.data"
+              :key="'fail'+idx"
+              clickable 
+              v-ripple>
+              <q-item-section>
+                <q-item-label caption>{{itm.height}}</q-item-label>
+                <q-item-label>{{itm.hashvalue}}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>          
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="OK" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 <script lang="ts">
@@ -69,6 +98,10 @@ import HASH from './class/HashAna';
 interface KeyObj {
   [key:string]:number;
 }
+interface HashData {
+  height:number;
+  hashvalue:string;
+}
 interface PosNum {
   Counter:number;
   Nums:KeyObj;
@@ -76,6 +109,7 @@ interface PosNum {
 interface FailC {
   pos:number;
   Counter:number;
+  data:HashData[];
 }
 interface NumH {
   fails:FailC[];
@@ -106,10 +140,14 @@ export default class MyLayout extends Vue {
     Pos:string='6';
     allowSameNum:boolean=false;
     NotOnlyDigital:boolean=false;
+    NoZero:boolean=false;
+    RepetLastOne:boolean=false; //疊字
     dfColor:string='secondary';
     sltColor:string='primary';
     options:SelectOptions[]=[];
     model:SelectOptions={value:0,label:'none'};
+    alert:boolean=false;
+    fails:FailC={pos:0,Counter:0,data:[]};
     @Watch('model',{immediate:true,deep:true})
     onModelChange(newVal:SelectOptions){
       //console.log('onModelChange:',newVal);
@@ -121,6 +159,8 @@ export default class MyLayout extends Vue {
           this.Pos=tmp[2];
           this.allowSameNum=tmp[3]==='1';
           this.NotOnlyDigital=tmp[4]==='1';
+          this.NoZero=tmp[5]==='1';
+          this.RepetLastOne=tmp[6]==='1';
         }
         this.HNum=JSON.parse(newVal.data);
         this.setBlock(this.HNum.TNum);
@@ -211,7 +251,7 @@ export default class MyLayout extends Vue {
         //console.log('getBTCHashData:',msg);
         if(msg.ErrNo===0){
           if(msg.data){
-            const dta=msg.data as {hashvalue:string}[];
+            const dta=msg.data as HashData[];
             if(dta.length===0){
               this.StopDo=true;
               return;
@@ -220,17 +260,18 @@ export default class MyLayout extends Vue {
               const Max=parseInt(this.Max,10);
               const Min=parseInt(this.Min,10);
               const Pos=parseInt(this.Pos,10);
-              const hl=new HASH(itm.hashvalue,Max,Min,Pos,this.allowSameNum,!this.NotOnlyDigital).NumLine;
+              const hl=new HASH(itm.hashvalue,Max,Min,Pos,this.allowSameNum,!this.NotOnlyDigital,this.NoZero,this.RepetLastOne).NumLine;
               if(hl.length < Pos){
                 if(this.HNum.fails){
                   let f=this.HNum.fails.find(itm=>itm.pos === hl.length);
                   if(f){
                     f.Counter+=1;
+                    f.data.push(itm);
                   } else {
-                    this.HNum.fails.push({pos:hl.length,Counter:1});  
+                    this.HNum.fails.push({pos:hl.length,Counter:1,data:[itm]});  
                   }
                 } else {
-                  this.HNum.fails=[{pos:hl.length,Counter:1}];
+                  this.HNum.fails=[{pos:hl.length,Counter:1,data:[itm]}];
                 }
               } else {
                 this.HNum.Counter+=1
@@ -293,7 +334,7 @@ export default class MyLayout extends Vue {
       const param:CommonParams={
         UserID:this.PInfo.id,
         sid:this.PInfo.sid,
-        Cond: `${this.Min}-${this.Max}-${this.Pos}-${this.allowSameNum ? 1 : 0}-${this.NotOnlyDigital ? 1 : 0}`,
+        Cond: `${this.Min}-${this.Max}-${this.Pos}-${this.allowSameNum ? 1 : 0}-${this.NotOnlyDigital ? 1 : 0}-${this.NoZero ? 1 : 0}-${this.RepetLastOne ? 1 : 0}`,
         AnaData: JSON.stringify(this.HNum)
       }
       const msg:IMsg=await this.store.ax.getApi('saveHashAna',param,'post');
