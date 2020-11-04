@@ -34,6 +34,7 @@ export interface BasePayRateItm {
 	Steps?:number;
 	//TopPay?:number;
     //OneHand?:number;
+    isParaly?:number;
     TotalNums?:number;
     UseAvg?:number;
     SingleNum?:number;

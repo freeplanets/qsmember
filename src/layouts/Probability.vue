@@ -105,6 +105,7 @@ export default class Probability extends Vue {
             //console.log('find:',f);
             f.id= itm.id;
             f.Probability = itm.Probability;
+            f.isParlay = !!itm.isParlay;
           } 
         })
       } else {
@@ -115,9 +116,107 @@ export default class Probability extends Vue {
         } 
         this.$q.dialog(opts);
       }
+    } 
+    addToData(dta:DfOddsItems[],GType:string,BetType:number,SubType:number,Num:number[],Position?:number[],addSub?:boolean,addZero?:boolean):DfOddsItems[]{
+      if(!Num || Num.length===0) return dta;
+      let ExtZero='';
+      if(addZero){
+        ExtZero='0';
+      }
+      if(Position){
+        Position.map(p=>{
+          Num.map(n=>{
+            const tmp:DfOddsItems={
+              GType,
+              BetType,
+              SubType,
+              Num:`${p}${n<10 ? ExtZero : '' }${n}`
+            }
+            dta.push(tmp);
+          })
+        })
+      } else {
+          Num.map(n=>{
+            const tmp:DfOddsItems={
+              GType,
+              BetType,
+              SubType,
+              Num:`${addSub ? SubType : ''}${n<10 ? ExtZero : '' }${n}`
+            }
+            dta.push(tmp);
+          })        
+      }
+      return dta;
+    }
+    async saveDfOddsItemsB(GType:string){
+      const data=PayRateData[GType].data;
+      const base=PayRateData[GType].base;
+      let dta:DfOddsItems[]=[];
+      Object.keys(data).map(sBT => {
+        //console.log('BT:',sBT);
+        data[sBT].map((itm,SubType)=>{
+            const BetType=parseInt(sBT);
+            let pos:number[] | undefined;
+            if(itm.addPosition){
+              if(base){
+                pos=base.Position;
+              }
+            }
+            if(itm.isTwoSide) {
+              dta=this.addToData(dta,GType,BetType,SubType,[0,1],pos,itm.addSub,itm.addZero);
+            } else if(itm.Num || itm.Num===0){
+              if(typeof(itm.Num)==='number'){
+                itm.Num = [itm.Num];
+              }
+              dta=this.addToData(dta,GType,BetType,SubType,itm.Num,pos,itm.addSub,itm.addZero);
+            } else if(itm.relateBT) {
+              //console.log(itm.relateBT);
+              let rbt=itm.relateBT;
+              //const rbt:DfOddsItems[]=[];
+              const tmpD:number[]=[];
+              dta.map(elm=>{
+                if(rbt.indexOf(elm.BetType) !== -1){
+                  tmpD.push(parseInt(`${elm.BetType}${elm.Num}`,10))
+                }
+                // rbt.push(elm);
+              })
+              //console.log(tmpD);
+              dta=this.addToData(dta,GType,BetType,SubType,tmpD,pos,itm.addSub,itm.addZero);
+              /*
+              rbt.map(bitm=>{
+                const tmp=Object.assign({},bitm);
+                tmp.BetType=parseInt(sBT);
+                tmp.Num = `${bitm.BetType}${bitm.Num}`;
+              })
+              */
+            } else {
+              if(base){
+                const nmD:number[]=[];
+                for(let i=base.Start;i<=base.End;i++){
+                    nmD.push(i);
+                }
+                dta=this.addToData(dta,GType,BetType,SubType,nmD,pos,itm.addSub,itm.addZero);
+              }
+            }
+          })
+      });
+      //console.log(dta);
+      ///*
+      const show={};
+      dta.map(itm=>{
+        if(!show[itm.GType]) show[itm.GType]={};
+        if(!show[itm.GType][itm.BetType]) show[itm.GType][itm.BetType]={};
+        if(!show[itm.GType][itm.BetType][itm.SubType]) show[itm.GType][itm.BetType][itm.SubType]=[];
+        show[itm.GType][itm.BetType][itm.SubType].push(itm.Num);
+      })
+      console.log(show);
+      //*/
+      await this.SendDfOddsItem(dta);
     }
     async saveDfOddsItems(GType:string){
       if(!BaseOddsItem[GType]){
+        await this.saveDfOddsItemsB(GType);
+        console.log('saveDfOddsItems:',PayRateData[GType]);
         return;
       }
       let data:DfOddsItems[]=[];
@@ -169,6 +268,10 @@ export default class Probability extends Vue {
       });
       //console.log('chkdata:',chkdata);
       ///*
+      await this.SendDfOddsItem(data);
+        //*/
+    }
+    async SendDfOddsItem(data:DfOddsItems[]){
         const param:CommonParams={
             UserID:this.PInfo.id,
             sid:this.PInfo.sid,
@@ -187,7 +290,6 @@ export default class Probability extends Vue {
                 message: 'Error!!'
             });            
         }
-        //*/
     }
     SaveData(){
         const dtas:ProbTable[] = [];

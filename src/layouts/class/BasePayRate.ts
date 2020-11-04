@@ -6,6 +6,10 @@ interface T {
     [n:string]: string | number | undefined;
 }
 */
+export interface ExtPR {
+    Rate:number;
+    Probability:number;
+}
 export class BasePayRate<T>{
     protected olddata:T | any ;
     protected data:T |any ;
@@ -14,6 +18,7 @@ export class BasePayRate<T>{
     protected BC:BClass<T>;
     protected extProbability:number|undefined;
     protected extRate:number=0;
+    protected extPR:ExtPR[]=[];
     constructor(v:T | any){ 
         this.BC=new BClass(v);
         this.data = this.BC.Datas;
@@ -72,6 +77,9 @@ export class BasePayRate<T>{
         this.isDataChanged = true;
     }
     */
+    get isParlay(){
+        return this.data.isParlay;
+    }
     get Rate():number | undefined{
         return this.data.DfRate;
     }
@@ -329,16 +337,34 @@ export class BasePayRate<T>{
             }
         }
     }
+    addExtPRS(itm:ExtPR){
+        this.extPR.push(itm);
+    }    
+    resetExtPR(){
+        this.extPR = [];
+    }    
     protected calProfit(){
         if(this.Rate && this.Probability) {
             if(this.Probability > 0) {
                 let p:number;
-                if( this.extProbability){
-                    //console.log(this.BetType,this.Probability,this.Rate,this.extProbability,this.extRate);
-                    p = Math.round((1 - (this.Probability * this.Rate + this.extProbability*this.extRate))*1000000)/10000;
+                if(this.extPR.length>0){
+                    let exRes=0;
+                    this.extPR.map(itm=>{
+                        exRes+= itm.Probability * itm.Rate;
+                    });
+                    p = Math.round((1 - (this.Probability * this.Rate + exRes))*1000000)/10000;
+                    //console.log('CalProfit:',this.BetType,this.ExtProb)
                 } else {
                     p = Math.round((1 - this.Probability * this.Rate)*1000000)/10000;
-                   // console.log('calProfit',p,this.Probability,this.Rate);
+                    /*
+                    if( this.extProbability){
+                        //console.log(this.BetType,this.Probability,this.Rate,this.extProbability,this.extRate);
+                        p = Math.round((1 - (this.Probability * this.Rate + this.extProbability*this.extRate))*1000000)/10000;
+                    } else {
+                        p = Math.round((1 - this.Probability * this.Rate)*1000000)/10000;
+                    // console.log('calProfit',p,this.Probability,this.Rate);
+                    }
+                    */
                 }
                 this.data.Profit=p;
             }

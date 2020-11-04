@@ -1,4 +1,31 @@
-const PayRateData = {
+interface BetItemData {
+      Title:string;
+      SubTitle?:string;
+      Filter?:string;
+      isTwoSide?:boolean;
+      addPosition?:boolean;
+      addZero?:boolean;
+      addSub?:boolean;
+      Num?:number|number[];
+      relateBT?:number[]
+}
+interface BaseParam {
+      Start:number;
+      End:number;
+      Position:number[];
+}
+interface BetData {
+      [key:string]:BetItemData[]
+}
+interface BetTypeParam {
+      [key:string]:{
+            order:string[];
+            base?:BaseParam;
+            data:BetData;
+      }
+}
+
+const PayRateData:BetTypeParam = {
     'MarkSix':{
           order:['1','28','2','3','74','4','5','6','7','8','72','9','10','73','11','71','12','13','14','27','15','16','17','18','19','20','21','22','23','24',
           '25','26','29','75','76','77','78','30','31','48','49','50','51','52','32','33','34','44','35','36','37','45','38','39','40','46','41','42',
@@ -36,19 +63,19 @@ const PayRateData = {
             '24':[{ Title: '正4特' }],
             '25':[{ Title: '正5特' }],
             '26':[{ Title: '正6特' }],
-            '29':[{ Title: '半波',SubTitle:'紅單'},
-                  { Title: '半波',SubTitle:'紅雙'},
-                  { Title: '半波',SubTitle:'紅大'},
-                  { Title: '半波',SubTitle:'紅小'},
-                  { Title: '半波',SubTitle:'藍單'},
-                  { Title: '半波',SubTitle:'藍雙'},
-                  { Title: '半波',SubTitle:'藍大'},
-                  { Title: '半波',SubTitle:'藍小'},
-                  { Title: '半波',SubTitle:'綠單'},
-                  { Title: '半波',SubTitle:'綠雙'},
-                  { Title: '半波',SubTitle:'綠大'},
-                  { Title: '半波',SubTitle:'綠小'}],
-            '75':[{ Title: '二肖'}],
+            '29':[{ Title: '半波',SubTitle:'紅單' ,Num:0},
+                  { Title: '半波',SubTitle:'紅雙' ,Num:1},
+                  { Title: '半波',SubTitle:'紅大' ,Num:2},
+                  { Title: '半波',SubTitle:'紅小' ,Num:3},
+                  { Title: '半波',SubTitle:'藍單' ,Num:4},
+                  { Title: '半波',SubTitle:'藍雙' ,Num:5},
+                  { Title: '半波',SubTitle:'藍大' ,Num:6},
+                  { Title: '半波',SubTitle:'藍小' ,Num:7},
+                  { Title: '半波',SubTitle:'綠單' ,Num:8},
+                  { Title: '半波',SubTitle:'綠雙' ,Num:9},
+                  { Title: '半波',SubTitle:'綠大' ,Num:10},
+                  { Title: '半波',SubTitle:'綠小' ,Num:11}],
+            '75':[{ Title: '二肖' ,Num:[1,2,3,4,5,6,7,8,9,10,11,12] }],
             '76':[{ Title: '三肖'}],
             '77':[{ Title: '四肖'}],
             '78':[{ Title: '五肖'}],
@@ -73,7 +100,7 @@ const PayRateData = {
             '46':[{ Title: '五尾連-中', SubTitle:'一般'},{ Title: '五尾連-中', SubTitle:'0尾'}],
             '41':[{ Title: '二尾連-不中', SubTitle:'一般'},{ Title: '二尾連-不中', SubTitle:'0尾'}],
             '42':[{ Title: '三尾連-不中', SubTitle:'一般'},{ Title: '三尾連-不中', SubTitle:'0尾'}],
-            '43':[{ Title: '四尾連-不中', SubTitle:'一般'},{ Title: '三尾連-不中', SubTitle:'0尾'}],
+            '43':[{ Title: '四尾連-不中', SubTitle:'一般'},{ Title: '四尾連-不中', SubTitle:'0尾'}],
             '47':[{ Title: '五尾連-不中', SubTitle:'一般'},{ Title: '五尾連-不中', SubTitle:'0尾'}],
             '53':[{ Title: '七碼', SubTitle: '單0大0'},
                   { Title: '七碼', SubTitle: '單1大1'},
@@ -416,6 +443,141 @@ const PayRateData = {
                   ],
                   '47': [{Title: '兩面過關'}]
             }
+      },
+      'HashSix':{
+            order:['21','22','23','24','25','26','4','9','7','8','79','80','81','5','6','12','13','27','20','38','39','40','46','41','42',
+            '43','47','70','31','48','49','50','51','52'
+            ,'71','57','58','59','60','61','62','63','64','65','66','67','68','15','53','56','14',
+            '82','19','83','84','85','86','87','32','33','34','44','35','36','37','45','69','55','88'],
+            // 89, 90, 91, 92,  93, 94, 95, 96, 97, 98, 99
+            base: {
+                  Start:0,
+                  End:49,
+                  Position:[1 ,2 ,3 ,4 ,5 ,6 ]
+            },
+            data: {
+                  '21':[{ Title: '正1特' }],
+                  '22':[{ Title: '正2特' }],
+                  '23':[{ Title: '正3特' }],
+                  '24':[{ Title: '正4特' }],
+                  '25':[{ Title: '正5特' }],
+                  '26':[{ Title: '正6特' }],                  
+              '4': [{ Title: '正碼' }],
+              '9': [{ Title: '二全中' }],              
+              '7': [{ Title: '三全中' }],
+              '8': [{ Title: 'KENO3' ,SubTitle:'中二'},
+                    { Title: 'KENO3' ,SubTitle:'全中' ,Filter:'>100',addZero:true,addSub:true}],
+              '79': [{ Title: 'KENO4' ,SubTitle:'中二'},
+                     { Title: 'KENO4' ,SubTitle:'中三' ,Filter:'>100',addZero:true,addSub:true},
+                     { Title: 'KENO4' ,SubTitle:'全中' ,Filter:'>100',addZero:true,addSub:true}],
+              '80': [{ Title: 'KENO5' ,SubTitle:'中二'},
+                     { Title: 'KENO5' ,SubTitle:'中三' ,Filter:'>100',addZero:true,addSub:true},
+                     { Title: 'KENO5' ,SubTitle:'中四' ,Filter:'>100',addZero:true,addSub:true},
+                     { Title: 'KENO5' ,SubTitle:'全中' ,Filter:'>100',addZero:true,addSub:true}],
+              '81': [{ Title: 'KENO6' ,SubTitle:'中三' },
+                     { Title: 'KENO6' ,SubTitle:'中四' ,Filter:'>100',addZero:true,addSub:true},
+                     { Title: 'KENO6' ,SubTitle:'中五' ,Filter:'>100',addZero:true,addSub:true},
+                     { Title: 'KENO6' ,SubTitle:'全中' ,Filter:'>100',addZero:true,addSub:true}],
+              '5': [{ Title: '總和單雙' ,isTwoSide:true}],
+              '6': [{ Title: '總和大小' ,isTwoSide:true}],              
+              '12':[{ Title: '正碼1-6單雙' ,addPosition:true ,isTwoSide:true}],
+              '13':[{ Title: '正碼1-6大小' ,addPosition:true ,isTwoSide:true}],
+              '27':[{ Title: '正碼1-6合數單雙' ,addPosition:true ,isTwoSide:true}],
+              '20':[{ Title: '尾數' ,Num:[0,1,2,3,4,5,6,7,8,9] }],
+              '38':[{ Title: '二尾連-中' ,Num:[0,1,2,3,4,5,6,7,8,9] }],
+              '39':[{ Title: '三尾連-中' ,Num:[0,1,2,3,4,5,6,7,8,9] }],
+              '40':[{ Title: '四尾連-中' ,Num:[0,1,2,3,4,5,6,7,8,9] }],
+              '46':[{ Title: '五尾連-中' ,Num:[0,1,2,3,4,5,6,7,8,9] }],
+              '41':[{ Title: '二尾連-不中' ,Num:[0,1,2,3,4,5,6,7,8,9] }],
+              '42':[{ Title: '三尾連-不中' ,Num:[0,1,2,3,4,5,6,7,8,9] }],
+              '43':[{ Title: '四尾連-不中' ,Num:[0,1,2,3,4,5,6,7,8,9] }],
+              '47':[{ Title: '五尾連-不中' ,Num:[0,1,2,3,4,5,6,7,8,9] }],
+              '70':[{ Title: '尾數不中' ,Num:[0,1,2,3,4,5,6,7,8,9] }],
+              '31':[{ Title: '五不中'}],
+              '48':[{ Title: '六不中'}],
+              '49':[{ Title: '七不中'}],
+              '50':[{ Title: '八不中'}],
+              '51':[{ Title: '九不中'}],
+              '52':[{ Title: '十不中'}],
+              '71':[{ Title: '四中一' }],
+              '57':[{ Title: '五中一' }],
+              '58':[{ Title: '六中一' }],
+              '59':[{ Title: '七中一' }],
+              '60':[{ Title: '八中一' }],
+              '61':[{ Title: '九中一' }],
+              '62':[{ Title: '十中一' }],
+              '63':[{ Title: '一粒任中' }],
+              '64':[{ Title: '二粒任中' }],
+              '65':[{ Title: '三粒任中' }],
+              '66':[{ Title: '四粒任中' }],
+              '67':[{ Title: '五粒任中' }],
+              '68':[{ Title: '龍虎',isTwoSide:true}],           
+              '53':[{ Title: '六碼', SubTitle: '單0大0' ,Num:[0,13,14,27] },
+                    { Title: '六碼', SubTitle: '單1大1' ,Num:[1,12,15,26] },
+                    { Title: '六碼', SubTitle: '單2大2' ,Num:[2,11,16,25] },
+                    { Title: '六碼', SubTitle: '單3大3' ,Num:[3,10,17,24] },
+                    { Title: '六碼', SubTitle: '單4大4' ,Num:[4,9,18,23,] },
+                    { Title: '六碼', SubTitle: '單5大5' ,Num:[5,8,19,22] },
+                    { Title: '六碼', SubTitle: '單6大6' ,Num:[6,7,20,21] }],
+              '56':[{Title: '尾數量', SubTitle: '尾2' ,Num:0 },
+                    {Title: '尾數量', SubTitle: '尾3' ,Num:1 },
+                    {Title: '尾數量', SubTitle: '尾4' ,Num:2 },
+                    {Title: '尾數量', SubTitle: '尾5' ,Num:3 },
+                    {Title: '尾數量', SubTitle: '尾6' ,Num:4 }],         
+              '14':[{ Title: '正碼1-6色波' ,SubTitle: '藍波' ,addPosition:true ,Num:1},{ Title: '正碼1-6色波',SubTitle:'紅綠波' ,addPosition:true ,Num:[0,2]}],
+              '15':[{ Title: '正碼過關',relateBT:[12,13,14]}],
+              '82':[{ Title: '正碼1-6半波' ,SubTitle:'紅單' ,addPosition:true ,Num:0 ,addZero:true },
+                    { Title: '正碼1-6半波' ,SubTitle:'紅雙' ,addPosition:true ,Num:1 ,addZero:true },
+                    { Title: '正碼1-6半波' ,SubTitle:'紅大' ,addPosition:true ,Num:2 ,addZero:true },
+                    { Title: '正碼1-6半波' ,SubTitle:'紅小' ,addPosition:true ,Num:3 ,addZero:true },
+                    { Title: '正碼1-6半波' ,SubTitle:'藍單' ,addPosition:true ,Num:4 ,addZero:true },
+                    { Title: '正碼1-6半波' ,SubTitle:'藍雙' ,addPosition:true ,Num:5 ,addZero:true },
+                    { Title: '正碼1-6半波' ,SubTitle:'藍大' ,addPosition:true ,Num:6 ,addZero:true },
+                    { Title: '正碼1-6半波' ,SubTitle:'藍小' ,addPosition:true ,Num:7 ,addZero:true },
+                    { Title: '正碼1-6半波' ,SubTitle:'綠單' ,addPosition:true ,Num:8 ,addZero:true },
+                    { Title: '正碼1-6半波' ,SubTitle:'綠雙' ,addPosition:true ,Num:9 ,addZero:true },
+                    { Title: '正碼1-6半波' ,SubTitle:'綠大' ,addPosition:true ,Num:10 },
+                    { Title: '正碼1-6半波' ,SubTitle:'綠小' ,addPosition:true ,Num:11 }],
+              '19':[
+                    { Title: '正碼1-6生肖',SubTitle: '一般',addPosition:true,Num:[3,4,5,6,7,8,9,10,11,12],addZero:true},
+                    { Title: '正碼1-6生肖',SubTitle:'0/1號生肖',addPosition:true,Num:[1,2],addZero:true}
+                  ], 
+              '83':[
+                    { Title: '正碼1-6二肖' ,SubTitle: '一般',addPosition:true,Num:[3,4,5,6,7,8,9,10,11,12],addZero:true},
+                    { Title: '正碼1-6二肖',SubTitle:'0/1號生肖',addPosition:true,Num:[1,2],addZero:true}
+                  ],
+              '84':[
+                    { Title: '正碼1-6三肖' ,SubTitle: '一般',addPosition:true,Num:[3,4,5,6,7,8,9,10,11,12],addZero:true},
+                    { Title: '正碼1-6三肖',SubTitle:'0/1號生肖',addPosition:true,Num:[1,2],addZero:true}
+                  ],
+              '85':[
+                    { Title: '正碼1-6四肖' ,SubTitle: '一般',addPosition:true,Num:[3,4,5,6,7,8,9,10,11,12],addZero:true},
+                    { Title: '正碼1-6四肖',SubTitle:'0/1號生肖',addPosition:true,Num:[1,2],addZero:true}
+                  ],
+              '86':[
+                    { Title: '正碼1-6五肖' ,SubTitle: '一般',addPosition:true,Num:[3,4,5,6,7,8,9,10,11,12],addZero:true},
+                    { Title: '正碼1-6五肖',SubTitle:'0/1號生肖',addPosition:true,Num:[1,2],addZero:true}
+                  ],
+              '87':[
+                    { Title: '正碼1-6六肖' ,SubTitle: '一般',addPosition:true,Num:[3,4,5,6,7,8,9,10,11,12],addZero:true},
+                    { Title: '正碼1-6六肖',SubTitle:'0/1號生肖',addPosition:true,Num:[1,2],addZero:true}
+                  ],
+              '32':[{ Title: '二肖連-中', SubTitle:'一般',Num:[3,4,5,6,7,8,9,10,11,12]},{ Title: '二肖連-中', SubTitle:'0/1號生肖',Num:[1,2]}],
+              '33':[{ Title: '三肖連-中', SubTitle:'一般',Num:[3,4,5,6,7,8,9,10,11,12]},{ Title: '三肖連-中', SubTitle:'0/1號生肖',Num:[1,2]}],
+              '34':[{ Title: '四肖連-中', SubTitle:'一般',Num:[3,4,5,6,7,8,9,10,11,12]},{ Title: '四肖連-中', SubTitle:'0/1號生肖',Num:[1,2]}],
+              '44':[{ Title: '五肖連-中', SubTitle:'一般',Num:[3,4,5,6,7,8,9,10,11,12]},{ Title: '五肖連-中', SubTitle:'0/1號生肖',Num:[1,2]}],
+              '35':[{ Title: '二肖連-不中', SubTitle:'一般',Num:[3,4,5,6,7,8,9,10,11,12]},{ Title: '二肖連-不中', SubTitle:'0/1號生肖',Num:[1,2]}],
+              '36':[{ Title: '三肖連-不中', SubTitle:'一般',Num:[3,4,5,6,7,8,9,10,11,12]},{ Title: '三肖連-不中', SubTitle:'0/1號生肖',Num:[1,2]}],
+              '37':[{ Title: '四肖連-不中', SubTitle:'一般',Num:[3,4,5,6,7,8,9,10,11,12]},{ Title: '四肖連-不中', SubTitle:'0/1號生肖',Num:[1,2]}],
+              '45':[{ Title: '五肖連-不中', SubTitle:'一般',Num:[3,4,5,6,7,8,9,10,11,12]},{ Title: '五肖連-不中', SubTitle:'0/1號生肖',Num:[1,2]}],
+              '69':[{ Title: '一肖不中',SubTitle: '一般',Num:[3,4,5,6,7,8,9,10,11,12]},{ Title: '一肖不中',SubTitle:'0/1號生肖',Num:[1,2]}], 
+              '55':[{ Title: '一肖量',SubTitle: '肖2' ,Num:0 },
+                    { Title: '一肖量',SubTitle: '肖3' ,Num:1 },
+                    { Title: '一肖量',SubTitle: '肖4' ,Num:2 },
+                    { Title: '一肖量',SubTitle: '肖5' ,Num:3 },
+                    { Title: '一肖量',SubTitle: '肖6' ,Num:4 }],             
+              '88':[{ Title: '正碼1-6五行' ,addPosition:true ,Num:[ 0 ,1 ,2 ,3 ,4 ]}],
+              }
       }
 }
 export default PayRateData;

@@ -108,14 +108,16 @@ import {getModule} from 'vuex-module-decorators';
 //import {IGames} from './data/schema';
 import {SelectOptions,BasePayRateItm,IbtCls,CommonParams,IMsg,StepG, ILoginInfo} from './data/if';
 import PayRateData from './data/PayRateList';
-import {BasePayRate} from './class/BasePayRate';
+import {BasePayRate,ExtPR} from './class/BasePayRate';
 import { cloneDeep } from 'lodash';
 import GameSelector from './components/GameSelector.vue';
 import BetTypeClass from './components/BetTypeClass.vue';
 import RateChangeOption from './components/RateChangeOption.vue';
+/*
 Vue.component('GS',GameSelector);
 Vue.component('BTC',BetTypeClass);
 Vue.component('RCO',RateChangeOption);
+*/
 
 interface PayClass {
     id:number;
@@ -133,7 +135,13 @@ interface BItem {
     Filter?:string;
 }
 
-@Component
+@Component({
+    components: {
+        GS:GameSelector,
+        BTC:BetTypeClass,
+        RCO:RateChangeOption
+    }
+})
 export default class BetClass extends Vue{
 	store = getModule(LayoutStoreModule);
     models:SelectOptions | null = null;
@@ -175,7 +183,7 @@ export default class BetClass extends Vue{
     get PInfo():ILoginInfo{
         return this.store.personal;
     }
-    setCurGames(v:SelectOptions){
+    async setCurGames(v:SelectOptions){
         this.models = v;
         let GType:string = this.models.GType ? this.models.GType : '';
         if(GType==='MarkSix'){
@@ -187,7 +195,7 @@ export default class BetClass extends Vue{
         }
         this.showProgress=true;
         this.showDataTable=false;
-        this.chkdata(v,GType);
+        await this.chkdata(v,GType);
     }
     async chkdata(v:SelectOptions,GType:string){
         // console.log('chkdata:', v);
@@ -197,6 +205,8 @@ export default class BetClass extends Vue{
         if(!PayRateData[GType]){
             this.showProgress=false;
             return;
+        } else {
+            console.log('chkdata no do!!');
         }
         const tmp:object=PayRateData[GType].data;
         const order:string[]=PayRateData[GType].order;
@@ -238,7 +248,17 @@ export default class BetClass extends Vue{
         this.showProgress=false;
     }
     chainEdit(bt:number){
-        //console.log('chainEdit',bt);
+        console.log('chainEdit',bt);
+        let itm = this.BasePayR.find(elm => elm.BetType === bt);
+        if(itm){
+            if(itm.isParlay){
+                itm.resetExtPR();
+                itm=this.setExtPR(itm)
+            }
+        } else {
+            console.log(bt + ' not procss!!!');
+        }
+        /*
         const e0 = this.BasePayR.find(elm => elm.BetType == bt && elm.SubType == 0);
         const e1 = this.BasePayR.find(elm => elm.BetType == bt && elm.SubType == 1);
         if( e0 &&  e1){
@@ -247,6 +267,20 @@ export default class BetClass extends Vue{
             e1.ExtProb = e0.Probability ? e0.Probability : 0;
             e1.ExtRate = e0.Rate ? e0.Rate : 0;
         }
+        */
+    }
+    setExtPR(itm:BasePayRate<BasePayRateItm>){
+        this.BasePayR.map(elm=>{
+            if(elm.isParlay && elm.BetType === itm.BetType && elm.SubType !== itm.SubType){
+                let tmp:ExtPR={
+                    Rate: elm.Rate ? elm.Rate : 0,
+                    Probability: elm.Probability ? elm.Probability : 0
+                }
+                itm.addExtPRS(tmp);
+            }
+        })
+        console.log('setExtPR',itm);
+        return itm;
     }
     createBPRItem(p:BItem,BetType:number,SubType:number):BasePayRateItm{
         let bpr:BasePayRateItm = Object.assign({},{
@@ -262,6 +296,7 @@ export default class BetClass extends Vue{
             Steps:0,
             //TopPay:0,
             //OneHand:0
+            isParlay:0,
             TotalNums:0,
             UseAvg:0,
             SingleNum:0,
