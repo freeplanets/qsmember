@@ -1,5 +1,5 @@
 import BClass from './BClass';
-import {fixlen} from '../components/func';
+import {fixlen,NoSientificNotation} from '../components/func';
 import {StepG} from '../data/if';
 /*
 interface T {
@@ -7,6 +7,7 @@ interface T {
 }
 */
 export interface ExtPR {
+    SubType:number;
     Rate:number;
     Probability:number;
 }
@@ -101,6 +102,9 @@ export class BasePayRate<T>{
         if((v || v===0) && v<=0) return;
         this.data.TopRate = this.fetchValueToSteps(v);
         this.isDataChanged = true;
+    }
+    get ProbabilityS():string{
+        return this.Probability ? NoSientificNotation(this.Probability) : '0';
     }
     get Probability():number |undefined{
         return this.data.Probability;
@@ -338,7 +342,14 @@ export class BasePayRate<T>{
         }
     }
     addExtPRS(itm:ExtPR){
-        this.extPR.push(itm);
+        const f:ExtPR|undefined = this.extPR.find(elm=> elm.SubType === itm.SubType);
+        if(f){
+            f.Rate = itm.Rate;
+        } else {
+            this.extPR.push(itm);
+        }
+        //console.log('addExtPRS',this.BetType,this.SubType,this.extPR);
+        this.calProfit();
     }    
     resetExtPR(){
         this.extPR = [];
@@ -353,7 +364,7 @@ export class BasePayRate<T>{
                         exRes+= itm.Probability * itm.Rate;
                     });
                     p = Math.round((1 - (this.Probability * this.Rate + exRes))*1000000)/10000;
-                    //console.log('CalProfit:',this.BetType,this.ExtProb)
+                    //console.log('CalProfit:',this.BetType,this.SubType,this.Probability ,this.Rate , exRes);
                 } else {
                     p = Math.round((1 - this.Probability * this.Rate)*1000000)/10000;
                     /*

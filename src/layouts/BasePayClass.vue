@@ -50,7 +50,7 @@
                 <td :class="{'test':true,redColor:itm.Profit<0}">{{ itm.Profit }}</td>
                 <td class="test"><input type="text" size='4' v-model="itm.Rate" @change="chkItem(itm)" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.TopRate"  /></td>
-                <td class="test">{{itm.Probability}}</td>
+                <td class="test">{{itm.ProbabilityS}}</td>
                 <td class="test"><input type="text" size='4' v-model="itm.TotalNums" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.SingleNum" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.UnionNum" /></td>
@@ -190,6 +190,8 @@ export default class BetClass extends Vue{
             // 8,72 三中二
             // 10,73 二中特
             this.spArr=[8,72,10,73];
+        } else if(GType==='HashSix') {
+            this.spArr=[8,79,80,81];
         } else {
             this.spArr = undefined;
         }
@@ -235,9 +237,13 @@ export default class BetClass extends Vue{
             })
             if(this.spArr){
                 this.spArr.map(bt=>{
-                    this.chainEdit(bt);
+                    this.BasePayR.map(itm=>{
+                        if(itm.BetType === bt){
+                            this.chainEdit(itm);
+                        }
+                    });
                 });
-            }            
+            } 
             //this.BasePayR=cloneDeep(this.BasePayR);
         }
         //console.log('BasePayR:',this.BasePayR)
@@ -247,16 +253,15 @@ export default class BetClass extends Vue{
         this.showDataTable=true;
         this.showProgress=false;
     }
-    chainEdit(bt:number){
-        console.log('chainEdit',bt);
-        let itm = this.BasePayR.find(elm => elm.BetType === bt);
+    chainEdit(b:BasePayRate<BasePayRateItm>){
+        let itm = this.BasePayR.find(elm => elm.BetType === b.BetType && elm.SubType ===b.SubType);
         if(itm){
             if(itm.isParlay){
-                itm.resetExtPR();
+                //itm.resetExtPR();
                 itm=this.setExtPR(itm)
             }
         } else {
-            console.log(bt + ' not procss!!!');
+            console.log( b, ' not procss!!!');
         }
         /*
         const e0 = this.BasePayR.find(elm => elm.BetType == bt && elm.SubType == 0);
@@ -270,16 +275,18 @@ export default class BetClass extends Vue{
         */
     }
     setExtPR(itm:BasePayRate<BasePayRateItm>){
+        //console.log('setExtPR',itm.BetType ,itm.SubType);
         this.BasePayR.map(elm=>{
             if(elm.isParlay && elm.BetType === itm.BetType && elm.SubType !== itm.SubType){
                 let tmp:ExtPR={
-                    Rate: elm.Rate ? elm.Rate : 0,
-                    Probability: elm.Probability ? elm.Probability : 0
+                    SubType: itm.SubType ? itm.SubType : 0,
+                    Rate: itm.Rate ? itm.Rate : 0,
+                    Probability: itm.Probability ? itm.Probability : 0
                 }
-                itm.addExtPRS(tmp);
+                elm.addExtPRS(tmp);
             }
         })
-        console.log('setExtPR',itm);
+        //console.log('setExtPR',itm);
         return itm;
     }
     createBPRItem(p:BItem,BetType:number,SubType:number):BasePayRateItm{
@@ -508,11 +515,11 @@ export default class BetClass extends Vue{
     }
     */
     chkItem(itm){
-        //console.log('chkItem',itm.BetType,this.spArr);
+        console.log('chkItem',itm.BetType,this.spArr);
         if(this.spArr){
             const f = this.spArr.find(bt=>bt===itm.BetType)
             if(f){
-                this.chainEdit(f);
+                this.chainEdit(itm);
             }
         }
     }

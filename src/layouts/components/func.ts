@@ -351,3 +351,21 @@ export function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1
     if(num<10 && (GType=='MarkSix' || GType=="Happy8" || dgt==2)) return '0'+num
     return num
 };
+export function NoSientificNotation(v:number):string{
+    let s:string=v.toString();
+    if(Math.abs(v) < 1.0){
+        const e = parseInt(s.split('e-')[1]);
+        if(e) {
+            v *= Math.pow(10,e-1);
+            s = '0.' + (new Array(e)).join('0') + v.toString().substring(2);
+        }
+    } else {
+        let e = parseInt(s.split('+')[1]);
+        if(e > 20) {
+            e-=20;
+            v /= Math.pow(10,e);
+            s = v + (new Array(e+1)).join('0');
+        }
+    }
+    return s;
+}

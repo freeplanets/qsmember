@@ -1527,6 +1527,132 @@ const BTCHash:Layout=[
         ]
     }
 ]
+const HashSix:Layout=[
+    { 
+        name: "Game.HashSix.Menu.Group.0.title", 
+        cont:[
+            {
+            title : "Game.HashSix.Item.5.title",
+            subtitle: "Game.HashSix.TitleSP.SNO.1",
+            item:[
+                [{BT:5,Num:0},{BT:5,Num:1},{BT:6,Num:0},{BT:6,Num:1}]
+            ]
+        },
+            {
+            title : "Game.HashSix.Item.21.title",
+            item:[
+                [{BT:13,Num:10},{BT:12,Num:10},{BT:27,Num:10}],
+                [{BT:13,Num:11},{BT:12,Num:11},{BT:27,Num:11}]
+            ]
+        },
+        {
+            title : "Game.HashSix.Item.22.title",
+            item:[
+                [{BT:13,Num:20},{BT:12,Num:20},{BT:27,Num:20}],
+                [{BT:13,Num:21},{BT:12,Num:21},{BT:27,Num:21}]
+            ]
+        },
+        {
+            title : "Game.HashSix.Item.23.title",
+            item:[
+                [{BT:13,Num:30},{BT:12,Num:30},{BT:27,Num:30}],
+                [{BT:13,Num:31},{BT:12,Num:31},{BT:27,Num:31}]
+            ]
+        },
+        {
+            title : "Game.HashSix.Item.24.title",
+            item:[
+                [{BT:13,Num:40},{BT:12,Num:40},{BT:27,Num:40}],
+                [{BT:13,Num:41},{BT:12,Num:41},{BT:27,Num:41}]
+            ]
+        },
+        {
+            title : "Game.HashSix.Item.24.title",
+            item:[
+                [{BT:13,Num:50},{BT:12,Num:50},{BT:27,Num:50}],
+                [{BT:13,Num:51},{BT:12,Num:51},{BT:27,Num:51}]
+            ]
+        },
+        {
+            title : "Game.HashSix.Item.26.title",
+            item:[
+                [{BT:13,Num:60},{BT:12,Num:60},{BT:27,Num:60}],
+                [{BT:13,Num:61},{BT:12,Num:61},{BT:27,Num:61}]
+            ]
+        },
+        ]
+    }, //title: '兩面盤', SubItem: [] 
+    { 
+        name: "Game.HashSix.Menu.Group.1.title",
+        cont:[
+            {
+                colorWave: true,
+                aBT: [4,21,22,23,24,25,26],
+                sltedItem:0,
+                start: 0,
+                end:49,
+                item: getNums
+            }
+        ]
+    }, // title: '正碼', BT: 4, SubItem: [], SubMenu: []
+    { 
+        name: "Game.HashSix.Menu.Group.2.title", 
+        cont:[
+            {
+                aBT: [9,7,8,79,80,81],
+                twOdds:[0,0,1,1,1,1],
+                sltedItem:0,
+                start: 0,
+                end:49,
+                item: getNums
+            }
+        ]
+    }, //title: '連碼', SubMenu: [] 6+9+55555+32+
+    { 
+        name: "Game.HashSix.Menu.Group.3.title", 
+        cont:[
+            {
+                aBT: [31,48,49,50,51,52],
+                sltedItem:0,
+                start: 0,
+                end:49,
+                item: getNums
+            }            
+        ]
+    }, //title: '不中', SubMenu: []
+    { 
+        name: "Game.HashSix.Menu.Group.4.title", 
+        cont:[
+            {
+                aBT: [71,57,58,59,60,61,62,63,64,65,66,67],
+                sltedItem:0,
+                start: 0,
+                end:49,
+                item: getNums
+            }             
+        ]
+    }, // title: '多選', SubMenu: [] 
+    { 
+        name: "Game.HashSix.Menu.Group.5.title", 
+        cont:[
+            {
+                aBT: [20,38,39,40,46,41,42,43,47,70],
+                sltedItem:0,
+                start: 0,
+                end:9,
+                item: getNums
+            }             
+        ]
+    }, //title: '尾數', SubMenu: []
+    { name: "Game.HashSix.Menu.Group.6.title", cont:[]}, //title: '色波', SubMenu: []
+    { name: "Game.HashSix.Menu.Group.7.title", cont:[]}, //title: '半波', SubMenu: []
+    { name: "Game.HashSix.Menu.Group.8.title", cont:[]}, //title: '生肖', SubMenu: []
+    { name: "Game.HashSix.Menu.Group.9.title", cont:[]}, //title: '合肖', SubMenu: []
+    { name: "Game.HashSix.Menu.Group.10.title", cont:[]}, //title: '生肖連', SubMenu: []
+    { name: "Game.HashSix.Menu.Group.11.title", cont:[]}, //title: '六碼', SubMenu: []
+    { name: "Game.HashSix.Menu.Group.12.title", cont:[]}, //title: '正碼過關', SubMenu: []
+    { name: "Game.HashSix.Menu.Group.13.title", cont:[]} //title: '其他', SubMenu: []
+]
 const Layouts:ILayouts= {}
 Layouts.MarkSix = MarkSixLayout;
 Layouts['3D'] = D3;
@@ -1536,4 +1662,5 @@ Layouts.Always = Always;
 Layouts.Speed3 = Speed3;
 Layouts.Happy8 = Happy8;
 Layouts.BTCHash = BTCHash;
+Layouts.HashSix = HashSix;
 export default Layouts;

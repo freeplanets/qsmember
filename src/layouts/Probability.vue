@@ -104,7 +104,7 @@ export default class Probability extends Vue {
           if(f){
             //console.log('find:',f);
             f.id= itm.id;
-            f.Probability = itm.Probability;
+            f.Probability = itm.Probability.toString();
             f.isParlay = !!itm.isParlay;
           } 
         })

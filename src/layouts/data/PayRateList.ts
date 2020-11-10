@@ -448,7 +448,7 @@ const PayRateData:BetTypeParam = {
             order:['21','22','23','24','25','26','4','9','7','8','79','80','81','5','6','12','13','27','20','38','39','40','46','41','42',
             '43','47','70','31','48','49','50','51','52'
             ,'71','57','58','59','60','61','62','63','64','65','66','67','68','15','53','56','14',
-            '82','19','83','84','85','86','87','32','33','34','44','35','36','37','45','69','55','88'],
+            '82','19','83','84','85','86','87','88','32','33','34','44','35','36','37','45','69','55','89'],
             // 89, 90, 91, 92,  93, 94, 95, 96, 97, 98, 99
             base: {
                   Start:0,
@@ -539,29 +539,33 @@ const PayRateData:BetTypeParam = {
                     { Title: '正碼1-6半波' ,SubTitle:'綠大' ,addPosition:true ,Num:10 },
                     { Title: '正碼1-6半波' ,SubTitle:'綠小' ,addPosition:true ,Num:11 }],
               '19':[
+                    { Title: '合肖',SubTitle: '一般',Num:[3,4,5,6,7,8,9,10,11,12],addZero:true},
+                    { Title: '合肖',SubTitle:'0/1號生肖',Num:[1,2],addZero:true}
+                  ],                    
+              '83':[
                     { Title: '正碼1-6生肖',SubTitle: '一般',addPosition:true,Num:[3,4,5,6,7,8,9,10,11,12],addZero:true},
                     { Title: '正碼1-6生肖',SubTitle:'0/1號生肖',addPosition:true,Num:[1,2],addZero:true}
                   ], 
-              '83':[
+              '84':[
                     { Title: '正碼1-6二肖' ,SubTitle: '一般',addPosition:true,Num:[3,4,5,6,7,8,9,10,11,12],addZero:true},
                     { Title: '正碼1-6二肖',SubTitle:'0/1號生肖',addPosition:true,Num:[1,2],addZero:true}
                   ],
-              '84':[
+              '85':[
                     { Title: '正碼1-6三肖' ,SubTitle: '一般',addPosition:true,Num:[3,4,5,6,7,8,9,10,11,12],addZero:true},
                     { Title: '正碼1-6三肖',SubTitle:'0/1號生肖',addPosition:true,Num:[1,2],addZero:true}
                   ],
-              '85':[
+              '86':[
                     { Title: '正碼1-6四肖' ,SubTitle: '一般',addPosition:true,Num:[3,4,5,6,7,8,9,10,11,12],addZero:true},
                     { Title: '正碼1-6四肖',SubTitle:'0/1號生肖',addPosition:true,Num:[1,2],addZero:true}
                   ],
-              '86':[
+              '87':[
                     { Title: '正碼1-6五肖' ,SubTitle: '一般',addPosition:true,Num:[3,4,5,6,7,8,9,10,11,12],addZero:true},
                     { Title: '正碼1-6五肖',SubTitle:'0/1號生肖',addPosition:true,Num:[1,2],addZero:true}
                   ],
-              '87':[
+              '88':[
                     { Title: '正碼1-6六肖' ,SubTitle: '一般',addPosition:true,Num:[3,4,5,6,7,8,9,10,11,12],addZero:true},
                     { Title: '正碼1-6六肖',SubTitle:'0/1號生肖',addPosition:true,Num:[1,2],addZero:true}
-                  ],
+                  ],                
               '32':[{ Title: '二肖連-中', SubTitle:'一般',Num:[3,4,5,6,7,8,9,10,11,12]},{ Title: '二肖連-中', SubTitle:'0/1號生肖',Num:[1,2]}],
               '33':[{ Title: '三肖連-中', SubTitle:'一般',Num:[3,4,5,6,7,8,9,10,11,12]},{ Title: '三肖連-中', SubTitle:'0/1號生肖',Num:[1,2]}],
               '34':[{ Title: '四肖連-中', SubTitle:'一般',Num:[3,4,5,6,7,8,9,10,11,12]},{ Title: '四肖連-中', SubTitle:'0/1號生肖',Num:[1,2]}],
@@ -576,7 +580,7 @@ const PayRateData:BetTypeParam = {
                     { Title: '一肖量',SubTitle: '肖4' ,Num:2 },
                     { Title: '一肖量',SubTitle: '肖5' ,Num:3 },
                     { Title: '一肖量',SubTitle: '肖6' ,Num:4 }],             
-              '88':[{ Title: '正碼1-6五行' ,addPosition:true ,Num:[ 0 ,1 ,2 ,3 ,4 ]}],
+              '89':[{ Title: '正碼1-6五行' ,addPosition:true ,Num:[ 0 ,1 ,2 ,3 ,4 ]}],
               }
       }
 }

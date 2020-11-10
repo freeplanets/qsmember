@@ -1,5 +1,6 @@
-import {ProbTable} from '../data/if'
-import BClass from './BClass'
+import {ProbTable} from '../data/if';
+import BClass from './BClass';
+import {NoSientificNotation} from '../components/func';
 
 export default class ProbabilityTable extends BClass<ProbTable>{
   private title='';
@@ -32,10 +33,10 @@ export default class ProbabilityTable extends BClass<ProbTable>{
       this.subtitle = v;
     }
     get Probability(){
-      return this.data.Probability;
+      return NoSientificNotation(this.data.Probability);
     }
-    set Probability(v:number){
-      this.data.Probability=v;
+    set Probability(v:string){
+      this.data.Probability=parseFloat(v);
       if(this.data.Probability !== this.oldData.Probability){
         this.isDataChanged = true;
       } else {
@@ -51,5 +52,5 @@ export default class ProbabilityTable extends BClass<ProbTable>{
     }
     get Selected(){
       return false;
-    }    
+    }
 }
