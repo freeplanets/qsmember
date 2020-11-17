@@ -112,7 +112,10 @@ export class CGame {
             ],
             BTCHash: [
                 
-            ]
+            ],
+            HashSix:[
+
+            ],
         }
     constructor(){
         this.member={}
@@ -279,7 +282,7 @@ export class CGame {
             return {};
         }
         if(!this.member[sBT].member[sNum]){
-            console.log('no perstep:',sBT,sNum,this.member[sBT]);
+            //console.log('no perstep:',sBT,sNum,this.member[sBT]);
             return {};
         }    
         const tmp:IOdds=this.member[sBT].member[sNum];

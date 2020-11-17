@@ -511,7 +511,7 @@ const PayRateData:BetTypeParam = {
               '65':[{ Title: '三粒任中' }],
               '66':[{ Title: '四粒任中' }],
               '67':[{ Title: '五粒任中' }],
-              '68':[{ Title: '龍虎',isTwoSide:true}],           
+              '68':[{ Title: '龍虎',Num:[0,1,10,11,20,21,30,31,40,41,50,51]}],           
               '53':[{ Title: '六碼', SubTitle: '單0大0' ,Num:[0,13,14,27] },
                     { Title: '六碼', SubTitle: '單1大1' ,Num:[1,12,15,26] },
                     { Title: '六碼', SubTitle: '單2大2' ,Num:[2,11,16,25] },

@@ -2,7 +2,7 @@ import {BetHeader, SelectOptions,INumData,IBetContent} from '../data/if'
 import Vue from 'vue';
 export const chkColor = (v:number,GType:string,chkExt:number|undefined=undefined)=>{
     //console.log('chkColor:',v,GType,chkExt);
-    if(GType != 'MarkSix'){
+    if(GType != 'MarkSix' && GType != 'HashSix'){
         return chkColorOther(v,GType)
         //return 'RedWav'
     } 
@@ -15,7 +15,11 @@ export const chkColor = (v:number,GType:string,chkExt:number|undefined=undefined
       if(chkExt===0){
         //let color=['RedWavTxt','GreenWavTxt','BlueWavTxt']
         return color[v % 10]
-      } else {           
+      } else {  
+        //if(GType=='HashSix') console.log('chkColor:',v,Math.floor(v/4),color[Math.floor(v/4)]);
+        if(v>=100){
+            v=v % 100;
+        }
         return color[Math.floor(v/4)]
       }
     }
@@ -29,7 +33,7 @@ export const chkColor = (v:number,GType:string,chkExt:number|undefined=undefined
     let color=['GreenWav','RedWav','RedWav','BlueWav','BlueWav','GreenWav']
     let key= Math.floor((v-1) / 10)
     let c = color[(v + key) % 6 ]
-    return c+ext
+    return v==0 ? 'GreenWav' : c+ext;
 };
 const chkColorOther=(v,GType)=>{
     let Blue = 'blue_ball'
@@ -68,9 +72,9 @@ export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle?:boolean)
         //if(bt==1) return V.$t('Game.Cars.Item.' + bt +'.sctitle[' + h +']') + ' ' + n 
         //return V.$t('Game.Cars.Item.' + bt +'.sctitle[' + h +']') + V.$t('Game.Cars.Item.' + bt +'.subTitle[' + n +']')
     }
-    if(V.GType=='MarkSix' && bt==53) return Num7(bt,num,V)
-    if((V.GType=='MarkSix' && bt==15) || (V.GType==='BTCHash' && bt==47)) return NumPass(V.GType,num,V,showScTitle,bt)
-    if(V.GType=='MarkSix' && bt==68) return DragonTiger(bt,num,V) /* 龍虎 */
+    if((V.GType=='MarkSix' || V.GType=='HashSix') && bt==53) return Num7(bt,num,V)
+    if(((V.GType=='MarkSix' || V.GType=='HashSix') && bt==15) || (V.GType==='BTCHash' && bt==47)) return NumPass(V.GType,num,V,showScTitle,bt)
+    if((V.GType=='MarkSix' || V.GType=='HashSix') && bt==68) return DragonTiger(bt,num,V) /* 龍虎 */
     //let subtt = V.$t('Game.'+V.GType+'.Item.' + bt +'.subTitle')
     let btitem = V.$t('Game.'+V.GType+'.Item.' + bt)
     if(showScTitle){
@@ -88,8 +92,11 @@ export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle?:boolean)
     //let subT = V.$t('Game.' + V.GType + '.Item.'+bt+'.subtitle').length
     if(typeof(btitem.subtitle)!='undefined'){
       let ext = num % btitem.subtitle.length
-      if((V.GType==='MarkSix' && bt==14) || V.GType==='Happy') {
-          ext = num % 10
+      if(((V.GType=='MarkSix' || V.GType=='HashSix')  && bt==14) || V.GType==='Happy') {
+          ext = num % 10;
+      }
+      if(V.GType=='HashSix'  && (bt>=82 && bt<=88)){
+          ext = num % 100;
       }
       if(typeof(btitem.shortT)!='undefined'){
           exTitle = btitem.shortT + btitem.subtitle[ext]
@@ -108,17 +115,19 @@ export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle?:boolean)
     if(V.GType=='Cars'){
         return n
     } 
-    if(num<10 && (V.GType=='MarkSix' || V.GType=="Happy8" || dgt==2)) return '0'+num
+    if(num<10 && (V.GType=='MarkSix' || V.GType=='HashSix' || V.GType=="Happy8" || dgt==2)) return '0'+num
     return num
 };
 const Num7=function(bt,num,V){
-    let t = Math.floor(num/8)
-    let n = num % 8
+    let base = 8;
+    if(V.GType === 'HashSix') base = 7;
+    let t = Math.floor(num/base);
+    let n = num % base;
     return V.$t(`Game.MarkSix.Item.${bt}.subtitle.${t}`) + n
 };
 const NumPass=function(GType,num,V,sct,bt){
     let base=10;
-    if(GType==='MarkSix') base=100;
+    if(GType==='MarkSix' || GType=='HashSix') base=100;
     let t = Math.floor(num/base);
     let n = num % 10
     /*
@@ -310,9 +319,9 @@ export function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1
             return tmp1+tmp2;
         } 
     }
-    if(GType=='MarkSix' && bt==53) return Num7(bt,num,V)
-    if(GType=='MarkSix' && bt==15 || (GType==='BTCHash' && bt==47)) return NumPass(GType,num,V,showScTitle,bt)
-    if(GType=='MarkSix' && bt==68) return DragonTiger(bt,num,V) /* 龍虎 */
+    if((GType=='MarkSix' || GType=='HashSix') && bt==53) return Num7(bt,num,V)
+    if((GType=='MarkSix' || GType=='HashSix') && bt==15 || (GType==='BTCHash' && bt==47)) return NumPass(GType,num,V,showScTitle,bt)
+    if((GType=='MarkSix' || GType=='HashSix') && bt==68) return DragonTiger(bt,num,V) /* 龍虎 */
     //let subtt = V.$t('Game.'+GType+'.Item.' + bt +'.subTitle')
     const tmpT:any=V.$t('Game.'+GType+'.Item.' + bt);
     const btitem:BtN = tmpT as BtN;
@@ -348,7 +357,7 @@ export function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1
     if(GType=='Cars'){
         return n
     } 
-    if(num<10 && (GType=='MarkSix' || GType=="Happy8" || dgt==2)) return '0'+num
+    if(num<10 && (GType=='MarkSix' || GType == 'HashSix' || GType=="Happy8" || dgt==2)) return '0'+num
     return num
 };
 export function NoSientificNotation(v:number):string{

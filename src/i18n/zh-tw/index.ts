@@ -1227,8 +1227,7 @@ export default {
           { title: '色波', SubMenu: [] },
           { title: '半波', SubMenu: [] },
           { title: '生肖', SubMenu: [] },
-          { title: '合肖', SubMenu: [] },
-          { title: '生肖連', SubMenu: [] },
+          { title: '正碼特生肖', SubMenu: [] },
           { title: '六碼', SubMenu: [] },
           { title: '正碼過關', SubMenu: [] },
           { title: '其他', SubMenu: [] }

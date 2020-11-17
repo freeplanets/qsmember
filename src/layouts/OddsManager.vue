@@ -90,7 +90,7 @@
                                         :Odds="getOdds(nItm.BT,nItm.Num)"
                                         :ExtOdds="Game.getOdds(nItm.BT,nItm.Num,(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
                                         :rightLine="nidx==(LItm.length-1)"
-                                        :bottomLine="Lidx==(LItm.length-1) || nidx==9 || (lnItem[Lidx+1] && lnItem[Lidx+1][nidx].BT<0)"
+                                        :bottomLine="Lidx==(LItm.length-1) || nidx==9 || (lnItem[Lidx+1] && lnItem[Lidx+1][nidx] && lnItem[Lidx+1][nidx].BT<0)"
                                         :GType="curGType"
                                         :colorWave="BItm.colorWave"
                                         :colorExt="BItm.colorExt"
@@ -130,9 +130,45 @@
                                 v-for="(BT,idx) in BItm.aBT"
                                 :key="'BTab'+idx"                                
                                 :name="'tab'+BT">
-                                <div v-if="BItm.item && typeof(BItm.item)==='function'">
+                                <div v-if="BItm.item && typeof(BItm.item)==='function' && !BItm.Position">
+                                    <div class='row justify-left'
+                                        v-for="(LItm,Lidx) in tmpItem=BItm.item(BT,BItm.end,BItm.start)"
+                                        :key="BT+'bitm'+Lidx"
+                                    >
+                                        <div class='col-10 col-md-1'
+                                            v-for="(nItm,nidx) in LItm"
+                                            :key="BT+'litm'+nidx"
+                                        >
+                                            <OB 
+                                                :store="store"
+                                                :tid="curTid"
+                                                :GameID="curGameID"
+                                                :dgt="BItm.dgt"
+                                                :Odds="getOdds(nItm.BT,nItm.Num)"
+                                                :ExtOdds="Game.getOdds(nItm.BT,nItm.Num,(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
+                                                :rightLine="nidx==(LItm.length-1)"
+                                                :bottomLine="Lidx==(tmpItem.length-1) || (nidx==9 && (tmpItem[Lidx+1] && tmpItem[Lidx+1].length<10))"
+                                                :GType="curGType"
+                                                :colorWave="BItm.colorWave"
+                                                :colorExt="BItm.colorExt"
+                                                @OddChange="getCurOdds"></OB>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="BItm.item && typeof(BItm.item)==='function' && BItm.Position ">
+                                    <q-btn-group outline>
+                                        <q-btn 
+                                            v-for="(pos,pidx) in BItm.Position"
+                                            :key="'pidx'+pidx"
+                                            outline 
+                                            color="brown" 
+                                            :label="$t(`Game.${curGType}.Item.${BT}.sctitle.${pos}`)" 
+                                            :icon="BItm.PosSelected && BItm.PosSelected[idx]== pos ? 'done' : ''" 
+                                            @click="BItm.PosSelected ? BItm.PosSelected[idx]=pos : BItm.PosSelected=[1,1,1,1,1,1]"
+                                            />
+                                    </q-btn-group>
                                 <div class='row justify-left'
-                                    v-for="(LItm,Lidx) in tmpItem=BItm.item(BT,BItm.end,BItm.start)"
+                                    v-for="(LItm,Lidx) in tmpItem=BItm.item(BT,BItm.start,BItm.end,BItm.PosSelected ? BItm.PosSelected[idx] : false)"
                                     :key="BT+'bitm'+Lidx"
                                 >
                                     <div class='col-10 col-md-1'
@@ -140,6 +176,7 @@
                                         :key="BT+'litm'+nidx"
                                     >
                                         <OB 
+                                            v-if="nItm.BT==BT && BItm.PosSelected && nItm.Position===BItm.PosSelected[idx]"
                                             :store="store"
                                             :tid="curTid"
                                             :GameID="curGameID"
@@ -153,7 +190,7 @@
                                             :colorExt="BItm.colorExt"
                                             @OddChange="getCurOdds"></OB>
                                     </div>
-                                </div>
+                                </div>                                    
                                 </div>
                             </q-tab-panel>
                         </q-tab-panels>

@@ -276,7 +276,8 @@ export default class Probability extends Vue {
             UserID:this.PInfo.id,
             sid:this.PInfo.sid,
             ModifyID: this.PInfo.id,        
-            data: JSON.stringify(data)
+            data: JSON.stringify(data),
+            GType: this.GType
         }
         const msg:IMsg=await this.store.ax.getApi('SaveDfOddsItem',param,'post');
         if(msg.ErrNo===0){
