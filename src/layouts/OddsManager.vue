@@ -160,10 +160,8 @@
                                         <q-btn 
                                             v-for="(pos,pidx) in BItm.Position"
                                             :key="'pidx'+pidx"
-                                            outline 
-                                            color="brown" 
+                                            :color="BItm.PosSelected && BItm.PosSelected[idx]== pos ? 'amber' : 'secondary'" 
                                             :label="$t(`Game.${curGType}.Item.${BT}.sctitle.${pos}`)" 
-                                            :icon="BItm.PosSelected && BItm.PosSelected[idx]== pos ? 'done' : ''" 
                                             @click="BItm.PosSelected ? BItm.PosSelected[idx]=pos : BItm.PosSelected=[1,1,1,1,1,1]"
                                             />
                                     </q-btn-group>

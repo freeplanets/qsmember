@@ -101,7 +101,7 @@ const getNums = (BT:number,lastNums?:number,startAt?:number,extF?:number,addArr?
         addArr.map(lnObj=>{
             nums.push(lnObj);
         })
-        console.log('getNums:',nums);
+        //console.log('getNums:',nums);
     }
     return nums;
 }
