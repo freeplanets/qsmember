@@ -48,7 +48,7 @@
                 <td :class="{test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.Title }}</td>
                 <td :class="{test:true,bgc:itm.Selected}" @click="itm.Selected=!itm.Selected">{{ itm.SubTitle }}</td>
                 <td :class="{'test':true,redColor:itm.Profit<0}">{{ itm.Profit }}</td>
-                <td class="test"><input type="text" size='4' v-model="itm.Rate" @change="chkItem(itm)" /></td>
+                <td class="test"><input type="text" size='4' v-model="itm.Rate" @change="chkItem(itm)" @blur="itm.setToStep()" /></td>
                 <td class="test"><input type="text" size='4' v-model="itm.TopRate"  /></td>
                 <td class="test">{{itm.ProbabilityS}}</td>
                 <td class="test"><input type="text" size='4' v-model="itm.TotalNums" /></td>
@@ -515,7 +515,7 @@ export default class BetClass extends Vue{
     }
     */
     chkItem(itm){
-        console.log('chkItem',itm.BetType,this.spArr);
+        //console.log('chkItem',itm.BetType,this.spArr);
         if(this.spArr){
             const f = this.spArr.find(bt=>bt===itm.BetType)
             if(f){

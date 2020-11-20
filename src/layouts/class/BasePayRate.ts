@@ -1,6 +1,7 @@
 import BClass from './BClass';
 import {fixlen,NoSientificNotation} from '../components/func';
 import {StepG} from '../data/if';
+import { timeStamp } from 'console';
 /*
 interface T {
     [n:string]: string | number | undefined;
@@ -87,7 +88,8 @@ export class BasePayRate<T>{
     set Rate(v:number | undefined) {
         v=this.checkNum(v);
         if((v || v===0) && v<=0) return;
-        this.data.DfRate = this.fetchValueToSteps(v);
+        //this.data.DfRate = this.fetchValueToSteps(v);
+        this.data.DfRate = v;
         if(this.data.TopRate > 0 && this.data.DfRate > this.data.TopRate){
             this.data.DfRate = this.data.TopRate;
         }
@@ -317,9 +319,12 @@ export class BasePayRate<T>{
             this.Steps = this.PerStep * v;
         }
     }
+    setToStep(){
+        this.Rate = this.fetchValueToSteps(this.Rate);
+    }
     protected fetchValueToSteps(v:number|undefined){
         if(v){
-            if(this.data.PerStep){
+            if(this.data.PerStep ){
                 //v=parseFloat(v.toPrecision(6));
                 if(this.data.PerStep <=0) return v;
                 //if(typeof v ==='string') v=parseFloat(v);
