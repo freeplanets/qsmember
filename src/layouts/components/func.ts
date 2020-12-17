@@ -55,7 +55,7 @@ const chkColorOther=(v,GType)=>{
 export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle?:boolean)=>{
     let n = V.GType==='Happy' && bt===1 ? num % 100 : num % 10;
     let h 
-    if(num > 100 && V.GType != 'Cars'){
+    if(num >= 100 && V.GType != 'Cars'){
         h=Math.floor(num/100)
     } else {
         h=Math.floor(num/10)
@@ -110,7 +110,7 @@ export const itemName=(bt:number,num:number,V,dgt:number=1,showScTitle?:boolean)
       return padingZero(num,dgt)
     }
     //if(num > 100 && typeof(dgt)=='undefined') num = num % 100
-    if(num > 100 ) num = num % 100
+    if(num >= 100 ) num = num % 100
     if(V.GType=='Always') return num %10
     if(V.GType=='Cars'){
         return n
@@ -300,7 +300,7 @@ export function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1
     //console.log('itemName:',bt,num,V.GType);
     let n = GType==='Happy' && bt===1 ? num % 100 : num % 10;
     let h;
-    if(num > 100 && GType != 'Cars'){
+    if(num >= 100 && GType != 'Cars'){
         h=Math.floor(num/100)
     } else {
         h=Math.floor(num/10)
@@ -338,9 +338,17 @@ export function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1
     //let subT = V.$t('Game.' + GType + '.Item.'+bt+'.subtitle').length
     if(btitem.subtitle){
       let ext = num % btitem.subtitle.length
+      /*
       if(GType=='MarkSix' && bt==14) {
           ext = num % 10
       }
+      */
+      if(((GType=='MarkSix' || GType=='HashSix')  && bt==14) || GType==='Happy') {
+        ext = num % 10;
+      }
+      if(GType=='HashSix'  && (bt>=82 && bt<=88)){
+        ext = num % 100;
+      }      
       if(btitem.shortT){
           exTitle = btitem.shortT + btitem.subtitle[ext]
       } else {
@@ -352,7 +360,7 @@ export function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1
     if(dgt>1){
       return padingZero(num,dgt)
     }
-    if(num > 100 && typeof(dgt)=='undefined') num = num % 100
+    if(num >= 100 && typeof(dgt)=='undefined') num = num % 100
     if(GType=='Always') return num %10
     if(GType=='Cars'){
         return n
