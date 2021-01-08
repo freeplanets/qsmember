@@ -348,12 +348,15 @@ export function itemNameNew(GType:string,bt:number,num:number,V:Vue,dgt:number=1
       }
       if(GType=='HashSix'  && (bt>=82 && bt<=88)){
         ext = num % 100;
-      }      
+      } 
+      /*     
       if(btitem.shortT){
           exTitle = btitem.shortT + btitem.subtitle[ext]
       } else {
         exTitle = btitem.subtitle[ext]
       }
+      */
+      exTitle = btitem.subtitle[ext]
       //exTitle = V.$t('Game.' + GType + '.Item.'+bt+'.shortT') + V.$t('Game.' + GType + '.Item.'+bt+'.subtitle.' + ext)
       return exTitle
     }

@@ -230,7 +230,7 @@ export default class BetLists extends Vue {
         this.TStatus.push(so);
       })
       this.sltedTS=this.TStatus[0];
-      console.log('BetLists mounted',this.TStatus);
+      //console.log('BetLists mounted',this.TStatus);
   }
 }
 </script>

@@ -360,7 +360,7 @@ export class AxApi {
     }
     doPost(url:string,param:CommonParams|ITerms):Promise<IMsg>{
         //const config:AxiosRequestConfig = {}
-        console.log('doPost',url,param);
+        //console.log('doPost',url,param);
         let msg:IMsg={ErrNo:0};
         return new Promise((resolve,reject)=>{
             axios.post(url,param).then((res:AxiosResponse)=>{

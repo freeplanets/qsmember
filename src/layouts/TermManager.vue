@@ -539,7 +539,7 @@ export default class TermManager extends Vue {
                     this.setCurGType(this.models.GType ? this.models.GType : '')
                 }
             }
-            console.log('getGameType:',this.GTypes);
+            //console.log('getGameType:',this.GTypes);
         }
     }
     getToday(){

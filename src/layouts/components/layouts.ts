@@ -1938,6 +1938,340 @@ const HashSix:Layout=[
         ]
     } //title: '其他', SubMenu: []
 ]
+
+const SGPools:Layout=[
+    { 
+        name: "Game.HashSix.Menu.Group.0.title",
+        cont:[
+            {
+                colorWave: true,
+                aBT: [4,21,22,23,24,25,26],
+                sltedItem:0,
+                start: 0,
+                end:49,
+                item: getNums
+            }
+        ]
+    }, // title: '正碼', BT: 4, SubItem: [], SubMenu: []
+    { 
+        name: "Game.HashSix.Menu.Group.2.title", 
+        cont:[
+            {
+                aBT: [9,7,8,79,80,81],
+                twOdds:[0,0,1,1,1,1],
+                sltedItem:0,
+                start: 0,
+                end:49,
+                item: getNums
+            }
+        ]
+    }, //title: '連碼', SubMenu: [] 6+9+55555+32+
+    { 
+        name: "Game.HashSix.Menu.Group.3.title", 
+        cont:[
+            {
+                aBT: [31,48,49,50,51,52],
+                sltedItem:0,
+                start: 0,
+                end:49,
+                item: getNums
+            }            
+        ]
+    }, //title: '不中', SubMenu: []
+    { 
+        name: "Game.HashSix.Menu.Group.4.title", 
+        cont:[
+            {
+                aBT: [71,57,58,59,60,61,62,63,64,65,66,67],
+                sltedItem:0,
+                start: 0,
+                end:49,
+                item: getNums
+            }             
+        ]
+    }, // title: '多選', SubMenu: [] 
+    { 
+        name: "Game.HashSix.Menu.Group.5.title", 
+        cont:[
+            {
+                aBT: [20,38,39,40,46,41,42,43,47,70],
+                sltedItem:0,
+                start: 0,
+                end:9,
+                item: getNums
+            }             
+        ]
+    }, //title: '尾數', SubMenu: []
+    { 
+        name: "Game.HashSix.Menu.Group.6.title", 
+        cont:[
+            {
+                title : "Game.HashSix.Item.21.title",
+                colorWave: true,
+                colorExt: 0,                
+                item:[
+                    [{BT:14,Num:10},{BT:14,Num:11},{BT:14,Num:12}]
+                ]
+            },            
+            {
+                title : "Game.HashSix.Item.22.title",
+                colorWave: true,
+                colorExt: 0,                
+                item:[
+                    [{BT:14,Num:20},{BT:14,Num:21},{BT:14,Num:22}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.23.title",
+                colorWave: true,
+                colorExt: 0,
+                item:[
+                    [{BT:14,Num:30},{BT:14,Num:31},{BT:14,Num:32}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.24.title",
+                colorWave: true,
+                colorExt: 0,
+                item:[
+                    [{BT:14,Num:40},{BT:14,Num:41},{BT:14,Num:42}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.25.title",
+                colorWave: true,
+                colorExt: 0,
+                item:[
+                    [{BT:14,Num:50},{BT:14,Num:51},{BT:14,Num:52}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.26.title",
+                colorWave: true,
+                colorExt: 0,
+                item:[
+                    [{BT:14,Num:60},{BT:14,Num:61},{BT:14,Num:62}]
+                ]
+            },
+        ]
+    }, //title: '色波', SubMenu: []
+    { 
+        name: "Game.HashSix.Menu.Group.7.title", 
+        cont:[
+            {
+                title : "Game.HashSix.Item.21.title",
+                colorWave: true,
+                colorExt: 1,    
+                item:[
+                    [{BT:82,Num:100},{BT:82,Num:101},{BT:82,Num:102},{BT:82,Num:103}],
+                    [{BT:82,Num:104},{BT:82,Num:105},{BT:82,Num:106},{BT:82,Num:107}],
+                    [{BT:82,Num:108},{BT:82,Num:109},{BT:82,Num:110},{BT:82,Num:111}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.22.title",
+                colorWave: true,
+                colorExt: 1,    
+                item:[
+                    [{BT:82,Num:200},{BT:82,Num:201},{BT:82,Num:202},{BT:82,Num:203}],
+                    [{BT:82,Num:204},{BT:82,Num:205},{BT:82,Num:206},{BT:82,Num:207}],
+                    [{BT:82,Num:208},{BT:82,Num:209},{BT:82,Num:210},{BT:82,Num:211}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.23.title",
+                colorWave: true,
+                colorExt: 1,    
+                item:[
+                    [{BT:82,Num:300},{BT:82,Num:301},{BT:82,Num:302},{BT:82,Num:303}],
+                    [{BT:82,Num:304},{BT:82,Num:305},{BT:82,Num:306},{BT:82,Num:307}],
+                    [{BT:82,Num:308},{BT:82,Num:309},{BT:82,Num:310},{BT:82,Num:311}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.24.title",
+                colorWave: true,
+                colorExt: 1,    
+                item:[
+                    [{BT:82,Num:400},{BT:82,Num:401},{BT:82,Num:402},{BT:82,Num:403}],
+                    [{BT:82,Num:404},{BT:82,Num:405},{BT:82,Num:406},{BT:82,Num:407}],
+                    [{BT:82,Num:408},{BT:82,Num:409},{BT:82,Num:410},{BT:82,Num:411}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.25.title",
+                colorWave: true,
+                colorExt: 1,    
+                item:[
+                    [{BT:82,Num:500},{BT:82,Num:501},{BT:82,Num:502},{BT:82,Num:503}],
+                    [{BT:82,Num:504},{BT:82,Num:505},{BT:82,Num:506},{BT:82,Num:507}],
+                    [{BT:82,Num:508},{BT:82,Num:509},{BT:82,Num:510},{BT:82,Num:511}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.26.title",
+                colorWave: true,
+                colorExt: 1,    
+                item:[
+                    [{BT:82,Num:600},{BT:82,Num:601},{BT:82,Num:602},{BT:82,Num:603}],
+                    [{BT:82,Num:604},{BT:82,Num:605},{BT:82,Num:606},{BT:82,Num:607}],
+                    [{BT:82,Num:608},{BT:82,Num:609},{BT:82,Num:610},{BT:82,Num:611}]
+                ]
+            },
+        ]
+    }, //title: '半波', SubMenu: []
+    { 
+        name: "Game.HashSix.Menu.Group.8.title", 
+        cont:[
+            {
+                aBT:[19,32,33,34,44,69,35,36,37,45],
+                sltedItem: 0,
+                start: 1,
+                end:12,
+                item: getNums
+            }
+        ]
+    }, //title: '生肖', SubMenu: []
+    { 
+        name: "Game.HashSix.Menu.Group.9.title", 
+        cont:[
+            {
+                aBT:[83,84,85,86,87,88],
+                sltedItem: 0,
+                start: 1,
+                end:12,
+                Position: [1,2,3,4,5,6],
+                PosSelected:[1,1,1,1,1,1],
+                item: getAZNums
+            }
+        ]
+    }, //title: '正碼特生肖', SubMenu: []
+    { 
+        name: "Game.HashSix.Menu.Group.10.title", 
+        cont:[
+            {
+                item:[
+                    [{BT:53,Num:0},{BT:53,Num:13},{BT:53,Num:14},{BT:53,Num:27}],
+                    [{BT:53,Num:1},{BT:53,Num:12},{BT:53,Num:15},{BT:53,Num:26}],
+                    [{BT:53,Num:2},{BT:53,Num:11},{BT:53,Num:16},{BT:53,Num:25}],
+                    [{BT:53,Num:3},{BT:53,Num:10},{BT:53,Num:17},{BT:53,Num:24}],
+                    [{BT:53,Num:4},{BT:53,Num:9},{BT:53,Num:18},{BT:53,Num:23}],
+                    [{BT:53,Num:5},{BT:53,Num:8},{BT:53,Num:19},{BT:53,Num:22}],
+                    [{BT:53,Num:6},{BT:53,Num:7},{BT:53,Num:20},{BT:53,Num:21}]
+                ]
+            }
+        ]
+    }, //title: '六碼', SubMenu: []
+    { 
+        name: "Game.HashSix.Menu.Group.11.title", 
+        cont:[
+            {
+                title : "Game.MarkSix.Item.21.title",
+                item:[
+                    [{BT:15,Num:1210},{BT:15,Num:1211},{BT:15,Num:1310},{BT:15,Num:1311}],
+                    [{BT:15,Num:1410},{BT:15,Num:1411},{BT:15,Num:1412}],
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.22.title",
+                item:[
+                    [{BT:15,Num:1220},{BT:15,Num:1221},{BT:15,Num:1320},{BT:15,Num:1321}],
+                    [{BT:15,Num:1420},{BT:15,Num:1421},{BT:15,Num:1422}],
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.23.title",
+                item:[
+                    [{BT:15,Num:1230},{BT:15,Num:1231},{BT:15,Num:1330},{BT:15,Num:1331}],
+                    [{BT:15,Num:1430},{BT:15,Num:1431},{BT:15,Num:1432}],
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.24.title",
+                item:[
+                    [{BT:15,Num:1240},{BT:15,Num:1241},{BT:15,Num:1340},{BT:15,Num:1341}],
+                    [{BT:15,Num:1440},{BT:15,Num:1441},{BT:15,Num:1442}],
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.25.title",
+                item:[
+                    [{BT:15,Num:1250},{BT:15,Num:1251},{BT:15,Num:1350},{BT:15,Num:1351}],
+                    [{BT:15,Num:1450},{BT:15,Num:1451},{BT:15,Num:1452}],
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.26.title",
+                item:[
+                    [{BT:15,Num:1260},{BT:15,Num:1261},{BT:15,Num:1360},{BT:15,Num:1361}],
+                    [{BT:15,Num:1460},{BT:15,Num:1461},{BT:15,Num:1462}],
+                ]
+            }            
+        ]
+    }, //title: '正碼過關', SubMenu: []
+    { 
+        name: "Game.HashSix.Menu.Group.12.title", 
+        cont:[
+            ///*  五行
+            {
+                title : "Game.HashSix.Item.21.title",
+                item:[
+                    [{BT:89,Num:10},{BT:89,Num:11},{BT:89,Num:12},{BT:89,Num:13},{BT:89,Num:14}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.22.title",
+                item:[
+                    [{BT:89,Num:20},{BT:89,Num:21},{BT:89,Num:22},{BT:89,Num:23},{BT:89,Num:24}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.23.title",
+                item:[
+                    [{BT:89,Num:30},{BT:89,Num:31},{BT:89,Num:32},{BT:89,Num:33},{BT:89,Num:34}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.24.title",
+                item:[
+                    [{BT:89,Num:40},{BT:89,Num:41},{BT:89,Num:42},{BT:89,Num:43},{BT:89,Num:44}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.25.title",
+                item:[
+                    [{BT:89,Num:50},{BT:89,Num:51},{BT:89,Num:52},{BT:89,Num:53},{BT:89,Num:54}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.26.title",
+                item:[
+                    [{BT:89,Num:60},{BT:89,Num:61},{BT:89,Num:62},{BT:89,Num:63},{BT:89,Num:64}]
+                ]
+            },
+            //*/
+            {
+                title : "Game.HashSix.Item.68.title",
+                item:[
+                    [{BT:68,Num:0},{BT:68,Num:10},{BT:68,Num:20},{BT:68,Num:30},{BT:68,Num:40},{BT:68,Num:50}],
+                    [{BT:68,Num:1},{BT:68,Num:11},{BT:68,Num:21},{BT:68,Num:31},{BT:68,Num:41},{BT:68,Num:51}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.55.title",
+                item:[
+                    [{BT:55,Num:0},{BT:55,Num:1},{BT:55,Num:2},{BT:55,Num:3},{BT:55,Num:4}]
+                ]
+            },
+            {
+                title : "Game.HashSix.Item.56.title",
+                item:[
+                    [{BT:56,Num:0},{BT:56,Num:1},{BT:56,Num:2},{BT:56,Num:3},{BT:56,Num:4}]
+                ]
+            }
+        ]
+    } //title: '其他', SubMenu: []
+]
 const Layouts:ILayouts= {}
 Layouts.MarkSix = MarkSixLayout;
 Layouts['3D'] = D3;

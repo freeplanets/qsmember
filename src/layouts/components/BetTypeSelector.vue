@@ -14,8 +14,8 @@ import {SelectOptions} from '../data/if';
 export default class BetTypeSelector extends Vue {
     @Prop() readonly GType?:string;
     @Watch('GType',{ immediate: true, deep: true })
-    onGTypeChange(val?:number,oldval?:number){
-      console.log('onGTypeChange',this.GType,val,oldval);
+    onGTypeChange(){
+      //console.log('onGTypeChange',this.GType,val,oldval);
       this.getBetTypes();
     }
     models:SelectOptions = {value: 0,label:''};
@@ -34,7 +34,7 @@ export default class BetTypeSelector extends Vue {
         this.options.push({value:0,label:'ALL'});
         if(this.GType){
           const bts=this.$t(`Game.${this.GType}.Item`);
-          console.log('getBetTypes',bts);
+          //console.log('getBetTypes',bts);
           Object.keys(bts).map(idx=>{
             const tmp:SelectOptions={
               value:parseInt(idx,10),

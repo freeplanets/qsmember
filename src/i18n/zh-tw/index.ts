@@ -91,7 +91,8 @@ export default {
       Speed3 : '骰寶',
       Happy8 : '快樂8',
       BTCHash : '比特 5D',
-      HashSix : '比特 506'
+      HashSix : '比特 506',
+      SGPools : '萬字票',
     },
     PlsSlt: '請選擇....',
     BTCHashDataAna:'雜湊數分析'
@@ -1434,6 +1435,49 @@ export default {
           '六'
         ]
       }
+    },
+    SGPools: {
+      Menu: {
+        Group: [
+          { title: '2D', SubItem: [] },
+          { title: '3D', SubItem: [], SubMenu: [] },
+          { title: '4D', SubItem: [], SubMenu: [] },
+          { title: '連碼', SubMenu: [] },
+          { title: '連碼', SubMenu: [] }
+        ]
+      },
+      Item: {
+        '1': {title: '2D-一獎',shortT:"一獎"},
+        '2': {title: '2D-二獎'},
+        '3': {title: '2D-三獎'},
+        '4': {title: '3D-一獎'},
+        '5': {title: '3D-二獎'},
+        '6': {title: '3D-三獎'},
+        '7': {title: '4D-一獎'},
+        '8': {title: '4D-二獎'},
+        '9': {title: '4D-三獎'},        
+        '10': { title: '2D-23組'},
+        '11': { title: '3D-23組'},
+        '12': { title: '4D-23組'},
+        '13': { title: '二星'},
+        '14': { title: '三星' },
+        '15': { title: '四星' },
+        '16': { title: '2D頭-一獎' },
+        '17': { title: '2D頭-二獎' },
+        '18': { title: '2D頭-三獎' },
+        '19': { title: '2D頭-23組' },
+        '20': { title: '2D不中-5不中' },
+        '21': { title: '2D不中-6不中' },
+        '22': { title: '2D不中-7不中' },
+        '23': { title: '2D不中-8不中' },
+        '24': { title: '2D不中-9不中' },
+        '25': { title: '2D不中-10不中' }
+      },
+      Ball: [
+        '',    '第一球', '第二球',
+        '第三球', '第四球', '第五球',
+        '第六球', '第七球', '第八球'
+      ]
     }    
   }
 }
