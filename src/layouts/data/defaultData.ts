@@ -6,6 +6,7 @@ export interface CondOfBetType {
     UserOtherBTOdds?:boolean;
     SubTypeAsNum?:boolean;                   //所有號不同SubType 用 Num
     Digital?:number;
+    Position?:number[];
 }
 export interface GameOfCond {
     [key:string]:CondOfBetType;
@@ -64,31 +65,35 @@ const BaseOddsItem:AllOfGame = {
         '47': {Min:0,Max:1,SameAsDigitalOrder:false,UserOtherBTOdds:true}    // [{Title: '兩面過關'}][1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
     },
     SGPools: {
-        '1': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  //[{ Title: '2D-一獎' }],
-        '2': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  //[{ Title: '2D-二獎' }],
-        '3': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '2D-三獎' }],
-        '4': {Min:0,Max:999,SameAsDigitalOrder:true,Digital:3},  // [{ Title: '3D-一獎' }],
-        '5': {Min:0,Max:999,SameAsDigitalOrder:true,Digital:3},  // [{ Title: '3D-二獎' }],
-        '6': {Min:0,Max:999,SameAsDigitalOrder:true,Digital:3},  // [{ Title: '3D-三獎' }],
-        '7': {Min:0,Max:9999,SameAsDigitalOrder:true,Digital:4},  // [{ Title: '4D-一獎' }],
-        '8': {Min:0,Max:9999,SameAsDigitalOrder:true,Digital:4},  // [{ Title: '4D-二獎' }],
-        '9': {Min:0,Max:9999,SameAsDigitalOrder:true,Digital:4},  // [{ Title: '4D-三獎' }],
-        '10': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '2D-23組' }],
-        '11': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '3D-23組' }],
-        '12': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '4D-23組' }],
-        '13': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '二星' }],
-        '14': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '三星' }],
-        '15': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '四星' }],
-        '16': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '2D頭-一獎' }],
-        '17': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '2D頭-二獎' }],
-        '18': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '2D頭-三獎' }],
-        '19': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '2D頭-23組' }],
-        '20': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '2D不中-5不中' }],
-        '21': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '2D不中-6不中' }],
-        '22': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '2D不中-7不中' }],
-        '23': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '2D不中-8不中' }],
-        '24': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '2D不中-9不中' }],
-        '25': {Min:0,Max:99,SameAsDigitalOrder:true,Digital:2},  // [{ Title: '2D不中-10不中' }]      
+        '1': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  //[{ Title: '2D-一獎' }],
+        '2': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  //[{ Title: '2D-二獎' }],
+        '3': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '2D-三獎' }],
+        '4': {Min:0,Max:999,SameAsDigitalOrder:false,Digital:3},  // [{ Title: '3D-一獎' }],
+        '5': {Min:0,Max:999,SameAsDigitalOrder:false,Digital:3},  // [{ Title: '3D-二獎' }],
+        '6': {Min:0,Max:999,SameAsDigitalOrder:false,Digital:3},  // [{ Title: '3D-三獎' }],
+        '7': {Min:0,Max:9999,SameAsDigitalOrder:false,Digital:4},  // [{ Title: '4D-一獎' }],
+        '8': {Min:0,Max:9999,SameAsDigitalOrder:false,Digital:4},  // [{ Title: '4D-二獎' }],
+        '9': {Min:0,Max:9999,SameAsDigitalOrder:false,Digital:4},  // [{ Title: '4D-三獎' }],
+        '10': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '2D-23組' }],
+        '11': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '3D-23組' }],
+        '12': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '4D-23組' }],
+        '13': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '二星' }],
+        '14': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '三星' }],
+        '15': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '四星' }],
+        '16': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '2D頭-一獎' }],
+        '17': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '2D頭-二獎' }],
+        '18': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '2D頭-三獎' }],
+        '19': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '2D頭-23組' }],
+        '20': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '2D不中-5不中' }],
+        '21': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '2D不中-6不中' }],
+        '22': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '2D不中-7不中' }],
+        '23': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '2D不中-8不中' }],
+        '24': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '2D不中-9不中' }],
+        '25': {Min:0,Max:99,SameAsDigitalOrder:false,Digital:2},  // [{ Title: '2D不中-10不中' }]
+        '26': {Min:0,Max:1,SameAsDigitalOrder:false,Digital:2,Position:[1,2,3]},  //[{ Title: '單雙'}],
+        '27': {Min:0,Max:1,SameAsDigitalOrder:false,Digital:2,Position:[1,2,3]},  //[{ Title: '大小'}],
+        '28': {Min:0,Max:1,SameAsDigitalOrder:false,Digital:2,Position:[1,2,3]},  //[{ Title: '合數單雙'}],
+        '29': {Min:0,Max:1,SameAsDigitalOrder:false,Digital:2,Position:[1,2,3]}   //[{ Title: '合數大小'}]        
     }
 }
 export default BaseOddsItem;

@@ -203,7 +203,7 @@
                                 <div class="row" v-for="(itm,idx) in BItm.FastSlt.subcont" :key="'fast'+idx">
                                     <div>{{itm.title ? $t(itm.title) : ''}}</div>
                                     <div v-for="(slt,sltidx) in  itm.subitem" :key="'fastsub'+idx+'-'+sltidx">
-                                        <q-btn :outline="!slt.isActive" size='sm' class='btn-pad' color="primary" :label="slt.num" @click="BItm.item=(itm.func? itm.func(itm.key,slt.num,BItm.BT):'');setActive(BItm.FastSlt ? BItm.FastSlt.subcont : []);slt.isActive=true"/>
+                                        <q-btn :outline="!slt.isActive" size='sm' class='btn-pad' color="primary" :label="slt.num" @click="(itm.func? itm.func(BItm.PosSlt,itm.key,slt.num,BItm.dgt):'');setActive(BItm.FastSlt ? BItm.FastSlt.subcont : []);slt.isActive=true"/>
                                     </div>
                                 </div>
                             </div>

@@ -116,6 +116,9 @@ export class CGame {
             HashSix:[
 
             ],
+            SGPools:[
+
+            ]
         }
     constructor(){
         this.member={}

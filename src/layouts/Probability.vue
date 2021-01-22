@@ -262,8 +262,16 @@ export default class Probability extends Vue {
             //else {
             //  if(tmp.BetType===33) chkdata.push(tmp);
            //}
-          } 
-          data.push(tmp);
+          }
+          if(itm.Position){
+            itm.Position.map(pos=>{
+              const newtmp=Object.assign({},tmp);
+              newtmp.Num = `${pos}${newtmp.Num}`;
+              data.push(newtmp);
+            })
+          } else { 
+            data.push(tmp);
+          }
         }
       });
       //console.log('chkdata:',chkdata);

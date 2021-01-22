@@ -170,7 +170,7 @@ export default {
   },
   Button: {
     Num: '號碼',
-    FastSlt: '快選',
+    FastSlts: '快選',
     DSP: '雙兩盤',
     More: '更多',
     ClearSlt: '清空選取',
@@ -286,14 +286,16 @@ export default {
     Pair: '對子',
     Hundreds: '百位',
     Tens: '十位',
-    Units: '個位'
+    Units: '個位',
+    Thousands: '千位',
+    TenThousands: '萬位'
   },
   GameTitle : {
     '1' : '六合彩',
     '2': '中國體彩',
     '3': '中國福彩',
     '4': '七星彩',
-    '5': '廣西快樂 10分',
+    '5': '萬字票',
     '6': '上海時時樂',
     '7': '舊重慶時時彩',
     '8': '天津时时彩',
@@ -1439,11 +1441,12 @@ export default {
     SGPools: {
       Menu: {
         Group: [
+          { title: '兩面', SubItem: [] },
           { title: '2D', SubItem: [] },
           { title: '3D', SubItem: [], SubMenu: [] },
           { title: '4D', SubItem: [], SubMenu: [] },
           { title: '連碼', SubMenu: [] },
-          { title: '連碼', SubMenu: [] }
+          { title: '不中', SubMenu: [] }
         ]
       },
       Item: {
@@ -1471,7 +1474,11 @@ export default {
         '22': { title: '2D不中-7不中' },
         '23': { title: '2D不中-8不中' },
         '24': { title: '2D不中-9不中' },
-        '25': { title: '2D不中-10不中' }
+        '25': { title: '2D不中-10不中' },
+        '26': { title: '單雙',sctitle: [ '', '1獎', '2獎', '3獎'],subtitle: [ '單', '雙' ] },
+        '27': { title: '大小',sctitle: [ '', '1獎', '2獎', '3獎'],subtitle: [ '大', '小' ] },
+        '28': { title: '合數單雙',sctitle: [ '', '1獎', '2獎', '3獎'],shortT: '合',subtitle: [ '單', '雙' ] },
+        '29': { title: '合數大小',sctitle: [ '', '1獎', '2獎', '3獎'],shortT: '合',subtitle: [ '大', '小' ] },
       },
       Ball: [
         '',    '第一球', '第二球',
