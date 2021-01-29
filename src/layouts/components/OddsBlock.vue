@@ -1,18 +1,20 @@
 <template>
-    <table :class="{oddblock:true,oddblockRightLine:rightLine,oddblockBottomLine:bottomLine,Stoped:Odds.isStop===1}">
+    <table
+        v-if="Odds && Odds.BT"
+     :class="{oddblock:true,oddblockRightLine:rightLine,oddblockBottomLine:bottomLine,Stoped:Odds.isStop===1}">
         <tr>
             <td class='col nums' :style="'backgroup-color:'+getColor()" v-if="titleLen>5">
                 {{title}}
             </td>
             <td class='col nums' v-if="titleLen<6">
-                <q-btn  round size="sm" :color="getColor()" :label="title" />
+                <q-btn  round size="sm" :color="getColor()" :label="title" @click="showOdds" />
             </td>            
             <td class='col data'>
                 <div class='row' v-if="!EditMode" @dblclick="SwitchMode(Odds.Odds)">
                     <div class='col btnpos'>
                         <q-btn dense style="font-szie:6px" icon="add" @click="setOdds(Odds.BT,Odds.Num,1,Odds.Steps)" />
                     </div>
-                    <div class='col'>{{Odds.Odds}}</div>
+                    <div class='col'>{{parseFloat(Odds.Odds.toFixed(4))}}</div>
                     <div class='col btnpos'>
                         <q-btn dense style="font-szie:6px" icon="remove" @click="setOdds(Odds.BT,Odds.Num,-1,Odds.Steps)" />
                     </div>
@@ -55,7 +57,7 @@
                     <div class='col'>{{Math.round(Odds.tolS)}}</div>
                 </div>
                 <div class='row'>
-                    <div class='col' :class="{redcolor:Odds.Risk ? Odds.Risk<0 : false}">{{Odds.Risk}}</div>
+                    <div class='col' :class="{redcolor:Odds.Risk ? Odds.Risk<0 : false}">{{Odds.Risk===0 ? '' : Odds.Risk}}</div>
                 </div>
             </td>
         </tr>
@@ -64,7 +66,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component';
-import {Prop} from 'vue-property-decorator';
+import {Prop,Watch} from 'vue-property-decorator';
 import {IOdds} from './Games';
 import {chkColor,itemName} from './func';
 import {CommonParams} from '../data/if';
@@ -87,6 +89,13 @@ export default class OddsBlock extends Vue {
     NewOdds1:number=0;
     EditMode1:boolean=false;
     title:string='';
+    @Watch('Odds',{immediate:true,deep:true})
+    onOddsChange(newVal:IOdds,oldVal:IOdds){
+        if(!oldVal || oldVal.BT !== newVal.BT || oldVal.Num !== newVal.Num) {
+            this.getItemName();
+        }
+        //console.log('onTitleChange',oldVal,newVal,this.Odds);
+    }
     titleLen:number=0;
     get digital(){
         if(this.dgt) return this.dgt;
@@ -97,9 +106,11 @@ export default class OddsBlock extends Vue {
         const num=this.Odds ? (this.Odds.Num ? this.Odds.Num : 0) : 0;
         if(this.colorWave || num > 1400){
             const GType=(this.GType? this.GType : '');
-            return chkColor(num,GType,this.colorExt);
+            const clr=chkColor(num,GType,this.colorExt);
+            //console.log(this.Odds.Num,num,clr,this.GType,this.colorWave,this.colorExt)
+            return clr;
         }
-        return 'blue-grey';
+        return 'BlueWav';
     }
     getItemName(){
         const num=this.Odds ? (this.Odds.Num ? this.Odds.Num : 0) : 0;  
@@ -109,6 +120,7 @@ export default class OddsBlock extends Vue {
             console.log('getItemName:',this.GType,bt,this.digital,this.dgt);
         }
         */
+        //if(bt===0) return;
         this.title=itemName(bt,num,this,this.digital);
         this.titleLen= this.TitleLen(this.title);
         //console.log('getItemName:',bt,num,this.title);
@@ -179,10 +191,13 @@ export default class OddsBlock extends Vue {
         if(odds){
             this.NewOdds1=odds;
         }
-    }    
+    }
+    showOdds(){
+        console.log('OddsBlock:',this.Odds);
+    }
     mounted(){
         //console.log('OddsBlock mounted:',this.Odds);
-        this.getItemName()
+        //this.getItemName()
     }
 }
 //export default Vue.extend({

@@ -1,6 +1,10 @@
-export interface numBlock {
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
+
+export interface bBlock {
     BT:number;
     Num:number;
+}
+export interface numBlock extends bBlock {
     Pos?:number;
     PosFix?:boolean;
 }
@@ -37,9 +41,10 @@ export interface contBlock {
     start?:number;
     end?:number;
     twOdds?:number[];
+    isTwOdd?:number;
     colorExt?:number;
     dgt?:number;
-    item?:numBlock[][] | Function ;
+    item?:numBlock[][] | Function;
     items?:numBlock[][][];
     fastSltItm?:string[];
     FastSlt?:FastSlts;
@@ -47,9 +52,9 @@ export interface contBlock {
     Selects?:string[];
     Position?:number[];   //1 不同位置(正1,正2,....)分頁
     PosSelected?:number[];
-    PosSlt?:SelectSet;
     curBT?:number;
     Sortable?:boolean;
+    DefaultSortID?:number;
 }
 export interface layoutBlock {
     name:string;
@@ -62,23 +67,25 @@ interface ILayouts {
     [key:string]:Layout;
 }
 const getAZNums = (BT:number,startAt:number,endAt:number,pos:number):numBlock[][]=>{
+    //console.log('getAZNums',BT,startAt,endAt,pos)
     const base = endAt > 10 ? 100 : 10;
     const cols = endAt > 5 ? Math.ceil(endAt / 2) : 0;
     const ans:numBlock[][]=[];
     let tmpline:numBlock[]=[];
-        for(let i=startAt;i<=endAt;i++){
-            const tmp:numBlock={
-                BT: BT,
-                //Num: pos ? pos*base + i : i,
-                Num: pos*base + i,
-                Pos: pos
-            }
-            tmpline.push(tmp);
-            if(tmpline.length===cols){
-                ans.push(tmpline);
-                tmpline=[];
-            }
+    for(let i=startAt;i<=endAt;i++){
+        const tmp:numBlock={
+            BT: BT,
+            //Num: pos ? pos*base + i : i,
+            Num: pos*base + i,
+            Pos: 0,
+            PosFix: true
         }
+        tmpline.push(tmp);
+        if(tmpline.length===cols){
+            ans.push(tmpline);
+            tmpline=[];
+        }
+    }
     //console.log('getAZNums:',ans);
     return ans;
 }
@@ -103,7 +110,7 @@ const getNums = (BT:number,lastNums?:number,startAt?:number,extF?:number,addArr?
             nums.push(tmp);
             tmp=[];
         }
-        tmp.push({BT: BT,Num:base+i,Pos:i});
+        tmp.push({Pos:0,PosFix:true,BT: BT,Num:base+i});
     }
     if(tmp.length>0) nums.push(tmp);
     if(addArr){
@@ -118,6 +125,7 @@ const getNums = (BT:number,lastNums?:number,startAt?:number,extF?:number,addArr?
 /*** */
 const getblocks=(start:number,end:number,firstBlockBlank?:boolean)=>{
     const ans:numBlock[][]=[];
+    const lnLength=(end-start)/2<10 ? Math.round((end-start)/2)  : 10;
     let ln:numBlock[]=[];
     let k=0;
     if(firstBlockBlank){
@@ -125,14 +133,14 @@ const getblocks=(start:number,end:number,firstBlockBlank?:boolean)=>{
     }
     for(let i=start;i<=end;i++){
       ln.push(getBlockData(k++,i))
-      if(ln.length===10){
+      if(ln.length===lnLength){
         ans.push(ln);
         ln=[];
       }
     }
     if(ln.length>0) ans.push(ln);
     return ans;  
-}
+  }
   /**
    * 回傳二字到倒三角佈局
    */
@@ -192,21 +200,21 @@ const get3D=()=>{
     return ans;
 }
 
-/*
 const getTwoDgt=(bt:number):numBlock[][]=>{
     return [
-        [{BT:bt,Num:0},{BT:bt,Num:1},{BT:bt,Num:2},{BT:bt,Num:3},{BT:bt,Num:4},{BT:bt,Num:5},{BT:bt,Num:6},{BT:bt,Num:7},{BT:bt,Num:8},{BT:bt,Num:9}],
-        [{BT:-1,Num:0},{BT:bt,Num:11},{BT:bt,Num:12},{BT:bt,Num:13},{BT:bt,Num:14},{BT:bt,Num:15},{BT:bt,Num:16},{BT:bt,Num:bt},{BT:bt,Num:18},{BT:bt,Num:19}],
-        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:22},{BT:bt,Num:23},{BT:bt,Num:24},{BT:bt,Num:25},{BT:bt,Num:26},{BT:bt,Num:27},{BT:bt,Num:28},{BT:bt,Num:29}],
-        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:33},{BT:bt,Num:34},{BT:bt,Num:35},{BT:bt,Num:36},{BT:bt,Num:37},{BT:bt,Num:38},{BT:bt,Num:39}],
-        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:44},{BT:bt,Num:45},{BT:bt,Num:46},{BT:bt,Num:47},{BT:bt,Num:48},{BT:bt,Num:49}],
-        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:55},{BT:bt,Num:56},{BT:bt,Num:57},{BT:bt,Num:58},{BT:bt,Num:59}],
-        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:66},{BT:bt,Num:67},{BT:bt,Num:68},{BT:bt,Num:69}],
-        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:77},{BT:bt,Num:78},{BT:bt,Num:79}],
-        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:88},{BT:bt,Num:89}],
-        [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:bt,Num:99}]
+        [{Pos:0,PosFix:true,BT:bt,Num:0},{Pos:0,PosFix:true,BT:bt,Num:1},{Pos:0,PosFix:true,BT:bt,Num:2},{Pos:0,PosFix:true,BT:bt,Num:3},{Pos:0,PosFix:true,BT:bt,Num:4},{Pos:0,PosFix:true,BT:bt,Num:5},{Pos:0,PosFix:true,BT:bt,Num:6},{Pos:0,PosFix:true,BT:bt,Num:7},{Pos:0,PosFix:true,BT:bt,Num:8},{Pos:0,PosFix:true,BT:bt,Num:9}],
+        [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:bt,Num:11},{Pos:0,PosFix:true,BT:bt,Num:12},{Pos:0,PosFix:true,BT:bt,Num:13},{Pos:0,PosFix:true,BT:bt,Num:14},{Pos:0,PosFix:true,BT:bt,Num:15},{Pos:0,PosFix:true,BT:bt,Num:16},{Pos:0,PosFix:true,BT:bt,Num:bt},{Pos:0,PosFix:true,BT:bt,Num:18},{Pos:0,PosFix:true,BT:bt,Num:19}],
+        [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:bt,Num:22},{Pos:0,PosFix:true,BT:bt,Num:23},{Pos:0,PosFix:true,BT:bt,Num:24},{Pos:0,PosFix:true,BT:bt,Num:25},{Pos:0,PosFix:true,BT:bt,Num:26},{Pos:0,PosFix:true,BT:bt,Num:27},{Pos:0,PosFix:true,BT:bt,Num:28},{Pos:0,PosFix:true,BT:bt,Num:29}],
+        [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:bt,Num:33},{Pos:0,PosFix:true,BT:bt,Num:34},{Pos:0,PosFix:true,BT:bt,Num:35},{Pos:0,PosFix:true,BT:bt,Num:36},{Pos:0,PosFix:true,BT:bt,Num:37},{Pos:0,PosFix:true,BT:bt,Num:38},{Pos:0,PosFix:true,BT:bt,Num:39}],
+        [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:bt,Num:44},{Pos:0,PosFix:true,BT:bt,Num:45},{Pos:0,PosFix:true,BT:bt,Num:46},{Pos:0,PosFix:true,BT:bt,Num:47},{Pos:0,PosFix:true,BT:bt,Num:48},{Pos:0,PosFix:true,BT:bt,Num:49}],
+        [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:bt,Num:55},{Pos:0,PosFix:true,BT:bt,Num:56},{Pos:0,PosFix:true,BT:bt,Num:57},{Pos:0,PosFix:true,BT:bt,Num:58},{Pos:0,PosFix:true,BT:bt,Num:59}],
+        [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:bt,Num:66},{Pos:0,PosFix:true,BT:bt,Num:67},{Pos:0,PosFix:true,BT:bt,Num:68},{Pos:0,PosFix:true,BT:bt,Num:69}],
+        [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:bt,Num:77},{Pos:0,PosFix:true,BT:bt,Num:78},{Pos:0,PosFix:true,BT:bt,Num:79}],
+        [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:bt,Num:88},{Pos:0,PosFix:true,BT:bt,Num:89}],
+        [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:bt,Num:99}]
     ];
 }
+/*
 const getThreeDgt=(bt:number):numBlock[][]=>{
     return [
         [{BT:bt,Num:0},{BT:bt,Num:1},{BT:bt,Num:2},{BT:bt,Num:3},{BT:bt,Num:4},{BT:bt,Num:5},{BT:bt,Num:6},{BT:bt,Num:7},{BT:bt,Num:8},{BT:bt,Num:9}],
@@ -410,7 +418,7 @@ const MarkSixLayout:Layout = [
                 end:49,
                 Sortable:true,
                 curBT:1,
-                item: getblocks(1,49,true)
+                item: getblocks(1,49)
             }
         ]
     },
@@ -421,7 +429,7 @@ const MarkSixLayout:Layout = [
                 colorWave: true,
                 BT:4,
                 Sortable:true,
-                item:getblocks(1,49,true)
+                item:getblocks(1,49)
             }
         ]
     },
@@ -436,7 +444,7 @@ const MarkSixLayout:Layout = [
                 end:49,                
                 curBT:21,
                 Sortable:true,                
-                item: getblocks(1,49,true)
+                item: getblocks(1,49)
             }
         ]
     },
@@ -450,7 +458,7 @@ const MarkSixLayout:Layout = [
                 sltedItem:0,
                 Sortable:true,
                 curBT:7,
-                item: getblocks(1,49,true)
+                item: getblocks(1,49)
             }
         ]
     },
@@ -462,8 +470,8 @@ const MarkSixLayout:Layout = [
                 aBT:[31,48,49,50,51,52],
                 sltedItem:0,
                 Sortable:true,
-                curBT:7,
-                item: getblocks(1,49,true)
+                curBT:31,
+                item: getblocks(1,49)
             }
         ]
     },
@@ -476,7 +484,7 @@ const MarkSixLayout:Layout = [
                 sltedItem:0,
                 Sortable:true,
                 curBT:57,
-                item: getblocks(1,49,true)
+                item: getblocks(1,49)
             }
         ]
     },
@@ -489,7 +497,7 @@ const MarkSixLayout:Layout = [
                 sltedItem:0,
                 Sortable:true,
                 curBT:63,
-                item: getblocks(1,49,true)
+                item: getblocks(1,49)
             }
         ]
     },                        
@@ -501,7 +509,7 @@ const MarkSixLayout:Layout = [
                 sltedItem: 0,
                 start: 1,
                 end:12,
-                curBT:1,
+                curBT:18,
                 item: getblocks(1,12)
             }
         ]
@@ -759,64 +767,64 @@ const D3:Layout =  [
             {
                 title : "Game.3D.Item.7.title",
                 item: [
-                    [{BT:9,Num:0},{BT:8,Num:0},{BT:36,Num:0}],
-                    [{BT:9,Num:1},{BT:8,Num:1},{BT:36,Num:1}]
+                    [{Pos:0,PosFix:true,BT:9,Num:0},{Pos:0,PosFix:true,BT:8,Num:0},{Pos:0,PosFix:true,BT:36,Num:0}],
+                    [{Pos:0,PosFix:true,BT:9,Num:1},{Pos:0,PosFix:true,BT:8,Num:1},{Pos:0,PosFix:true,BT:36,Num:1}]
                 ]
             },
             {
                 title : "Game.3D.Item.4.title",
                 item: [
-                    [{BT:6,Num:0},{BT:5,Num:0},{BT:35,Num:0}],
-                    [{BT:6,Num:1},{BT:5,Num:1},{BT:35,Num:1}]
+                    [{Pos:0,PosFix:true,BT:6,Num:0},{Pos:0,PosFix:true,BT:5,Num:0},{Pos:0,PosFix:true,BT:35,Num:0}],
+                    [{Pos:0,PosFix:true,BT:6,Num:1},{Pos:0,PosFix:true,BT:5,Num:1},{Pos:0,PosFix:true,BT:35,Num:1}]
                 ]
             },
             {
                 title : "Game.3D.Item.1.title",
                 item: [
-                    [{BT:3,Num:0},{BT:2,Num:0},{BT:34,Num:0}],
-                    [{BT:3,Num:1},{BT:2,Num:1},{BT:34,Num:1}]
+                    [{Pos:0,PosFix:true,BT:3,Num:0},{Pos:0,PosFix:true,BT:2,Num:0},{Pos:0,PosFix:true,BT:34,Num:0}],
+                    [{Pos:0,PosFix:true,BT:3,Num:1},{Pos:0,PosFix:true,BT:2,Num:1},{Pos:0,PosFix:true,BT:34,Num:1}]
                 ]
             },
             {
                 title : "Game.3D.Item.46.title",
                 item: [
-                    [{BT:49,Num:0},{BT:49,Num:1}]
+                    [{Pos:0,PosFix:true,BT:49,Num:0},{Pos:0,PosFix:true,BT:49,Num:1}]
                 ]
             },
             {
                 title : "Game.3D.Item.45.title",
                 item: [
-                    [{BT:48,Num:0},{BT:48,Num:1}]
+                    [{Pos:0,PosFix:true,BT:48,Num:0},{Pos:0,PosFix:true,BT:48,Num:1}]
                 ]
             },
             {
                 title : "Game.3D.Item.44.title",
                 item: [
-                    [{BT:47,Num:0},{BT:47,Num:1}]
+                    [{Pos:0,PosFix:true,BT:47,Num:0},{Pos:0,PosFix:true,BT:47,Num:1}]
                 ]
             },
             {
                 title : "Game.3D.Item.52.title",
                 item: [
-                    [{BT:55,Num:0},{BT:55,Num:1},{BT:58,Num:1},{BT:58,Num:1}]
+                    [{Pos:0,PosFix:true,BT:55,Num:0},{Pos:0,PosFix:true,BT:55,Num:1},{Pos:0,PosFix:true,BT:58,Num:1},{Pos:0,PosFix:true,BT:58,Num:1}]
                 ]
             },
             {
                 title : "Game.3D.Item.51.title",
                 item: [
-                    [{BT:54,Num:0},{BT:54,Num:1},{BT:57,Num:1},{BT:57,Num:1}]
+                    [{Pos:0,PosFix:true,BT:54,Num:0},{Pos:0,PosFix:true,BT:54,Num:1},{Pos:0,PosFix:true,BT:57,Num:1},{Pos:0,PosFix:true,BT:57,Num:1}]
                 ]
             },
             {
                 title : "Game.3D.Item.50.title",
                 item: [
-                    [{BT:53,Num:0},{BT:53,Num:1},{BT:56,Num:1},{BT:56,Num:1}]
+                    [{Pos:0,PosFix:true,BT:53,Num:0},{Pos:0,PosFix:true,BT:53,Num:1},{Pos:0,PosFix:true,BT:56,Num:1},{Pos:0,PosFix:true,BT:56,Num:1}]
                 ]
             },
             {
                 title : "Game.3D.Item.11.title",
                 item: [
-                    [{BT:12,Num:0},{BT:12,Num:1},{BT:13,Num:0},{BT:13,Num:1}]
+                    [{Pos:0,PosFix:true,BT:12,Num:0},{Pos:0,PosFix:true,BT:12,Num:1},{Pos:0,PosFix:true,BT:13,Num:0},{Pos:0,PosFix:true,BT:13,Num:1}]
                 ]
             }
         ]
@@ -829,8 +837,9 @@ const D3:Layout =  [
                 fastSltItm:["Odd","Even","Big","Small","Clear"],
                 sltedItem:0,
                 start: 0,
-                end:9,                
-                item:getNums
+                end:9,
+                item: getblocks(0,9)
+                //item:getNums
             }
         ]
     },
@@ -840,16 +849,16 @@ const D3:Layout =  [
             {
                 dgt: 2, //位數
                 item:[
-                    [{BT:17,Num:0},{BT:17,Num:1},{BT:17,Num:2},{BT:17,Num:3},{BT:17,Num:4},{BT:17,Num:5},{BT:17,Num:6},{BT:17,Num:7},{BT:17,Num:8},{BT:17,Num:9}],
-                    [{BT:-1,Num:0},{BT:17,Num:11},{BT:17,Num:12},{BT:17,Num:13},{BT:17,Num:14},{BT:17,Num:15},{BT:17,Num:16},{BT:17,Num:17},{BT:17,Num:18},{BT:17,Num:19}],
-                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:22},{BT:17,Num:23},{BT:17,Num:24},{BT:17,Num:25},{BT:17,Num:26},{BT:17,Num:27},{BT:17,Num:28},{BT:17,Num:29}],
-                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:33},{BT:17,Num:34},{BT:17,Num:35},{BT:17,Num:36},{BT:17,Num:37},{BT:17,Num:38},{BT:17,Num:39}],
-                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:44},{BT:17,Num:45},{BT:17,Num:46},{BT:17,Num:47},{BT:17,Num:48},{BT:17,Num:49}],
-                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:55},{BT:17,Num:56},{BT:17,Num:57},{BT:17,Num:58},{BT:17,Num:59}],
-                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:66},{BT:17,Num:67},{BT:17,Num:68},{BT:17,Num:69}],
-                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:77},{BT:17,Num:78},{BT:17,Num:79}],
-                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:88},{BT:17,Num:89}],
-                    [{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:-1,Num:0},{BT:17,Num:99}]
+                    [{Pos:0,PosFix:true,BT:17,Num:0},{Pos:0,PosFix:true,BT:17,Num:1},{Pos:0,PosFix:true,BT:17,Num:2},{Pos:0,PosFix:true,BT:17,Num:3},{Pos:0,PosFix:true,BT:17,Num:4},{Pos:0,PosFix:true,BT:17,Num:5},{Pos:0,PosFix:true,BT:17,Num:6},{Pos:0,PosFix:true,BT:17,Num:7},{Pos:0,PosFix:true,BT:17,Num:8},{Pos:0,PosFix:true,BT:17,Num:9}],
+                    [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:17,Num:11},{Pos:0,PosFix:true,BT:17,Num:12},{Pos:0,PosFix:true,BT:17,Num:13},{Pos:0,PosFix:true,BT:17,Num:14},{Pos:0,PosFix:true,BT:17,Num:15},{Pos:0,PosFix:true,BT:17,Num:16},{Pos:0,PosFix:true,BT:17,Num:17},{Pos:0,PosFix:true,BT:17,Num:18},{Pos:0,PosFix:true,BT:17,Num:19}],
+                    [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:17,Num:22},{Pos:0,PosFix:true,BT:17,Num:23},{Pos:0,PosFix:true,BT:17,Num:24},{Pos:0,PosFix:true,BT:17,Num:25},{Pos:0,PosFix:true,BT:17,Num:26},{Pos:0,PosFix:true,BT:17,Num:27},{Pos:0,PosFix:true,BT:17,Num:28},{Pos:0,PosFix:true,BT:17,Num:29}],
+                    [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:17,Num:33},{Pos:0,PosFix:true,BT:17,Num:34},{Pos:0,PosFix:true,BT:17,Num:35},{Pos:0,PosFix:true,BT:17,Num:36},{Pos:0,PosFix:true,BT:17,Num:37},{Pos:0,PosFix:true,BT:17,Num:38},{Pos:0,PosFix:true,BT:17,Num:39}],
+                    [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:17,Num:44},{Pos:0,PosFix:true,BT:17,Num:45},{Pos:0,PosFix:true,BT:17,Num:46},{Pos:0,PosFix:true,BT:17,Num:47},{Pos:0,PosFix:true,BT:17,Num:48},{Pos:0,PosFix:true,BT:17,Num:49}],
+                    [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:17,Num:55},{Pos:0,PosFix:true,BT:17,Num:56},{Pos:0,PosFix:true,BT:17,Num:57},{Pos:0,PosFix:true,BT:17,Num:58},{Pos:0,PosFix:true,BT:17,Num:59}],
+                    [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:17,Num:66},{Pos:0,PosFix:true,BT:17,Num:67},{Pos:0,PosFix:true,BT:17,Num:68},{Pos:0,PosFix:true,BT:17,Num:69}],
+                    [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:17,Num:77},{Pos:0,PosFix:true,BT:17,Num:78},{Pos:0,PosFix:true,BT:17,Num:79}],
+                    [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:17,Num:88},{Pos:0,PosFix:true,BT:17,Num:89}],
+                    [{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:-1,Num:0},{Pos:0,PosFix:true,BT:17,Num:99}]
                 ]
             }
         ]
@@ -862,8 +871,10 @@ const D3:Layout =  [
                 sltedItem:0,
                 start: 0,
                 end:99,
-                dgt: 2, //位數                
-                item:getNums
+                dgt: 2, //位數
+                Sortable:true,
+                item: getblocks(0,99)
+                //item:getNums
             }
         ]
     },
@@ -875,7 +886,8 @@ const D3:Layout =  [
                 sltedItem:0,
                 start: 4,
                 end:14,
-                item:getNums
+                item: getblocks(4,14)
+                //item:getNums
             }
         ]
     },
@@ -888,7 +900,8 @@ const D3:Layout =  [
                 start: 0,
                 end:9,
                 dgt: 1, //位數
-                item:getNums
+                item: getblocks(0,9)
+                //item:getNums
             }
         ]
     },
@@ -897,6 +910,7 @@ const D3:Layout =  [
         cont: [
             {
                 BT:42,
+                /*
                 FastSlt: {
                         title:'FastSlt.Box',
                         subcont:[
@@ -929,11 +943,15 @@ const D3:Layout =  [
                             }                                                                        
                         ]
                     },
+                */
                 sltedItem:0,
                 dgt: 3, //位數
                 //NumDuplicate:true,     //數字可以重複
                 noSameNum: false,    //數字不可重複
-                item:getNum3D('nuits',0,42)
+                Sortable:true,
+                DefaultSortID:1,
+                item: getblocks(0,99)
+                //item:getNum3D('nuits',0,42)
             }
         ]
     },
@@ -946,6 +964,9 @@ const D3:Layout =  [
                 sltedItem:0,
                 //NumDuplicate:false,         //數字不可重複
                 noSameNum: true,    //數字不可重複
+                Sortable:true,
+                item: getblocks(0,219)
+                /*
                 item:[
                     [{BT:43,Num:0},{BT:43,Num:1},{BT:43,Num:2},{BT:43,Num:3},{BT:43,Num:4},{BT:43,Num:5},{BT:43,Num:6},{BT:43,Num:7},{BT:43,Num:8},{BT:43,Num:9}],
                     [{BT:43,Num:11},{BT:43,Num:12},{BT:43,Num:13},{BT:43,Num:14},{BT:43,Num:15},{BT:43,Num:16},{BT:43,Num:17},{BT:43,Num:18},{BT:43,Num:19},{BT:43,Num:22}],
@@ -970,6 +991,7 @@ const D3:Layout =  [
                     [{BT:43,Num:666},{BT:43,Num:667},{BT:43,Num:668},{BT:43,Num:669},{BT:43,Num:677},{BT:43,Num:678},{BT:43,Num:679},{BT:43,Num:688},{BT:43,Num:689},{BT:43,Num:699}],
                     [{BT:43,Num:777},{BT:43,Num:778},{BT:43,Num:779},{BT:43,Num:788},{BT:43,Num:789},{BT:43,Num:799},{BT:43,Num:888},{BT:43,Num:889},{BT:43,Num:899},{BT:43,Num:999}]
                 ]
+                */
             }
         ]
     },
@@ -981,7 +1003,8 @@ const D3:Layout =  [
                 sltedItem:0,
                 start: 0,
                 end:9,
-                item:getNums
+                item: getblocks(0,9)
+                //item:getNums
             }
         ]
     },
@@ -993,7 +1016,8 @@ const D3:Layout =  [
                 sltedItem:0,
                 start: 0,
                 end:9,
-                item:getNums
+                item: getblocks(0,9)
+                //item:getNums
             }
         ]
     },
@@ -1005,7 +1029,8 @@ const D3:Layout =  [
                 sltedItem:0,
                 start: 0,
                 end:7,
-                item:getNums
+                item: getblocks(0,7)
+                //item:getNums
             }
         ]
     },
@@ -1015,14 +1040,14 @@ const D3:Layout =  [
             {
                 title : "Game.3D.Menu.Group.11.title",
                 item: [
-                    [{BT:59,Num:0},{BT:60,Num:0},{BT:61,Num:0}],
-                    [{BT:63,Num:0},{BT:65,Num:0},{BT:18,Num:0}]
+                    [{Pos:0,PosFix:true,BT:59,Num:0},{Pos:0,PosFix:true,BT:60,Num:0},{Pos:0,PosFix:true,BT:61,Num:0}],
+                    [{Pos:0,PosFix:true,BT:63,Num:0},{Pos:0,PosFix:true,BT:65,Num:0},{Pos:0,PosFix:true,BT:18,Num:0}]
                 ]
             },
             {
                 title : "Game.3D.Item.11.title",
                 item: [
-                    [{BT:12,Num:0},{BT:12,Num:1},{BT:13,Num:0},{BT:13,Num:1}]
+                    [{Pos:0,PosFix:true,BT:12,Num:0},{Pos:0,PosFix:true,BT:12,Num:1},{Pos:0,PosFix:true,BT:13,Num:0},{Pos:0,PosFix:true,BT:13,Num:1}]
                 ]
             }
         ]
@@ -1036,7 +1061,8 @@ const D3:Layout =  [
                 start: 0,
                 end:9,
                 dgt:1,
-                item:getNums
+                item: getblocks(0,9)
+                //item:getNums
             }
         ]
     }
@@ -1048,64 +1074,64 @@ const Happy:Layout =  [
             {
                 title: "Game.Happy.Item.10.shortT",
                 item:[
-                    [{BT:10,Num:0},{BT:11,Num:0},{BT:12,Num:0}],
-                    [{BT:10,Num:1},{BT:11,Num:1},{BT:12,Num:1}]
+                    [{Pos:0,PosFix:true,BT:10,Num:0},{Pos:0,PosFix:true,BT:11,Num:0},{Pos:0,PosFix:true,BT:12,Num:0}],
+                    [{Pos:0,PosFix:true,BT:10,Num:1},{Pos:0,PosFix:true,BT:11,Num:1},{Pos:0,PosFix:true,BT:12,Num:1}]
                 ]
             },
             {
                 title: "Game.Happy.Ball.1",
                 item:[
-                    [{BT:3,Num:10},{BT:2,Num:10},{BT:5,Num:10},{BT:4,Num:10},{BT:13,Num:10}],
-                    [{BT:3,Num:11},{BT:2,Num:11},{BT:5,Num:11},{BT:4,Num:11},{BT:13,Num:11}]
+                    [{Pos:0,PosFix:true,BT:3,Num:10},{Pos:0,PosFix:true,BT:2,Num:10},{Pos:0,PosFix:true,BT:5,Num:10},{Pos:0,PosFix:true,BT:4,Num:10},{Pos:0,PosFix:true,BT:13,Num:10}],
+                    [{Pos:0,PosFix:true,BT:3,Num:11},{Pos:0,PosFix:true,BT:2,Num:11},{Pos:0,PosFix:true,BT:5,Num:11},{Pos:0,PosFix:true,BT:4,Num:11},{Pos:0,PosFix:true,BT:13,Num:11}]
                 ]                
             },
             {
                 title: "Game.Happy.Ball.2",
                 item:[
-                    [{BT:3,Num:20},{BT:2,Num:20},{BT:5,Num:20},{BT:4,Num:20},{BT:13,Num:20}],
-                    [{BT:3,Num:21},{BT:2,Num:21},{BT:5,Num:21},{BT:4,Num:21},{BT:13,Num:21}]
+                    [{Pos:0,PosFix:true,BT:3,Num:20},{Pos:0,PosFix:true,BT:2,Num:20},{Pos:0,PosFix:true,BT:5,Num:20},{Pos:0,PosFix:true,BT:4,Num:20},{Pos:0,PosFix:true,BT:13,Num:20}],
+                    [{Pos:0,PosFix:true,BT:3,Num:21},{Pos:0,PosFix:true,BT:2,Num:21},{Pos:0,PosFix:true,BT:5,Num:21},{Pos:0,PosFix:true,BT:4,Num:21},{Pos:0,PosFix:true,BT:13,Num:21}]
                 ]                
             },
             {
                 title: "Game.Happy.Ball.3",
                 item:[
-                    [{BT:3,Num:30},{BT:2,Num:30},{BT:5,Num:30},{BT:4,Num:30},{BT:13,Num:30}],
-                    [{BT:3,Num:31},{BT:2,Num:31},{BT:5,Num:31},{BT:4,Num:31},{BT:13,Num:31}]
+                    [{Pos:0,PosFix:true,BT:3,Num:30},{Pos:0,PosFix:true,BT:2,Num:30},{Pos:0,PosFix:true,BT:5,Num:30},{Pos:0,PosFix:true,BT:4,Num:30},{Pos:0,PosFix:true,BT:13,Num:30}],
+                    [{Pos:0,PosFix:true,BT:3,Num:31},{Pos:0,PosFix:true,BT:2,Num:31},{Pos:0,PosFix:true,BT:5,Num:31},{Pos:0,PosFix:true,BT:4,Num:31},{Pos:0,PosFix:true,BT:13,Num:31}]
                 ]                
             },
             {
                 title: "Game.Happy.Ball.4",
                 item:[
-                    [{BT:3,Num:40},{BT:2,Num:40},{BT:5,Num:40},{BT:4,Num:40},{BT:13,Num:40}],
-                    [{BT:3,Num:41},{BT:2,Num:41},{BT:5,Num:41},{BT:4,Num:41},{BT:13,Num:41}]
+                    [{Pos:0,PosFix:true,BT:3,Num:40},{Pos:0,PosFix:true,BT:2,Num:40},{Pos:0,PosFix:true,BT:5,Num:40},{Pos:0,PosFix:true,BT:4,Num:40},{Pos:0,PosFix:true,BT:13,Num:40}],
+                    [{Pos:0,PosFix:true,BT:3,Num:41},{Pos:0,PosFix:true,BT:2,Num:41},{Pos:0,PosFix:true,BT:5,Num:41},{Pos:0,PosFix:true,BT:4,Num:41},{Pos:0,PosFix:true,BT:13,Num:41}]
                 ]                
             },
             {
                 title: "Game.Happy.Ball.5",
                 item:[
-                    [{BT:3,Num:50},{BT:2,Num:50},{BT:5,Num:50},{BT:4,Num:50},{BT:13,Num:50}],
-                    [{BT:3,Num:51},{BT:2,Num:51},{BT:5,Num:51},{BT:4,Num:51},{BT:13,Num:51}]
+                    [{Pos:0,PosFix:true,BT:3,Num:50},{Pos:0,PosFix:true,BT:2,Num:50},{Pos:0,PosFix:true,BT:5,Num:50},{Pos:0,PosFix:true,BT:4,Num:50},{Pos:0,PosFix:true,BT:13,Num:50}],
+                    [{Pos:0,PosFix:true,BT:3,Num:51},{Pos:0,PosFix:true,BT:2,Num:51},{Pos:0,PosFix:true,BT:5,Num:51},{Pos:0,PosFix:true,BT:4,Num:51},{Pos:0,PosFix:true,BT:13,Num:51}]
                 ]                
             },
             {
                 title: "Game.Happy.Ball.6",
                 item:[
-                    [{BT:3,Num:60},{BT:2,Num:60},{BT:5,Num:60},{BT:4,Num:60},{BT:13,Num:60}],
-                    [{BT:3,Num:61},{BT:2,Num:61},{BT:5,Num:61},{BT:4,Num:61},{BT:13,Num:61}]
+                    [{Pos:0,PosFix:true,BT:3,Num:60},{Pos:0,PosFix:true,BT:2,Num:60},{Pos:0,PosFix:true,BT:5,Num:60},{Pos:0,PosFix:true,BT:4,Num:60},{Pos:0,PosFix:true,BT:13,Num:60}],
+                    [{Pos:0,PosFix:true,BT:3,Num:61},{Pos:0,PosFix:true,BT:2,Num:61},{Pos:0,PosFix:true,BT:5,Num:61},{Pos:0,PosFix:true,BT:4,Num:61},{Pos:0,PosFix:true,BT:13,Num:61}]
                 ]                
             },
             {
                 title: "Game.Happy.Ball.7",
                 item:[
-                    [{BT:3,Num:70},{BT:2,Num:70},{BT:5,Num:70},{BT:4,Num:70},{BT:13,Num:70}],
-                    [{BT:3,Num:71},{BT:2,Num:71},{BT:5,Num:71},{BT:4,Num:71},{BT:13,Num:71}]
+                    [{Pos:0,PosFix:true,BT:3,Num:70},{Pos:0,PosFix:true,BT:2,Num:70},{Pos:0,PosFix:true,BT:5,Num:70},{Pos:0,PosFix:true,BT:4,Num:70},{Pos:0,PosFix:true,BT:13,Num:70}],
+                    [{Pos:0,PosFix:true,BT:3,Num:71},{Pos:0,PosFix:true,BT:2,Num:71},{Pos:0,PosFix:true,BT:5,Num:71},{Pos:0,PosFix:true,BT:4,Num:71},{Pos:0,PosFix:true,BT:13,Num:71}]
                 ]                
             },
             {
                 title: "Game.Happy.Ball.8",
                 item:[
-                    [{BT:3,Num:80},{BT:2,Num:80},{BT:5,Num:80},{BT:4,Num:80},{BT:13,Num:80}],
-                    [{BT:3,Num:81},{BT:2,Num:81},{BT:5,Num:81},{BT:4,Num:81},{BT:13,Num:81}]
+                    [{Pos:0,PosFix:true,BT:3,Num:80},{Pos:0,PosFix:true,BT:2,Num:80},{Pos:0,PosFix:true,BT:5,Num:80},{Pos:0,PosFix:true,BT:4,Num:80},{Pos:0,PosFix:true,BT:13,Num:80}],
+                    [{Pos:0,PosFix:true,BT:3,Num:81},{Pos:0,PosFix:true,BT:2,Num:81},{Pos:0,PosFix:true,BT:5,Num:81},{Pos:0,PosFix:true,BT:4,Num:81},{Pos:0,PosFix:true,BT:13,Num:81}]
                 ]                
             }
         ]
@@ -1127,37 +1153,37 @@ const Happy:Layout =  [
                 ],
                 items:[ 
                     getNums(1,20,1,100,[
-                        [{BT:3,Num:10},{BT:3,Num:11},{BT:2,Num:10},{BT:2,Num:11},{BT:5,Num:10},{BT:5,Num:11},{BT:4,Num:10},{BT:4,Num:11},{BT:13,Num:10},{BT:13,Num:11}],
-                        [{BT:7,Num:10},{BT:7,Num:11},{BT:7,Num:12},{BT:7,Num:13},{BT:9,Num:10},{BT:9,Num:11},{BT:9,Num:12}]
+                        [{Pos:0,PosFix:true,BT:3,Num:10},{Pos:0,PosFix:true,BT:3,Num:11},{Pos:0,PosFix:true,BT:2,Num:10},{Pos:0,PosFix:true,BT:2,Num:11},{Pos:0,PosFix:true,BT:5,Num:10},{Pos:0,PosFix:true,BT:5,Num:11},{Pos:0,PosFix:true,BT:4,Num:10},{Pos:0,PosFix:true,BT:4,Num:11},{Pos:0,PosFix:true,BT:13,Num:10},{Pos:0,PosFix:true,BT:13,Num:11}],
+                        [{Pos:0,PosFix:true,BT:7,Num:10},{Pos:0,PosFix:true,BT:7,Num:11},{Pos:0,PosFix:true,BT:7,Num:12},{Pos:0,PosFix:true,BT:7,Num:13},{Pos:0,PosFix:true,BT:9,Num:10},{Pos:0,PosFix:true,BT:9,Num:11},{Pos:0,PosFix:true,BT:9,Num:12}]
 
                     ]),
                     getNums(2,20,1,100,[
-                        [{BT:3,Num:20},{BT:3,Num:21},{BT:2,Num:20},{BT:2,Num:21},{BT:5,Num:20},{BT:5,Num:21},{BT:4,Num:20},{BT:4,Num:21},{BT:13,Num:20},{BT:13,Num:21}],
-                        [{BT:7,Num:20},{BT:7,Num:21},{BT:7,Num:22},{BT:7,Num:23},{BT:9,Num:20},{BT:9,Num:21},{BT:9,Num:22}]
+                        [{Pos:0,PosFix:true,BT:3,Num:20},{Pos:0,PosFix:true,BT:3,Num:21},{Pos:0,PosFix:true,BT:2,Num:20},{Pos:0,PosFix:true,BT:2,Num:21},{Pos:0,PosFix:true,BT:5,Num:20},{Pos:0,PosFix:true,BT:5,Num:21},{Pos:0,PosFix:true,BT:4,Num:20},{Pos:0,PosFix:true,BT:4,Num:21},{Pos:0,PosFix:true,BT:13,Num:20},{Pos:0,PosFix:true,BT:13,Num:21}],
+                        [{Pos:0,PosFix:true,BT:7,Num:20},{Pos:0,PosFix:true,BT:7,Num:21},{Pos:0,PosFix:true,BT:7,Num:22},{Pos:0,PosFix:true,BT:7,Num:23},{Pos:0,PosFix:true,BT:9,Num:20},{Pos:0,PosFix:true,BT:9,Num:21},{Pos:0,PosFix:true,BT:9,Num:22}]
                     ]),
                     getNums(3,20,1,100,[
-                        [{BT:3,Num:30},{BT:3,Num:31},{BT:2,Num:30},{BT:2,Num:31},{BT:5,Num:30},{BT:5,Num:31},{BT:4,Num:30},{BT:4,Num:31},{BT:13,Num:30},{BT:13,Num:31}],
-                        [{BT:7,Num:30},{BT:7,Num:31},{BT:7,Num:32},{BT:7,Num:33},{BT:9,Num:30},{BT:9,Num:31},{BT:9,Num:32}]
+                        [{Pos:0,PosFix:true,BT:3,Num:30},{Pos:0,PosFix:true,BT:3,Num:31},{Pos:0,PosFix:true,BT:2,Num:30},{Pos:0,PosFix:true,BT:2,Num:31},{Pos:0,PosFix:true,BT:5,Num:30},{Pos:0,PosFix:true,BT:5,Num:31},{Pos:0,PosFix:true,BT:4,Num:30},{Pos:0,PosFix:true,BT:4,Num:31},{Pos:0,PosFix:true,BT:13,Num:30},{Pos:0,PosFix:true,BT:13,Num:31}],
+                        [{Pos:0,PosFix:true,BT:7,Num:30},{Pos:0,PosFix:true,BT:7,Num:31},{Pos:0,PosFix:true,BT:7,Num:32},{Pos:0,PosFix:true,BT:7,Num:33},{Pos:0,PosFix:true,BT:9,Num:30},{Pos:0,PosFix:true,BT:9,Num:31},{Pos:0,PosFix:true,BT:9,Num:32}]
                     ]),
                     getNums(4,20,1,100,[
-                        [{BT:3,Num:40},{BT:3,Num:41},{BT:2,Num:40},{BT:2,Num:41},{BT:5,Num:40},{BT:5,Num:41},{BT:4,Num:40},{BT:4,Num:41},{BT:13,Num:40},{BT:13,Num:41}],
-                        [{BT:7,Num:40},{BT:7,Num:41},{BT:7,Num:42},{BT:7,Num:43},{BT:9,Num:40},{BT:9,Num:41},{BT:9,Num:42}]
+                        [{Pos:0,PosFix:true,BT:3,Num:40},{Pos:0,PosFix:true,BT:3,Num:41},{Pos:0,PosFix:true,BT:2,Num:40},{Pos:0,PosFix:true,BT:2,Num:41},{Pos:0,PosFix:true,BT:5,Num:40},{Pos:0,PosFix:true,BT:5,Num:41},{Pos:0,PosFix:true,BT:4,Num:40},{Pos:0,PosFix:true,BT:4,Num:41},{Pos:0,PosFix:true,BT:13,Num:40},{Pos:0,PosFix:true,BT:13,Num:41}],
+                        [{Pos:0,PosFix:true,BT:7,Num:40},{Pos:0,PosFix:true,BT:7,Num:41},{Pos:0,PosFix:true,BT:7,Num:42},{Pos:0,PosFix:true,BT:7,Num:43},{Pos:0,PosFix:true,BT:9,Num:40},{Pos:0,PosFix:true,BT:9,Num:41},{Pos:0,PosFix:true,BT:9,Num:42}]
                     ]),
                     getNums(5,20,1,100,[
-                        [{BT:3,Num:50},{BT:3,Num:51},{BT:2,Num:50},{BT:2,Num:51},{BT:5,Num:50},{BT:5,Num:51},{BT:4,Num:50},{BT:4,Num:51},{BT:13,Num:50},{BT:13,Num:51}],
-                        [{BT:7,Num:50},{BT:7,Num:51},{BT:7,Num:52},{BT:7,Num:53},{BT:9,Num:50},{BT:9,Num:51},{BT:9,Num:52}]
+                        [{Pos:0,PosFix:true,BT:3,Num:50},{Pos:0,PosFix:true,BT:3,Num:51},{Pos:0,PosFix:true,BT:2,Num:50},{Pos:0,PosFix:true,BT:2,Num:51},{Pos:0,PosFix:true,BT:5,Num:50},{Pos:0,PosFix:true,BT:5,Num:51},{Pos:0,PosFix:true,BT:4,Num:50},{Pos:0,PosFix:true,BT:4,Num:51},{Pos:0,PosFix:true,BT:13,Num:50},{Pos:0,PosFix:true,BT:13,Num:51}],
+                        [{Pos:0,PosFix:true,BT:7,Num:50},{Pos:0,PosFix:true,BT:7,Num:51},{Pos:0,PosFix:true,BT:7,Num:52},{Pos:0,PosFix:true,BT:7,Num:53},{Pos:0,PosFix:true,BT:9,Num:50},{Pos:0,PosFix:true,BT:9,Num:51},{Pos:0,PosFix:true,BT:9,Num:52}]
                     ]),
                     getNums(6,20,1,100,[
-                        [{BT:3,Num:60},{BT:3,Num:61},{BT:2,Num:60},{BT:2,Num:61},{BT:5,Num:60},{BT:5,Num:61},{BT:4,Num:60},{BT:4,Num:61},{BT:13,Num:60},{BT:13,Num:61}],
-                        [{BT:7,Num:60},{BT:7,Num:61},{BT:7,Num:62},{BT:7,Num:63},{BT:9,Num:60},{BT:9,Num:61},{BT:9,Num:62}]
+                        [{Pos:0,PosFix:true,BT:3,Num:60},{Pos:0,PosFix:true,BT:3,Num:61},{Pos:0,PosFix:true,BT:2,Num:60},{Pos:0,PosFix:true,BT:2,Num:61},{Pos:0,PosFix:true,BT:5,Num:60},{Pos:0,PosFix:true,BT:5,Num:61},{Pos:0,PosFix:true,BT:4,Num:60},{Pos:0,PosFix:true,BT:4,Num:61},{Pos:0,PosFix:true,BT:13,Num:60},{Pos:0,PosFix:true,BT:13,Num:61}],
+                        [{Pos:0,PosFix:true,BT:7,Num:60},{Pos:0,PosFix:true,BT:7,Num:61},{Pos:0,PosFix:true,BT:7,Num:62},{Pos:0,PosFix:true,BT:7,Num:63},{Pos:0,PosFix:true,BT:9,Num:60},{Pos:0,PosFix:true,BT:9,Num:61},{Pos:0,PosFix:true,BT:9,Num:62}]
                     ]),
                     getNums(7,20,1,100,[
-                        [{BT:3,Num:70},{BT:3,Num:71},{BT:2,Num:70},{BT:2,Num:71},{BT:5,Num:70},{BT:5,Num:71},{BT:4,Num:70},{BT:4,Num:71},{BT:13,Num:70},{BT:13,Num:71}],
-                        [{BT:7,Num:70},{BT:7,Num:71},{BT:7,Num:72},{BT:7,Num:73},{BT:9,Num:70},{BT:9,Num:71},{BT:9,Num:72}]
+                        [{Pos:0,PosFix:true,BT:3,Num:70},{Pos:0,PosFix:true,BT:3,Num:71},{Pos:0,PosFix:true,BT:2,Num:70},{Pos:0,PosFix:true,BT:2,Num:71},{Pos:0,PosFix:true,BT:5,Num:70},{Pos:0,PosFix:true,BT:5,Num:71},{Pos:0,PosFix:true,BT:4,Num:70},{Pos:0,PosFix:true,BT:4,Num:71},{Pos:0,PosFix:true,BT:13,Num:70},{Pos:0,PosFix:true,BT:13,Num:71}],
+                        [{Pos:0,PosFix:true,BT:7,Num:70},{Pos:0,PosFix:true,BT:7,Num:71},{Pos:0,PosFix:true,BT:7,Num:72},{Pos:0,PosFix:true,BT:7,Num:73},{Pos:0,PosFix:true,BT:9,Num:70},{Pos:0,PosFix:true,BT:9,Num:71},{Pos:0,PosFix:true,BT:9,Num:72}]
                     ]),
                     getNums(8,20,1,100,[
-                        [{BT:3,Num:80},{BT:3,Num:81},{BT:2,Num:80},{BT:2,Num:81},{BT:5,Num:80},{BT:5,Num:81},{BT:4,Num:80},{BT:4,Num:81},{BT:13,Num:80},{BT:13,Num:81}],
-                        [{BT:7,Num:80},{BT:7,Num:81},{BT:7,Num:82},{BT:7,Num:83},{BT:9,Num:80},{BT:9,Num:81},{BT:9,Num:82}]
+                        [{Pos:0,PosFix:true,BT:3,Num:80},{Pos:0,PosFix:true,BT:3,Num:81},{Pos:0,PosFix:true,BT:2,Num:80},{Pos:0,PosFix:true,BT:2,Num:81},{Pos:0,PosFix:true,BT:5,Num:80},{Pos:0,PosFix:true,BT:5,Num:81},{Pos:0,PosFix:true,BT:4,Num:80},{Pos:0,PosFix:true,BT:4,Num:81},{Pos:0,PosFix:true,BT:13,Num:80},{Pos:0,PosFix:true,BT:13,Num:81}],
+                        [{Pos:0,PosFix:true,BT:7,Num:80},{Pos:0,PosFix:true,BT:7,Num:81},{Pos:0,PosFix:true,BT:7,Num:82},{Pos:0,PosFix:true,BT:7,Num:83},{Pos:0,PosFix:true,BT:9,Num:80},{Pos:0,PosFix:true,BT:9,Num:81},{Pos:0,PosFix:true,BT:9,Num:82}]
                     ]),
                 ]
             }
@@ -1178,8 +1204,9 @@ const Happy:Layout =  [
                 aBT: [15,16,17,18,19,20],
                 sltedItem:0,
                 start: 1,
-                end:20,                
-                item: getNums                
+                end:20,
+                item: getblocks(1,20)             
+                //item: getNums                
             }
         ]
 
@@ -1191,19 +1218,19 @@ const Cars:Layout = [
         cont:[
             {
                 item:[
-                    [{BT:5,Num:0},{BT:5,Num:1},{BT:6,Num:0},{BT:6,Num:1}],
-                    [{BT:2,Num:10},{BT:2,Num:11},{BT:3,Num:10},{BT:3,Num:11}],
-                    [{BT:2,Num:20},{BT:2,Num:21},{BT:3,Num:20},{BT:3,Num:21}],
-                    [{BT:2,Num:30},{BT:2,Num:31},{BT:3,Num:30},{BT:3,Num:31}],
-                    [{BT:2,Num:40},{BT:2,Num:41},{BT:3,Num:40},{BT:3,Num:41}],
-                    [{BT:2,Num:50},{BT:2,Num:51},{BT:3,Num:50},{BT:3,Num:51}],
-                    [{BT:2,Num:60},{BT:2,Num:61},{BT:3,Num:60},{BT:3,Num:61}],
-                    [{BT:2,Num:70},{BT:2,Num:71},{BT:3,Num:70},{BT:3,Num:71}],
-                    [{BT:2,Num:80},{BT:2,Num:81},{BT:3,Num:80},{BT:3,Num:81}],
-                    [{BT:2,Num:90},{BT:2,Num:91},{BT:3,Num:90},{BT:3,Num:91}],
-                    [{BT:2,Num:100},{BT:2,Num:101},{BT:3,Num:100},{BT:3,Num:101}],
-                    [{BT:4,Num:10},{BT:4,Num:20},{BT:4,Num:30},{BT:4,Num:40},{BT:4,Num:50}],
-                    [{BT:4,Num:11},{BT:4,Num:21},{BT:4,Num:31},{BT:4,Num:41},{BT:4,Num:51}]
+                    [{Pos:0,PosFix:true,BT:5,Num:0},{Pos:0,PosFix:true,BT:5,Num:1},{Pos:0,PosFix:true,BT:6,Num:0},{Pos:0,PosFix:true,BT:6,Num:1}],
+                    [{Pos:0,PosFix:true,BT:2,Num:10},{Pos:0,PosFix:true,BT:2,Num:11},{Pos:0,PosFix:true,BT:3,Num:10},{Pos:0,PosFix:true,BT:3,Num:11}],
+                    [{Pos:0,PosFix:true,BT:2,Num:20},{Pos:0,PosFix:true,BT:2,Num:21},{Pos:0,PosFix:true,BT:3,Num:20},{Pos:0,PosFix:true,BT:3,Num:21}],
+                    [{Pos:0,PosFix:true,BT:2,Num:30},{Pos:0,PosFix:true,BT:2,Num:31},{Pos:0,PosFix:true,BT:3,Num:30},{Pos:0,PosFix:true,BT:3,Num:31}],
+                    [{Pos:0,PosFix:true,BT:2,Num:40},{Pos:0,PosFix:true,BT:2,Num:41},{Pos:0,PosFix:true,BT:3,Num:40},{Pos:0,PosFix:true,BT:3,Num:41}],
+                    [{Pos:0,PosFix:true,BT:2,Num:50},{Pos:0,PosFix:true,BT:2,Num:51},{Pos:0,PosFix:true,BT:3,Num:50},{Pos:0,PosFix:true,BT:3,Num:51}],
+                    [{Pos:0,PosFix:true,BT:2,Num:60},{Pos:0,PosFix:true,BT:2,Num:61},{Pos:0,PosFix:true,BT:3,Num:60},{Pos:0,PosFix:true,BT:3,Num:61}],
+                    [{Pos:0,PosFix:true,BT:2,Num:70},{Pos:0,PosFix:true,BT:2,Num:71},{Pos:0,PosFix:true,BT:3,Num:70},{Pos:0,PosFix:true,BT:3,Num:71}],
+                    [{Pos:0,PosFix:true,BT:2,Num:80},{Pos:0,PosFix:true,BT:2,Num:81},{Pos:0,PosFix:true,BT:3,Num:80},{Pos:0,PosFix:true,BT:3,Num:81}],
+                    [{Pos:0,PosFix:true,BT:2,Num:90},{Pos:0,PosFix:true,BT:2,Num:91},{Pos:0,PosFix:true,BT:3,Num:90},{Pos:0,PosFix:true,BT:3,Num:91}],
+                    [{Pos:0,PosFix:true,BT:2,Num:100},{Pos:0,PosFix:true,BT:2,Num:101},{Pos:0,PosFix:true,BT:3,Num:100},{Pos:0,PosFix:true,BT:3,Num:101}],
+                    [{Pos:0,PosFix:true,BT:4,Num:10},{Pos:0,PosFix:true,BT:4,Num:20},{Pos:0,PosFix:true,BT:4,Num:30},{Pos:0,PosFix:true,BT:4,Num:40},{Pos:0,PosFix:true,BT:4,Num:50}],
+                    [{Pos:0,PosFix:true,BT:4,Num:11},{Pos:0,PosFix:true,BT:4,Num:21},{Pos:0,PosFix:true,BT:4,Num:31},{Pos:0,PosFix:true,BT:4,Num:41},{Pos:0,PosFix:true,BT:4,Num:51}]
                 ]
             }
         ]
@@ -1226,58 +1253,58 @@ const Cars:Layout = [
                 ],
                 items:[ 
                         getNums(1,10,1,10,[
-                            [{BT:2,Num:10},{BT:2,Num:11}],
-                            [{BT:3,Num:10},{BT:3,Num:11}],
-                            [{BT:4,Num:10},{BT:4,Num:11}]
+                            [{Pos:0,PosFix:true,BT:2,Num:10},{Pos:0,PosFix:true,BT:2,Num:11}],
+                            [{Pos:0,PosFix:true,BT:3,Num:10},{Pos:0,PosFix:true,BT:3,Num:11}],
+                            [{Pos:0,PosFix:true,BT:4,Num:10},{Pos:0,PosFix:true,BT:4,Num:11}]
                         ]),
                         getNums(2,10,1,10,
                             [
-                                [{BT:2,Num:20},{BT:2,Num:21}],
-                                [{BT:3,Num:20},{BT:3,Num:21}],
-                                [{BT:4,Num:20},{BT:4,Num:21}]
+                                [{Pos:0,PosFix:true,BT:2,Num:20},{Pos:0,PosFix:true,BT:2,Num:21}],
+                                [{Pos:0,PosFix:true,BT:3,Num:20},{Pos:0,PosFix:true,BT:3,Num:21}],
+                                [{Pos:0,PosFix:true,BT:4,Num:20},{Pos:0,PosFix:true,BT:4,Num:21}]
                             ]),
                         getNums(3,10,1,10,
                             [
-                                [{BT:2,Num:30},{BT:2,Num:31}],
-                                [{BT:3,Num:30},{BT:3,Num:31}],
-                                [{BT:4,Num:30},{BT:4,Num:31}]
+                                [{Pos:0,PosFix:true,BT:2,Num:30},{Pos:0,PosFix:true,BT:2,Num:31}],
+                                [{Pos:0,PosFix:true,BT:3,Num:30},{Pos:0,PosFix:true,BT:3,Num:31}],
+                                [{Pos:0,PosFix:true,BT:4,Num:30},{Pos:0,PosFix:true,BT:4,Num:31}]
                             ]),
                         getNums(4,10,1,10,
                             [
-                                [{BT:2,Num:40},{BT:2,Num:41}],
-                                [{BT:3,Num:40},{BT:3,Num:41}],
-                                [{BT:4,Num:40},{BT:4,Num:41}]
+                                [{Pos:0,PosFix:true,BT:2,Num:40},{Pos:0,PosFix:true,BT:2,Num:41}],
+                                [{Pos:0,PosFix:true,BT:3,Num:40},{Pos:0,PosFix:true,BT:3,Num:41}],
+                                [{Pos:0,PosFix:true,BT:4,Num:40},{Pos:0,PosFix:true,BT:4,Num:41}]
                             ]),
                         getNums(5,10,1,10,
                             [
-                                [{BT:2,Num:50},{BT:2,Num:51}],
-                                [{BT:3,Num:50},{BT:3,Num:51}],
-                                [{BT:4,Num:50},{BT:4,Num:51}]
+                                [{Pos:0,PosFix:true,BT:2,Num:50},{Pos:0,PosFix:true,BT:2,Num:51}],
+                                [{Pos:0,PosFix:true,BT:3,Num:50},{Pos:0,PosFix:true,BT:3,Num:51}],
+                                [{Pos:0,PosFix:true,BT:4,Num:50},{Pos:0,PosFix:true,BT:4,Num:51}]
                             ]),
                         getNums(6,10,1,10,
                             [
-                                [{BT:2,Num:60},{BT:2,Num:61}],
-                                [{BT:3,Num:60},{BT:3,Num:61}]
+                                [{Pos:0,PosFix:true,BT:2,Num:60},{Pos:0,PosFix:true,BT:2,Num:61}],
+                                [{Pos:0,PosFix:true,BT:3,Num:60},{Pos:0,PosFix:true,BT:3,Num:61}]
                             ]),
                         getNums(7,10,1,10,
                             [
-                                [{BT:2,Num:70},{BT:2,Num:71}],
-                                [{BT:3,Num:70},{BT:3,Num:71}]
+                                [{Pos:0,PosFix:true,BT:2,Num:70},{Pos:0,PosFix:true,BT:2,Num:71}],
+                                [{Pos:0,PosFix:true,BT:3,Num:70},{Pos:0,PosFix:true,BT:3,Num:71}]
                             ]),
                         getNums(8,10,1,10,
                             [
-                                [{BT:2,Num:80},{BT:2,Num:81}],
-                                [{BT:3,Num:80},{BT:3,Num:81}]
+                                [{Pos:0,PosFix:true,BT:2,Num:80},{Pos:0,PosFix:true,BT:2,Num:81}],
+                                [{Pos:0,PosFix:true,BT:3,Num:80},{Pos:0,PosFix:true,BT:3,Num:81}]
                             ]),
                         getNums(9,10,1,10,
                             [
-                                [{BT:2,Num:90},{BT:2,Num:91}],
-                                [{BT:3,Num:90},{BT:3,Num:91}]
+                                [{Pos:0,PosFix:true,BT:2,Num:90},{Pos:0,PosFix:true,BT:2,Num:91}],
+                                [{Pos:0,PosFix:true,BT:3,Num:90},{Pos:0,PosFix:true,BT:3,Num:91}]
                             ]),
                         getNums(10,10,1,10,
                             [
-                                [{BT:2,Num:100},{BT:2,Num:101}],
-                                [{BT:3,Num:100},{BT:3,Num:101}]
+                                [{Pos:0,PosFix:true,BT:2,Num:100},{Pos:0,PosFix:true,BT:2,Num:101}],
+                                [{Pos:0,PosFix:true,BT:3,Num:100},{Pos:0,PosFix:true,BT:3,Num:101}]
                             ]),
                 ]
             }
@@ -1290,7 +1317,7 @@ const Cars:Layout = [
                 Selects:[],
                 items:[
                     getNums(7,19,3,0,
-                        [[{BT:5,Num:0},{BT:5,Num:1}]])
+                        [[{Pos:0,PosFix:true,BT:5,Num:0},{Pos:0,PosFix:true,BT:5,Num:1}]])
                 ] 
             }
         ]
@@ -1302,8 +1329,9 @@ const Cars:Layout = [
                 aBT: [8,9,10],
                 sltedItem:0,
                 start: 1,
-                end:10,                
-                item: getNums                
+                end:10,
+                item: getblocks(1,10)
+                //item: getNums                
             }
         ]               
     }
@@ -1316,38 +1344,38 @@ const Always:Layout = [
                 title: "Game.Always.Item.5.title",
                 subtitle: "Game.Always.Item.7.title",
                 item:[
-                    [{BT:5,Num:0},{BT:6,Num:0},{BT:7,Num:0},{BT:8,Num:0}],
-                    [{BT:5,Num:1},{BT:6,Num:1},{BT:7,Num:1}]
+                    [{Pos:0,PosFix:true,BT:5,Num:0},{Pos:0,PosFix:true,BT:6,Num:0},{Pos:0,PosFix:true,BT:7,Num:0},{Pos:0,PosFix:true,BT:8,Num:0}],
+                    [{Pos:0,PosFix:true,BT:5,Num:1},{Pos:0,PosFix:true,BT:6,Num:1},{Pos:0,PosFix:true,BT:7,Num:1}]
                 ]
             },
             {
                 title: "Game.Always.Ball.1",
                 item:[
-                    [{BT:2,Num:10},{BT:2,Num:11},{BT:3,Num:10},{BT:3,Num:11}]
+                    [{Pos:0,PosFix:true,BT:2,Num:10},{Pos:0,PosFix:true,BT:2,Num:11},{Pos:0,PosFix:true,BT:3,Num:10},{Pos:0,PosFix:true,BT:3,Num:11}]
                 ]                
             },
             {
                 title: "Game.Always.Ball.2",
                 item:[
-                    [{BT:2,Num:20},{BT:2,Num:21},{BT:3,Num:20},{BT:3,Num:21}]
+                    [{Pos:0,PosFix:true,BT:2,Num:20},{Pos:0,PosFix:true,BT:2,Num:21},{Pos:0,PosFix:true,BT:3,Num:20},{Pos:0,PosFix:true,BT:3,Num:21}]
                 ]                
             },
             {
                 title: "Game.Always.Ball.3",
                 item:[
-                    [{BT:2,Num:30},{BT:2,Num:31},{BT:3,Num:30},{BT:3,Num:31}]
+                    [{Pos:0,PosFix:true,BT:2,Num:30},{Pos:0,PosFix:true,BT:2,Num:31},{Pos:0,PosFix:true,BT:3,Num:30},{Pos:0,PosFix:true,BT:3,Num:31}]
                 ]                
             },
             {
                 title: "Game.Always.Ball.4",
                 item:[
-                    [{BT:2,Num:40},{BT:2,Num:41},{BT:3,Num:40},{BT:3,Num:41}]
+                    [{Pos:0,PosFix:true,BT:2,Num:40},{Pos:0,PosFix:true,BT:2,Num:41},{Pos:0,PosFix:true,BT:3,Num:40},{Pos:0,PosFix:true,BT:3,Num:41}]
                 ]
             },
             {
                 title: "Game.Always.Ball.5",
                 item:[
-                    [{BT:2,Num:50},{BT:2,Num:51},{BT:3,Num:50},{BT:3,Num:51}]
+                    [{Pos:0,PosFix:true,BT:2,Num:50},{Pos:0,PosFix:true,BT:2,Num:51},{Pos:0,PosFix:true,BT:3,Num:50},{Pos:0,PosFix:true,BT:3,Num:51}]
                 ]
             }
         ]
@@ -1368,11 +1396,11 @@ const Always:Layout = [
                 start: 0,
                 end:9,                
                 items:[ 
-                    getNums(1,9,0,10,[[{BT:2,Num:10},{BT:2,Num:11},{BT:3,Num:10},{BT:3,Num:11}]]),
-                    getNums(2,9,0,10,[[{BT:2,Num:20},{BT:2,Num:21},{BT:3,Num:20},{BT:3,Num:21}]]),
-                    getNums(3,9,0,10,[[{BT:2,Num:30},{BT:2,Num:31},{BT:3,Num:30},{BT:3,Num:31}]]),
-                    getNums(4,9,0,10,[[{BT:2,Num:40},{BT:2,Num:41},{BT:3,Num:40},{BT:3,Num:41}]]),
-                    getNums(5,9,0,10,[[{BT:2,Num:50},{BT:2,Num:51},{BT:3,Num:50},{BT:3,Num:51}]])
+                    getNums(1,9,0,10,[[{Pos:0,PosFix:true,BT:2,Num:10},{Pos:0,PosFix:true,BT:2,Num:11},{Pos:0,PosFix:true,BT:3,Num:10},{Pos:0,PosFix:true,BT:3,Num:11}]]),
+                    getNums(2,9,0,10,[[{Pos:0,PosFix:true,BT:2,Num:20},{Pos:0,PosFix:true,BT:2,Num:21},{Pos:0,PosFix:true,BT:3,Num:20},{Pos:0,PosFix:true,BT:3,Num:21}]]),
+                    getNums(3,9,0,10,[[{Pos:0,PosFix:true,BT:2,Num:30},{Pos:0,PosFix:true,BT:2,Num:31},{Pos:0,PosFix:true,BT:3,Num:30},{Pos:0,PosFix:true,BT:3,Num:31}]]),
+                    getNums(4,9,0,10,[[{Pos:0,PosFix:true,BT:2,Num:40},{Pos:0,PosFix:true,BT:2,Num:41},{Pos:0,PosFix:true,BT:3,Num:40},{Pos:0,PosFix:true,BT:3,Num:41}]]),
+                    getNums(5,9,0,10,[[{Pos:0,PosFix:true,BT:2,Num:50},{Pos:0,PosFix:true,BT:2,Num:51},{Pos:0,PosFix:true,BT:3,Num:50},{Pos:0,PosFix:true,BT:3,Num:51}]])
                 ]
             }
         ]
@@ -1383,19 +1411,19 @@ const Always:Layout = [
             {
                 title: "Game.Always.Item.12.title",
                 item:[
-                    [{BT:12,Num:1},{BT:12,Num:2},{BT:12,Num:3},{BT:12,Num:4},{BT:12,Num:5}]
+                    [{Pos:0,PosFix:true,BT:12,Num:1},{Pos:0,PosFix:true,BT:12,Num:2},{Pos:0,PosFix:true,BT:12,Num:3},{Pos:0,PosFix:true,BT:12,Num:4},{Pos:0,PosFix:true,BT:12,Num:5}]
                 ]
             },
             {
                 title: "Game.Always.Item.13.title",
                 item:[
-                    [{BT:13,Num:1},{BT:13,Num:2},{BT:13,Num:3},{BT:13,Num:4},{BT:13,Num:5}]
+                    [{Pos:0,PosFix:true,BT:13,Num:1},{Pos:0,PosFix:true,BT:13,Num:2},{Pos:0,PosFix:true,BT:13,Num:3},{Pos:0,PosFix:true,BT:13,Num:4},{Pos:0,PosFix:true,BT:13,Num:5}]
                 ]
             },
             {
                 title: "Game.Always.Item.14.title",
                 item:[
-                    [{BT:14,Num:1},{BT:14,Num:2},{BT:14,Num:3},{BT:14,Num:4},{BT:14,Num:5}]
+                    [{Pos:0,PosFix:true,BT:14,Num:1},{Pos:0,PosFix:true,BT:14,Num:2},{Pos:0,PosFix:true,BT:14,Num:3},{Pos:0,PosFix:true,BT:14,Num:4},{Pos:0,PosFix:true,BT:14,Num:5}]
                 ]
             }                        
         ]
@@ -1408,7 +1436,7 @@ const Speed3:Layout=[
         cont:[
             {
                 item:[
-                    [{BT:2,Num:0},{BT:2,Num:1},{BT:4,Num:0}],
+                    [{Pos:0,PosFix:true,BT:2,Num:0},{Pos:0,PosFix:true,BT:2,Num:1},{Pos:0,PosFix:true,BT:4,Num:0}],
                 ]
             }
         ]
@@ -1418,8 +1446,8 @@ const Speed3:Layout=[
         cont: [
             {
                 item:[
-                    [{BT:1,Num:1},{BT:1,Num:2},{BT:1,Num:3}],
-                    [{BT:1,Num:4},{BT:1,Num:5},{BT:1,Num:6}]
+                    [{Pos:0,PosFix:true,BT:1,Num:1},{Pos:0,PosFix:true,BT:1,Num:2},{Pos:0,PosFix:true,BT:1,Num:3}],
+                    [{Pos:0,PosFix:true,BT:1,Num:4},{Pos:0,PosFix:true,BT:1,Num:5},{Pos:0,PosFix:true,BT:1,Num:6}]
                 ]                
             }
         ]
@@ -1429,8 +1457,8 @@ const Speed3:Layout=[
         cont: [
             {
                 item:[
-                    [{BT:3,Num:1},{BT:3,Num:2},{BT:3,Num:3}],
-                    [{BT:3,Num:4},{BT:3,Num:5},{BT:3,Num:6}]
+                    [{Pos:0,PosFix:true,BT:3,Num:1},{Pos:0,PosFix:true,BT:3,Num:2},{Pos:0,PosFix:true,BT:3,Num:3}],
+                    [{Pos:0,PosFix:true,BT:3,Num:4},{Pos:0,PosFix:true,BT:3,Num:5},{Pos:0,PosFix:true,BT:3,Num:6}]
                 ]                
             }                       
         ]
@@ -1440,8 +1468,8 @@ const Speed3:Layout=[
         cont: [
             {
                 item:[
-                    [{BT:7,Num:1},{BT:7,Num:2},{BT:7,Num:3}],
-                    [{BT:7,Num:4},{BT:7,Num:5},{BT:7,Num:6}]
+                    [{Pos:0,PosFix:true,BT:7,Num:1},{Pos:0,PosFix:true,BT:7,Num:2},{Pos:0,PosFix:true,BT:7,Num:3}],
+                    [{Pos:0,PosFix:true,BT:7,Num:4},{Pos:0,PosFix:true,BT:7,Num:5},{Pos:0,PosFix:true,BT:7,Num:6}]
                 ]                
             }
         ]
@@ -1451,9 +1479,9 @@ const Speed3:Layout=[
         cont: [
             {
                 item:[
-                    [{BT:5,Num:4},{BT:5,Num:5},{BT:5,Num:6},{BT:5,Num:7},{BT:5,Num:8}],
-                    [{BT:5,Num:9},{BT:5,Num:10},{BT:5,Num:11},{BT:5,Num:12},{BT:5,Num:13}],
-                    [{BT:5,Num:14},{BT:5,Num:15},{BT:5,Num:16},{BT:5,Num:17}]
+                    [{Pos:0,PosFix:true,BT:5,Num:4},{Pos:0,PosFix:true,BT:5,Num:5},{Pos:0,PosFix:true,BT:5,Num:6},{Pos:0,PosFix:true,BT:5,Num:7},{Pos:0,PosFix:true,BT:5,Num:8}],
+                    [{Pos:0,PosFix:true,BT:5,Num:9},{Pos:0,PosFix:true,BT:5,Num:10},{Pos:0,PosFix:true,BT:5,Num:11},{Pos:0,PosFix:true,BT:5,Num:12},{Pos:0,PosFix:true,BT:5,Num:13}],
+                    [{Pos:0,PosFix:true,BT:5,Num:14},{Pos:0,PosFix:true,BT:5,Num:15},{Pos:0,PosFix:true,BT:5,Num:16},{Pos:0,PosFix:true,BT:5,Num:17}]
                 ]
             }
         ]
@@ -1463,9 +1491,9 @@ const Speed3:Layout=[
         cont: [
             {
                 item:[
-                    [{BT:6,Num:0},{BT:6,Num:1},{BT:6,Num:2},{BT:6,Num:3},{BT:6,Num:4}],
-                    [{BT:6,Num:5},{BT:6,Num:6},{BT:6,Num:7},{BT:6,Num:8},{BT:6,Num:9}],
-                    [{BT:6,Num:10},{BT:6,Num:11},{BT:6,Num:12},{BT:6,Num:13},{BT:6,Num:14}]
+                    [{Pos:0,PosFix:true,BT:6,Num:0},{Pos:0,PosFix:true,BT:6,Num:1},{Pos:0,PosFix:true,BT:6,Num:2},{Pos:0,PosFix:true,BT:6,Num:3},{Pos:0,PosFix:true,BT:6,Num:4}],
+                    [{Pos:0,PosFix:true,BT:6,Num:5},{Pos:0,PosFix:true,BT:6,Num:6},{Pos:0,PosFix:true,BT:6,Num:7},{Pos:0,PosFix:true,BT:6,Num:8},{Pos:0,PosFix:true,BT:6,Num:9}],
+                    [{Pos:0,PosFix:true,BT:6,Num:10},{Pos:0,PosFix:true,BT:6,Num:11},{Pos:0,PosFix:true,BT:6,Num:12},{Pos:0,PosFix:true,BT:6,Num:13},{Pos:0,PosFix:true,BT:6,Num:14}]
                 ]
             }
         ]
@@ -1478,26 +1506,26 @@ const Happy8:Layout=[
             {
                 title : "Game.Happy8.Item.2.shortT",
                 item:[
-                    [{BT:2,Num:0},{BT:2,Num:1},{BT:3,Num:0},{BT:3,Num:1},{BT:4,Num:0}],
-                    [{BT:5,Num:0},{BT:5,Num:1},{BT:5,Num:2},{BT:5,Num:3}]
+                    [{Pos:0,PosFix:true,BT:2,Num:0},{Pos:0,PosFix:true,BT:2,Num:1},{Pos:0,PosFix:true,BT:3,Num:0},{Pos:0,PosFix:true,BT:3,Num:1},{Pos:0,PosFix:true,BT:4,Num:0}],
+                    [{Pos:0,PosFix:true,BT:5,Num:0},{Pos:0,PosFix:true,BT:5,Num:1},{Pos:0,PosFix:true,BT:5,Num:2},{Pos:0,PosFix:true,BT:5,Num:3}]
                 ]
             },
             {
                 title : "Game.Happy8.Item.6.title",
                 item:[
-                    [{BT:6,Num:0},{BT:6,Num:1},{BT:6,Num:2}]
+                    [{Pos:0,PosFix:true,BT:6,Num:0},{Pos:0,PosFix:true,BT:6,Num:1},{Pos:0,PosFix:true,BT:6,Num:2}]
                 ]                
             },
             {
                 title : "Game.Happy8.Item.7.title",
                 item:[
-                    [{BT:7,Num:0},{BT:7,Num:1},{BT:7,Num:2}]
+                    [{Pos:0,PosFix:true,BT:7,Num:0},{Pos:0,PosFix:true,BT:7,Num:1},{Pos:0,PosFix:true,BT:7,Num:2}]
                 ]                
             },
             {
                 title : "Game.Happy8.Item.8.title",
                 item:[
-                    [{BT:8,Num:0},{BT:8,Num:1},{BT:8,Num:2},{BT:8,Num:3},{BT:8,Num:4}]
+                    [{Pos:0,PosFix:true,BT:8,Num:0},{Pos:0,PosFix:true,BT:8,Num:1},{Pos:0,PosFix:true,BT:8,Num:2},{Pos:0,PosFix:true,BT:8,Num:3},{Pos:0,PosFix:true,BT:8,Num:4}]
                 ]                
             }
         ]
@@ -1506,7 +1534,10 @@ const Happy8:Layout=[
         name: "Game.Happy8.Menu.Group.1.title",
         cont: [
             {
-                item:getNums(1,80,1)
+                //item:getNums(1,80,1)
+                BT:1,
+                Sortable:true,
+                item: getblocks(1,80)
             }
         ]
     }    
@@ -1518,55 +1549,55 @@ const BTCHash:Layout=[
             {
                 title : "Game.BTCHash.Item.1.sctitle.0",
                 item:[
-                    [{BT:1,Num:0},{BT:1,Num:1},{BT:6,Num:0},{BT:6,Num:1},{BT:11,Num:0},{BT:11,Num:1}]
+                    [{Pos:0,PosFix:true,BT:1,Num:0},{Pos:0,PosFix:true,BT:1,Num:1},{Pos:0,PosFix:true,BT:6,Num:0},{Pos:0,PosFix:true,BT:6,Num:1},{Pos:0,PosFix:true,BT:11,Num:0},{Pos:0,PosFix:true,BT:11,Num:1}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.2.sctitle.0",
                 item:[
-                    [{BT:2,Num:0},{BT:2,Num:1},{BT:7,Num:0},{BT:7,Num:1},{BT:12,Num:0},{BT:12,Num:1}]
+                    [{Pos:0,PosFix:true,BT:2,Num:0},{Pos:0,PosFix:true,BT:2,Num:1},{Pos:0,PosFix:true,BT:7,Num:0},{Pos:0,PosFix:true,BT:7,Num:1},{Pos:0,PosFix:true,BT:12,Num:0},{Pos:0,PosFix:true,BT:12,Num:1}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.3.sctitle.0",
                 item:[
-                    [{BT:3,Num:0},{BT:3,Num:1},{BT:8,Num:0},{BT:8,Num:1},{BT:13,Num:0},{BT:13,Num:1}]
+                    [{Pos:0,PosFix:true,BT:3,Num:0},{Pos:0,PosFix:true,BT:3,Num:1},{Pos:0,PosFix:true,BT:8,Num:0},{Pos:0,PosFix:true,BT:8,Num:1},{Pos:0,PosFix:true,BT:13,Num:0},{Pos:0,PosFix:true,BT:13,Num:1}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.4.sctitle.0",
                 item:[
-                    [{BT:4,Num:0},{BT:4,Num:1},{BT:9,Num:0},{BT:9,Num:1},{BT:14,Num:0},{BT:14,Num:1}]
+                    [{Pos:0,PosFix:true,BT:4,Num:0},{Pos:0,PosFix:true,BT:4,Num:1},{Pos:0,PosFix:true,BT:9,Num:0},{Pos:0,PosFix:true,BT:9,Num:1},{Pos:0,PosFix:true,BT:14,Num:0},{Pos:0,PosFix:true,BT:14,Num:1}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.5.sctitle.0",
                 item:[
-                    [{BT:5,Num:0},{BT:5,Num:1},{BT:10,Num:0},{BT:10,Num:1},{BT:15,Num:0},{BT:15,Num:1}]
+                    [{Pos:0,PosFix:true,BT:5,Num:0},{Pos:0,PosFix:true,BT:5,Num:1},{Pos:0,PosFix:true,BT:10,Num:0},{Pos:0,PosFix:true,BT:10,Num:1},{Pos:0,PosFix:true,BT:15,Num:0},{Pos:0,PosFix:true,BT:15,Num:1}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.16.sctitle.0",
                 item:[
-                    [{BT:16,Num:0},{BT:16,Num:1},{BT:17,Num:0},{BT:17,Num:1}]
+                    [{Pos:0,PosFix:true,BT:16,Num:0},{Pos:0,PosFix:true,BT:16,Num:1},{Pos:0,PosFix:true,BT:17,Num:0},{BT:17,Num:1}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.18.sctitle.0",
                 item:[
-                    [{BT:18,Num:0},{BT:18,Num:1},{BT:19,Num:0},{BT:19,Num:1}]
+                    [{Pos:0,PosFix:true,BT:18,Num:0},{Pos:0,PosFix:true,BT:18,Num:1},{Pos:0,PosFix:true,BT:19,Num:0},{Pos:0,PosFix:true,BT:19,Num:1}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.20.sctitle.0",
                 item:[
-                    [{BT:20,Num:0},{BT:20,Num:1},{BT:21,Num:0},{BT:21,Num:1}]
+                    [{Pos:0,PosFix:true,BT:20,Num:0},{Pos:0,PosFix:true,BT:20,Num:1},{Pos:0,PosFix:true,BT:21,Num:0},{Pos:0,PosFix:true,BT:21,Num:1}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.22.sctitle.0",
                 item:[
-                    [{BT:22,Num:0},{BT:22,Num:1},{BT:23,Num:0},{BT:23,Num:1}]
+                    [{Pos:0,PosFix:true,BT:22,Num:0},{Pos:0,PosFix:true,BT:22,Num:1},{Pos:0,PosFix:true,BT:23,Num:0},{Pos:0,PosFix:true,BT:23,Num:1}]
                 ]
             },
         ]
@@ -1579,8 +1610,10 @@ const BTCHash:Layout=[
                 aBT:[24,25,26,27,28],
                 sltedItem:0,
                 start: 0,
-                end:9,                
-                item:getNums
+                end:9,
+                curBT:24,
+                item:getblocks(0,9)
+                //item:getNums
             }
         ]
     },
@@ -1592,8 +1625,10 @@ const BTCHash:Layout=[
                 aBT:[29,30,31,32],
                 sltedItem:0,
                 start: 0,
-                end:9,                
-                item:getNums
+                end:9,
+                curBT:29,
+                item:getblocks(0,9)
+                //item:getNums
             }
         ]
     },
@@ -1602,18 +1637,25 @@ const BTCHash:Layout=[
         cont:[
             {
                 dgt: 2, //位數
+                /*
                 Selects: [
                     "Game.BTCHash.Item.33.title",
                     "Game.BTCHash.Item.34.title",
                     "Game.BTCHash.Item.35.title",
                     "Game.BTCHash.Item.36.title",
-                ],          
+                ],
+                */
+                aBT:[33,34,35,36],
+                curBT:33,
+                item:getblocks(0,219)
+                /*
                 items:[
-                    //getTwoDgt(33),
-                    //getTwoDgt(34),
-                    //getTwoDgt(35),
-                    //getTwoDgt(36),
+                    getTwoDgt(33),
+                    getTwoDgt(34),
+                    getTwoDgt(35),
+                    getTwoDgt(36),
                 ]
+                */
             }
         ]
     },
@@ -1622,18 +1664,24 @@ const BTCHash:Layout=[
         cont:[
             {
                 dgt: 3, //位數
+                aBT:[37,38,39,40],
+                curBT:37,
+                Sortable:true,
+                item:getblocks(0,99)
+                /*
                 Selects: [
                     "Game.BTCHash.Item.37.title",
                     "Game.BTCHash.Item.38.title",
                     "Game.BTCHash.Item.39.title",
                     "Game.BTCHash.Item.40.title",
-                ],          
+                ],
                 items:[
                     //getThreeDgt(37),
                     //getThreeDgt(38),
                     //getThreeDgt(39),
                     //getThreeDgt(40),
                 ]
+                */
             }
         ]
     },
@@ -1642,9 +1690,14 @@ const BTCHash:Layout=[
         cont:[
             {
                 dgt: 4, //位數
+                BT:41,
+                Sortable:true,
+                item:getblocks(0,99)
+                /*
                 item:[
                     [{BT:41,Num:0}]
                 ]
+                */
             }
         ]
     },
@@ -1653,9 +1706,14 @@ const BTCHash:Layout=[
         cont:[
             {
                 dgt: 5, //位數
+                BT:42,
+                Sortable:true,
+                item:getblocks(0,99)
+                /*
                 item:[
                     [{BT:42,Num:0}]
                 ]
+                */
             }
         ]
     },
@@ -1665,25 +1723,25 @@ const BTCHash:Layout=[
             {
                 title : "Game.BTCHash.Item.43.sctitle.0",
                 item:[
-                    [{BT:43,Num:0},{BT:43,Num:1},{BT:43,Num:2},{BT:43,Num:3},{BT:43,Num:4}]
+                    [{Pos:0,PosFix:true,BT:43,Num:0},{Pos:0,PosFix:true,BT:43,Num:1},{Pos:0,PosFix:true,BT:43,Num:2},{Pos:0,PosFix:true,BT:43,Num:3},{Pos:0,PosFix:true,BT:43,Num:4}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.44.sctitle.0",
                 item:[
-                    [{BT:44,Num:0},{BT:44,Num:1},{BT:44,Num:2},{BT:44,Num:3},{BT:44,Num:4}]
+                    [{Pos:0,PosFix:true,BT:44,Num:0},{Pos:0,PosFix:true,BT:44,Num:1},{Pos:0,PosFix:true,BT:44,Num:2},{Pos:0,PosFix:true,BT:44,Num:3},{Pos:0,PosFix:true,BT:44,Num:4}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.45.sctitle.0",
                 item:[
-                    [{BT:45,Num:0},{BT:45,Num:1},{BT:45,Num:2},{BT:45,Num:3},{BT:45,Num:4}]
+                    [{Pos:0,PosFix:true,BT:45,Num:0},{Pos:0,PosFix:true,BT:45,Num:1},{Pos:0,PosFix:true,BT:45,Num:2},{Pos:0,PosFix:true,BT:45,Num:3},{Pos:0,PosFix:true,BT:45,Num:4}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.46.title",
                 item:[
-                    [{BT:46,Num:0},{BT:46,Num:1},{BT:46,Num:2},{BT:46,Num:3},{BT:46,Num:4},{BT:46,Num:5}]
+                    [{Pos:0,PosFix:true,BT:46,Num:0},{Pos:0,PosFix:true,BT:46,Num:1},{Pos:0,PosFix:true,BT:46,Num:2},{Pos:0,PosFix:true,BT:46,Num:3},{Pos:0,PosFix:true,BT:46,Num:4},{Pos:0,PosFix:true,BT:46,Num:5}]
                 ]
             }
         ]
@@ -1694,31 +1752,31 @@ const BTCHash:Layout=[
             {
                 title : "Game.BTCHash.Item.1.sctitle.0",
                 item:[
-                    [{BT:47,Num:10},{BT:47,Num:11},{BT:47,Num:60},{BT:47,Num:61},{BT:47,Num:110},{BT:47,Num:111}]
+                    [{Pos:0,PosFix:true,BT:47,Num:10},{Pos:0,PosFix:true,BT:47,Num:11},{Pos:0,PosFix:true,BT:47,Num:60},{Pos:0,PosFix:true,BT:47,Num:61},{Pos:0,PosFix:true,BT:47,Num:110},{Pos:0,PosFix:true,BT:47,Num:111}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.2.sctitle.0",
                 item:[
-                    [{BT:47,Num:20},{BT:47,Num:21},{BT:47,Num:70},{BT:47,Num:71},{BT:47,Num:120},{BT:47,Num:121}]
+                    [{Pos:0,PosFix:true,BT:47,Num:20},{Pos:0,PosFix:true,BT:47,Num:21},{Pos:0,PosFix:true,BT:47,Num:70},{Pos:0,PosFix:true,BT:47,Num:71},{Pos:0,PosFix:true,BT:47,Num:120},{Pos:0,PosFix:true,BT:47,Num:121}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.3.sctitle.0",
                 item:[
-                    [{BT:47,Num:30},{BT:47,Num:31},{BT:47,Num:80},{BT:47,Num:81},{BT:47,Num:130},{BT:47,Num:131}]
+                    [{Pos:0,PosFix:true,BT:47,Num:30},{Pos:0,PosFix:true,BT:47,Num:31},{Pos:0,PosFix:true,BT:47,Num:80},{Pos:0,PosFix:true,BT:47,Num:81},{Pos:0,PosFix:true,BT:47,Num:130},{Pos:0,PosFix:true,BT:47,Num:131}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.4.sctitle.0",
                 item:[
-                    [{BT:47,Num:40},{BT:47,Num:41},{BT:47,Num:90},{BT:47,Num:91},{BT:47,Num:140},{BT:47,Num:141}]
+                    [{Pos:0,PosFix:true,BT:47,Num:40},{Pos:0,PosFix:true,BT:47,Num:41},{Pos:0,PosFix:true,BT:47,Num:90},{Pos:0,PosFix:true,BT:47,Num:91},{Pos:0,PosFix:true,BT:47,Num:140},{Pos:0,PosFix:true,BT:47,Num:141}]
                 ]
             },
             {
                 title : "Game.BTCHash.Item.5.sctitle.0",
                 item:[
-                    [{BT:47,Num:50},{BT:47,Num:51},{BT:47,Num:100},{BT:47,Num:101},{BT:47,Num:150},{BT:47,Num:151}]
+                    [{Pos:0,PosFix:true,BT:47,Num:50},{Pos:0,PosFix:true,BT:47,Num:51},{Pos:0,PosFix:true,BT:47,Num:100},{Pos:0,PosFix:true,BT:47,Num:101},{Pos:0,PosFix:true,BT:47,Num:150},{Pos:0,PosFix:true,BT:47,Num:151}]
                 ]
             }
         ]
@@ -1732,49 +1790,49 @@ const HashSix:Layout=[
             title : "Game.HashSix.Item.5.title",
             subtitle: "Game.HashSix.TitleSP.SNO.1",
             item:[
-                [{BT:5,Num:0},{BT:5,Num:1},{BT:6,Num:0},{BT:6,Num:1}]
+                [{Pos:0,PosFix:true,BT:5,Num:0},{Pos:0,PosFix:true,BT:5,Num:1},{Pos:0,PosFix:true,BT:6,Num:0},{Pos:0,PosFix:true,BT:6,Num:1}]
             ]
         },
             {
             title : "Game.HashSix.Item.21.title",
             item:[
-                [{BT:13,Num:10},{BT:12,Num:10},{BT:27,Num:10}],
-                [{BT:13,Num:11},{BT:12,Num:11},{BT:27,Num:11}]
+                [{Pos:0,PosFix:true,BT:13,Num:10},{Pos:0,PosFix:true,BT:12,Num:10},{Pos:0,PosFix:true,BT:27,Num:10}],
+                [{Pos:0,PosFix:true,BT:13,Num:11},{Pos:0,PosFix:true,BT:12,Num:11},{Pos:0,PosFix:true,BT:27,Num:11}]
             ]
         },
         {
             title : "Game.HashSix.Item.22.title",
             item:[
-                [{BT:13,Num:20},{BT:12,Num:20},{BT:27,Num:20}],
-                [{BT:13,Num:21},{BT:12,Num:21},{BT:27,Num:21}]
+                [{Pos:0,PosFix:true,BT:13,Num:20},{Pos:0,PosFix:true,BT:12,Num:20},{Pos:0,PosFix:true,BT:27,Num:20}],
+                [{Pos:0,PosFix:true,BT:13,Num:21},{Pos:0,PosFix:true,BT:12,Num:21},{Pos:0,PosFix:true,BT:27,Num:21}]
             ]
         },
         {
             title : "Game.HashSix.Item.23.title",
             item:[
-                [{BT:13,Num:30},{BT:12,Num:30},{BT:27,Num:30}],
-                [{BT:13,Num:31},{BT:12,Num:31},{BT:27,Num:31}]
+                [{Pos:0,PosFix:true,BT:13,Num:30},{Pos:0,PosFix:true,BT:12,Num:30},{Pos:0,PosFix:true,BT:27,Num:30}],
+                [{Pos:0,PosFix:true,BT:13,Num:31},{Pos:0,PosFix:true,BT:12,Num:31},{Pos:0,PosFix:true,BT:27,Num:31}]
             ]
         },
         {
             title : "Game.HashSix.Item.24.title",
             item:[
-                [{BT:13,Num:40},{BT:12,Num:40},{BT:27,Num:40}],
-                [{BT:13,Num:41},{BT:12,Num:41},{BT:27,Num:41}]
+                [{Pos:0,PosFix:true,BT:13,Num:40},{Pos:0,PosFix:true,BT:12,Num:40},{Pos:0,PosFix:true,BT:27,Num:40}],
+                [{Pos:0,PosFix:true,BT:13,Num:41},{Pos:0,PosFix:true,BT:12,Num:41},{Pos:0,PosFix:true,BT:27,Num:41}]
             ]
         },
         {
             title : "Game.HashSix.Item.24.title",
             item:[
-                [{BT:13,Num:50},{BT:12,Num:50},{BT:27,Num:50}],
-                [{BT:13,Num:51},{BT:12,Num:51},{BT:27,Num:51}]
+                [{Pos:0,PosFix:true,BT:13,Num:50},{Pos:0,PosFix:true,BT:12,Num:50},{Pos:0,PosFix:true,BT:27,Num:50}],
+                [{Pos:0,PosFix:true,BT:13,Num:51},{Pos:0,PosFix:true,BT:12,Num:51},{Pos:0,PosFix:true,BT:27,Num:51}]
             ]
         },
         {
             title : "Game.HashSix.Item.26.title",
             item:[
-                [{BT:13,Num:60},{BT:12,Num:60},{BT:27,Num:60}],
-                [{BT:13,Num:61},{BT:12,Num:61},{BT:27,Num:61}]
+                [{Pos:0,PosFix:true,BT:13,Num:60},{Pos:0,PosFix:true,BT:12,Num:60},{Pos:0,PosFix:true,BT:27,Num:60}],
+                [{Pos:0,PosFix:true,BT:13,Num:61},{Pos:0,PosFix:true,BT:12,Num:61},{Pos:0,PosFix:true,BT:27,Num:61}]
             ]
         },
         ]
@@ -1788,7 +1846,10 @@ const HashSix:Layout=[
                 sltedItem:0,
                 start: 0,
                 end:49,
-                item: getNums
+                curBT:4,
+                Sortable:true,
+                item:getblocks(0,49)
+                //item: getNums
             }
         ]
     }, // title: '正碼', BT: 4, SubItem: [], SubMenu: []
@@ -1796,12 +1857,15 @@ const HashSix:Layout=[
         name: "Game.HashSix.Menu.Group.2.title", 
         cont:[
             {
+                colorWave: true,
                 aBT: [9,7,8,79,80,81],
                 twOdds:[0,0,1,1,1,1],
                 sltedItem:0,
                 start: 0,
                 end:49,
-                item: getNums
+                curBT:9,
+                item:getblocks(0,49)                
+                //item: getNums
             }
         ]
     }, //title: '連碼', SubMenu: [] 6+9+55555+32+
@@ -1809,11 +1873,15 @@ const HashSix:Layout=[
         name: "Game.HashSix.Menu.Group.3.title", 
         cont:[
             {
+                colorWave: true,
                 aBT: [31,48,49,50,51,52],
                 sltedItem:0,
                 start: 0,
                 end:49,
-                item: getNums
+                curBT:31,
+                Sortable:true,
+                item:getblocks(0,49)                
+                //item: getNums
             }            
         ]
     }, //title: '不中', SubMenu: []
@@ -1821,11 +1889,15 @@ const HashSix:Layout=[
         name: "Game.HashSix.Menu.Group.4.title", 
         cont:[
             {
+                colorWave: true,
                 aBT: [71,57,58,59,60,61,62,63,64,65,66,67],
                 sltedItem:0,
                 start: 0,
                 end:49,
-                item: getNums
+                curBT:71,
+                Sortable:true,
+                item:getblocks(0,49)                
+                //item: getNums
             }             
         ]
     }, // title: '多選', SubMenu: [] 
@@ -1837,7 +1909,9 @@ const HashSix:Layout=[
                 sltedItem:0,
                 start: 0,
                 end:9,
-                item: getNums
+                curBT:20,
+                item:getblocks(0,9)
+                //item: getNums
             }             
         ]
     }, //title: '尾數', SubMenu: []
@@ -1849,7 +1923,7 @@ const HashSix:Layout=[
                 colorWave: true,
                 colorExt: 0,                
                 item:[
-                    [{BT:14,Num:10},{BT:14,Num:11},{BT:14,Num:12}]
+                    [{Pos:0,PosFix:true,BT:14,Num:10},{Pos:0,PosFix:true,BT:14,Num:11},{Pos:0,PosFix:true,BT:14,Num:12}]
                 ]
             },            
             {
@@ -1857,7 +1931,7 @@ const HashSix:Layout=[
                 colorWave: true,
                 colorExt: 0,                
                 item:[
-                    [{BT:14,Num:20},{BT:14,Num:21},{BT:14,Num:22}]
+                    [{Pos:0,PosFix:true,BT:14,Num:20},{Pos:0,PosFix:true,BT:14,Num:21},{Pos:0,PosFix:true,BT:14,Num:22}]
                 ]
             },
             {
@@ -1865,7 +1939,7 @@ const HashSix:Layout=[
                 colorWave: true,
                 colorExt: 0,
                 item:[
-                    [{BT:14,Num:30},{BT:14,Num:31},{BT:14,Num:32}]
+                    [{Pos:0,PosFix:true,BT:14,Num:30},{Pos:0,PosFix:true,BT:14,Num:31},{Pos:0,PosFix:true,BT:14,Num:32}]
                 ]
             },
             {
@@ -1873,7 +1947,7 @@ const HashSix:Layout=[
                 colorWave: true,
                 colorExt: 0,
                 item:[
-                    [{BT:14,Num:40},{BT:14,Num:41},{BT:14,Num:42}]
+                    [{Pos:0,PosFix:true,BT:14,Num:40},{Pos:0,PosFix:true,BT:14,Num:41},{Pos:0,PosFix:true,BT:14,Num:42}]
                 ]
             },
             {
@@ -1881,7 +1955,7 @@ const HashSix:Layout=[
                 colorWave: true,
                 colorExt: 0,
                 item:[
-                    [{BT:14,Num:50},{BT:14,Num:51},{BT:14,Num:52}]
+                    [{Pos:0,PosFix:true,BT:14,Num:50},{Pos:0,PosFix:true,BT:14,Num:51},{Pos:0,PosFix:true,BT:14,Num:52}]
                 ]
             },
             {
@@ -1889,7 +1963,7 @@ const HashSix:Layout=[
                 colorWave: true,
                 colorExt: 0,
                 item:[
-                    [{BT:14,Num:60},{BT:14,Num:61},{BT:14,Num:62}]
+                    [{Pos:0,PosFix:true,BT:14,Num:60},{Pos:0,PosFix:true,BT:14,Num:61},{Pos:0,PosFix:true,BT:14,Num:62}]
                 ]
             },
         ]
@@ -1902,9 +1976,9 @@ const HashSix:Layout=[
                 colorWave: true,
                 colorExt: 1,    
                 item:[
-                    [{BT:82,Num:100},{BT:82,Num:101},{BT:82,Num:102},{BT:82,Num:103}],
-                    [{BT:82,Num:104},{BT:82,Num:105},{BT:82,Num:106},{BT:82,Num:107}],
-                    [{BT:82,Num:108},{BT:82,Num:109},{BT:82,Num:110},{BT:82,Num:111}]
+                    [{Pos:0,PosFix:true,BT:82,Num:100},{Pos:0,PosFix:true,BT:82,Num:101},{Pos:0,PosFix:true,BT:82,Num:102},{Pos:0,PosFix:true,BT:82,Num:103}],
+                    [{Pos:0,PosFix:true,BT:82,Num:104},{Pos:0,PosFix:true,BT:82,Num:105},{Pos:0,PosFix:true,BT:82,Num:106},{Pos:0,PosFix:true,BT:82,Num:107}],
+                    [{Pos:0,PosFix:true,BT:82,Num:108},{Pos:0,PosFix:true,BT:82,Num:109},{Pos:0,PosFix:true,BT:82,Num:110},{Pos:0,PosFix:true,BT:82,Num:111}]
                 ]
             },
             {
@@ -1912,9 +1986,9 @@ const HashSix:Layout=[
                 colorWave: true,
                 colorExt: 1,    
                 item:[
-                    [{BT:82,Num:200},{BT:82,Num:201},{BT:82,Num:202},{BT:82,Num:203}],
-                    [{BT:82,Num:204},{BT:82,Num:205},{BT:82,Num:206},{BT:82,Num:207}],
-                    [{BT:82,Num:208},{BT:82,Num:209},{BT:82,Num:210},{BT:82,Num:211}]
+                    [{Pos:0,PosFix:true,BT:82,Num:200},{Pos:0,PosFix:true,BT:82,Num:201},{Pos:0,PosFix:true,BT:82,Num:202},{Pos:0,PosFix:true,BT:82,Num:203}],
+                    [{Pos:0,PosFix:true,BT:82,Num:204},{Pos:0,PosFix:true,BT:82,Num:205},{Pos:0,PosFix:true,BT:82,Num:206},{Pos:0,PosFix:true,BT:82,Num:207}],
+                    [{Pos:0,PosFix:true,BT:82,Num:208},{Pos:0,PosFix:true,BT:82,Num:209},{Pos:0,PosFix:true,BT:82,Num:210},{Pos:0,PosFix:true,BT:82,Num:211}]
                 ]
             },
             {
@@ -1922,9 +1996,9 @@ const HashSix:Layout=[
                 colorWave: true,
                 colorExt: 1,    
                 item:[
-                    [{BT:82,Num:300},{BT:82,Num:301},{BT:82,Num:302},{BT:82,Num:303}],
-                    [{BT:82,Num:304},{BT:82,Num:305},{BT:82,Num:306},{BT:82,Num:307}],
-                    [{BT:82,Num:308},{BT:82,Num:309},{BT:82,Num:310},{BT:82,Num:311}]
+                    [{Pos:0,PosFix:true,BT:82,Num:300},{Pos:0,PosFix:true,BT:82,Num:301},{Pos:0,PosFix:true,BT:82,Num:302},{Pos:0,PosFix:true,BT:82,Num:303}],
+                    [{Pos:0,PosFix:true,BT:82,Num:304},{Pos:0,PosFix:true,BT:82,Num:305},{Pos:0,PosFix:true,BT:82,Num:306},{Pos:0,PosFix:true,BT:82,Num:307}],
+                    [{Pos:0,PosFix:true,BT:82,Num:308},{Pos:0,PosFix:true,BT:82,Num:309},{Pos:0,PosFix:true,BT:82,Num:310},{Pos:0,PosFix:true,BT:82,Num:311}]
                 ]
             },
             {
@@ -1932,9 +2006,9 @@ const HashSix:Layout=[
                 colorWave: true,
                 colorExt: 1,    
                 item:[
-                    [{BT:82,Num:400},{BT:82,Num:401},{BT:82,Num:402},{BT:82,Num:403}],
-                    [{BT:82,Num:404},{BT:82,Num:405},{BT:82,Num:406},{BT:82,Num:407}],
-                    [{BT:82,Num:408},{BT:82,Num:409},{BT:82,Num:410},{BT:82,Num:411}]
+                    [{Pos:0,PosFix:true,BT:82,Num:400},{Pos:0,PosFix:true,BT:82,Num:401},{Pos:0,PosFix:true,BT:82,Num:402},{Pos:0,PosFix:true,BT:82,Num:403}],
+                    [{Pos:0,PosFix:true,BT:82,Num:404},{Pos:0,PosFix:true,BT:82,Num:405},{Pos:0,PosFix:true,BT:82,Num:406},{Pos:0,PosFix:true,BT:82,Num:407}],
+                    [{Pos:0,PosFix:true,BT:82,Num:408},{Pos:0,PosFix:true,BT:82,Num:409},{Pos:0,PosFix:true,BT:82,Num:410},{Pos:0,PosFix:true,BT:82,Num:411}]
                 ]
             },
             {
@@ -1942,9 +2016,9 @@ const HashSix:Layout=[
                 colorWave: true,
                 colorExt: 1,    
                 item:[
-                    [{BT:82,Num:500},{BT:82,Num:501},{BT:82,Num:502},{BT:82,Num:503}],
-                    [{BT:82,Num:504},{BT:82,Num:505},{BT:82,Num:506},{BT:82,Num:507}],
-                    [{BT:82,Num:508},{BT:82,Num:509},{BT:82,Num:510},{BT:82,Num:511}]
+                    [{Pos:0,PosFix:true,BT:82,Num:500},{Pos:0,PosFix:true,BT:82,Num:501},{Pos:0,PosFix:true,BT:82,Num:502},{Pos:0,PosFix:true,BT:82,Num:503}],
+                    [{Pos:0,PosFix:true,BT:82,Num:504},{Pos:0,PosFix:true,BT:82,Num:505},{Pos:0,PosFix:true,BT:82,Num:506},{Pos:0,PosFix:true,BT:82,Num:507}],
+                    [{Pos:0,PosFix:true,BT:82,Num:508},{Pos:0,PosFix:true,BT:82,Num:509},{Pos:0,PosFix:true,BT:82,Num:510},{Pos:0,PosFix:true,BT:82,Num:511}]
                 ]
             },
             {
@@ -1952,9 +2026,9 @@ const HashSix:Layout=[
                 colorWave: true,
                 colorExt: 1,    
                 item:[
-                    [{BT:82,Num:600},{BT:82,Num:601},{BT:82,Num:602},{BT:82,Num:603}],
-                    [{BT:82,Num:604},{BT:82,Num:605},{BT:82,Num:606},{BT:82,Num:607}],
-                    [{BT:82,Num:608},{BT:82,Num:609},{BT:82,Num:610},{BT:82,Num:611}]
+                    [{Pos:0,PosFix:true,BT:82,Num:600},{Pos:0,PosFix:true,BT:82,Num:601},{Pos:0,PosFix:true,BT:82,Num:602},{Pos:0,PosFix:true,BT:82,Num:603}],
+                    [{Pos:0,PosFix:true,BT:82,Num:604},{Pos:0,PosFix:true,BT:82,Num:605},{Pos:0,PosFix:true,BT:82,Num:606},{Pos:0,PosFix:true,BT:82,Num:607}],
+                    [{Pos:0,PosFix:true,BT:82,Num:608},{Pos:0,PosFix:true,BT:82,Num:609},{Pos:0,PosFix:true,BT:82,Num:610},{Pos:0,PosFix:true,BT:82,Num:611}]
                 ]
             },
         ]
@@ -1967,7 +2041,9 @@ const HashSix:Layout=[
                 sltedItem: 0,
                 start: 1,
                 end:12,
-                item: getNums
+                curBT:19,
+                item:getblocks(1,12)
+                //item: getNums
             }
         ]
     }, //title: '生肖', SubMenu: []
@@ -1979,6 +2055,7 @@ const HashSix:Layout=[
                 sltedItem: 0,
                 start: 1,
                 end:12,
+                curBT:83,
                 Position: [1,2,3,4,5,6],
                 PosSelected:[1,1,1,1,1,1],
                 item: getAZNums
@@ -1990,13 +2067,13 @@ const HashSix:Layout=[
         cont:[
             {
                 item:[
-                    [{BT:53,Num:0},{BT:53,Num:13},{BT:53,Num:14},{BT:53,Num:27}],
-                    [{BT:53,Num:1},{BT:53,Num:12},{BT:53,Num:15},{BT:53,Num:26}],
-                    [{BT:53,Num:2},{BT:53,Num:11},{BT:53,Num:16},{BT:53,Num:25}],
-                    [{BT:53,Num:3},{BT:53,Num:10},{BT:53,Num:17},{BT:53,Num:24}],
-                    [{BT:53,Num:4},{BT:53,Num:9},{BT:53,Num:18},{BT:53,Num:23}],
-                    [{BT:53,Num:5},{BT:53,Num:8},{BT:53,Num:19},{BT:53,Num:22}],
-                    [{BT:53,Num:6},{BT:53,Num:7},{BT:53,Num:20},{BT:53,Num:21}]
+                    [{Pos:0,PosFix:true,BT:53,Num:0},{Pos:0,PosFix:true,BT:53,Num:13},{Pos:0,PosFix:true,BT:53,Num:14},{Pos:0,PosFix:true,BT:53,Num:27}],
+                    [{Pos:0,PosFix:true,BT:53,Num:1},{Pos:0,PosFix:true,BT:53,Num:12},{Pos:0,PosFix:true,BT:53,Num:15},{Pos:0,PosFix:true,BT:53,Num:26}],
+                    [{Pos:0,PosFix:true,BT:53,Num:2},{Pos:0,PosFix:true,BT:53,Num:11},{Pos:0,PosFix:true,BT:53,Num:16},{Pos:0,PosFix:true,BT:53,Num:25}],
+                    [{Pos:0,PosFix:true,BT:53,Num:3},{Pos:0,PosFix:true,BT:53,Num:10},{Pos:0,PosFix:true,BT:53,Num:17},{Pos:0,PosFix:true,BT:53,Num:24}],
+                    [{Pos:0,PosFix:true,BT:53,Num:4},{Pos:0,PosFix:true,BT:53,Num:9},{Pos:0,PosFix:true,BT:53,Num:18},{Pos:0,PosFix:true,BT:53,Num:23}],
+                    [{Pos:0,PosFix:true,BT:53,Num:5},{Pos:0,PosFix:true,BT:53,Num:8},{Pos:0,PosFix:true,BT:53,Num:19},{Pos:0,PosFix:true,BT:53,Num:22}],
+                    [{Pos:0,PosFix:true,BT:53,Num:6},{Pos:0,PosFix:true,BT:53,Num:7},{Pos:0,PosFix:true,BT:53,Num:20},{Pos:0,PosFix:true,BT:53,Num:21}]
                 ]
             }
         ]
@@ -2007,43 +2084,43 @@ const HashSix:Layout=[
             {
                 title : "Game.MarkSix.Item.21.title",
                 item:[
-                    [{BT:15,Num:1210},{BT:15,Num:1211},{BT:15,Num:1310},{BT:15,Num:1311}],
-                    [{BT:15,Num:1410},{BT:15,Num:1411},{BT:15,Num:1412}],
+                    [{Pos:0,PosFix:true,BT:15,Num:1210},{Pos:0,PosFix:true,BT:15,Num:1211},{Pos:0,PosFix:true,BT:15,Num:1310},{Pos:0,PosFix:true,BT:15,Num:1311}],
+                    [{Pos:0,PosFix:true,BT:15,Num:1410},{Pos:0,PosFix:true,BT:15,Num:1411},{Pos:0,PosFix:true,BT:15,Num:1412}],
                 ]
             },
             {
                 title : "Game.HashSix.Item.22.title",
                 item:[
-                    [{BT:15,Num:1220},{BT:15,Num:1221},{BT:15,Num:1320},{BT:15,Num:1321}],
-                    [{BT:15,Num:1420},{BT:15,Num:1421},{BT:15,Num:1422}],
+                    [{Pos:0,PosFix:true,BT:15,Num:1220},{Pos:0,PosFix:true,BT:15,Num:1221},{Pos:0,PosFix:true,BT:15,Num:1320},{Pos:0,PosFix:true,BT:15,Num:1321}],
+                    [{Pos:0,PosFix:true,BT:15,Num:1420},{Pos:0,PosFix:true,BT:15,Num:1421},{Pos:0,PosFix:true,BT:15,Num:1422}],
                 ]
             },
             {
                 title : "Game.HashSix.Item.23.title",
                 item:[
-                    [{BT:15,Num:1230},{BT:15,Num:1231},{BT:15,Num:1330},{BT:15,Num:1331}],
-                    [{BT:15,Num:1430},{BT:15,Num:1431},{BT:15,Num:1432}],
+                    [{Pos:0,PosFix:true,BT:15,Num:1230},{Pos:0,PosFix:true,BT:15,Num:1231},{Pos:0,PosFix:true,BT:15,Num:1330},{Pos:0,PosFix:true,BT:15,Num:1331}],
+                    [{Pos:0,PosFix:true,BT:15,Num:1430},{Pos:0,PosFix:true,BT:15,Num:1431},{Pos:0,PosFix:true,BT:15,Num:1432}],
                 ]
             },
             {
                 title : "Game.HashSix.Item.24.title",
                 item:[
-                    [{BT:15,Num:1240},{BT:15,Num:1241},{BT:15,Num:1340},{BT:15,Num:1341}],
-                    [{BT:15,Num:1440},{BT:15,Num:1441},{BT:15,Num:1442}],
+                    [{Pos:0,PosFix:true,BT:15,Num:1240},{Pos:0,PosFix:true,BT:15,Num:1241},{Pos:0,PosFix:true,BT:15,Num:1340},{Pos:0,PosFix:true,BT:15,Num:1341}],
+                    [{Pos:0,PosFix:true,BT:15,Num:1440},{Pos:0,PosFix:true,BT:15,Num:1441},{Pos:0,PosFix:true,BT:15,Num:1442}],
                 ]
             },
             {
                 title : "Game.HashSix.Item.25.title",
                 item:[
-                    [{BT:15,Num:1250},{BT:15,Num:1251},{BT:15,Num:1350},{BT:15,Num:1351}],
-                    [{BT:15,Num:1450},{BT:15,Num:1451},{BT:15,Num:1452}],
+                    [{Pos:0,PosFix:true,BT:15,Num:1250},{Pos:0,PosFix:true,BT:15,Num:1251},{Pos:0,PosFix:true,BT:15,Num:1350},{Pos:0,PosFix:true,BT:15,Num:1351}],
+                    [{Pos:0,PosFix:true,BT:15,Num:1450},{Pos:0,PosFix:true,BT:15,Num:1451},{Pos:0,PosFix:true,BT:15,Num:1452}],
                 ]
             },
             {
                 title : "Game.HashSix.Item.26.title",
                 item:[
-                    [{BT:15,Num:1260},{BT:15,Num:1261},{BT:15,Num:1360},{BT:15,Num:1361}],
-                    [{BT:15,Num:1460},{BT:15,Num:1461},{BT:15,Num:1462}],
+                    [{Pos:0,PosFix:true,BT:15,Num:1260},{Pos:0,PosFix:true,BT:15,Num:1261},{Pos:0,PosFix:true,BT:15,Num:1360},{Pos:0,PosFix:true,BT:15,Num:1361}],
+                    [{Pos:0,PosFix:true,BT:15,Num:1460},{Pos:0,PosFix:true,BT:15,Num:1461},{Pos:0,PosFix:true,BT:15,Num:1462}],
                 ]
             }            
         ]
@@ -2055,57 +2132,57 @@ const HashSix:Layout=[
             {
                 title : "Game.HashSix.Item.21.title",
                 item:[
-                    [{BT:89,Num:10},{BT:89,Num:11},{BT:89,Num:12},{BT:89,Num:13},{BT:89,Num:14}]
+                    [{Pos:0,PosFix:true,BT:89,Num:10},{Pos:0,PosFix:true,BT:89,Num:11},{Pos:0,PosFix:true,BT:89,Num:12},{Pos:0,PosFix:true,BT:89,Num:13},{Pos:0,PosFix:true,BT:89,Num:14}]
                 ]
             },
             {
                 title : "Game.HashSix.Item.22.title",
                 item:[
-                    [{BT:89,Num:20},{BT:89,Num:21},{BT:89,Num:22},{BT:89,Num:23},{BT:89,Num:24}]
+                    [{Pos:0,PosFix:true,BT:89,Num:20},{Pos:0,PosFix:true,BT:89,Num:21},{Pos:0,PosFix:true,BT:89,Num:22},{Pos:0,PosFix:true,BT:89,Num:23},{Pos:0,PosFix:true,BT:89,Num:24}]
                 ]
             },
             {
                 title : "Game.HashSix.Item.23.title",
                 item:[
-                    [{BT:89,Num:30},{BT:89,Num:31},{BT:89,Num:32},{BT:89,Num:33},{BT:89,Num:34}]
+                    [{Pos:0,PosFix:true,BT:89,Num:30},{Pos:0,PosFix:true,BT:89,Num:31},{Pos:0,PosFix:true,BT:89,Num:32},{Pos:0,PosFix:true,BT:89,Num:33},{Pos:0,PosFix:true,BT:89,Num:34}]
                 ]
             },
             {
                 title : "Game.HashSix.Item.24.title",
                 item:[
-                    [{BT:89,Num:40},{BT:89,Num:41},{BT:89,Num:42},{BT:89,Num:43},{BT:89,Num:44}]
+                    [{Pos:0,PosFix:true,BT:89,Num:40},{Pos:0,PosFix:true,BT:89,Num:41},{Pos:0,PosFix:true,BT:89,Num:42},{Pos:0,PosFix:true,BT:89,Num:43},{Pos:0,PosFix:true,BT:89,Num:44}]
                 ]
             },
             {
                 title : "Game.HashSix.Item.25.title",
                 item:[
-                    [{BT:89,Num:50},{BT:89,Num:51},{BT:89,Num:52},{BT:89,Num:53},{BT:89,Num:54}]
+                    [{Pos:0,PosFix:true,BT:89,Num:50},{Pos:0,PosFix:true,BT:89,Num:51},{Pos:0,PosFix:true,BT:89,Num:52},{Pos:0,PosFix:true,BT:89,Num:53},{Pos:0,PosFix:true,BT:89,Num:54}]
                 ]
             },
             {
                 title : "Game.HashSix.Item.26.title",
                 item:[
-                    [{BT:89,Num:60},{BT:89,Num:61},{BT:89,Num:62},{BT:89,Num:63},{BT:89,Num:64}]
+                    [{Pos:0,PosFix:true,BT:89,Num:60},{Pos:0,PosFix:true,BT:89,Num:61},{Pos:0,PosFix:true,BT:89,Num:62},{Pos:0,PosFix:true,BT:89,Num:63},{Pos:0,PosFix:true,BT:89,Num:64}]
                 ]
             },
             //*/
             {
                 title : "Game.HashSix.Item.68.title",
                 item:[
-                    [{BT:68,Num:0},{BT:68,Num:10},{BT:68,Num:20},{BT:68,Num:30},{BT:68,Num:40},{BT:68,Num:50}],
-                    [{BT:68,Num:1},{BT:68,Num:11},{BT:68,Num:21},{BT:68,Num:31},{BT:68,Num:41},{BT:68,Num:51}]
+                    [{Pos:0,PosFix:true,BT:68,Num:0},{Pos:0,PosFix:true,BT:68,Num:10},{Pos:0,PosFix:true,BT:68,Num:20},{Pos:0,PosFix:true,BT:68,Num:30},{Pos:0,PosFix:true,BT:68,Num:40},{Pos:0,PosFix:true,BT:68,Num:50}],
+                    [{Pos:0,PosFix:true,BT:68,Num:1},{Pos:0,PosFix:true,BT:68,Num:11},{Pos:0,PosFix:true,BT:68,Num:21},{Pos:0,PosFix:true,BT:68,Num:31},{Pos:0,PosFix:true,BT:68,Num:41},{Pos:0,PosFix:true,BT:68,Num:51}]
                 ]
             },
             {
                 title : "Game.HashSix.Item.55.title",
                 item:[
-                    [{BT:55,Num:0},{BT:55,Num:1},{BT:55,Num:2},{BT:55,Num:3},{BT:55,Num:4}]
+                    [{Pos:0,PosFix:true,BT:55,Num:0},{Pos:0,PosFix:true,BT:55,Num:1},{Pos:0,PosFix:true,BT:55,Num:2},{Pos:0,PosFix:true,BT:55,Num:3},{Pos:0,PosFix:true,BT:55,Num:4}]
                 ]
             },
             {
                 title : "Game.HashSix.Item.56.title",
                 item:[
-                    [{BT:56,Num:0},{BT:56,Num:1},{BT:56,Num:2},{BT:56,Num:3},{BT:56,Num:4}]
+                    [{Pos:0,PosFix:true,BT:56,Num:0},{Pos:0,PosFix:true,BT:56,Num:1},{Pos:0,PosFix:true,BT:56,Num:2},{Pos:0,PosFix:true,BT:56,Num:3},{Pos:0,PosFix:true,BT:56,Num:4}]
                 ]
             }
         ]
@@ -2119,29 +2196,29 @@ const SGPools:Layout=[
             {
                 title : "Game.MarkSix.Item.26.title",
                 item: [
-                    [{BT:26,Num:10},{BT:26,Num:10},{BT:26,Num:10}],
-                    [{BT:26,Num:11},{BT:26,Num:11},{BT:26,Num:11}]
+                    [{Pos:0,PosFix:true,BT:26,Num:10},{Pos:0,PosFix:true,BT:26,Num:10},{Pos:0,PosFix:true,BT:26,Num:10}],
+                    [{Pos:0,PosFix:true,BT:26,Num:11},{Pos:0,PosFix:true,BT:26,Num:11},{Pos:0,PosFix:true,BT:26,Num:11}]
                 ]
             },
             {
                 title : "Game.MarkSix.Item.27.title",
                 item: [
-                    [{BT:27,Num:10},{BT:27,Num:10},{BT:27,Num:10}],
-                    [{BT:27,Num:11},{BT:27,Num:11},{BT:27,Num:11}]
+                    [{Pos:0,PosFix:true,BT:27,Num:10},{Pos:0,PosFix:true,BT:27,Num:10},{Pos:0,PosFix:true,BT:27,Num:10}],
+                    [{Pos:0,PosFix:true,BT:27,Num:11},{Pos:0,PosFix:true,BT:27,Num:11},{Pos:0,PosFix:true,BT:27,Num:11}]
                 ]
             },
             {
                 title : "Game.MarkSix.Item.28.title",
                 item: [
-                    [{BT:28,Num:10},{BT:28,Num:10},{BT:28,Num:10}],
-                    [{BT:28,Num:11},{BT:28,Num:11},{BT:28,Num:11}]
+                    [{Pos:0,PosFix:true,BT:28,Num:10},{Pos:0,PosFix:true,BT:28,Num:10},{Pos:0,PosFix:true,BT:28,Num:10}],
+                    [{Pos:0,PosFix:true,BT:28,Num:11},{Pos:0,PosFix:true,BT:28,Num:11},{Pos:0,PosFix:true,BT:28,Num:11}]
                 ]
             },
             {
                 title : "Game.MarkSix.Item.29.title",
                 item: [
-                    [{BT:29,Num:10},{BT:29,Num:10},{BT:29,Num:10}],
-                    [{BT:29,Num:11},{BT:29,Num:11},{BT:29,Num:11}]
+                    [{Pos:0,PosFix:true,BT:29,Num:10},{Pos:0,PosFix:true,BT:29,Num:10},{Pos:0,PosFix:true,BT:29,Num:10}],
+                    [{Pos:0,PosFix:true,BT:29,Num:11},{Pos:0,PosFix:true,BT:29,Num:11},{Pos:0,PosFix:true,BT:29,Num:11}]
                 ]
             },
 
@@ -2155,7 +2232,10 @@ const SGPools:Layout=[
                 sltedItem:0,
                 start: 0,
                 end:99,
-                item: getNums
+                curBT:1,
+                Sortable:true,
+                item:getblocks(0,99)
+                //item: getNums
             }
         ]
     }, // title: '2D', SubItem: []
@@ -2163,48 +2243,12 @@ const SGPools:Layout=[
         name: "Game.SGPools.Menu.Group.2.title", 
         cont:[
             {
-                //aBT: [4,5,6,11],
-                BT: 4,
-                FastSlt: {
-                    title:'FastSlt.Box',
-                    subcont:[
-                        {
-                            title: 'FastSlt.Hundreds',
-                            subitem:[
-                                {num:0,isActive:true},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
-                                {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
-                            ],
-                            key: 'hundreds',
-                            func: setSelect
-                        },
-                        {
-                            title: 'FastSlt.Tens',
-                            subitem:[
-                                {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
-                                {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
-                            ],
-                            key:'tens',
-                            func: setSelect
-                        },
-                        {
-                            title: 'FastSlt.Units',
-                            subitem:[
-                                {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
-                                {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
-                            ],
-                            key:'units',
-                            func: setSelect
-                        }                                                                        
-                    ]
-                },
+                aBT: [4,5,6,11],
                 sltedItem:0,
                 dgt: 3, //位數
-                PosSlt: {
-                    num:[0],
-                    pos:['hundreds']
-                },
-                noSameNum: false,    //數字不可重複
-                item:getNumXD({num:[0],pos:['hundreds']},4,3)
+                Sortable:true,
+                curBT:4,
+                item:getblocks(0,99)
             }
         ]
     }, // title: '3D', SubItem: [], SubMenu: []
@@ -2212,59 +2256,13 @@ const SGPools:Layout=[
         name: "Game.SGPools.Menu.Group.3.title", 
         cont:[
             {
-                //aBT: [7,8,9,12],
-                BT:7,
-                FastSlt: {
-                    title:'FastSlt.Box',
-                    subcont:[
-                        {
-                            title: 'FastSlt.Thousands',
-                            subitem:[
-                                {num:0,isActive:true},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
-                                {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
-                            ],
-                            key: 'thousands',
-                            func:setSelect
-                        },                        
-                        {
-                            title: 'FastSlt.Hundreds',
-                            subitem:[
-                                {num:0,isActive:true},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
-                                {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
-                            ],
-                            key: 'hundreds',
-                            func:setSelect
-                        },
-                        {
-                            title: 'FastSlt.Tens',
-                            subitem:[
-                                {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
-                                {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
-                            ],
-                            key:'tens',
-                            func:setSelect
-                        },
-                        {
-                            title: 'FastSlt.Units',
-                            subitem:[
-                                {num:0,isActive:false},{num:1,isActive:false},{num:2,isActive:false},{num:3,isActive:false},{num:4,isActive:false},
-                                {num:5,isActive:false},{num:6,isActive:false},{num:7,isActive:false},{num:8,isActive:false},{num:9,isActive:false}
-                            ],
-                            key:'units',
-                            func:setSelect
-                        }                                                                        
-                    ]
-                },
+                aBT: [7,8,9,12],
                 sltedItem:0,
                 dgt: 4, //位數
-                PosSlt: {
-                    num:[0,0],
-                    pos:['thousands','hundreds']
-                },
-                noSameNum: false,    //數字不可重複
-                item:function(){              
-                    return getNumXD(this.PosSlt,this.BT,this.dgt);
-                }
+                Sortable:true,
+                curBT:7,
+                item:getblocks(0,99)
+                //item:getNumXD(this.PosSlt,this.BT,this.dgt)
             }            
         ]
     }, // title: '4D', SubItem: [], SubMenu: []
@@ -2276,7 +2274,9 @@ const SGPools:Layout=[
                 sltedItem:0,
                 start: 0,
                 end:99,
-                item: getNums
+                curBT:13,
+                item:getblocks(0,99)
+                //item: getNums
             }             
         ]
     }, // title: '連碼', SubMenu: []
@@ -2288,7 +2288,10 @@ const SGPools:Layout=[
                 sltedItem:0,
                 start: 0,
                 end:99,
-                item: getNums
+                Sortable:true,
+                curBT:20,
+                item:getblocks(0,99)
+                //item: getNums
             }             
         ]
     }, // title: '不中', SubMenu: []

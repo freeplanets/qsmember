@@ -1,7 +1,9 @@
+import { textChangeRangeIsUnchanged } from 'typescript';
 import {BaNum} from './func';
 //import {OSteps} from '../data/if';
-import {numBlock} from './layouts';
+import {bBlock,numBlock} from './layouts';
 export interface IOdds {
+    pos?:number;
     OID:number;
     Odds:number;
     SubType:number;
@@ -16,17 +18,41 @@ export interface IOdds {
     Steps:number;
     PerStep:number;
 }
+interface NTemp extends numBlock {
+    TolS:number;
+}
 interface INum {
     [num:string]:IOdds;
 }
 export interface IData {
     [BT:string]:INum;
 }
+interface NumSortData {
+    num:number;
+    tolS:number;
+    Risk:number;
+}
+interface ISortFunc {
+    (A:NumSortData,B:NumSortData):number;
+}
 interface IBetType {
     Total:number;
     Payouts:number;
     MaxWin?:number;
-    member:INum;
+    //member:INum;
+    SortTable:boolean;
+    Pos:NumSortData[];
+    member:IOdds[];
+    SortID:number;
+}
+const SortByNum:ISortFunc=(a,b)=>{
+    return a.num - b.num
+}
+const SortByTols:ISortFunc=(a,b)=>{
+    return b.tolS - a.tolS
+}
+const SortByRisk:ISortFunc=(a,b)=>{
+    return a.Risk - b.Risk
 }
 interface IBetTypes {
     [BT:string]:IBetType;
@@ -41,12 +67,7 @@ interface RiskGroup {
 interface RGS {
     [key:string]:RiskGroup[];
 }
-interface NTemp extends numBlock {
-    TolS:number;
-}
-function sortTolS(a:NTemp,b:NTemp){
-    return b.TolS - a.TolS;
-}
+
 const FOUR_DIGITAL = 'Game.BTCHash.Menu.Group.5.title';
 const FIVE_DIGITAL = 'Game.BTCHash.Menu.Group.6.title';
 export class CGame {
@@ -54,6 +75,7 @@ export class CGame {
     private OID:number=0;
     public isUpdated:boolean=true;
     public GType:string='';
+    private SortType:ISortFunc[]=[SortByNum,SortByTols,SortByRisk];
     private RiskGroup:RGS=
         {
             MarkSix:[  
@@ -80,7 +102,7 @@ export class CGame {
                     36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
                     46, 47, 48, 49, 50, 51, 52, 53, 54, 55,
                     56, 57, 58, 59, 60, 61, 62, 63, 64, 65,
-                    66, 67, 68, 69, 70]
+                    66, 67, 68, 69, 70, 71, 72, 73]
             }],
             '3D':[
                 {
@@ -145,13 +167,16 @@ export class CGame {
             this.member[bt]={
                 Total:0,
                 Payouts:0,
-                member:{}
+                member:[],
+                Pos:[],
+                SortID:0,
+                SortTable:false
             }
             const tmp:object[]=[];
-            Object.keys(BTItm).map(num=>{
+            Object.keys(BTItm).map((num,idx)=>{
                 if(chk45){
-                    const nt:NTemp = this.getNTemp(BTItm,bt,num);
-                    TNT.push(nt);
+                    //const nt:NTemp = this.getNTemp(BTItm,bt,num);
+                    //TNT.push(nt);
                 }                
                 //this.member.
                 /*
@@ -166,15 +191,25 @@ export class CGame {
                     tmp.push({BT:parseInt(bt,10),Num:parseInt(num,10)})
                 }
                 */
+                const nsd:NumSortData={
+                    num:parseInt(num,10),
+                    tolS:BTItm[num].tolS,
+                    Risk:0
+                }
+                this.member[bt].Pos[idx]=nsd;
                 this.member[bt].member[num]=BTItm[num];
+                this.member[bt].member[num].pos = idx;
+                this.member[bt].member[num].Num = parseInt(num,10);
+                this.member[bt].member[num].BT = parseInt(bt,10);
                 this.member[bt].Total += BTItm[num].tolS;
                 this.member[bt].Payouts += BTItm[num].tolP;
+                //this.member[bt].func = SortF;
                 if(BTItm[num].OID > this.OID) {
                     this.OID = BTItm[num].OID;
                 }
             });
             if(TNT.length>0){
-                this.ExtendLayoutsBlock(TNT,chkString,OM);
+                //this.ExtendLayoutsBlock(TNT,chkString,OM);
             }            
             /*
             if(tmp.length>0){
@@ -201,8 +236,8 @@ export class CGame {
             }
             Object.keys(BTItm).map(num=>{
                 if(chk45){
-                    const nt:NTemp = this.getNTemp(BTItm,bt,num);
-                    TNT.push(nt);
+                    //const nt:NTemp = this.getNTemp(BTItm,bt,num);
+                    //TNT.push(nt);
                 }
                 if(this.member[bt].member[num]){
                     this.member[bt].Total -= this.member[bt].member[num].tolS
@@ -210,7 +245,16 @@ export class CGame {
                 }
                 //dta[bt][num].PerStep=this.member[bt].member[num].PerStep;
                 //dta[bt][num].Steps=this.member[bt].member[num].Steps;
+                
+                //const pos=this.member[bt].member[num].pos;
                 this.member[bt].member[num]=BTItm[num];
+                this.member[bt].member[num].Num = parseInt(num,10);
+                this.member[bt].member[num].BT = parseInt(bt,10);                
+                //this.member[bt].member[num].pos = pos;
+                let f=this.member[bt].Pos.find(m=>m.num===parseInt(num,10))
+                if(f){
+                    f.tolS=BTItm[num].tolS;
+                }
                 //this.member[bt].member[num]=Object.assign(this.member[bt].member[num],dta[bt][num])
                 //console.log('game updateData',this.member[bt].member[num])
                 if(dta[bt][num].OID > this.OID) {
@@ -220,7 +264,7 @@ export class CGame {
                 this.member[bt].Payouts += this.member[bt].member[num].tolP
             })
             if(TNT.length>0){
-                this.ExtendLayoutsBlock(TNT,chkString,OM);
+                //this.ExtendLayoutsBlock(TNT,chkString,OM);
             }
             this.calRisk(bt);
             this.isUpdated = true;
@@ -228,6 +272,7 @@ export class CGame {
     }
     getNTemp(BTItm:INum,bt:string,num:string):NTemp{
         return {
+            Pos:0,
             Num:parseInt(num,10),
             BT:parseInt(bt,10),
             TolS: BTItm[num].tolS
@@ -248,6 +293,7 @@ export class CGame {
                 let f=olddata.find(itm=>itm.BT===TNT[i].BT && itm.Num===TNT[i].Num);
                 if(!f){
                     let block:numBlock={
+                        Pos:0,
                         BT:TNT[i].BT,
                         Num:TNT[i].Num
                     }
@@ -269,14 +315,39 @@ export class CGame {
         }
         console.log('ExtendLayoutsBlock',OM.dfLayout);
     }
-    getOdds(BT:number,num:number,extOdds?:number){
-        //console.log('CGame getOdds',BT,num);
-        if(extOdds!==undefined){
-            if(extOdds==1){
-                num=num+100;
-            } else {
-                return null;
+    getOdds(blk:numBlock,BT?:number,extOdds?:number){
+        if(!BT) BT=blk.BT;
+        if(blk.PosFix || extOdds===1){
+            let num=blk.Num;
+            const Odds = this.getOddsByNum(BT,num,extOdds);
+            return Odds;
+            //return this.getOddsByNum(BT,num,extOdds);
+        } else {
+            if(typeof extOdds !== 'undefined') return null;
+            if(blk.Pos !== undefined){
+                const sBT:string=BT.toString();
+                const nsd=this.member[sBT].Pos[blk.Pos];
+                const tmp:IOdds=this.member[sBT].member[nsd.num+''];
+                //const ba = BaNum(tmp.PerStep ? tmp.PerStep : 1);
+                if(tmp.PerStep>0){
+                    const ba = BaNum(tmp.PerStep);
+                    tmp.Odds= Math.round(tmp.Odds*ba)/ba;
+                }                
+                return tmp;
+                /*
+                let f;
+                this.member[sBT].member.map(elm=>{
+                    if(elm.pos===blk.Pos) f=elm;
+                })
+                if(f) return f;
+                */
             }
+        }
+        return {};
+    }    
+    getOddsByNum(BT:number,num:number,extOdds?:number){
+        if(extOdds===1){
+            num=num+100;
         }
         const sBT:string=BT.toString();
         const sNum:string=num.toString();
@@ -294,12 +365,35 @@ export class CGame {
             const ba = BaNum(tmp.PerStep);
             tmp.Odds= Math.round(tmp.Odds*ba)/ba;
         }
-        //if(this.GType==='BTCHash' &&　BT===47) console.log('getOdds:',sBT,tmp.Odds,tmp.Steps);
         tmp.BT = BT;
         tmp.Num = num;
         //if(Steps) tmp.Steps = Steps;
         return tmp;
     }
+    setSortTableByBT=(bt:string|number,sorttype:boolean)=>{
+        const BT = typeof bt === 'number' ? bt+'' : bt;
+        this.member[BT].SortTable=sorttype
+    }
+    setSortType=(sortid:number)=>{
+        Object.keys(this.member).map(BT=>{
+            if(this.member[BT].SortTable){
+                //if(BT==='1') console.log(`setSortType: ${BT}, ${this.member[BT].SortID}, ${sortid}`);
+                if(this.member[BT].SortID !== sortid){
+                    this.member[BT].SortID = sortid;
+                    this.member[BT].Pos.sort(this.SortType[sortid]);
+                    //if(BT==='1') console.log('Sort:',sortid,this.member[BT].Pos);
+                }
+            }
+        })
+        /*
+        if(this.member[BT].SortTable){
+            if(this.member[BT].SortID!=sortid){
+                this.member[BT].SortID=sortid;
+                this.member[BT].Pos.sort(this.SortType[sortid]);
+            }
+        }
+        */
+    }    
     calRisk=(BT:string|number)=>{
         if(typeof(BT)==='string') BT=parseInt(BT,10);
         let rg:RiskGroup=this.getRiskFunc(BT);
@@ -314,6 +408,9 @@ export class CGame {
                         this[key](BT);
                     }
                     isDone=true;
+                    if(this.member[BT].SortID!=0){
+                        this.member[BT].Pos.sort(this.SortType[this.member[BT].SortID])
+                    }
                 }
             })
         }
@@ -343,6 +440,7 @@ export class CGame {
             let M =  B.member[key];
             let Risk = B.Total - M.tolP;
             this.member[BT].member[key].Risk = Math.round(Risk);
+            this.setRiskToPos(BT,parseInt(key),Risk);
             if(MaxWin > Risk) MaxWin = Risk;
         });
         this.member[BT].MaxWin=MaxWin;
@@ -358,6 +456,7 @@ export class CGame {
             let M =  B.member[key];
             let Risk = B.Total - M.tolP - (B.Payouts-M.tolP)*(otherNums/leftNums);
             this.member[BT].member[key].Risk = Math.round(Risk);
+            this.setRiskToPos(BT,parseInt(key),Risk);
         });
         /*
 		for(var i=0;i<len;i+=1){
@@ -365,6 +464,12 @@ export class CGame {
 			this.Datas[i].Risk=this.LRTotal-((this.Datas[i].RPay+this.Datas[i].SPay+this.Datas[i].RLeft)+((this.TotalRPay+this.TotalSPay+this.LRTotal)-(this.Datas[i].RPay+this.Datas[i].SPay+this.Datas[i].RLeft))*otherNums/leftNums)-this.CTotal+this.SCTotal;
         }
         */
+    }
+    setRiskToPos=(BT:number,num:number,Risk:number)=>{
+        const f=this.member[BT].Pos.find(m=>m.num===num);
+        if(f){
+            f.Risk = Risk;
+        }
     }
     get Items(){
         return this.member;

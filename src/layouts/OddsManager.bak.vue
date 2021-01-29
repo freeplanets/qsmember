@@ -11,25 +11,6 @@
                     <q-avatar color="red" text-color="white">{{CountDown}}</q-avatar>
                     {{$t('Label.Refresh')}}                    
                 </q-chip>
-            </div>
-            <div class='col-1'>
-                <div class="q-pa-md">
-                    {{$t('Label.Sorts')}}
-                    <q-btn-dropdown color="primary" :label="SortName">
-                    <q-list>
-                        <q-item 
-                            v-for="(itm,idx) in SortItems" 
-                            :key="'sort'+idx"
-                            clickable 
-                            v-close-popup 
-                            @click="setSortType(idx,itm)">
-                        <q-item-section>
-                            <q-item-label>{{itm}}</q-item-label>
-                        </q-item-section>
-                        </q-item>
-                    </q-list>
-                    </q-btn-dropdown>
-                </div>
             </div>            
             <div class='col talign1'
                  v-if="oddshow"
@@ -106,7 +87,8 @@
                                         :tid="curTid"
                                         :GameID="curGameID"
                                         :dgt="BItm.dgt"
-                                        :Odds="getOdds(nItm,nItm.BT)"                                        
+                                        :Odds="getOdds(nItm.BT,nItm)"
+                                        :ExtOdds="Game.getOdds(nItm.BT,nItm,(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
                                         :rightLine="nidx==(LItm.length-1)"
                                         :bottomLine="Lidx==(LItm.length-1) || nidx==9 || (lnItem[Lidx+1] && lnItem[Lidx+1][nidx] && lnItem[Lidx+1][nidx].BT<0)"
                                         :GType="curGType"
@@ -137,17 +119,42 @@
                                 v-for="(BT,idx) in BItm.aBT"
                                 :key="'BItm'+idx"
                                 :name="'tab'+BT" 
-                                :label="$t(`Game.${curGType}.Item.${BT}.title`)"
-                                @click="BItm.curBT=BT;BItm.twOdds ? BItm.isTwOdd=BItm.twOdds[idx] : 0"
+                                :label="$t(`Game.${curGType}.Item.${BT}.title`)" 
                                 />
                         </q-tabs>
 
                         <q-separator />
+
                         <q-tab-panels v-model="tab" animated>
                             <q-tab-panel 
                                 v-for="(BT,idx) in BItm.aBT"
                                 :key="'BTab'+idx"                                
                                 :name="'tab'+BT">
+                                <div v-if="BItm.item && typeof(BItm.item)==='function' && !BItm.Position">
+                                    <div class='row justify-left'
+                                        v-for="(LItm,Lidx) in tmpItem=BItm.item(BT,BItm.end,BItm.start)"
+                                        :key="BT+'bitm'+Lidx"
+                                    >
+                                        <div class='col-10 col-md-1'
+                                            v-for="(nItm,nidx) in LItm"
+                                            :key="BT+'litm'+nidx"
+                                        >
+                                            <OB 
+                                                :store="store"
+                                                :tid="curTid"
+                                                :GameID="curGameID"
+                                                :dgt="BItm.dgt"
+                                                :Odds="getOdds(nItm.BT,nItm.Num)"
+                                                :ExtOdds="Game.getOdds(nItm.BT,nItm.Num,(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
+                                                :rightLine="nidx==(LItm.length-1)"
+                                                :bottomLine="Lidx==(tmpItem.length-1) || (nidx==9 && (tmpItem[Lidx+1] && tmpItem[Lidx+1].length<10))"
+                                                :GType="curGType"
+                                                :colorWave="BItm.colorWave"
+                                                :colorExt="BItm.colorExt"
+                                                @OddChange="getCurOdds"></OB>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div v-if="BItm.item && typeof(BItm.item)==='function' && BItm.Position ">
                                     <q-btn-group outline>
                                         <q-btn 
@@ -167,11 +174,13 @@
                                         :key="BT+'litm'+nidx"
                                     >
                                         <OB 
+                                            v-if="nItm.BT==BT && BItm.PosSelected && nItm.Position===BItm.PosSelected[idx]"
                                             :store="store"
                                             :tid="curTid"
                                             :GameID="curGameID"
                                             :dgt="BItm.dgt"
-                                            :Odds="getOdds(nItm,nItm.BT)"                                   
+                                            :Odds="getOdds(nItm.BT,nItm)"
+                                            :ExtOdds="Game.getOdds(nItm.BT,nItm,(BItm.twOdds ? BItm.twOdds[idx] : 0 ))"                                            
                                             :rightLine="nidx==(LItm.length-1)"
                                             :bottomLine="Lidx==(tmpItem.length-1) || (nidx==9 && (tmpItem[Lidx+1] && tmpItem[Lidx+1].length<10))"
                                             :GType="curGType"
@@ -180,34 +189,8 @@
                                             @OddChange="getCurOdds"></OB>
                                     </div>
                                 </div>                                    
-                                </div>                          
-                            <div v-if="BItm.item && !BItm.Position">
-                                <div class='row justify-left'
-                                    v-for="(LItm,Lidx) in BItm.item"
-                                    :key="'bitm'+Lidx"
-                                >
-                                    <div class='col-10 col-md-1'
-                                        v-for="(nItm,nidx) in LItm"
-                                        :key="'litm'+nidx"
-                                    >
-                                        <OB 
-                                            v-if="BItm.item"
-                                            :store="store"
-                                            :tid="curTid"
-                                            :GameID="curGameID"
-                                            :dgt="BItm.dgt"
-                                            :Odds="getOdds(nItm,BT)"
-                                            :ExtOdds="Game.getOdds(nItm,BT,(BItm.isTwOdd ? BItm.isTwOdd : 0 ))"                                            
-                                            :rightLine="nidx==(LItm.length-1)"
-                                            :bottomLine="parseInt(Lidx,10)==BItm.item.length-1 || (nidx==(BItm.item[Lidx].length-1) && (BItm.item[Lidx+1] && BItm.item[Lidx+1].length<BItm.item[Lidx].length)) || (BItm.item[Lidx+1] && (!BItm.item[Lidx+1][nidx] || BItm.item[Lidx+1][nidx].BT<0))"
-                                            :GType="curGType"
-                                            :colorWave="BItm.colorWave"
-                                            :colorExt="BItm.colorExt"
-                                            @OddChange="getCurOdds"></OB>
-                                    </div>
                                 </div>
-                            </div>
-                            </q-tab-panel> 
+                            </q-tab-panel>
                         </q-tab-panels>
                     </q-card>
                 </div>
@@ -220,8 +203,7 @@
                                 <div class="row" v-for="(itm,idx) in BItm.FastSlt.subcont" :key="'fast'+idx">
                                     <div>{{itm.title ? $t(itm.title) : ''}}</div>
                                     <div v-for="(slt,sltidx) in  itm.subitem" :key="'fastsub'+idx+'-'+sltidx">
-                                        <q-btn :outline="!slt.isActive" size='sm' class='btn-pad' color="primary" :label="slt.num" @click="
-                                        setActive(BItm.FastSlt ? BItm.FastSlt.subcont : []);slt.isActive=true"/>
+                                        <q-btn :outline="!slt.isActive" size='sm' class='btn-pad' color="primary" :label="slt.num" @click="(itm.func? itm.func(BItm.PosSlt,itm.key,slt.num,BItm.dgt):'');setActive(BItm.FastSlt ? BItm.FastSlt.subcont : []);slt.isActive=true"/>
                                     </div>
                                 </div>
                             </div>
@@ -234,13 +216,14 @@
                             v-for="(nItm,nidx) in LItm"
                             :key="nItm.BT+'litm'+nidx"
                         >
+                            <div v-if="nItm.BT<1"></div>
                             <OB 
-                                v-if="BItm.item"
+                                v-if="nItm.BT>0 && BItm.item"
                                 :store="store"
                                 :tid="curTid"
                                 :GameID="curGameID"
                                 :dgt="BItm.dgt"
-                                :Odds="getOdds(nItm,BItm.BT ? BItm.BT : nItm.BT)" 
+                                :Odds="getOdds(nItm.BT,nItm)" 
                                 :rightLine="nidx==(LItm.length-1)"
                                 :bottomLine="parseInt(Lidx,10)==BItm.item.length-1 || (nidx==(BItm.item[Lidx].length-1) && (BItm.item[Lidx+1] && BItm.item[Lidx+1].length<BItm.item[Lidx].length)) || (BItm.item[Lidx+1] && (!BItm.item[Lidx+1][nidx] || BItm.item[Lidx+1][nidx].BT<0))"
                                 :GType="curGType"
@@ -303,9 +286,6 @@ export default class OddsManager extends Vue {
         Odds:49,
         Risk:123456
     }
-    SortID:number=0;
-    SortName:string='';
-    SortItems:string[]=[];
     get PInfo():ILoginInfo{
         return this.store.personal;
     }
@@ -333,7 +313,6 @@ export default class OddsManager extends Vue {
             this.dfColor=[];
             //this.getOpSteps();
             Object.keys(this.dfLayout).map(key=>{
-                //console.log('layout:',key,this.dfLayout[key]);
                 if(key==='0'){
                     this.cont = this.dfLayout[key].cont;
                     this.dfColor.push(this.sltColor);
@@ -361,20 +340,6 @@ export default class OddsManager extends Vue {
                     */
                     this.Game.inidata(ans.data as IData,this);
                     //console.log('Game:',this.Game.Items)
-                    Object.keys(this.dfLayout).map(key=>{
-                        let me=this;
-                        Object.keys(this.dfLayout[key].cont).map(idx=>{
-                            if(this.dfLayout[key].cont[idx] && this.dfLayout[key].cont[idx].Sortable){
-                                if(this.dfLayout[key].cont[idx].BT){
-                                    me.Game.setSortTableByBT(this.dfLayout[key].cont[idx].BT,true);
-                                } else if(this.dfLayout[key].cont[idx].aBT){
-                                    this.dfLayout[key].cont[idx].aBT.map(BT=>{
-                                        me.Game.setSortTableByBT(BT,true);
-                                    })
-                                }
-                            }
-                        })
-                    })                    
                     this.curTid=ans.tid;
                     //console.log('CGame MaxOddsID:',this.Game.MaxOddsID);
                     if(this.curInterval){
@@ -388,10 +353,8 @@ export default class OddsManager extends Vue {
             this.oddshow=true;
         }
     }
-    getOdds(Num:numBlock,BT?:number){
-        const Odds=this.Game.getOdds(Num,BT);
-        //if(this.curGType==='HashSix') console.log('getOdds:',Num,BT,Odds);
-        return Odds;
+    getOdds(BT:number,Num:numBlock){
+        return this.Game.getOdds(BT,Num);
     }
     refreshData(doitnow?:number){
         if(doitnow){
@@ -496,17 +459,6 @@ export default class OddsManager extends Vue {
         if(this.curInterval){
             window.clearInterval(this.curInterval);
         }
-    }
-    setSortType(sortid:number,sortname:string){
-        this.SortID=sortid;
-        this.SortName=sortname;
-        this.Game.setSortType(sortid);
-    }
-    mounted(){
-        this.SortName = this.$t('Label.SortItem.0').toString();
-        this.SortItems.push(this.$t('Label.SortItem.0').toString());
-        this.SortItems.push(this.$t('Label.SortItem.1').toString());
-        this.SortItems.push(this.$t('Label.SortItem.2').toString());
     }
 }
 //export default Vue.extend({

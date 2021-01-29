@@ -2,25 +2,25 @@ import {BetHeader, SelectOptions,INumData,IBetContent} from '../data/if'
 import Vue from 'vue';
 export const chkColor = (v:number,GType:string,chkExt:number|undefined=undefined)=>{
     //console.log('chkColor:',v,GType,chkExt);
+    //if(typeof v === 'string') v=parseInt(v,10);
     if(GType != 'MarkSix' && GType != 'HashSix'){
         return chkColorOther(v,GType)
         //return 'RedWav'
     } 
-    let ext=''
     if(v > 1400) {
         chkExt =0;
     }
     if(chkExt!==undefined){
-      let color=['RedWav','BlueWav','GreenWav']
+      const colorE=['RedWav','BlueWav','GreenWav']
       if(chkExt===0){
         //let color=['RedWavTxt','GreenWavTxt','BlueWavTxt']
-        return color[v % 10]
+        return colorE[v % 10]
       } else {  
         //if(GType=='HashSix') console.log('chkColor:',v,Math.floor(v/4),color[Math.floor(v/4)]);
         if(v>=100){
             v=v % 100;
         }
-        return color[Math.floor(v/4)]
+        return colorE[Math.floor(v/4)]
       }
     }
     /*
@@ -30,10 +30,12 @@ export const chkColor = (v:number,GType:string,chkExt:number|undefined=undefined
     }
     */
     //v=parseInt(v)
-    let color=['GreenWav','RedWav','RedWav','BlueWav','BlueWav','GreenWav']
-    let key= Math.floor((v-1) / 10)
-    let c = color[(v + key) % 6 ]
-    return v==0 ? 'GreenWav' : c+ext;
+    const color=['GreenWav','RedWav','RedWav','BlueWav','BlueWav','GreenWav']
+    const key= Math.floor((v-1) / 10);
+    const c = (v + key) % 6;
+    const clr = color[c];
+    //console.log(`chkColor:${v},${key},${c},${clr}`);
+    return v==0 ? 'GreenWav' : clr;
 };
 const chkColorOther=(v,GType)=>{
     let Blue = 'blue_ball'

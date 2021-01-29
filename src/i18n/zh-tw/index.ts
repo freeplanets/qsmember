@@ -95,7 +95,9 @@ export default {
       SGPools : '萬字票',
     },
     PlsSlt: '請選擇....',
-    BTCHashDataAna:'雜湊數分析'
+    BTCHashDataAna:'雜湊數分析',
+    Sorts:"排序",
+    SortItem:['號碼','注額','風險']
   },
   Tip:{
     UserFind: "請輸入名稱或代號"
