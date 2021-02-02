@@ -2194,28 +2194,28 @@ const SGPools:Layout=[
         name: "Game.SGPools.Menu.Group.0.title",
         cont: [
             {
-                title : "Game.MarkSix.Item.26.title",
+                title : "Game.SGPools.Item.26.title",
                 item: [
                     [{Pos:0,PosFix:true,BT:26,Num:10},{Pos:0,PosFix:true,BT:26,Num:10},{Pos:0,PosFix:true,BT:26,Num:10}],
                     [{Pos:0,PosFix:true,BT:26,Num:11},{Pos:0,PosFix:true,BT:26,Num:11},{Pos:0,PosFix:true,BT:26,Num:11}]
                 ]
             },
             {
-                title : "Game.MarkSix.Item.27.title",
+                title : "Game.SGPools.Item.27.title",
                 item: [
                     [{Pos:0,PosFix:true,BT:27,Num:10},{Pos:0,PosFix:true,BT:27,Num:10},{Pos:0,PosFix:true,BT:27,Num:10}],
                     [{Pos:0,PosFix:true,BT:27,Num:11},{Pos:0,PosFix:true,BT:27,Num:11},{Pos:0,PosFix:true,BT:27,Num:11}]
                 ]
             },
             {
-                title : "Game.MarkSix.Item.28.title",
+                title : "Game.SGPools.Item.28.title",
                 item: [
                     [{Pos:0,PosFix:true,BT:28,Num:10},{Pos:0,PosFix:true,BT:28,Num:10},{Pos:0,PosFix:true,BT:28,Num:10}],
                     [{Pos:0,PosFix:true,BT:28,Num:11},{Pos:0,PosFix:true,BT:28,Num:11},{Pos:0,PosFix:true,BT:28,Num:11}]
                 ]
             },
             {
-                title : "Game.MarkSix.Item.29.title",
+                title : "Game.SGPools.Item.29.title",
                 item: [
                     [{Pos:0,PosFix:true,BT:29,Num:10},{Pos:0,PosFix:true,BT:29,Num:10},{Pos:0,PosFix:true,BT:29,Num:10}],
                     [{Pos:0,PosFix:true,BT:29,Num:11},{Pos:0,PosFix:true,BT:29,Num:11},{Pos:0,PosFix:true,BT:29,Num:11}]

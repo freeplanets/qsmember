@@ -1460,7 +1460,7 @@ export default {
         '6': {title: '3D-三獎'},
         '7': {title: '4D-一獎'},
         '8': {title: '4D-二獎'},
-        '9': {title: '4D-三獎'},        
+        '9': {title: '4D-三獎'},
         '10': { title: '2D-23組'},
         '11': { title: '3D-23組'},
         '12': { title: '4D-23組'},
@@ -1482,11 +1482,13 @@ export default {
         '28': { title: '合數單雙',sctitle: [ '', '1獎', '2獎', '3獎'],shortT: '合',subtitle: [ '單', '雙' ] },
         '29': { title: '合數大小',sctitle: [ '', '1獎', '2獎', '3獎'],shortT: '合',subtitle: [ '大', '小' ] },
       },
-      Ball: [
-        '',    '第一球', '第二球',
-        '第三球', '第四球', '第五球',
-        '第六球', '第七球', '第八球'
-      ]
+      OpenTitle:{
+        First:"第一獎",
+        Secondary:"第二獎",
+        Third:"第三獎",
+        Shortlisted:"入圍獎",
+        ConsolationPrize: "安慰獎"
+      }      
     }    
   }
 }

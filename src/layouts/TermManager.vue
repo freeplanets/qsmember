@@ -63,7 +63,9 @@
             <div class="text-h6">{{$t('Label.InputNums')}}</div>
             </q-card-section>
 
-            <q-card-section class="q-pt-none">
+            <q-card-section 
+                v-if="curGType && curGType.GType !== 'SGPools' "
+                class="q-pt-none">
                 <div class="row">
                 <q-input class="numbox"
                     v-for="(num,idx) in nums"
@@ -71,10 +73,67 @@
                     outlined dense v-model="nums[idx]" />
                 </div>
             </q-card-section>
+            <q-card-section 
+                v-if="curGType && curGType.GType === 'SGPools' "
+                class="q-pt-none">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-5"><q-chip dense size="xl" icon="bookmark">{{$t('Game.SGPools.OpenTitle.First')}}</q-chip></div>
+                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[0]" /></div>
+                    <div class="col-3"></div>
+                </div>
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-5"><q-chip dense size="xl" icon="bookmark">{{$t('Game.SGPools.OpenTitle.Secondary')}}</q-chip></div>
+                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[1]" /></div>
+                    <div class="col-3"></div>
+                </div>
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-5"><q-chip dense size="xl" icon="bookmark">{{$t('Game.SGPools.OpenTitle.Third')}}</q-chip></div>
+                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[2]" /></div>
+                    <div class="col-3"></div>
+                </div>
+                <div class="row">
+                   <div class="col-6"><q-chip dense size="xl" icon="bookmark">{{$t('Game.SGPools.OpenTitle.Shortlisted')}}</q-chip></div>
+                   <div class="col-6"><q-chip dense size="xl" icon="bookmark">{{$t('Game.SGPools.OpenTitle.ConsolationPrize')}}</q-chip></div>
+                </div>
+                <div class="row">
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[3]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[8]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[13]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[18]" /></div>
+                </div>
+                <div class="row">
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[4]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[9]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[14]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[19]" /></div>
+                </div> 
+                <div class="row">
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[5]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[10]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[15]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[20]" /></div>
+                </div> 
+                <div class="row">
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[6]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[11]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[16]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[21]" /></div>
+                </div> 
+                <div class="row">
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[7]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[12]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[17]" /></div>
+                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[22]" /></div>
+                </div>                                                                 
+            </q-card-section>            
 
             <q-card-actions align="right" class="text-primary">
-            <q-btn flat label="Send" @click="SendNums()" />
-            <q-btn flat label="Cancel" v-close-popup />
+                <q-btn flat label="Gens" @click="RandNums()" />
+                <q-btn flat label="Send" @click="SendNums()" />
+                <q-btn flat label="Cancel" v-close-popup />
             </q-card-actions>
         </q-card>
         </q-dialog>
@@ -407,7 +466,9 @@ export default class TermManager extends Vue {
         //const nums:string[]=v.split(',');
     }
     chkNums(nums:string[]):boolean{
+        console.log('chkNums:',nums);
         if(this.curGType){
+            let cGType=this.curGType.GType;
             if(nums.length != this.curGType.OpenNums)  return false;
             const GT=this.curGType;
             const tmpA:number[]=[];
@@ -419,8 +480,12 @@ export default class TermManager extends Vue {
                     return;
                 }
                 const iNum:number = parseInt(num,10);
-                if(iNum < GT.StartNum) return false;
-                if(iNum > GT.EndNum) return false;
+                if(cGType==='SGPools'){
+                    if(num.length<4) return false;
+                } else {
+                    if(iNum < GT.StartNum) return false;
+                    if(iNum > GT.EndNum) return false;
+                }
                 if(tmpA.indexOf(iNum)===-1) tmpA.push(iNum);
             })
             if(hasSpace) return false;
@@ -431,6 +496,22 @@ export default class TermManager extends Vue {
             return true;
         }
         return true;
+    }
+    RandNums(){
+        const RN=()=>{
+            let num=Math.round(Math.random()*10000);
+            if(num>9999) num=9999;
+            let str=num.toString();
+            while(str.length<4){
+                str='0'+str;
+            }
+            return str;
+        }
+        const tmp:string[]=[];
+        while(tmp.length<23){
+            tmp.push(RN());
+        }
+        this.nums=tmp;
     }
     async SendNums(){
         if(!this.chkNums(this.nums)) {
@@ -604,6 +685,10 @@ td {
 }
 .numbox {
     width: 40px !important;
+    margin-right: 5px;
+}
+.numboxL {
+    width: 80px !important;
     margin-right: 5px;
 }
 .pd {
