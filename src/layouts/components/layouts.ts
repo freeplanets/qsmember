@@ -2194,34 +2194,26 @@ const SGPools:Layout=[
         name: "Game.SGPools.Menu.Group.0.title",
         cont: [
             {
-                title : "Game.SGPools.Item.26.title",
+                title : "Game.SGPools.Item.1.title",
                 item: [
-                    [{Pos:0,PosFix:true,BT:26,Num:10},{Pos:0,PosFix:true,BT:26,Num:10},{Pos:0,PosFix:true,BT:26,Num:10}],
-                    [{Pos:0,PosFix:true,BT:26,Num:11},{Pos:0,PosFix:true,BT:26,Num:11},{Pos:0,PosFix:true,BT:26,Num:11}]
+                    [{Pos:0,PosFix:true,BT:26,Num:10},{Pos:0,PosFix:true,BT:27,Num:10},{Pos:0,PosFix:true,BT:28,Num:10},{Pos:0,PosFix:true,BT:29,Num:10}],
+                    [{Pos:0,PosFix:true,BT:26,Num:11},{Pos:0,PosFix:true,BT:27,Num:11},{Pos:0,PosFix:true,BT:28,Num:11},{Pos:0,PosFix:true,BT:29,Num:11}]
                 ]
             },
             {
-                title : "Game.SGPools.Item.27.title",
+                title : "Game.SGPools.Item.2.title",
                 item: [
-                    [{Pos:0,PosFix:true,BT:27,Num:10},{Pos:0,PosFix:true,BT:27,Num:10},{Pos:0,PosFix:true,BT:27,Num:10}],
-                    [{Pos:0,PosFix:true,BT:27,Num:11},{Pos:0,PosFix:true,BT:27,Num:11},{Pos:0,PosFix:true,BT:27,Num:11}]
+                    [{Pos:0,PosFix:true,BT:26,Num:20},{Pos:0,PosFix:true,BT:27,Num:20},{Pos:0,PosFix:true,BT:28,Num:20},{Pos:0,PosFix:true,BT:29,Num:20}],
+                    [{Pos:0,PosFix:true,BT:26,Num:21},{Pos:0,PosFix:true,BT:27,Num:21},{Pos:0,PosFix:true,BT:28,Num:21},{Pos:0,PosFix:true,BT:29,Num:21}]
                 ]
             },
             {
-                title : "Game.SGPools.Item.28.title",
+                title : "Game.SGPools.Item.3.title",
                 item: [
-                    [{Pos:0,PosFix:true,BT:28,Num:10},{Pos:0,PosFix:true,BT:28,Num:10},{Pos:0,PosFix:true,BT:28,Num:10}],
-                    [{Pos:0,PosFix:true,BT:28,Num:11},{Pos:0,PosFix:true,BT:28,Num:11},{Pos:0,PosFix:true,BT:28,Num:11}]
+                    [{Pos:0,PosFix:true,BT:26,Num:30},{Pos:0,PosFix:true,BT:27,Num:30},{Pos:0,PosFix:true,BT:28,Num:30},{Pos:0,PosFix:true,BT:29,Num:30}],
+                    [{Pos:0,PosFix:true,BT:26,Num:31},{Pos:0,PosFix:true,BT:27,Num:31},{Pos:0,PosFix:true,BT:28,Num:31},{Pos:0,PosFix:true,BT:29,Num:31}]
                 ]
             },
-            {
-                title : "Game.SGPools.Item.29.title",
-                item: [
-                    [{Pos:0,PosFix:true,BT:29,Num:10},{Pos:0,PosFix:true,BT:29,Num:10},{Pos:0,PosFix:true,BT:29,Num:10}],
-                    [{Pos:0,PosFix:true,BT:29,Num:11},{Pos:0,PosFix:true,BT:29,Num:11},{Pos:0,PosFix:true,BT:29,Num:11}]
-                ]
-            },
-
         ]
     }, // title: '兩面', SubItem: []    
     { 
@@ -2234,13 +2226,30 @@ const SGPools:Layout=[
                 end:99,
                 curBT:1,
                 Sortable:true,
+                dgt:2,
                 item:getblocks(0,99)
                 //item: getNums
             }
         ]
     }, // title: '2D', SubItem: []
     { 
-        name: "Game.SGPools.Menu.Group.2.title", 
+        name: "Game.SGPools.Menu.Group.2.title",
+        cont:[
+            {
+                aBT: [16,17,18,19],
+                sltedItem:0,
+                start: 0,
+                end:99,
+                curBT:1,
+                dgt:2,
+                Sortable:true,
+                item:getblocks(0,99)
+                //item: getNums
+            }
+        ]
+    }, // title: '2D-頭', SubItem: []
+    { 
+        name: "Game.SGPools.Menu.Group.3.title", 
         cont:[
             {
                 aBT: [4,5,6,11],
@@ -2253,7 +2262,7 @@ const SGPools:Layout=[
         ]
     }, // title: '3D', SubItem: [], SubMenu: []
     { 
-        name: "Game.SGPools.Menu.Group.3.title", 
+        name: "Game.SGPools.Menu.Group.4.title", 
         cont:[
             {
                 aBT: [7,8,9,12],
@@ -2267,7 +2276,7 @@ const SGPools:Layout=[
         ]
     }, // title: '4D', SubItem: [], SubMenu: []
     { 
-        name: "Game.SGPools.Menu.Group.4.title", 
+        name: "Game.SGPools.Menu.Group.5.title", 
         cont:[
             {
                 aBT: [13,14,15],
@@ -2281,7 +2290,7 @@ const SGPools:Layout=[
         ]
     }, // title: '連碼', SubMenu: []
     { 
-        name: "Game.SGPools.Menu.Group.5.title", 
+        name: "Game.SGPools.Menu.Group.6.title", 
         cont:[
             {
                 aBT: [20,21,22,23,24,25],

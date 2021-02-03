@@ -13,9 +13,8 @@
                 </q-chip>
             </div>
             <div class='col-1'>
-                <div class="q-pa-md">
-                    {{$t('Label.Sorts')}}
-                    <q-btn-dropdown color="primary" :label="SortName">
+                <div class="row pbtn">
+                    <q-btn-dropdown color="primary" :label="SortName" icon="sort">
                     <q-list>
                         <q-item 
                             v-for="(itm,idx) in SortItems" 

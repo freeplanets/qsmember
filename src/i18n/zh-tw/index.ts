@@ -1445,6 +1445,7 @@ export default {
         Group: [
           { title: '兩面', SubItem: [] },
           { title: '2D', SubItem: [] },
+          { title: '2D-頭', SubItem: [] },
           { title: '3D', SubItem: [], SubMenu: [] },
           { title: '4D', SubItem: [], SubMenu: [] },
           { title: '連碼', SubMenu: [] },
@@ -1481,7 +1482,6 @@ export default {
         '27': { title: '大小',sctitle: [ '', '1獎', '2獎', '3獎'],subtitle: [ '大', '小' ] },
         '28': { title: '合數單雙',sctitle: [ '', '1獎', '2獎', '3獎'],shortT: '合',subtitle: [ '單', '雙' ] },
         '29': { title: '合數大小',sctitle: [ '', '1獎', '2獎', '3獎'],shortT: '合',subtitle: [ '大', '小' ] },
-        '30': { title: 'tt'},
       },
       OpenTitle:{
         First:"第一獎",
