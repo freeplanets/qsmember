@@ -20,10 +20,12 @@ export class PayRate extends BasePayRate<PayRateItm> {
     */
     get Rate(){
          //this.data.Rate ? this.data.Rate : 0;
-        return this.fetchValueToSteps(this.data.Rate + this.data.DfRate);
+        return this.fetchValueToSteps((this.data.Rate ? this.data.Rate : 0) + this.data.DfRate);
     }
     set Rate(v:number|undefined){
+        console.log('Rate:',this.data.DfRate,this.data);
         v = v as number - this.data.DfRate as number;
+        console.log('Rate:',v);
         this.data.Rate = this.fetchValueToSteps(v);
         this.DataChanged = true;
     }

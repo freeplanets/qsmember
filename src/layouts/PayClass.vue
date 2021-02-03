@@ -210,6 +210,7 @@ export default class BetClass extends Vue{
         //console.log('getPayRate itms:',itms);
         if(itms.length>0){
             itms.map(itm=>{
+                if(!itm.SubType) itm.SubType=0;
                 const e = this.PayR.find(elm => elm.BetType == itm.BetType && elm.SubType == itm.SubType)
                 if(e){
                     e.Datas= itm
