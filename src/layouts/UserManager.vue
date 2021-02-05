@@ -53,6 +53,7 @@
             <div class='col-1 test lnh'>{{ itm.TypeName }}</div>
             <div class='col-1 test lnh'><q-btn  flat round dense v-if='itm.Types===1 || itm.Types===2' :label="$t('Common.Setup')" @click="SetupGames(itm.id,itm.PayClass ? itm.PayClass : '')" /></div>
             <div class='col-1 test lnh'><q-btn  flat round dense  v-if='itm.Types && itm.Types < 9' :label="$t('Common.Setup')" @click="SetupPrograms(itm.id,itm.Programs)" /></div>
+            <div class='col-1 test lnh'><q-btn  flat round dense  v-if='itm.Types && itm.Types < 4' :label="$t('Common.Setup')" @click="ResetPW(itm.id,itm.Account)" /></div>
         </div>
     </div>
     <div class='UserModify'
@@ -124,7 +125,23 @@
           <q-btn flat :label="$t('Label.Cancel')" v-close-popup />
         </q-card-actions>
       </q-card>
-    </q-dialog>    
+    </q-dialog>
+    <q-dialog v-model="showResetPW" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">{{WhosName}}:{{$t('Title.NPassword')}}</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input dense v-model="NPassword" autofocus @keyup.enter="prompt = false" />
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat :label="$t('Label.Cancel')" v-close-popup />
+          <q-btn flat :label="$t('Table.ResetPW')" v-close-popup @click="DoResetPW" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 <script lang="ts">
@@ -166,7 +183,10 @@ export default class UserManager extends Vue{
     PayClassSlted:string='';
     Programs:EPrograms[]=[];
     showPrograms:boolean=false;
+    showResetPW:boolean=false;
+    NPassword:string='';
     SetUid:number=0;
+    WhosName:string='';
     cols:ITableHeader[]=[
       {
         name:'Account',
@@ -192,6 +212,11 @@ export default class UserManager extends Vue{
         name:'Programs',
         label: 'Programs',
         field: 'Programs'
+      },
+      {
+        name:'ResetPW',
+        label: 'ResetPW',
+        field: 'ResetPW'
       }
     ]
     private typesOption:SelectOptions[]=[]
@@ -264,6 +289,34 @@ export default class UserManager extends Vue{
       User.PayClass = this.PayClassSlted;
       this.saveUser(User);
       this.showPayClass=false;
+    }
+    ResetPW(userid:number,username?:string){
+      //console.log('ResetPW:',userid);
+      this.showResetPW=true;
+      this.SetUid = userid;
+      this.WhosName = username ? username : '';
+    }
+    async DoResetPW(){
+      if(this.NPassword && this.NPassword =='' ){
+          this.$q.dialog({
+              title: this.$t('Table.ResetPW') as string,
+              message: 'Empty is not allowed!'
+          });
+          return;
+      }
+      const param:CommonParams={
+        UserID:this.store.personal.id,
+        sid:this.store.personal.sid,
+        WhosID: this.SetUid,
+        NPassword: this.NPassword,
+      }
+      const msg:IMsg= await this.store.ax.getApi('ResetPassword',param,'post');
+      if(msg.ErrNo===0){
+        this.$q.dialog({
+            title: this.$t('Table.ResetPW') as string,
+            message: `${this.WhosName}'s Password is changed!`
+        });    
+      }
     }
     setPayClass(slted:string){
       this.PayClassSlted = slted;

@@ -129,6 +129,7 @@ export default {
     Password: '密碼',
     Nickname: '暱稱',
     Programs: '程式',
+    ResetPW: '重設密碼',
     Types: '類別',
     Levels: '層級',
     CreateDate: '新增日期',

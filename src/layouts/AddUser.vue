@@ -194,7 +194,7 @@ export default class AddUser extends Vue{
           }
         })
       }
-      //console.log('getUsers',ans);
+      console.log('getUsers',this.data);
     }
 
     mounted(){
