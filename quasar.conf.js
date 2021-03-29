@@ -4,6 +4,7 @@
 module.exports = function (ctx) {
   return {
     // Quasar looks for *.js files by default
+    supportTS: true,
     sourceFiles: {
       router: 'src/router/index.ts',
       store: 'src/store/index.ts'
@@ -48,6 +49,10 @@ module.exports = function (ctx) {
       //            (not treeshaking Quasar; biggest bundle size; convenient)
       all: false,
 
+      // For special cases outside of where "auto" importStrategy can have an impact
+      // (like functional components as one of the examples),
+      // you can manually specify Quasar components/directives to be available everywhere:
+      //
       components: [
         'QLayout',
         'QHeader',

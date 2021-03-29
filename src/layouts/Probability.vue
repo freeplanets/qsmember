@@ -30,7 +30,6 @@
 import Vue from 'vue'
 import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
-import { QDialogOptions } from 'quasar';
 import {getModule} from 'vuex-module-decorators';
 import PayRateData from './data/PayRateList';
 import {Watch} from 'vue-property-decorator'
@@ -110,7 +109,7 @@ export default class Probability extends Vue {
         })
       } else {
         //console.log(msg);
-        const opts:QDialogOptions = {
+        const opts = {
           title: this.$t('Label.ProbabilityManage')+'',
           message: msg.ErrCon          
         } 

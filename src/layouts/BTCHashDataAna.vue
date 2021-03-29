@@ -91,7 +91,6 @@ import Vue from 'vue'
 import Component from 'vue-class-component';
 import {Watch} from 'vue-property-decorator'
 import LayoutStoreModule from './data/LayoutStoreModule';
-//import { QDialogOptions } from 'quasar';
 import {getModule} from 'vuex-module-decorators';
 import {CommonParams,IMsg, SelectOptions,HashAna} from './data/if';
 import HASH from './class/HashAna';

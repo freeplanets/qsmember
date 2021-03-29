@@ -83,7 +83,6 @@ import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 import {SelectOptions,CommonParams,IMsg, BasePayRateItm,ILoginInfo} from './data/if';
-import { QDialogOptions } from 'quasar';
 import GameSelector from './components/GameSelector.vue';
 import {BaNum} from './components/func';
 Vue.component('GS',GameSelector);
@@ -211,7 +210,7 @@ export default class BetClass extends Vue{
             PayClassName: this.PayClassName
         }
         const ans:IMsg = await this.store.ax.getApi('savePayClass',param,'post');
-        let msg:QDialogOptions={
+        let msg={
           title: `${this.$t('Label.CratePayClass')}`,
           message: 'Ok!!'
         }

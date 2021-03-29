@@ -22,7 +22,6 @@ import Vue from 'vue'
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
 import {CommonParams,IMsg} from '../data/if';
-import { QDialogOptions } from 'quasar';
 import LayoutStoreModule from '../data/LayoutStoreModule';
 @Component
 export default class Comments extends Vue {
@@ -42,7 +41,7 @@ export default class Comments extends Vue {
         //const ans:IMsg = await AxApi.getApi('saveComments',cp,'post');
         const ans:IMsg = await this.store.ax.getApi('saveComments',cp,'post');
         if(ans.ErrNo===0){
-          let msg:QDialogOptions={
+          let msg={
             title: 'Save Comments',
             message: 'Ok!!'
           }

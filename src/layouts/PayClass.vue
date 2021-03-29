@@ -50,7 +50,6 @@ import {SelectOptions,PayRateItm,IMsg,PayClass, CommonParams,ILoginInfo} from '.
 import PayRateData from './data/PayRateList';
 import {PayRate} from './class/PayRate'
 import { cloneDeep } from 'lodash'
-//import { QDialogOptions } from 'quasar';
 import GameSelector from './components/GameSelector.vue';
 import BetTypeClass from './components/BetTypeClass.vue';
 import RateChangeOption from './components/RateChangeOption.vue';
