@@ -1,7 +1,7 @@
 import {BaNum} from './func';
 //import {OSteps} from '../data/if';
-import {bBlock,numBlock} from './layouts';
-export interface IOdds {
+import {numBlock} from './layouts';
+export interface Odds {
     pos?:number;
     OID:number;
     Odds:number;
@@ -20,41 +20,41 @@ export interface IOdds {
 interface NTemp extends numBlock {
     TolS:number;
 }
-interface INum {
-    [num:string]:IOdds;
+interface Num {
+    [num:string]:Odds;
 }
-export interface IData {
-    [BT:string]:INum;
+export interface Data {
+    [BT:string]:Num;
 }
 interface NumSortData {
     num:number;
     tolS:number;
     Risk:number;
 }
-interface ISortFunc {
+interface SortFunc {
     (A:NumSortData,B:NumSortData):number;
 }
-interface IBetType {
+interface BetType {
     Total:number;
     Payouts:number;
     MaxWin?:number;
-    //member:INum;
+    //member:Num;
     SortTable:boolean;
     Pos:NumSortData[];
-    member:IOdds[];
+    member:Odds[];
     SortID:number;
 }
-const SortByNum:ISortFunc=(a,b)=>{
+const SortByNum:SortFunc=(a,b)=>{
     return a.num - b.num
 }
-const SortByTols:ISortFunc=(a,b)=>{
+const SortByTols:SortFunc=(a,b)=>{
     return b.tolS - a.tolS
 }
-const SortByRisk:ISortFunc=(a,b)=>{
+const SortByRisk:SortFunc=(a,b)=>{
     return a.Risk - b.Risk
 }
-interface IBetTypes {
-    [BT:string]:IBetType;
+interface BetTypes {
+    [BT:string]:BetType;
 }
 
 interface RiskGroup {
@@ -67,14 +67,14 @@ interface RGS {
     [key:string]:RiskGroup[];
 }
 
-const FOUR_DIGITAL = 'Game.BTCHash.Menu.Group.5.title';
-const FIVE_DIGITAL = 'Game.BTCHash.Menu.Group.6.title';
+//const FOUR_DIGITAL = 'Game.BTCHash.Menu.Group.5.title';
+//const FIVE_DIGITAL = 'Game.BTCHash.Menu.Group.6.title';
 export class CGame {
-    private member:IBetTypes;
+    private member:BetTypes;
     private OID:number=0;
     public isUpdated:boolean=true;
     public GType:string='';
-    private SortType:ISortFunc[]=[SortByNum,SortByTols,SortByRisk];
+    private SortType:SortFunc[]=[SortByNum,SortByTols,SortByRisk];
     private RiskGroup:RGS=
         {
             MarkSix:[  
@@ -147,20 +147,20 @@ export class CGame {
     get MaxOddsID(){
         return this.OID;
     }
-    inidata(dta:IData,OM){
+    inidata(dta:Data,OM){
         this.member={};
         Object.keys(dta).map(bt=>{
-            const BTItm:INum=dta[bt];
-            let chk45:boolean=false;
-            let chkString='';
+            const BTItm:Num=dta[bt];
+            let chk45=false;
+            //let chkString='';
             const TNT:NTemp[]=[];
             if(this.GType==='BTCHash'){
                 if (bt==='41'){
                     chk45=true;
-                    chkString=FOUR_DIGITAL;
+                    //chkString=FOUR_DIGITAL;
                 } else if(bt==='42'){
                     chk45=true;
-                    chkString=FIVE_DIGITAL;
+                    //chkString=FIVE_DIGITAL;
                 }
             }            
             this.member[bt]={
@@ -218,19 +218,19 @@ export class CGame {
             this.calRisk(bt);
         })
     }
-    updateData(dta:IData,OM){
+    updateData(dta:Data,OM){
         Object.keys(dta).map(bt=>{
-            const BTItm:INum=dta[bt];
-            let chk45:boolean=false;
-            let chkString='';
+            const BTItm:Num=dta[bt];
+            let chk45=false;
+            //let chkString='';
             const TNT:NTemp[]=[];
             if(this.GType==='BTCHash'){
                 if (bt==='41'){
                     chk45=true;
-                    chkString=FOUR_DIGITAL;
+                    //chkString=FOUR_DIGITAL;
                 } else if(bt==='42'){
                     chk45=true;
-                    chkString=FIVE_DIGITAL;
+                    //chkString=FIVE_DIGITAL;
                 }
             }
             Object.keys(BTItm).map(num=>{
@@ -250,7 +250,7 @@ export class CGame {
                 this.member[bt].member[num].Num = parseInt(num,10);
                 this.member[bt].member[num].BT = parseInt(bt,10);                
                 //this.member[bt].member[num].pos = pos;
-                let f=this.member[bt].Pos.find(m=>m.num===parseInt(num,10))
+                const f=this.member[bt].Pos.find(m=>m.num===parseInt(num,10))
                 if(f){
                     f.tolS=BTItm[num].tolS;
                 }
@@ -269,7 +269,7 @@ export class CGame {
             this.isUpdated = true;
         })
     }
-    getNTemp(BTItm:INum,bt:string,num:string):NTemp{
+    getNTemp(BTItm:Num,bt:string,num:string):NTemp{
         return {
             Pos:0,
             Num:parseInt(num,10),
@@ -281,7 +281,7 @@ export class CGame {
         //TNT.sort(sortTolS);
         const f=OM.dfLayout.find(itm=> itm.name===chkString)
         if(f){
-            let olddata:numBlock[]=[];
+            const olddata:numBlock[]=[];
             f.cont[0].item.map(line=>{
                 line.map(blk=>{
                     olddata.push(blk);
@@ -289,9 +289,9 @@ export class CGame {
             })
             const len=TNT.length<100 ? TNT.length : 100;
             for(let i=0;i<len;i++){
-                let f=olddata.find(itm=>itm.BT===TNT[i].BT && itm.Num===TNT[i].Num);
+                const f=olddata.find(itm=>itm.BT===TNT[i].BT && itm.Num===TNT[i].Num);
                 if(!f){
-                    let block:numBlock={
+                    const block:numBlock={
                         Pos:0,
                         BT:TNT[i].BT,
                         Num:TNT[i].Num
@@ -317,7 +317,7 @@ export class CGame {
     getOdds(blk:numBlock,BT?:number,extOdds?:number){
         if(!BT) BT=blk.BT;
         if(blk.PosFix || extOdds===1){
-            let num=blk.Num;
+            const num=blk.Num;
             const Odds = this.getOddsByNum(BT,num,extOdds);
             return Odds;
             //return this.getOddsByNum(BT,num,extOdds);
@@ -326,7 +326,7 @@ export class CGame {
             if(blk.Pos !== undefined){
                 const sBT:string=BT.toString();
                 const nsd=this.member[sBT].Pos[blk.Pos];
-                const tmp:IOdds=this.member[sBT].member[nsd.num+''];
+                const tmp:Odds=this.member[sBT].member[nsd.num+''];
                 //const ba = BaNum(tmp.PerStep ? tmp.PerStep : 1);
                 if(tmp.PerStep>0){
                     const ba = BaNum(tmp.PerStep);
@@ -358,7 +358,7 @@ export class CGame {
             //console.log('no perstep:',sBT,sNum,this.member[sBT]);
             return {};
         }    
-        const tmp:IOdds=this.member[sBT].member[sNum];
+        const tmp:Odds=this.member[sBT].member[sNum];
         //const ba = BaNum(tmp.PerStep ? tmp.PerStep : 1);
         if(tmp.PerStep>0){
             const ba = BaNum(tmp.PerStep);
@@ -395,7 +395,7 @@ export class CGame {
     }    
     calRisk=(BT:string|number)=>{
         if(typeof(BT)==='string') BT=parseInt(BT,10);
-        let rg:RiskGroup=this.getRiskFunc(BT);
+        const rg:RiskGroup=this.getRiskFunc(BT);
         let isDone = false;
         if(rg.func){
             Object.keys(this).map(key=>{
@@ -416,7 +416,7 @@ export class CGame {
     }
     getRiskFunc=(BT:number):RiskGroup=>{
         let tmp:RiskGroup={member:[]};
-        let found:boolean=false;
+        let found=false;
         if(this.GType){
             const g:RiskGroup[]=this.RiskGroup[this.GType];
             g.map(itm=>{
@@ -433,11 +433,11 @@ export class CGame {
     // 單號風險
 	calBigestRiskOne=(BT:number)=>{
         //console.log('calBigestRiskOne',BT);
-        let MaxWin:number=0;
+        let MaxWin=0;
         Object.keys(this.member[BT].member).map(key=>{
-            let B =  this.member[BT];
-            let M =  B.member[key];
-            let Risk = B.Total - M.tolP;
+            const B =  this.member[BT];
+            const M =  B.member[key];
+            const Risk = B.Total - M.tolP;
             this.member[BT].member[key].Risk = Math.round(Risk);
             this.setRiskToPos(BT,parseInt(key),Risk);
             if(MaxWin > Risk) MaxWin = Risk;
@@ -451,9 +451,9 @@ export class CGame {
         const leftNums=T-1;
         //const len:number=Object.keys(this.member[BT].member).length;
         Object.keys(this.member[BT].member).map(key=>{
-            let B =  this.member[BT];
-            let M =  B.member[key];
-            let Risk = B.Total - M.tolP - (B.Payouts-M.tolP)*(otherNums/leftNums);
+            const B =  this.member[BT];
+            const M =  B.member[key];
+            const Risk = B.Total - M.tolP - (B.Payouts-M.tolP)*(otherNums/leftNums);
             this.member[BT].member[key].Risk = Math.round(Risk);
             this.setRiskToPos(BT,parseInt(key),Risk);
         });

@@ -149,8 +149,8 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule'
 import {getModule} from 'vuex-module-decorators';
-import {IUser} from './data/schema'
-import { SelectOptions,ITableHeader,CommonParams, ILoginInfo, IMsg,IProgs} from './data/if';
+import {User} from './data/schema'
+import { SelectOptions,TableHeader,CommonParams,LoginInfo, Msg,Progs} from './data/if';
 import {UserTypes} from './class/Users'
 import GamePayClassSelector from './components/GamePayClassSelector.vue';
 Vue.component('GPCS',GamePayClassSelector);
@@ -162,18 +162,18 @@ interface Ans {
 interface UserGPC {
   [key:string]:number;
 }
-interface EPrograms extends IProgs{
+interface EPrograms extends Progs{
   isChecked:boolean;
 }
 @Component
 export default class UserManager extends Vue{
     store=getModule(LayoutStoreModule);
-    NewUser:IUser = {TableName:'User',id:0,Types:0}
+    NewUser:User = {TableName:'User',id:0,Types:0}
     slt:SelectOptions={value:0}
     showList=true;
     showEdit=false;
     Userf:string='';
-    data:IUser[]=[]
+    data:User[]=[]
     typeNameTip:string='';
     curTypeName:string='';
     curType:number|undefined;
@@ -187,7 +187,7 @@ export default class UserManager extends Vue{
     NPassword:string='';
     SetUid:number=0;
     WhosName:string='';
-    cols:ITableHeader[]=[
+    cols:TableHeader[]=[
       {
         name:'Account',
         label: 'Account',
@@ -226,7 +226,7 @@ export default class UserManager extends Vue{
     get Selected(){
       return this.slted;
     }
-    set Selected(v:IUser[]){
+    set Selected(v:User[]){
       //console.log('Selected',v,v.length)
       //this.slted = v;
       this.showEdit = true;
@@ -246,7 +246,7 @@ export default class UserManager extends Vue{
     get UserID(){
       return this.store.personal.id;
     }
-    get PInfo():ILoginInfo{
+    get PInfo():LoginInfo{
       return this.store.personal;
     }
     getTypeOptions(){
@@ -272,7 +272,7 @@ export default class UserManager extends Vue{
     }
     */
     SavePayClass(){
-      const User:IUser={
+      const User:User={
         TableName:'User',
         id:this.curUserID
       }
@@ -310,7 +310,7 @@ export default class UserManager extends Vue{
         WhosID: this.SetUid,
         NPassword: this.NPassword,
       }
-      const msg:IMsg= await this.store.ax.getApi('ResetPassword',param,'post');
+      const msg:Msg= await this.store.ax.getApi('ResetPassword',param,'post');
       if(msg.ErrNo===0){
         this.$q.dialog({
             title: this.$t('Table.ResetPW') as string,
@@ -372,7 +372,7 @@ export default class UserManager extends Vue{
             this.curTypeName = n ? n : ''; 
         }
     }
-    setUser(v:IUser){
+    setUser(v:User){
       Object.keys(v).map(key=>{
         if(key==='TypeName') return;
         this.NewUser[key]=v[key];
@@ -396,7 +396,7 @@ export default class UserManager extends Vue{
       })
       if(prog.length===0) return;
       param.Programs = prog.join(',');
-      const msg:IMsg=await ax.getApi('SetUser',param);
+      const msg:Msg=await ax.getApi('SetUser',param);
       this.$q.dialog({
         title: this.$t('Label.ProgramsSet')+'',
         message: msg.ErrNo ? msg.ErrCon : 'Ok!!'
@@ -420,7 +420,7 @@ export default class UserManager extends Vue{
         UserID:this.PInfo.id,
         sid:this.PInfo.sid
       };
-      const msg:IMsg=await ax.getApi('getPrograms',param);
+      const msg:Msg=await ax.getApi('getPrograms',param);
       if(msg.ErrNo===0){
         let data = msg.data as EPrograms[];
         data.map(itm=>{
@@ -429,8 +429,8 @@ export default class UserManager extends Vue{
         })
       }
     }
-    async saveUser(user?:IUser){
-      let curUser:IUser;
+    async saveUser(user?:User){
+      let curUser:User;
       if(user){
         curUser=user;
       } else {
@@ -438,7 +438,7 @@ export default class UserManager extends Vue{
       }
       curUser.ModifyID = this.UserID;
       const ax=this.store.ax;
-      const ans:IMsg=await ax.saveUser(this.PInfo.id,this.PInfo.sid,curUser);
+      const ans:Msg=await ax.saveUser(this.PInfo.id,this.PInfo.sid,curUser);
       //console.log('saveUSer',ans);
       if(ans.ErrNo===0){
         this.clearUser();
@@ -478,7 +478,7 @@ export default class UserManager extends Vue{
       if(this.Userf) param.findString = this.Userf;
       if(this.curType !== undefined) param.userType = this.curType;
     
-      const ans:IMsg=await ax.getUsers(param);
+      const ans:Msg=await ax.getUsers(param);
       if(ans.ErrNo===0){
         this.data = ans.data as [];
         console.log('getUsers',this.data);

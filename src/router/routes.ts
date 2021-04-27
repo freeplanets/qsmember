@@ -61,6 +61,10 @@ const routes: RouteConfig[] = [
       {
         path: '/btchash',
         component: () => import('layouts/BTCHashDataAna.vue')
+      },
+      {
+        path: '/itemsmanager',
+        component: () => import('components/ItemsManager.vue')
       }
     ],
   }

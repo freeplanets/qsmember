@@ -52,8 +52,8 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule'
 import {getModule} from 'vuex-module-decorators';
-import {IUser} from './data/schema'
-import { SelectOptions,ITableHeader,IMsg, ILoginInfo, CommonParams} from './data/if';
+import {User} from './data/schema'
+import { SelectOptions,TableHeader,Msg,LoginInfo, CommonParams} from './data/if';
 import {UserTypes} from './class/Users'
 interface Ans {
   affectedRow?:number;
@@ -63,12 +63,12 @@ interface Ans {
 @Component
 export default class AddUser extends Vue{
     store=getModule(LayoutStoreModule);
-    NewUser:IUser = {TableName:'User',id:0}
+    NewUser:User = {TableName:'User',id:0}
     slt:SelectOptions={value:0}
     showList=true;
     showEdit=false;
-    data:IUser[]=[]
-    cols:ITableHeader[]=[
+    data:User[]=[]
+    cols:TableHeader[]=[
       {
         name:'Account',
         label: 'Account',
@@ -89,13 +89,13 @@ export default class AddUser extends Vue{
     //paycls:SelectOptions={}
     //payclss:SelectOptions[]=[];
     private slted=[];
-    get PInfo():ILoginInfo {
+    get PInfo():LoginInfo {
       return this.store.personal;
     }
     get Selected(){
       return this.slted;
     }
-    set Selected(v:IUser[]){
+    set Selected(v:User[]){
       //console.log('Selected',v,v.length)
       //this.slted = v;
       this.showEdit = true;
@@ -133,7 +133,7 @@ export default class AddUser extends Vue{
       this.paycls = v;
     }
     */
-    setUser(v:IUser){
+    setUser(v:User){
       Object.keys(v).map(key=>{
         if(key==='TypeName') return;
         this.NewUser[key]=v[key];
@@ -146,7 +146,7 @@ export default class AddUser extends Vue{
     }
     async saveUser(){
       const ax=this.store.ax;
-      const ans:IMsg=await ax.saveUser(this.PInfo.id,this.PInfo.sid,this.NewUser);
+      const ans:Msg=await ax.saveUser(this.PInfo.id,this.PInfo.sid,this.NewUser);
       //console.log('saveUSer',ans);
       if(ans.ErrNo===0){
         this.clearUser();
@@ -183,9 +183,9 @@ export default class AddUser extends Vue{
         UserID:this.PInfo.id,
         sid:this.PInfo.sid
       }
-      const ans:IMsg=await ax.getUsers(param);
+      const ans:Msg=await ax.getUsers(param);
       if(ans.ErrNo===0){
-        this.data = ans.data as IUser[];
+        this.data = ans.data as User[];
 
         this.data.map(u=>{
           const tmp=this.typesOption.find(itm => itm.value===u.Types);

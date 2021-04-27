@@ -17,7 +17,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop,Watch} from 'vue-property-decorator';
 import LayoutStoreModule from '../data/LayoutStoreModule';
-import { IbtCls,ILoginInfo } from '../data/if';
+import { IbtCls,LoginInfo } from '../data/if';
 /**
  * :store="ParameterName"
  * :GameID="ParameterName"
@@ -26,7 +26,7 @@ import { IbtCls,ILoginInfo } from '../data/if';
 @Component
 export default class BetTypeClass extends Vue {
     @Prop() readonly store?:LayoutStoreModule;
-    @Prop() readonly pinfo?:ILoginInfo;
+    @Prop() readonly pinfo?:LoginInfo;
     @Prop() readonly GameID?:number;
     @Watch('GameID',{ immediate: true, deep: true })
     onGameIDChange(){
@@ -34,7 +34,7 @@ export default class BetTypeClass extends Vue {
     }
     BtClass:IbtCls[]=[];
 	async getBtClass(){
-        let pinfo:ILoginInfo={
+        let pinfo:LoginInfo={
             id:0,
             Account:'',
             sid:'',

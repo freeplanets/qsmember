@@ -1,7 +1,7 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 import Store from '../../store/index';
 import AxApi from '../components/AxApi';
-import {ILoginInfo} from './if';
+import {LoginInfo} from './if';
 
 @Module({
     dynamic: true,
@@ -12,7 +12,7 @@ import {ILoginInfo} from './if';
 export default class LayoutStoreModule extends VuexModule {
     private isleftDrawerOpen = false;
     public isLogin = false;
-    public personal:ILoginInfo = {
+    public personal:LoginInfo = {
         id:0,
         Account:'',
         sid:'',
@@ -61,17 +61,17 @@ export default class LayoutStoreModule extends VuexModule {
     }
 
     @Mutation
-    public SET_PERSONAL(value:ILoginInfo){
+    public SET_PERSONAL(value:LoginInfo){
         this.personal = value;
     }
 
     @Action
-    public setPersonal(value:ILoginInfo){
+    public setPersonal(value:LoginInfo){
         this.SET_PERSONAL(value);
     }
     @Action
     public clearPInfo(){
-        const personal:ILoginInfo = {
+        const personal:LoginInfo = {
             id:0,
             Account:'',
             sid:'',

@@ -1,3 +1,7 @@
+export interface KeyVal {
+    key: string;
+    value: string | number | boolean;
+}
 export interface SelectOptions {
     value:number;
 	label?:string;
@@ -65,7 +69,7 @@ export interface CBetItems {
 	ModifyID:number;
 	data:string;
 }
-export interface IMsg {
+export interface Msg {
     ErrNo?: number;
     data?: object[]|object;
     debug?: string;
@@ -76,7 +80,7 @@ export interface CMain<T> {
 	Modify(v:T):void;
 	Delete(id:number):void;
 }
-export interface ITableHeader {
+export interface TableHeader {
     // unique id
     // identifies column
     // (used by pagination.sortBy, "body-cell-[name]" slot, ...)
@@ -180,16 +184,16 @@ export interface BetHeader {
     UPName?:string;
 }
 
-export interface INumData {
+export interface NumData {
     Num: number;
     OddsID: number;
     Odds?: string | number;
     Amt: number;
     BetType?: number;
 }
-export interface IBetContent {
+export interface BetContent {
     BetType?: number;
-    Content?: INumData[];
+    Content?: NumData[];
     isPaylay?: boolean;
     Sets?: number;
 }
@@ -200,18 +204,18 @@ export interface OSteps {
     PerStep:number;
     Steps:number;
 }
-export interface IProgs {
+export interface Progs {
     id:number;
     Title:string;
     Paths:string;
     Icon:string;
     Funcs:string;
 }
-export interface IPClass {
+export interface PClass {
     GameID:number;
     PayClassID:number;
 }
-export interface ILoginInfo {
+export interface LoginInfo {
     id: number;
     Account: string;
     sid: string;
@@ -220,8 +224,8 @@ export interface ILoginInfo {
     isTwoPassAsked:number;
     forcePWChange:number;
     isChkGA:number;
-    Progs:IProgs[];
-    PayClass?:IPClass[];
+    Progs:Progs[];
+    PayClass?:PClass[];
 }
 
 export interface ParamLog {
@@ -253,4 +257,15 @@ export interface MyUser {
     id: number;
     Cond: string;
     AnaData: string;
+}
+
+export interface HasID {
+    id?: number;
+}
+export interface WebParams {
+    sid: string;
+    UserID: number;
+    TableName?:string;
+    TableData?:HasID | HasID[];
+    [key: string]: number|string|boolean|HasID|HasID[]|undefined;
 }

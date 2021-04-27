@@ -1,7 +1,7 @@
 import axios,{AxiosRequestConfig,AxiosResponse} from 'axios'
-import { SelectOptions,CBetItems,IMsg,CommonParams,IbtCls, ParamLog} from '../data/if';
-import {IGames,ITerms,Game, IUser} from '../data/schema';
-let myApiUrl:string='https://testu.uuss.net:3000';
+import { SelectOptions,CBetItems,Msg,CommonParams,IbtCls, ParamLog,WebParams} from '../data/if';
+import {Terms,Game, User} from '../data/schema';
+let myApiUrl='https://testu.uuss.net:3000';
 
 if(window.location.hostname==='localhost'){
     myApiUrl = 'http://localhost:3000';
@@ -90,7 +90,7 @@ export class AxApi {
             return;
         }
     }    
-    async saveTerms(UserID:number,sid:string,dtas:ITerms,PL?:ParamLog[]){
+    async saveTerms(UserID:number,sid:string,dtas:Terms,PL?:ParamLog[]){
         let param:CommonParams={
             UserID,
             sid
@@ -121,7 +121,7 @@ export class AxApi {
             sid:sid            
         }
         return new Promise((resolve,reject)=>{
-            this.getApi('GameList',param).then((msg:IMsg)=>{
+            this.getApi('GameList',param).then((msg:Msg)=>{
                 resolve(msg.data as Game[]);
             }).catch(err=>{
                 reject(err);
@@ -142,7 +142,7 @@ export class AxApi {
         return ans;
         */
     }
-    async saveGame(UserID:number,sid:string,dta:Game):Promise<IMsg>{
+    async saveGame(UserID:number,sid:string,dta:Game):Promise<Msg>{
         const param:CommonParams={
             UserID:UserID,
             sid:sid,
@@ -154,7 +154,7 @@ export class AxApi {
         return await this.getApi('UpdateGame',param,'post');
     }
 
-    async getTerms(UserID:number,sid:string,GameID:number|string,sdate?:string):Promise<IMsg>{
+    async getTerms(UserID:number,sid:string,GameID:number|string,sdate?:string):Promise<Msg>{
         const param:CommonParams={
             UserID:UserID,
             sid:sid,
@@ -180,7 +180,7 @@ export class AxApi {
         return ans;
         */   
     }
-    async saveUser(UserID:number,sid:string,user:IUser):Promise<IMsg>{
+    async saveUser(UserID:number,sid:string,user:User):Promise<Msg>{
         const param:CommonParams={
             UserID:UserID,
             sid:sid,
@@ -202,7 +202,7 @@ export class AxApi {
         return ans;
         */     
     }
-    async getUsers(f:CommonParams):Promise<IMsg>{
+    async getUsers(f:CommonParams):Promise<Msg>{
         return await this.getApi('getUsers',f);
         /*
         const url:string=this.ApiUrl+'/api/getUsers';
@@ -216,7 +216,7 @@ export class AxApi {
         return ans;
         */
     }
-    async getPayClass(UserID:number,sid:string,GameID?:number|string):Promise<IMsg>{
+    async getPayClass(UserID:number,sid:string,GameID?:number|string):Promise<Msg>{
         const param:CommonParams={
             GameID:GameID,
             UserID:UserID,
@@ -224,7 +224,7 @@ export class AxApi {
         }       
         return await this.getApi('getPayClass',param);
     }
-    async saveNums(UserID:number,sid:string,tid:number,GameID:number|string,nums:string,isSettled?:number,PLog?:ParamLog[]):Promise<IMsg>{
+    async saveNums(UserID:number,sid:string,tid:number,GameID:number|string,nums:string,isSettled?:number,PLog?:ParamLog[]):Promise<Msg>{
         const param:CommonParams={
             UserID:UserID,
             sid:sid,
@@ -258,7 +258,7 @@ export class AxApi {
     }
     /*
     async getOpParams(GameID:number|string){
-        let msg:IMsg={ErrNo:0};
+        let msg:Msg={ErrNo:0};
         const url:string=this.ApiUrl+'/api/getOpParams';
         const config:AxiosRequestConfig = {
             params: {
@@ -281,8 +281,8 @@ export class AxApi {
     }
     */
     async SaveData(TableName:string,data:string){
-        let msg:IMsg={ErrNo:0};
-        const url:string=`${this.ApiUrl}/api/save/${TableName}`;
+        let msg:Msg={ErrNo:0};
+        const url=`${this.ApiUrl}/api/save/${TableName}`;
         const config:AxiosRequestConfig = {
             params: {
                 data:data,
@@ -302,22 +302,22 @@ export class AxApi {
         })
         return msg;                
     }
-    async getApi(appName:string,param:CommonParams|ITerms,method?:string):Promise<IMsg>{
-        const url:string=`${this.ApiUrl}/api/${appName}`;
-        let func:Promise<IMsg>;
+    async getApi(appName:string,param:CommonParams|Terms|WebParams,method?:string):Promise<Msg>{
+        const url=`${this.ApiUrl}/api/${appName}`;
+        let func:Promise<Msg>;
         if(method==='post'){
             func=this.doPost(url,param);
         } else {
             func=this.doit(url,param);
         }
         return new Promise((resolve,reject)=>{
-            func.then((msg:IMsg)=>{
+            func.then((msg:Msg)=>{
                 if(msg.ErrNo===7){
                     this.gotoLoginPage();
                 }
                 resolve(msg);
             }).catch(err=>{
-                const msg:IMsg={
+                const msg:Msg={
                     ErrNo:9,
                     error:err
                 };
@@ -333,10 +333,10 @@ export class AxApi {
         */
     }
     async setOdds(param:CommonParams,appName:string){
-        const url:string=`${this.ApiUrl}/api/${appName}`;
+        const url=`${this.ApiUrl}/api/${appName}`;
         return await this.doit(url,param); 
     }
-    doit(url:string,param:CommonParams|ITerms):Promise<IMsg>{
+    doit(url:string,param:CommonParams|Terms|WebParams):Promise<Msg>{
        const config:AxiosRequestConfig = {
            params: param
        };
@@ -345,7 +345,7 @@ export class AxApi {
             config.params=param
         }
         */
-        let msg:IMsg={ErrNo:0};
+        let msg:Msg={ErrNo:0};
         return new Promise((resolve,reject)=>{
             axios.get(url,config).then((res:AxiosResponse)=>{
                 //console.log('AxApi doit res:',res);
@@ -358,10 +358,10 @@ export class AxApi {
             })
         });
     }
-    doPost(url:string,param:CommonParams|ITerms):Promise<IMsg>{
+    doPost(url:string,param:CommonParams|Terms|WebParams):Promise<Msg>{
         //const config:AxiosRequestConfig = {}
         //console.log('doPost',url,param);
-        let msg:IMsg={ErrNo:0};
+        let msg:Msg={ErrNo:0};
         return new Promise((resolve,reject)=>{
             axios.post(url,param).then((res:AxiosResponse)=>{
                 msg=res.data;

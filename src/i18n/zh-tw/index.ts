@@ -1,14 +1,14 @@
 export default {
   Error : [
-    "OK!!",             //0
-    "低於最小下注金額",   //1
-    "高於最大下注金額",   //2
-    "單碼滿倉",          //3
-    "聯碼滿倉",           //4
-    "停押",               //5
-    "額度不足",           //6
-    "尚未登入",           //7
-    "已有注單,無法刪除",   //8
+    'OK!!',             //0
+    '低於最小下注金額',   //1
+    '高於最大下注金額',   //2
+    '單碼滿倉',          //3
+    '聯碼滿倉',           //4
+    '停押',               //5
+    '額度不足',           //6
+    '尚未登入',           //7
+    '已有注單,無法刪除',   //8
   ],  
   Label: {
     GameName: '彩局名稱',
@@ -21,36 +21,36 @@ export default {
     SavePayClassName: '儲存分盤名稱',
     EditPayClassName: '修改分盤名稱',
     DeletePayClass: '刪除分盤',
-    BasePayRate:"基本盤",
-    RefPayRate:"參考分盤",
-    CratePayClass:"新增分盤",
-    PayClassFunc: "基本盤賠率%,基本盤利潤差,固定利潤,浮動利潤",
-    RateDiff:"賠率差距",
-    RateDiffInfo:"正數,表示分盤賠率佔基本盤比率不可以小於90",
-    ProfitDiff:"利潤差距",
-    ProfitDiffInfo:"正值表示利潤比基本盤高，負值表示比基本盤低",
-    FixProfit:"固定利潤",
-    FixProfitInfo:"所有下注項目都是相同利潤",
-    FloatProfit:"浮動利潤",
-    FloatProfitInfo:"根據中獎機率設定不同利潤",
-    WinChance:"中獎機率",
+    BasePayRate:'基本盤',
+    RefPayRate:'參考分盤',
+    CratePayClass:'新增分盤',
+    PayClassFunc: '基本盤賠率%,基本盤利潤差,固定利潤,浮動利潤',
+    RateDiff:'賠率差距',
+    RateDiffInfo:'正數,表示分盤賠率佔基本盤比率不可以小於90',
+    ProfitDiff:'利潤差距',
+    ProfitDiffInfo:'正值表示利潤比基本盤高，負值表示比基本盤低',
+    FixProfit:'固定利潤',
+    FixProfitInfo:'所有下注項目都是相同利潤',
+    FloatProfit:'浮動利潤',
+    FloatProfitInfo:'根據中獎機率設定不同利潤',
+    WinChance:'中獎機率',
     Time: '時間',
     Date: '日期',
-    TermManager:"彩期管理",
-    AddTerm: "新增彩期",
-    EditTerm: "修改彩期",
-    OpenDate:"開獎日期",
-    BetEndTime:"下注截止時間",
-    SpNo:"特碼",
-    Save:"存檔",
-    Cancel:"取消",
-    Delete:"刪除",
-    Unselected:"未選取過項目",
-    TermID:"期次",
-    GameManager:"彩票管理",
-    SPEndTime:"特碼截止時間",
-    AddUser:"新增用戶",
-    UserManager:"用戶管理",
+    TermManager:'彩期管理',
+    AddTerm: '新增彩期',
+    EditTerm: '修改彩期',
+    OpenDate:'開獎日期',
+    BetEndTime:'下注截止時間',
+    SpNo:'特碼',
+    Save:'存檔',
+    Cancel:'取消',
+    Delete:'刪除',
+    Unselected:'未選取過項目',
+    TermID:'期次',
+    GameManager:'彩票管理',
+    SPEndTime:'特碼截止時間',
+    AddUser:'新增用戶',
+    UserManager:'用戶管理',
     Member:'會員',
     Agent:'代理',
     WebOwner:'網站站主',
@@ -96,34 +96,44 @@ export default {
     },
     PlsSlt: '請選擇....',
     BTCHashDataAna:'雜湊數分析',
-    Sorts:"排序",
-    SortItem:['號碼','注額','風險']
+    Sorts:'排序',
+    SortItem:['號碼','注額','風險'],
+    ItemsManager:'項目管理',
+    RecordCount:'筆數'
   },
   Tip:{
-    UserFind: "請輸入名稱或代號"
+    UserFind: '請輸入名稱或代號'
   },
   Table: {
-    ItemName: "項目名稱",
-    SubName: "指定名稱",
-    NoAdjust: "不調盤",
-    Profit:"利潤",
-    RateDefault:"賠率",
-    RateTop:"賠率上限",
-    Probability:"機率",
-    TopPay:"最高派彩",
-    OneHand: "公司單注",
-    PlusRate: "加本金",
-    LowestBet:"最小下注",
-    SingleBet:"最大單注",
+    Items: {
+      Title: '名稱',
+      OpenFee: '開單手續費',
+      CloseFee: '收單手續費',
+      LoanFee: '槓桿手續費',
+      BattleFee: '對戰手續費',
+      BattleLoanFee: '對戰槓桿手續費',
+    },
+    ItemName: '項目名稱',
+    SubName: '指定名稱',
+    NoAdjust: '不調盤',
+    Profit:'利潤',
+    RateDefault:'賠率',
+    RateTop:'賠率上限',
+    Probability:'機率',
+    TopPay:'最高派彩',
+    OneHand: '公司單注',
+    PlusRate: '加本金',
+    LowestBet:'最小下注',
+    SingleBet:'最大單注',
     OfficeSite: '官網',
-    StopBeforeEnd:"提前封盤秒數",
-    BothSideAdjust:"採用兩面押碼",
-    AutoOpen:"自動開放下注",
-    TwoMoreGame:"過闗賠率差距",
-    TwoSide:"兩面",
-    ColorWave:"色波",
-    DelAfterBet:"會員可刪除秒數",
-    DelBeforeEnd:"截止刪除注單秒數",
+    StopBeforeEnd:'提前封盤秒數',
+    BothSideAdjust:'採用兩面押碼',
+    AutoOpen:'自動開放下注',
+    TwoMoreGame:'過闗賠率差距',
+    TwoSide:'兩面',
+    ColorWave:'色波',
+    DelAfterBet:'會員可刪除秒數',
+    DelBeforeEnd:'截止刪除注單秒數',
     PayClassID: '盤口',
     Account: '帳號',
     Password: '密碼',
@@ -140,15 +150,15 @@ export default {
     MinHand:'最小單注',
     MaxHand:'最大單注',
     UseAvgOdds:'使用均成本(或最小)',
-    GType:"遊戲代號",
+    GType:'遊戲代號',
     GameItems:'遊戲項目',
-    ChangeStart:"押碼啟動全額",
-    BetForChange:"押碼全額",
-    PerStep:"跳動點",
-    Steps:"押碼點數",
-    StepsGroup:"押碼級距",
-    StopTimeS:"特碼下注截止時間",
-    StopTime:"下注截止時間",
+    ChangeStart:'押碼啟動全額',
+    BetForChange:'押碼全額',
+    PerStep:'跳動點',
+    Steps:'押碼點數',
+    StepsGroup:'押碼級距',
+    StopTimeS:'特碼下注截止時間',
+    StopTime:'下注截止時間',
     Result:'開獎結果',
     hasSPNO:'有開特碼',
     OpenNums:'開出獎號',
@@ -188,7 +198,10 @@ export default {
     Search:'查詢',
     Clear:'清除',
     EditRecord:'修改記錄',
-    Edit:'修改'
+    Edit:'修改',
+    Add: '新增',
+    Lists: '清單',
+    Undo: '復原'
   },
   Dialog: {
     MTitle: '主選單',
@@ -238,7 +251,7 @@ export default {
   Report: {
     Today: '今日',
     Yesterday:'昨日',
-    Beforeday:"前一日",
+    Beforeday:'前一日',
     Orders: '投注額',
     Result: '結果',
     Commission: '退水',
@@ -1454,7 +1467,7 @@ export default {
         ]
       },
       Item: {
-        '1': {title: '2D-一獎',shortT:"一獎"},
+        '1': {title: '2D-一獎',shortT:'一獎'},
         '2': {title: '2D-二獎'},
         '3': {title: '2D-三獎'},
         '4': {title: '3D-一獎'},
@@ -1485,11 +1498,11 @@ export default {
         '29': { title: '合數大小',sctitle: [ '', '1獎', '2獎', '3獎'],shortT: '合',subtitle: [ '大', '小' ] },
       },
       OpenTitle:{
-        First:"第一獎",
-        Secondary:"第二獎",
-        Third:"第三獎",
-        Shortlisted:"入圍獎",
-        ConsolationPrize: "安慰獎"
+        First:'第一獎',
+        Secondary:'第二獎',
+        Third:'第三獎',
+        Shortlisted:'入圍獎',
+        ConsolationPrize: '安慰獎'
       }      
     }    
   }

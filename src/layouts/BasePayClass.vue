@@ -105,8 +105,8 @@ import {Watch} from 'vue-property-decorator';
 //import axios, { AxiosResponse } from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-//import {IGames} from './data/schema';
-import {SelectOptions,BasePayRateItm,IbtCls,CommonParams,IMsg,StepG, ILoginInfo} from './data/if';
+//import {Games} from './data/schema';
+import {SelectOptions,BasePayRateItm,IbtCls,CommonParams,Msg,StepG,LoginInfo} from './data/if';
 import PayRateData from './data/PayRateList';
 import {BasePayRate,ExtPR} from './class/BasePayRate';
 import { cloneDeep } from 'lodash';
@@ -180,7 +180,7 @@ export default class BetClass extends Vue{
 		} 
         return '';
     }
-    get PInfo():ILoginInfo{
+    get PInfo():LoginInfo{
         return this.store.personal;
     }
     async setCurGames(v:SelectOptions){
@@ -322,7 +322,7 @@ export default class BetClass extends Vue{
             UserID: this.store.personal.id,
             sid: this.store.personal.sid
         }
-        let msg:IMsg = await this.store.ax.getApi('getBasePayRate',param);
+        let msg:Msg = await this.store.ax.getApi('getBasePayRate',param);
         if(msg.ErrNo==0){
             dta=msg.data as BasePayRateItm[]; 
         }
@@ -453,7 +453,7 @@ export default class BetClass extends Vue{
             data: JSON.stringify(dtas)
         }
         */
-        const msg:IMsg=await this.store.ax.getApi('batch/saveBasePayRate',param,'post');
+        const msg:Msg=await this.store.ax.getApi('batch/saveBasePayRate',param,'post');
         if(msg.ErrNo===0){
             this.$q.dialog({
                 title: this.$t('Label.Save') as string,

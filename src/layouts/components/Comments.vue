@@ -21,7 +21,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component';
 import {Prop} from 'vue-property-decorator';
-import {CommonParams,IMsg} from '../data/if';
+import {CommonParams,Msg} from '../data/if';
 import LayoutStoreModule from '../data/LayoutStoreModule';
 @Component
 export default class Comments extends Vue {
@@ -38,8 +38,8 @@ export default class Comments extends Vue {
           PageName:this.page,
           Comments:this.comment
         }
-        //const ans:IMsg = await AxApi.getApi('saveComments',cp,'post');
-        const ans:IMsg = await this.store.ax.getApi('saveComments',cp,'post');
+        //const ans:Msg = await AxApi.getApi('saveComments',cp,'post');
+        const ans:Msg = await this.store.ax.getApi('saveComments',cp,'post');
         if(ans.ErrNo===0){
           let msg={
             title: 'Save Comments',
@@ -57,8 +57,8 @@ export default class Comments extends Vue {
           sid:this.store.personal.sid,          
           PageName:this.page
         }
-        //const ans:IMsg = await AxApi.getApi('getComments',cp,'post');
-        const ans:IMsg = await this.store.ax.getApi('getComments',cp,'post');
+        //const ans:Msg = await AxApi.getApi('getComments',cp,'post');
+        const ans:Msg = await this.store.ax.getApi('getComments',cp,'post');
         //console.log('getComment',ans);
         if(ans.ErrNo===0){
           const dta:any=ans.data;

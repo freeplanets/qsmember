@@ -67,7 +67,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component';
 import {Prop,Watch} from 'vue-property-decorator';
-import {IOdds} from './Games';
+import {Odds} from './Games';
 import {chkColor,itemName} from './func';
 import {CommonParams} from '../data/if';
 import LayoutStoreModule from '../data/LayoutStoreModule';
@@ -76,8 +76,8 @@ export default class OddsBlock extends Vue {
     @Prop() readonly store?:LayoutStoreModule;
     @Prop() readonly tid?:number;
     @Prop() readonly GameID?:number;
-    @Prop() readonly Odds!:IOdds;
-    @Prop() readonly ExtOdds!:IOdds;
+    @Prop() readonly Odds!:Odds;
+    @Prop() readonly ExtOdds!:Odds;
     @Prop() readonly rightLine?:boolean;
     @Prop() readonly bottomLine?:boolean;
     @Prop() readonly GType?:string;
@@ -90,7 +90,7 @@ export default class OddsBlock extends Vue {
     EditMode1:boolean=false;
     title:string='';
     @Watch('Odds',{immediate:true,deep:true})
-    onOddsChange(newVal:IOdds,oldVal:IOdds){
+    onOddsChange(newVal:Odds,oldVal:Odds){
         if(!oldVal || oldVal.BT !== newVal.BT || oldVal.Num !== newVal.Num) {
             this.getItemName();
         }

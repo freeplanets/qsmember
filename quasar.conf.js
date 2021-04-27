@@ -47,55 +47,13 @@ module.exports = function (ctx) {
       //            (fastest compile time; minimum bundle size; most tedious)
       // * true   - Import everything from Quasar
       //            (not treeshaking Quasar; biggest bundle size; convenient)
-      all: false,
+      all: 'auto',
 
       // For special cases outside of where "auto" importStrategy can have an impact
       // (like functional components as one of the examples),
       // you can manually specify Quasar components/directives to be available everywhere:
       //
-      components: [
-        'QLayout',
-        'QHeader',
-        'QDrawer',
-        'QPageContainer',
-        'QPage',
-        'QToolbar',
-        'QToolbarTitle',
-        'QBtn',
-        'QIcon',
-        'QList',
-        'QItem',
-        'QItemSection',
-        'QItemLabel',
-        'QInput',
-        'QSelect',
-        'QCheckbox',
-        'QCard',
-        'QCardSection',
-        'QCardActions',
-        'QBtnDropdown',
-        'QTabs',
-        'QTab',
-        'QSeparator',
-        'QTabPanel',
-        'QTabPanels',
-        'QToggle',
-        'QDate',
-        'QDialog',
-        'QTable',
-        'QTh',
-        'QTr',
-        'QTd',
-        'QAvatar',
-        'QBtnGroup',
-        'QChip',
-        'QEditor',
-        'QBtnToggle',
-        'QCircularProgress',
-        'QBar',
-        'QSpace',
-        'QTooltip'
-      ],
+      components: [],
 
       directives: [
         'Ripple',
@@ -140,7 +98,7 @@ module.exports = function (ctx) {
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       // https: true,
-      port: 8081,
+      port: 8080,
       open: true // opens browser window automatically
     },
 

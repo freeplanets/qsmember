@@ -100,7 +100,7 @@ import {Watch} from 'vue-property-decorator';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 import {BHRemaster,datetime} from './components/func';
-import { SelectOptions, CommonParams,IMsg, ILoginInfo,BetHeader,MyUser } from './data/if';
+import { SelectOptions, CommonParams,Msg,LoginInfo,BetHeader,MyUser } from './data/if';
 import GameSelector from './components/GameSelector.vue';
 import SEDate from './components/SEDate.vue';
 Vue.component('GS',GameSelector);
@@ -151,7 +151,7 @@ export default class BetReport extends Vue{
     this.showTotal=false;
     this.curLedger=v;
   }
-  get PInfo():ILoginInfo {
+  get PInfo():LoginInfo {
     return this.store.personal;
   }
   setGameLists(v:SelectOptions[]){
@@ -182,7 +182,7 @@ export default class BetReport extends Vue{
       if(tmp[1]) param.EDate = tmp[1];
     }
     console.log('getBTDetail',param);
-    const msg:IMsg=await this.store.ax.getApi('getBetHeaders',param);
+    const msg:Msg=await this.store.ax.getApi('getBetHeaders',param);
     if(msg.ErrNo===0){
       const bhs:BetHeader[]=msg.data as BetHeader[];
       bhs.map(bh=>{
@@ -232,7 +232,7 @@ export default class BetReport extends Vue{
     if(this.curLedger){
       param.Ledger=this.curLedger;
     }
-    const msg:IMsg=await this.store.ax.getApi('getBetTotal',param);
+    const msg:Msg=await this.store.ax.getApi('getBetTotal',param);
     if(msg.ErrNo===0){
       this.curDateSet=this.dateSet;
       this.Tlist = msg.data as TData[];

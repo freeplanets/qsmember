@@ -32,7 +32,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import { SelectOptions, ItmBtg, IbtCls,Btg,CommonParams, ILoginInfo} from './data/if';
+import { SelectOptions, ItmBtg, IbtCls,Btg,CommonParams,LoginInfo} from './data/if';
 import GameSelector from './components/GameSelector.vue';
 Vue.component('GS',GameSelector);
 
@@ -63,7 +63,7 @@ export default class BetClass extends Vue{
 		} 
 		return '';
 	}
-	get PInfo():ILoginInfo {
+	get PInfo():LoginInfo {
 		return this.store.personal;
 	}
 	setCurGame(v:SelectOptions){

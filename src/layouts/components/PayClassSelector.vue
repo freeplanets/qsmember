@@ -5,7 +5,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Prop, Watch} from 'vue-property-decorator';
-import {SelectOptions,PayClass,IMsg} from '../data/if';
+import {SelectOptions,PayClass,Msg} from '../data/if';
 import LayoutStoreModule from '../data/LayoutStoreModule';
 
 @Component
@@ -74,7 +74,7 @@ export default class PayClassSelector extends Vue {
   async getPayCls(gid:string|number) {
       let data:PayClass[] = [];
       if(this.store){
-        const ans:IMsg=await this.store.ax.getPayClass(this.store.personal.id,this.store.personal.sid,gid);
+        const ans:Msg=await this.store.ax.getPayClass(this.store.personal.id,this.store.personal.sid,gid);
         if(ans.ErrNo==0){
             data=ans.data as PayClass[];
         }

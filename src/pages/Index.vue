@@ -7,7 +7,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {IMsg, CommonParams} from '../layouts/data/if';
+import {Msg, CommonParams} from '../layouts/data/if';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
 
@@ -27,7 +27,7 @@ export default class PageIndex extends Vue {
       sid:this.store.personal.sid,
       isTwoPassAsked:1
     }
-    const msg:IMsg=await this.store.ax.getApi('SetUser',param);
+    const msg:Msg=await this.store.ax.getApi('SetUser',param);
     if(msg.ErrNo!==0){
       console.log(msg);
     }     

@@ -39,8 +39,8 @@ import Components from 'vue-class-component';
 //import axios, { AxiosRequestConfig,AxiosResponse} from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import { getModule } from 'vuex-module-decorators';
-//import {IUser} from './data/schema';
-import { IMsg,CommonParams,ILoginInfo } from './data/if';
+//import {User} from './data/schema';
+import { Msg,CommonParams,LoginInfo } from './data/if';
 
 @Components
 export default class Login extends Vue {
@@ -50,10 +50,10 @@ export default class Login extends Vue {
   Pin='';
   prompt=false;
   GAError=false;
-  set Personal(value:ILoginInfo){
+  set Personal(value:LoginInfo){
     this.store.setPersonal(value);
   }
-  get Personal():ILoginInfo {
+  get Personal():LoginInfo {
     return this.store.personal;
   }
   set isLogin(value:boolean){
@@ -80,11 +80,11 @@ export default class Login extends Vue {
         sid:''
     }
     //const url:string=this.store.ax.Host+'/login';
-    const msg:IMsg=await this.store.ax.getApi('/login',params);
+    const msg:Msg=await this.store.ax.getApi('/login',params);
     if(msg.ErrNo===0){
         this.Account='';
         this.Password='';
-        this.Personal = msg.data as ILoginInfo;
+        this.Personal = msg.data as LoginInfo;
         this.isLogin = true;
         //this.store.leftDrawerOpen=true;
         //console.log('Login PInfo:',this.Personal);
@@ -104,10 +104,10 @@ export default class Login extends Vue {
     //console.log('login:',url);
     /*
     await axios.get(url,config).then((res:AxiosResponse)=>{
-      const ans:IMsg=res.data as IMsg;
+      const ans:Msg=res.data as Msg;
       //console.log('login:',ans);
       if(ans.ErrNo===0){
-        this.Personal = ans.data as IUser;
+        this.Personal = ans.data as User;
         this.isLogin = true;
         //this.store.leftDrawerOpen=true;
         this.$router.push({path:'/'});
@@ -125,7 +125,7 @@ export default class Login extends Vue {
       sid:this.store.personal.sid,
       Pin:this.Pin
     }
-    const msg:IMsg=await this.store.ax.getApi('GAValidate',param);
+    const msg:Msg=await this.store.ax.getApi('GAValidate',param);
     console.log('GAValidate:',msg);
     if(msg.ErrNo===0){
       //this.GAIMG=msg.ErrCon ? msg.ErrCon : '';

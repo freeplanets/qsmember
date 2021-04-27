@@ -260,9 +260,9 @@ import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 import OddsBlock from './components/OddsBlock.vue';
 import GameSelector from './components/GameSelector.vue';
-import {Odds, SelectOptions,IMsg, CommonParams,ILoginInfo} from './data/if';
+import {Odds, SelectOptions,Msg, CommonParams,LoginInfo} from './data/if';
 import Layouts,{Layout,contBlock,numBlock,FastSltSub,FastSltSubItem} from './components/layouts';
-import {CGame,IData} from './components/Games';
+import {CGame,Data} from './components/Games';
 
 Vue.component('OB',OddsBlock);
 Vue.component('GS',GameSelector);
@@ -305,7 +305,7 @@ export default class OddsManager extends Vue {
     SortID:number=0;
     SortName:string='';
     SortItems:string[]=[];
-    get PInfo():ILoginInfo{
+    get PInfo():LoginInfo{
         return this.store.personal;
     }
     async setCurGames(v:SelectOptions){
@@ -349,7 +349,7 @@ export default class OddsManager extends Vue {
                     GameID:v.value,
                     MaxOddsID:0
                 }
-                let ans:IMsg=await this.store.ax.getApi('CurOddsInfo',param);
+                let ans:Msg=await this.store.ax.getApi('CurOddsInfo',param);
                 //console.log('get CurOddsInfo:',ans);
                 if(ans.data){
                     /*
@@ -358,7 +358,7 @@ export default class OddsManager extends Vue {
                         Steps=ans.Steps;
                     }
                     */
-                    this.Game.inidata(ans.data as IData,this);
+                    this.Game.inidata(ans.data as Data,this);
                     //console.log('Game:',this.Game.Items)
                     Object.keys(this.dfLayout).map(key=>{
                         let me=this;
@@ -411,9 +411,9 @@ export default class OddsManager extends Vue {
             GameID:this.curGameID,
             MaxOddsID: this.Game.MaxOddsID
         }
-        let ans:IMsg=await this.store.ax.getApi('CurOddsInfo',param);
+        let ans:Msg=await this.store.ax.getApi('CurOddsInfo',param);
         if(ans.data){
-            this.Game.updateData(ans.data as IData,this);
+            this.Game.updateData(ans.data as Data,this);
             this.curTid=ans.tid;
             //this.$forceUpdate();
             //console.log('do changePage');
@@ -473,7 +473,7 @@ export default class OddsManager extends Vue {
             isStop: stop,
             BetTypes: bt,
         }
-        let ans:IMsg=await this.store.ax.getApi('setStop',param);
+        let ans:Msg=await this.store.ax.getApi('setStop',param);
         //console.log('setStop:',ans);
         if(ans.ErrNo===0){
             this.getCurOdds();

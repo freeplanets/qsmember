@@ -92,7 +92,7 @@ import Component from 'vue-class-component';
 import {Watch} from 'vue-property-decorator'
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import {CommonParams,IMsg, SelectOptions,HashAna} from './data/if';
+import {CommonParams,Msg, SelectOptions,HashAna} from './data/if';
 import HASH from './class/HashAna';
 interface KeyObj {
   [key:string]:number;
@@ -246,7 +246,7 @@ export default class MyLayout extends Vue {
             idx: this.dStart,
             steps: this.steps
         }
-        const msg:IMsg=await this.store.ax.getApi('getBTCHashTable',param);
+        const msg:Msg=await this.store.ax.getApi('getBTCHashTable',param);
         //console.log('getBTCHashData:',msg);
         if(msg.ErrNo===0){
           if(msg.data){
@@ -336,7 +336,7 @@ export default class MyLayout extends Vue {
         Cond: `${this.Min}-${this.Max}-${this.Pos}-${this.allowSameNum ? 1 : 0}-${this.NotOnlyDigital ? 1 : 0}-${this.NoZero ? 1 : 0}-${this.RepetLastOne ? 1 : 0}`,
         AnaData: JSON.stringify(this.HNum)
       }
-      const msg:IMsg=await this.store.ax.getApi('saveHashAna',param,'post');
+      const msg:Msg=await this.store.ax.getApi('saveHashAna',param,'post');
       if(msg.ErrNo!==0){
         console.log('saveHashAna',msg);
       } 
@@ -349,7 +349,7 @@ export default class MyLayout extends Vue {
         sid:this.PInfo.sid,
         id:this.model.value
       }
-      const msg:IMsg=await this.store.ax.getApi('delHashAna',param);
+      const msg:Msg=await this.store.ax.getApi('delHashAna',param);
       if(msg.ErrNo!==0){
         console.log('delHashAna',msg);
         this.showProgress=false;
@@ -369,7 +369,7 @@ export default class MyLayout extends Vue {
       }
       this.options=[{value:0,label:'none'}];
       this.model = {value:0,label:'none'};
-      const msg:IMsg=await this.store.ax.getApi('getHashAna',param);
+      const msg:Msg=await this.store.ax.getApi('getHashAna',param);
       if(msg.ErrNo!==0){
         console.log('saveHashAna',msg);
       } else {

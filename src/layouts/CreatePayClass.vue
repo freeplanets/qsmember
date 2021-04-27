@@ -82,7 +82,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import {SelectOptions,CommonParams,IMsg, BasePayRateItm,ILoginInfo} from './data/if';
+import {SelectOptions,CommonParams,Msg, BasePayRateItm,LoginInfo} from './data/if';
 import GameSelector from './components/GameSelector.vue';
 import {BaNum} from './components/func';
 Vue.component('GS',GameSelector);
@@ -150,7 +150,7 @@ export default class BetClass extends Vue{
 		} 
 		return '';
     }
-    get PInfo():ILoginInfo{
+    get PInfo():LoginInfo{
         return this.store.personal;
     }
     expendPR(id:number){
@@ -209,7 +209,7 @@ export default class BetClass extends Vue{
             data:RateData,
             PayClassName: this.PayClassName
         }
-        const ans:IMsg = await this.store.ax.getApi('savePayClass',param,'post');
+        const ans:Msg = await this.store.ax.getApi('savePayClass',param,'post');
         let msg={
           title: `${this.$t('Label.CratePayClass')}`,
           message: 'Ok!!'
@@ -324,7 +324,7 @@ export default class BetClass extends Vue{
             sid:this.PInfo.sid,
             GameID: gid
         }
-        let msg:IMsg = await this.store.ax.getApi('getBasePayRate',param);
+        let msg:Msg = await this.store.ax.getApi('getBasePayRate',param);
         if(msg.ErrNo==0){
             dta=msg.data as BasePayRateItm[]; 
         }

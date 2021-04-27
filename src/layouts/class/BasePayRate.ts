@@ -1,7 +1,6 @@
 import BClass from './BClass';
 import {fixlen,NoSientificNotation} from '../components/func';
 import {StepG} from '../data/if';
-import { timeStamp } from 'console';
 /*
 interface T {
     [n:string]: string | number | undefined;
@@ -340,7 +339,7 @@ export class BasePayRate<T>{
         if(this.Profit && this.Probability){
             if(this.Probability > 0) {
                 if(!this.olddata.TopRate){
-                    let r:number = (1-this.Profit)/this.Probability;
+                    const r:number = (1-this.Profit)/this.Probability;
                     this.TopRate = this.fetchValueToSteps(r);
                 }
             }

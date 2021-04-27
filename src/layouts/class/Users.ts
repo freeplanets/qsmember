@@ -1,4 +1,4 @@
-import { IUser} from '../data/schema'
+import { User} from '../data/schema'
 
 export const UserTypes = [
     {title:'Member',value:0},
@@ -8,7 +8,7 @@ export const UserTypes = [
     {title:'Programmer',value:9}
 ]
 export default class Users{
-    constructor(private Data:IUser){ }
+    constructor(private Data:User){ }
     get Account(){
         return this.Data.Account as string;
     }

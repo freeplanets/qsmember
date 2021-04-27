@@ -33,7 +33,7 @@ import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
 import PayRateData from './data/PayRateList';
 import {Watch} from 'vue-property-decorator'
-import { CommonParams,IMsg ,ProbTable} from './data/if';
+import { CommonParams,Msg ,ProbTable} from './data/if';
 import ProbT from './class/ProbabilityTable';
 import BaseOddsItem,{CondOfBetType} from './data/defaultData';
 interface Slt {
@@ -94,7 +94,7 @@ export default class Probability extends Vue {
             this.list.push(pt);
         })
       }
-      const msg:IMsg = await this.store.ax.getApi('getProbTable',param);
+      const msg:Msg = await this.store.ax.getApi('getProbTable',param);
       if(msg.ErrNo===0){
         const rlt=msg.data as ProbTable[];
         console.log('getProbData:',rlt);
@@ -286,7 +286,7 @@ export default class Probability extends Vue {
             data: JSON.stringify(data),
             GType: this.GType
         }
-        const msg:IMsg=await this.store.ax.getApi('SaveDfOddsItem',param,'post');
+        const msg:Msg=await this.store.ax.getApi('SaveDfOddsItem',param,'post');
         if(msg.ErrNo===0){
             this.$q.dialog({
                 title: this.$t('Label.Save') as string,
@@ -317,7 +317,7 @@ export default class Probability extends Vue {
             ModifyID: this.PInfo.id,
             data: JSON.stringify(dtas)            
         }
-        const msg:IMsg=await this.store.ax.getApi('batch/saveProbTable',param,'post');
+        const msg:Msg=await this.store.ax.getApi('batch/saveProbTable',param,'post');
         if(msg.ErrNo===0){
             this.$q.dialog({
                 title: this.$t('Label.Save') as string,
@@ -341,7 +341,7 @@ export default class Probability extends Vue {
             UserID:this.PInfo.id,
             sid:this.PInfo.sid
         }
-        const msg:IMsg=await this.store.ax.getApi('getBTCHashTable',param);
+        const msg:Msg=await this.store.ax.getApi('getBTCHashTable',param);
         console.log('getBTCHashData',msg);
     }
     mounted(){

@@ -1,7 +1,4 @@
-export interface commObj {
-    [key:string]:number;
-}
-export interface IUser {
+export interface User {
     TableName:'User';
     id: number;
     Account?: string;
@@ -21,7 +18,7 @@ export interface IUser {
     ModifyID?:number;
 }
 
-export interface IPayRate {
+export interface PayRate {
     id: number;
     BetType: number;
     SubRate: number;    // 次賠率 例  三中二 另有三中三的賠率
@@ -39,14 +36,14 @@ export interface IPayRate {
     ChangeTime: Date;   //修改時間
 }
 
-export interface IGames {
+export interface Games {
     id:number;              //遊戲代號
     name:string;            //遊戲名稱
     ModifyID?:number;
     GType?:string;
 }
 
-export interface ITerms {
+export interface Terms {
     id:number;
     GameID:number;
     TermID:string;

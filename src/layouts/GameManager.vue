@@ -59,7 +59,7 @@ import Component from 'vue-class-component';
 import {Game} from './data/schema';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import { SelectOptions,IMsg, ILoginInfo,CommonParams} from './data/if';
+import { SelectOptions,Msg,LoginInfo,CommonParams} from './data/if';
 import {itemNameNew} from './components/func';
 import getBetItems from './class/BetItems';
 import {GameM} from './class/GameM';
@@ -100,7 +100,7 @@ export default class GameManager extends Vue{
     */
     options:SelectOptions[]=[];
     gamelist:Game[]=[];
-    get PInfo():ILoginInfo{
+    get PInfo():LoginInfo{
         return this.store.personal;
     }
     get ax(){
@@ -128,7 +128,7 @@ export default class GameManager extends Vue{
             UserID:this.PInfo.id,
             sid:this.PInfo.sid
         }
-        const msg:IMsg = await this.ax.getApi('GameList',param);
+        const msg:Msg = await this.ax.getApi('GameList',param);
         //console.log('getGameList',msg);
         if(msg.ErrNo===0){
             let tmp:Game[]=msg.data as Game[];
@@ -144,7 +144,7 @@ export default class GameManager extends Vue{
         if(this.MyGame){
             if(this.MyGame.DataChanged){
                 const g:Game=this.MyGame.Datas;
-                let msg:IMsg=await this.ax.saveGame(this.PInfo.id,this.PInfo.sid,g);
+                let msg:Msg=await this.ax.saveGame(this.PInfo.id,this.PInfo.sid,g);
                 if(msg.ErrNo===0){
                     this.$q.dialog({
                         title: this.$t('Label.Save') as string,

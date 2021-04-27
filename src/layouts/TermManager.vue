@@ -216,9 +216,9 @@ import Vue from 'vue'
 import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-import {SelectOptions,CommonParams,IMsg,ParamLog,ILoginInfo} from './data/if';
+import {SelectOptions,CommonParams,Msg,ParamLog,LoginInfo} from './data/if';
 import {Game} from './data/schema';
-import {ITerms} from './data/schema';
+import {Terms} from './data/schema';
 import JDate from './components/Date/JDate'
 import {dateAddZero} from './components/func';
 import GameSelector from './components/GameSelector.vue';
@@ -241,7 +241,7 @@ export default class TermManager extends Vue {
     options:SelectOptions[] = [
 		{value: 0,label:'default'}
     ]
-    term:ITerms={
+    term:Terms={
         id:0,
         GameID:0,
         TermID:'',
@@ -251,9 +251,9 @@ export default class TermManager extends Vue {
         StopTimeS:'',
         ModifyID: this.User.id as number,
     }
-    oldTerm:ITerms|undefined;
+    oldTerm:Terms|undefined;
     nums:string[]=[];
-    data:ITerms[]=[];
+    data:Terms[]=[];
     isAddTerm:boolean=false;
     isInputNum:boolean=false;
     curTermSettleStatus:number=0;
@@ -279,7 +279,7 @@ export default class TermManager extends Vue {
     get ax(){
         return this.store.ax;
     }
-    get User():ILoginInfo{
+    get User():LoginInfo{
         return this.store.personal;
     }
     get TDate() {
@@ -327,7 +327,7 @@ export default class TermManager extends Vue {
             id,
             tb:'Terms'
         }
-        const msg:IMsg=await this.ax.getApi('getEditRecord',param);
+        const msg:Msg=await this.ax.getApi('getEditRecord',param);
         if(msg.ErrNo===0){
             this.EditRecord = msg.data as ParamLog[];
         }
@@ -339,11 +339,11 @@ export default class TermManager extends Vue {
             UserID: this.store.personal.id,
             sid: this.store.personal.sid
         }
-        const msg:IMsg=await this.store.ax.getApi('getLastTerm',param);
+        const msg:Msg=await this.store.ax.getApi('getLastTerm',param);
         if(msg.ErrNo===0){
             //console.log(msg.data);
             if(msg.data){
-                const lsTerm:ITerms=msg.data[0] as ITerms;
+                const lsTerm:Terms=msg.data[0] as Terms;
                 this.term.PDate = this.dateString;
                 if(lsTerm && lsTerm.PTime){
                     this.term.PTime = lsTerm.PTime;
@@ -408,7 +408,7 @@ export default class TermManager extends Vue {
         this.data=[];
         const ans=await this.ax.getTerms(this.store.personal.id,this.store.personal.sid,GameID,this.sdate.split('/').join('-'))
         if(ans.ErrNo===0){
-            this.data=ans.data as ITerms[];
+            this.data=ans.data as Terms[];
             if(ans.Game) {
                 this.curGame=ans.Game as Game;
                 this.hasSPNO = !!this.curGame.hasSPNO;
@@ -430,7 +430,7 @@ export default class TermManager extends Vue {
         this.InProcess=false;
         this.showProgress=false;
     }
-    Edit(v:ITerms){
+    Edit(v:Terms){
         this.oldTerm=Object.assign({},v);
         this.term=Object.assign(this.term,v);
         console.log('Edit',this.oldTerm);
@@ -443,7 +443,7 @@ export default class TermManager extends Vue {
         this.term.ModifyID = this.User.id as number;
         this.isAddTerm = true;
     }
-    InputNum(v:ITerms,rlt?:string,spno?:string){
+    InputNum(v:Terms,rlt?:string,spno?:string){
         if(rlt){
             this.nums=rlt.split(',');
             if(spno){
@@ -556,7 +556,7 @@ export default class TermManager extends Vue {
             sid:this.User.sid,
             tid
         }
-        const msg:IMsg=await this.ax.getApi('DelTerm',param);
+        const msg:Msg=await this.ax.getApi('DelTerm',param);
         if(msg.ErrNo===0){
             this.$q.dialog({
                 title: this.$t('Label.Delete') as string,
@@ -592,7 +592,7 @@ export default class TermManager extends Vue {
             sid:this.User.sid,
             tid
         }
-        const msg:IMsg=await this.ax.getApi('CancelTerm',param);
+        const msg:Msg=await this.ax.getApi('CancelTerm',param);
         if(msg.ErrNo===0){
             this.$q.dialog({
                 title: this.$t('Label.Cancel') as string,
@@ -612,7 +612,7 @@ export default class TermManager extends Vue {
             UserID:this.User.id,
             sid:this.User.sid,
         }
-        let ans:IMsg=await this.ax.getApi('getGameType',param);
+        let ans:Msg=await this.ax.getApi('getGameType',param);
         if(ans.ErrNo===0){
             this.GTypes = ans.data as GameType[];
             if(!this.curGType){

@@ -45,7 +45,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import LayoutStoreModule from './data/LayoutStoreModule'
 import {getModule} from 'vuex-module-decorators';
-import {SelectOptions,CommonParams,IMsg,BetHeader} from './data/if';
+import {SelectOptions,CommonParams,Msg,BetHeader} from './data/if';
 import {dateString,BHRemaster,datetime} from './components/func';
 import GameSelector from './components/GameSelector.vue';
 Vue.component('GS',GameSelector);
@@ -63,11 +63,14 @@ export default class BetLists extends Vue {
       this.curGameID=v.value;
   }
   async SearchData(){
-    const param:CommonParams={}
+    const param:CommonParams={
+      sid:'',
+      UserID:0
+    }
     param.findString = this.NameOrNick;
     param.GameID=this.curGameID;
     param.SDate=this.TDate;
-    const msg:IMsg = await this.store.ax.getApi('getBetHeaders',param);
+    const msg:Msg = await this.store.ax.getApi('getBetHeaders',param);
     console.log('SearchData',msg);
     if(msg.ErrNo==0){
       const bhs:BetHeader[]=msg.data as BetHeader[];

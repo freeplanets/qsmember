@@ -45,8 +45,8 @@ import Component from 'vue-class-component';
 import axios,{AxiosResponse } from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';
-//import {IGames} from './data/schema';
-import {SelectOptions,PayRateItm,IMsg,PayClass, CommonParams,ILoginInfo} from './data/if';
+//import {Games} from './data/schema';
+import {SelectOptions,PayRateItm,Msg,PayClass, CommonParams,LoginInfo} from './data/if';
 import PayRateData from './data/PayRateList';
 import {PayRate} from './class/PayRate'
 import { cloneDeep } from 'lodash'
@@ -114,7 +114,7 @@ export default class BetClass extends Vue{
 		} 
 		return '';
     }
-    get PInfo():ILoginInfo {
+    get PInfo():LoginInfo {
         return this.store.personal;
     }
     expendPR(){
@@ -320,7 +320,7 @@ export default class BetClass extends Vue{
         param.id= this.curPayClass.id;
         param.PayClassName=this.PayClassName;
         param.ModifyID = this.store.personal.id;
-        const msg:IMsg=await this.store.ax.getApi('editPayClass',param);
+        const msg:Msg=await this.store.ax.getApi('editPayClass',param);
         console.log('after getApi editPayClass',msg);
         if(msg.ErrNo===0){
             this.$q.dialog({
@@ -351,7 +351,7 @@ export default class BetClass extends Vue{
         };
         param.id= this.curPayClass.id;
         param.GameID = this.curGameID;
-        const msg:IMsg=await this.store.ax.getApi('delPayClass',param);
+        const msg:Msg=await this.store.ax.getApi('delPayClass',param);
         console.log('after getApi editPayClass',msg);
         if(msg.ErrNo===0){
             this.$q.dialog({

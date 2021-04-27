@@ -218,9 +218,9 @@ import Vue from 'vue'
 import Component from 'vue-class-component';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
-import {IMsg,ILoginInfo, CommonParams,IProgs} from './data/if';
+import {Msg,LoginInfo, CommonParams,Progs} from './data/if';
 import {Watch} from 'vue-property-decorator';
-//import {IUser} from './data/schema';
+//import {User} from './data/schema';
 import Comments from './components/Comments.vue';
 Vue.component('CMMT',Comments);
 
@@ -235,7 +235,7 @@ export default class MyLayout extends Vue {
   CPassword:string='';
   GAIMG:string='';
   showGAPop:boolean=false;
-  get Funcs():IProgs[] {
+  get Funcs():Progs[] {
     return this.store.personal.Progs;
   }
   get showProgress(){
@@ -275,8 +275,8 @@ export default class MyLayout extends Vue {
   get isLogin(){
     return this.store.isLogin;
   }
-  get Personal():ILoginInfo{
-    return this.store.personal as ILoginInfo;
+  get Personal():LoginInfo{
+    return this.store.personal as LoginInfo;
   }
   setProName(v:string){
     this.ProName=this.$t(`Label.${v}`)+'';
@@ -289,7 +289,7 @@ export default class MyLayout extends Vue {
       sid:this.store.personal.sid,
       AppName:this.store.SysInfo
     }
-    const msg:IMsg=await this.store.ax.getApi('getGAImg',param);
+    const msg:Msg=await this.store.ax.getApi('getGAImg',param);
     if(msg.ErrNo===0){
       this.GAIMG=msg.ErrCon ? msg.ErrCon : '';
       this.showProgress=false;
@@ -302,7 +302,7 @@ export default class MyLayout extends Vue {
       UserID:this.store.personal.id,
       sid:this.store.personal.sid
     }
-    const msg:IMsg=await this.store.ax.getApi('SaveGAImg',param);
+    const msg:Msg=await this.store.ax.getApi('SaveGAImg',param);
     if(msg.ErrNo===0){
       this.GAIMG=msg.ErrCon ? msg.ErrCon : '';
     } 
@@ -313,7 +313,7 @@ export default class MyLayout extends Vue {
       UserID:0,
       sid:''
     }
-    const msg:IMsg=await this.store.ax.getApi('getSysInfo',param);
+    const msg:Msg=await this.store.ax.getApi('getSysInfo',param);
     //console.log(msg);
     if(msg.ErrNo===0){
       //Object.assign(this.store.SysInfo,msg.data);
@@ -342,7 +342,7 @@ export default class MyLayout extends Vue {
       NPassword: this.NPassword,
       CPassword: this.CPassword
     }
-    const msg:IMsg= await this.store.ax.getApi('ChangePassword',param,'post');
+    const msg:Msg= await this.store.ax.getApi('ChangePassword',param,'post');
     if(msg.ErrNo===0){
       this.showCp=false;
       this.$q.dialog({
@@ -358,7 +358,7 @@ export default class MyLayout extends Vue {
       UserID:this.Personal.id,
       sid: this.Personal.sid
     }
-    const msg:IMsg= await this.store.ax.getApi('logout',param);
+    const msg:Msg= await this.store.ax.getApi('logout',param);
     console.log(msg);
     this.store.clearPInfo();
     this.$router.push({path:'/login'}).catch(err=>{
@@ -381,7 +381,7 @@ export default class MyLayout extends Vue {
       sid: this.Personal.sid,
       isChkGA: '0'
     };
-    const msg:IMsg=await this.store.ax.getApi('SetUser',param);
+    const msg:Msg=await this.store.ax.getApi('SetUser',param);
     if(msg.ErrNo===0){
       this.$q.dialog({
           title: this.$t('Label.CancelPass2') + '',

@@ -81,7 +81,7 @@ import Component from 'vue-class-component';
 import {Watch} from 'vue-property-decorator';
 import LayoutStoreModule from './data/LayoutStoreModule'
 import {getModule} from 'vuex-module-decorators';
-import {SelectOptions,CommonParams,IMsg,BetHeader, ILoginInfo,MyUser} from './data/if';
+import {SelectOptions,CommonParams,Msg,BetHeader,LoginInfo,MyUser} from './data/if';
 import {BHRemaster,datetime} from './components/func';
 import GameSelector from './components/GameSelector.vue';
 import TermIDSelector from './components/TermIDSelector.vue';
@@ -127,7 +127,7 @@ export default class BetLists extends Vue {
       this.showTimeEdit=false;
     }
   }
-  get PInfo():ILoginInfo {
+  get PInfo():LoginInfo {
     return this.store.personal;
   }
   setCurGames(v:SelectOptions){
@@ -175,7 +175,7 @@ export default class BetLists extends Vue {
     if(this.WinLoseS) param.WinLoseS = this.WinLoseS;
     if(this.WinLoseE) param.WinLoseE = this.WinLoseE;
     if(this.sltedTS) param.isCanceled = this.sltedTS.value;
-    const msg:IMsg = await this.store.ax.getApi('getBetHeaders',param);
+    const msg:Msg = await this.store.ax.getApi('getBetHeaders',param);
     //console.log('SearchData',msg);
     if(msg.ErrNo==0){
       const bhs:BetHeader[]=msg.data as BetHeader[];

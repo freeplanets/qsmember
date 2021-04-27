@@ -73,6 +73,8 @@ module.exports = {
     // See https://github.com/typescript-eslint/typescript-eslint/issues/501
     // See https://github.com/typescript-eslint/typescript-eslint/issues/493
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-explicit-any': 'off'
+    '@typescript-eslint/no-explicit-any': 'off',
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "@typescript-eslint/no-parameter-properties": "off"
   }
 }
