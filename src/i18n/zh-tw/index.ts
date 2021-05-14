@@ -99,6 +99,7 @@ export default {
     Sorts:'排序',
     SortItem:['號碼','注額','風險'],
     ItemsManager:'項目管理',
+    LeverModifier:'槓桿設定',
     RecordCount:'筆數'
   },
   Tip:{
@@ -112,6 +113,11 @@ export default {
       LoanFee: '槓桿手續費',
       BattleFee: '對戰手續費',
       BattleLoanFee: '對戰槓桿手續費',
+    },
+    Lever: {
+      Multiples: '',
+      LongT: '',
+      ShortT: ''
     },
     ItemName: '項目名稱',
     SubName: '指定名稱',

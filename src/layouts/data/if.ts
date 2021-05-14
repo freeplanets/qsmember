@@ -154,7 +154,7 @@ export interface CommonParams {
     SDate?:string;
     UpId?:number;
     ParamLog?:ParamLog[];
-    [key:string]:number|string|ParamLog[]|undefined;
+    [key:string]:any;
 }
 
 export interface PayClass {
@@ -260,12 +260,19 @@ export interface MyUser {
 }
 
 export interface HasID {
-    id?: number;
+    id: number;
+    [key:string]:any;
 }
 export interface WebParams {
     sid: string;
     UserID: number;
     TableName?:string;
     TableData?:HasID | HasID[];
-    [key: string]: number|string|boolean|HasID|HasID[]|undefined;
+    [key: string]: any;
+}
+export interface LeverData extends HasID {
+    Multiples: number;
+    LongT: number;
+    ShortT: number;
+    ModifyUID: number;
 }

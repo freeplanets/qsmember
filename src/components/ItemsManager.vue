@@ -74,6 +74,7 @@ export default class ItemsManager extends Vue{
   updateid=0;
   modifyStatus = 0 // 0 add, 1 edit
   initItemData:TableItems={
+    id:0,
     Title:'',
     OpenFee: 0,
     CloseFee: 0,

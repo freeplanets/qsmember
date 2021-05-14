@@ -99,9 +99,9 @@
 	</div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import {Watch} from 'vue-property-decorator';
+// import Vue from 'vue';
+// import Component from 'vue-class-component';
+import {Vue, Component, Watch} from 'vue-property-decorator';
 //import axios, { AxiosResponse } from 'axios';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {getModule} from 'vuex-module-decorators';

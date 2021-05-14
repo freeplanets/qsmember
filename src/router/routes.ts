@@ -65,6 +65,10 @@ const routes: RouteConfig[] = [
       {
         path: '/itemsmanager',
         component: () => import('components/ItemsManager.vue')
+      },
+      {
+        path: '/levermodifier',
+        component: () => import('layouts/LeverModifier.vue')
       }
     ],
   }
