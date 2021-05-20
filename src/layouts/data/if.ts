@@ -267,12 +267,12 @@ export interface WebParams {
     sid: string;
     UserID: number;
     TableName?:string;
-    TableData?:HasID | HasID[];
+    TableData?:HasID | HasID[] | string;
     [key: string]: any;
 }
 export interface LeverData extends HasID {
     Multiples: number;
     LongT: number;
     ShortT: number;
-    ModifyUID: number;
+    ModifyID: number;
 }

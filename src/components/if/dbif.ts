@@ -7,13 +7,14 @@ export interface TableData {
 export interface DataObject {
   [key:string]:number|string|boolean;
 }
-export interface TableItems extends HasID {
+export interface Item extends HasID {
   Title?:string;
   Code?:string;
   OpenFee?:number;
   CloseFee?:number;
   LoanFee?:number;
-  BattleFee?:number;
-  BattleLoanFee?:number;
-  ModifyUID?:number;
+  StopGain?:number;
+  StopLose?:number;
+  Type?:number;
+  ModifyID?:number;
 }

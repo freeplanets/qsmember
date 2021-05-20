@@ -107,17 +107,19 @@ export default {
   },
   Table: {
     Items: {
+      id: '序號',
       Title: '名稱',
-      OpenFee: '開單手續費',
-      CloseFee: '收單手續費',
+      OpenFee: '買入手續費',
+      CloseFee: '賣出手續費',
       LoanFee: '槓桿手續費',
-      BattleFee: '對戰手續費',
-      BattleLoanFee: '對戰槓桿手續費',
+      StopGain: '停利',
+      StopLose: '停損',
+      Type: '商品類型',
     },
     Lever: {
-      Multiples: '',
-      LongT: '',
-      ShortT: ''
+      Multiples: '槓桿倍數',
+      LongT: '多單',
+      ShortT: '空單'
     },
     ItemName: '項目名稱',
     SubName: '指定名稱',

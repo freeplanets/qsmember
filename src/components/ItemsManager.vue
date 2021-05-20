@@ -35,7 +35,7 @@
               v-for="(keys,idx) in Object.keys(UpdateItem)"
               :key="'modi:'+idx"
               >
-              <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items."+keys) + (typeof(UpdateItem[keys])==='number' ? '(%)' : '')}}</div>
+              <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items."+keys)}}</div>
               <div class="col-3"><q-input outlined  dense v-model="UpdateItem[keys]" label="" /></div>
             </div>
             <div class="row q-pa-md q-gutter-sm">
@@ -52,7 +52,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component';
-import {TableItems} from './if/dbif';
+import {Item} from './if/dbif';
 import {getModule} from 'vuex-module-decorators';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
 import {Msg,WebParams} from '../layouts/data/if';
@@ -73,18 +73,19 @@ export default class ItemsManager extends Vue{
   tab = 'lists';
   updateid=0;
   modifyStatus = 0 // 0 add, 1 edit
-  initItemData:TableItems={
+  initItemData:Item={
     id:0,
     Title:'',
     OpenFee: 0,
     CloseFee: 0,
     LoanFee: 0,
-    BattleFee: 0,
-    BattleLoanFee: 0
+    StopGain: 0,
+    StopLose: 0,
+    Type: 1,
   }
-  UpdateItem:TableItems=Object.assign({},this.initItemData);
+  UpdateItem:Item=Object.assign({},this.initItemData);
   columns:TableColumn[]=[];
-  data:TableItems[]=[];
+  data:Item[]=[];
   visibleColumns=['id','Code','ModifyID','ModifyTime'];
   async GetData(){
     const param:WebParams = {
@@ -95,13 +96,13 @@ export default class ItemsManager extends Vue{
     const msg = await this.store.ax.getApi('cc/GetData',param);
     if(msg.ErrNo === 0) {
       if(msg.data) {
-        this.data = msg.data as TableItems[];
+        this.data = msg.data as Item[];
       }
     }
   }
   async SendData(){
     let msg:Msg={ErrNo:0};
-    this.UpdateItem.ModifyUID = this.uInfo.id;
+    this.UpdateItem.ModifyID = this.uInfo.id;
     this.UpdateItem.id = this.updateid;
     const param:WebParams = {
       sid:this.uInfo.sid,

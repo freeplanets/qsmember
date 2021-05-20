@@ -1,11 +1,10 @@
-import { LeverData, WebParams, Msg } from '../data/if';
-import ErrCode from '../data/ErrCode';
+import { LeverData, WebParams, Msg } from '../../layouts/data/if';
+import ErrCode from '../../layouts/data/ErrCode';
 import Lever from './Lever';
-import { AxApi } from '../components/AxApi';
+import { AxApi } from '../../layouts/components/AxApi';
 
 export default class LeversModifier {
-  private list:Lever[] = [];
-  constructor(private ax:AxApi,private params:WebParams){
+  constructor(private list:Lever[], private ax:AxApi, private params:WebParams){
     this.params.TableName = 'Lever';
     this.getList();
   }
@@ -13,10 +12,13 @@ export default class LeversModifier {
     return this.list;
   }  
   async getList():Promise<void> {
-    let msg:Msg = { ErrNo:ErrCode.PASS };
+    let msg:Msg = { ErrNo: 0 };
+    console.log('getList', msg); 
     const param = Object.assign({},this.params);
-    msg = await this.ax.getApi('/cc/GetData',param);
-    if(msg.ErrNo === ErrCode.PASS) {
+    msg = await this.ax.getApi('cc/GetData',param);
+    console.log('after api',msg);
+    if(msg.ErrNo === 0) {
+      console.log('after PASS');
       const tmp:LeverData[] = msg.data as LeverData[];
       tmp.forEach((itm:LeverData)=>{
         const fidx = this.list.findIndex(l => l.id === itm.id);
@@ -25,19 +27,30 @@ export default class LeversModifier {
         } else {
           this.list[fidx].MultiUpdate(itm);
         }
-      })
+      });
+      const newOne:LeverData = {
+        id:0,
+        Multiples:0,
+        LongT:0,
+        ShortT:0,
+        ModifyID: this.params.UserID,
+      }
+      this.list.push(new Lever(newOne));
+      console.log('getList', this.list);
+    } else {
+      console.log('NO PASS', msg.ErrNo, ErrCode.PASS);
     }
   }
   async Update():Promise<boolean> {
     let tmp:LeverData[] = [];
      this.list.forEach((itm)=>{
-      if(itm.isChanged) return tmp.push(itm);
+      if(itm.isChanged) return tmp.push(itm.Data);
     });
     if(tmp.length === 0) return false;
     return new Promise<boolean>((resolve)=>{
       const param = Object.assign({},this.params);
-      param.TableData = tmp;
-      this.ax.getApi('/cc/SaveData',param).then((msg:Msg) => {
+      param.TableData = JSON.stringify(tmp);
+      this.ax.getApi('cc/SaveData',param).then((msg:Msg) => {
         if (msg.ErrNo === ErrCode.PASS) {
           return true;
         } else {

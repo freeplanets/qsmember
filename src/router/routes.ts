@@ -68,7 +68,7 @@ const routes: RouteConfig[] = [
       },
       {
         path: '/levermodifier',
-        component: () => import('layouts/LeverModifier.vue')
+        component: () => import('components/LeverModifier.vue')
       }
     ],
   }

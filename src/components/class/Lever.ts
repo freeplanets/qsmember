@@ -1,4 +1,4 @@
-import { LeverData } from '../data/if';
+import { LeverData } from '../../layouts/data/if';
 
 export default class Lever {
   static fields:string[] = ['Multiples','LongT','ShortT'];
@@ -28,8 +28,8 @@ export default class Lever {
     this.data.ShortT = v;
     this.ischanged = true;
   }
-  set ModifyUID(v:number) {
-    this.data.ModifyUID = v;
+  set ModifyID(v:number) {
+    this.data.ModifyID = v;
   }
   get isChanged() {
     return this.ischanged;
