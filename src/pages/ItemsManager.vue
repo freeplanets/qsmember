@@ -52,7 +52,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component';
-import {Item} from './if/dbif';
+import {Item} from '../components/if/dbif';
 import {getModule} from 'vuex-module-decorators';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
 import {Msg,WebParams} from '../layouts/data/if';

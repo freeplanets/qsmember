@@ -33,6 +33,12 @@ export default class LayoutStoreModule extends VuexModule {
     get isShowGA(){
         return this.showGA;
     }
+    get Param() {
+        return {
+            sid:this.personal.sid,
+            UserID:this.personal.id            
+        }
+    }
     @Mutation
     private SET_SYSINFO(info:string){
         this.sInfo=info;

@@ -64,12 +64,16 @@ const routes: RouteConfig[] = [
       },
       {
         path: '/itemsmanager',
-        component: () => import('components/ItemsManager.vue')
+        component: () => import('pages/ItemsManager.vue')
       },
       {
         path: '/levermodifier',
-        component: () => import('components/LeverModifier.vue')
-      }
+        component: () => import('pages/LeverModifier.vue')
+      },
+      {
+        path: '/cryptoreport',
+        component: () => import('pages/CryptoReport.vue')
+      },
     ],
   }
 

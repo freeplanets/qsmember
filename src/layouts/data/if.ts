@@ -1,6 +1,16 @@
+
 export interface KeyVal {
-    key: string;
-    value: string | number | boolean;
+    Key?: string;
+    Val?: string | number;
+    Cond?: string;
+    Val2?: string | number;
+}
+export interface FilterKeyVal {
+    Key?: string;
+    Val?: string | number;
+    Cond?: string;
+    Val2?: string | number;
+    [key: string]: string|number|undefined;
 }
 export interface SelectOptions {
     value:number;
@@ -268,6 +278,8 @@ export interface WebParams {
     UserID: number;
     TableName?:string;
     TableData?:HasID | HasID[] | string;
+    Fields?:string | string[];
+    Filter?:FilterKeyVal | FilterKeyVal[];
     [key: string]: any;
 }
 export interface LeverData extends HasID {

@@ -7,10 +7,10 @@
 </template>
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Lever from './class/Lever';
-import LeverList from './LeverList.vue';
+import Lever from '../components/class/Lever';
+import LeverList from '../components/LeverList.vue';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
-import LeversModifier from './class/LeversModifier';
+import LeversModifier from '../components/class/LeversModifier';
 import { getModule } from 'vuex-module-decorators';
 import { WebParams } from '../layouts/data/if';
 

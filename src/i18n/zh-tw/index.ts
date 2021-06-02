@@ -100,7 +100,8 @@ export default {
     SortItem:['號碼','注額','風險'],
     ItemsManager:'項目管理',
     LeverModifier:'槓桿設定',
-    RecordCount:'筆數'
+    RecordCount:'筆數',
+    CryptoReport:'數字幣報表'
   },
   Tip:{
     UserFind: '請輸入名稱或代號'
