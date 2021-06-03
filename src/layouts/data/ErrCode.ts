@@ -1,4 +1,4 @@
-const enum ErrCode {
+enum ErrCode {
   PASS = 0,
   LESS_MIN_HAND = 1,
   OVER_MAX_HAND = 2,

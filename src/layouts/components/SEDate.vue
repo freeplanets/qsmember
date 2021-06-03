@@ -25,17 +25,19 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
-import Compnent from 'vue-class-component';
-import {Prop,Watch} from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch} from 'vue-property-decorator';
 import jd,{DateSets} from './Date/JDate';
 import DateWithInputBox from './Date/DateWithInputBox.vue';
-Vue.component('DWIB',DateWithInputBox);
+
 interface DateSltBtn {
   Title:string;
   ds:DateSets;
 }
-@Compnent
+@Component({
+  components: {
+    DWIB: DateWithInputBox
+  }
+})
 export default class SEDate extends Vue{
   @Prop() value!:string;
   @Watch('value',{immediate:true,deep:true})
@@ -102,6 +104,7 @@ export default class SEDate extends Vue{
     if(dateSet){
       this.$emit('input',dateSet);
     }
+    this.$emit('closeme');
   }
   /*
   setSltDates(b:boolean){

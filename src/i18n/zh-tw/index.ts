@@ -122,6 +122,9 @@ export default {
       LongT: '多單',
       ShortT: '空單'
     },
+    AskTable: {
+      User: '會員',
+    },
     ItemName: '項目名稱',
     SubName: '指定名稱',
     NoAdjust: '不調盤',

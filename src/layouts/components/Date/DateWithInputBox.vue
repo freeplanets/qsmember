@@ -12,11 +12,9 @@
   </div> 
 </template>
 <script lang="ts">
-import Vue from 'vue'
-import Compnent from 'vue-class-component'
-import {Prop,Watch} from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch} from 'vue-property-decorator'
 
-@Compnent
+@Component
 export default class DateWithInputBox extends Vue{
   date:string=''
   @Prop() value!:string;

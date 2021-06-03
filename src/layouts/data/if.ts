@@ -4,20 +4,15 @@ export interface KeyVal {
     Val?: string | number;
     Cond?: string;
     Val2?: string | number;
-}
-export interface FilterKeyVal {
-    Key?: string;
-    Val?: string | number;
-    Cond?: string;
-    Val2?: string | number;
     [key: string]: string|number|undefined;
 }
 export interface SelectOptions {
-    value:number;
-	label?:string;
-    GType?:string;
-    OpenNums?:number;
-    data?:any;
+    value: number;
+	label: string;
+    GType?: string;
+    OpenNums?: number;
+    data?: any;
+    disable?: boolean;
 }
 export interface Btg { 
 	title: string;
@@ -276,10 +271,10 @@ export interface HasID {
 export interface WebParams {
     sid: string;
     UserID: number;
-    TableName?:string;
-    TableData?:HasID | HasID[] | string;
-    Fields?:string | string[];
-    Filter?:FilterKeyVal | FilterKeyVal[];
+    TableName?: string;
+    TableData?: HasID | HasID[] | string;
+    Fields?: string | string[];
+    Filter?: KeyVal | KeyVal[];
     [key: string]: any;
 }
 export interface LeverData extends HasID {

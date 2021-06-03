@@ -169,7 +169,7 @@ interface EPrograms extends Progs{
 export default class UserManager extends Vue{
     store=getModule(LayoutStoreModule);
     NewUser:User = {TableName:'User',id:0,Types:0}
-    slt:SelectOptions={value:0}
+    slt:SelectOptions={value:0, label:''}
     showList=true;
     showEdit=false;
     Userf:string='';
