@@ -106,6 +106,12 @@ export default {
   Tip:{
     UserFind: '請輸入名稱或代號'
   },
+  Select: {
+    Crypto: {
+      AskType: ['市價','限價'],
+      BuyType: ['買','賣'],
+    }
+  },
   Table: {
     Items: {
       id: '序號',
@@ -124,6 +130,19 @@ export default {
     },
     AskTable: {
       User: '會員',
+      Item: '項目',
+      AskType: '單別',
+      BuyType: '買/賣',
+      Qty: '數量',
+      Price: '價格',
+      Amount: '金額',
+      Fee: '手續費',
+      AskFee: '手續費率',
+      AskPrice: '下單價格',
+      LeverCredit: '信用額度',
+      ExtCredit: '補充額度',
+      Lever: '槓桿倍數',
+      CreateTime: '下單時間',
     },
     ItemName: '項目名稱',
     SubName: '指定名稱',

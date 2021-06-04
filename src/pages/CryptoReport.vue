@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <div class="row">
+    <div class="row selector">
       <div class="col-2"><selector :Title="$t('Title.Item')" :defaultModel="itemid" :options="options" @SetItem="setItem" /></div>
       <div class="col-2"><q-input class="" outlined dense v-model="SelectDate" /></div>
       <div class="pbtn2"><q-btn color="primary" dense icon="date_range" @click="isDateSlt=true"/></div>
@@ -9,6 +9,8 @@
         <q-btn dense color="blue" icon-right="clear" :label="$t('Button.Clear')"  @click="ClearSearch"/>
       </div>
     </div>
+    <q-separator />
+    <AL v-if="askReports.length>0" :list="askReports" />
     <q-dialog v-model="isDateSlt">
       <q-card class='diaDate'>
         <q-card-section class="q-pt-none">
@@ -21,17 +23,25 @@
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator';
 import LStore from '../layouts/data/LayoutStoreModule';
-import { Msg, SelectOptions, WebParams } from 'src/layouts/data/if';
+import { KeyVal, Msg, SelectOptions, WebParams } from 'src/layouts/data/if';
+import { AskTable, AskReport } from '../components/if/dbif';
 import { getModule } from 'vuex-module-decorators';
 import Selector from '../components/Selector.vue';
 import ErrCode from '../layouts/data/ErrCode';
 import { Item } from '../components/if/dbif';
 import SEDate from '../layouts/components/SEDate.vue';
+import AskList from '../components/AskList.vue';
+
+interface UserName {
+  id: number;
+  Nickname: string;
+}
 
 @Component({
   components: {
     Selector,
     SED: SEDate,
+    AL: AskList,
   }
 })
 export default class CrytoReport extends Vue{
@@ -40,6 +50,7 @@ export default class CrytoReport extends Vue{
   itemid = 0;
   isDateSlt = false;
   SelectDate = '';
+  askReports:AskReport[]=[];
   @Watch('SelectDate')
   onSDChange(){
     console.log('onSDChange:', this.SelectDate);
@@ -54,11 +65,17 @@ export default class CrytoReport extends Vue{
   }
   async SearchData() {
     if ( !this.SelectDate ) return;
+    this.store.setShowProgress(true);
+    this.askReports = [];
     const param:WebParams = { ...this.store.Param };
     const tmp = this.SelectDate.split('-');
     const sdate = tmp[0];
     const edate = tmp[1] ? tmp[1] : tmp[0];
     param.TableName = 'AskTable';
+    param.Fields = [ 'id', 'UserID', 'ItemID', 'AskType', 'BuyType','Qty','Price','Amount',
+        'Fee','AskFee','AskPrice','LeverCredit','ExtCredit','Lever',
+        'UNIX_TIMESTAMP(CreateTime) CreateTime',
+    ]
     param.Filter = [];
     if(this.itemid){
       param.Filter.push({
@@ -73,12 +90,69 @@ export default class CrytoReport extends Vue{
       Cond: 'between'
     })
     const msg:Msg = await this.store.ax.getApi('cc/GetData',param);
-    console.log(msg,param);
-    /*
     if (msg.ErrNo === ErrCode.PASS) {
-      
+      if(msg.data) {
+        const asks:AskTable[] = msg.data as AskTable[];
+        const users:number[]=[];
+        asks.forEach( (itm) => {
+          if (users.indexOf(itm.UserID) === -1) users.push(itm.UserID);
+        })
+        if(users.length > 0) {
+          const Usrs = await this.getUsers(users);
+          console.log('after getUsers', Usrs);
+          if(Usrs.length > 0) {
+            this.askReports = this.getAskReports(asks, Usrs, this.options);
+            console.log('after getAskReports', this.askReports);
+          }
+        }
+      }
     }
-    */
+    this.store.setShowProgress(false);
+  }
+  getAskReports(asks:AskTable[],users:UserName[],items:SelectOptions[]):AskReport[] {
+    return asks.map(ask=>{
+      const fu = users.find(usr=>usr.id===ask.UserID);
+      let UsrName=''
+      if(fu) UsrName = fu.Nickname;
+      const fi = items.find(itm=>itm.value === ask.ItemID);
+      let ItemName = '';
+      if (fi) ItemName = fi.label;
+      const tmp:AskReport = {
+        User: UsrName,
+        Item: ItemName,
+        AskType: this.$t(`Select.Crypto.AskType.${ask.AskType}`).toString(),
+        AT: ask.AskType,
+        BuyType: this.$t(`Select.Crypto.BuyType.${ask.BuyType}`).toString(),
+        BT: ask.BuyType,
+        Qty: ask.Qty,
+        Price: ask.Price,
+        Amount: ask.Amount,
+        Fee: ask.Fee,
+        AskFee: ask.AskFee,
+        AskPrice: ask.AskPrice,
+        LeverCredit: ask.LeverCredit,
+        ExtCredit: ask.ExtCredit,
+        Lever: ask.Lever,
+        CreateTime: ask.CreateTime,
+      }
+      return tmp;
+    })
+  }
+  async getUsers(users:number[]):Promise<UserName[]>{
+    const param:WebParams = { ...this.store.Param };
+    const filter:KeyVal = {
+      Key: 'id',
+      Val: `(${users.join(',')})`,
+      Cond: 'in'
+    }
+    param.TableName = 'Member';
+    param.Fields = ['id', 'Nickname'];
+    param.Filter = filter;
+    const msg:Msg = await this.store.ax.getApi('cc/GetData',param);
+    if( msg.ErrNo === ErrCode.PASS ) {
+      return msg.data as UserName[];
+    }
+    return [];
   }
   async getData(){
     const param:WebParams = { ...this.store.Param };
@@ -109,6 +183,9 @@ export default class CrytoReport extends Vue{
 }
 </script>
 <style scoped>
+.selector {
+  margin-bottom: 4px;
+}
 .pbtn {
     padding: 8px 4px;
 }

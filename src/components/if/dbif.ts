@@ -42,15 +42,17 @@ export interface AskTable {
   ProcStatus: number;  // 0 等待處理, 1 處理中, 2 成交, 3 取消
   CreateTime: number; // 建單時間
   DealTime?: number; // 成交時間
-  ModifyTime?: number; // 修改時間
+  ModifyTime?: string; // 修改時間
   SetID: number; // 平倉對象ID -> System下單
   USetID: number;  // 平倉對象ID -> User下單
 }
-interface AskReport {
+export interface AskReport {
   User: string;
   Item: string;
   AskType: string; // 0 市價, 1 限價
+  AT?: number;
   BuyType: string; // 0 買單, 1 賣單
+  BT?: number;
   Qty: number;
   Price: number; // 建倉價格
   Amount: number; // USDT金額
@@ -59,5 +61,6 @@ interface AskReport {
   AskPrice: number; // 下單價格
   LeverCredit: number; // 下單時暫扣的信用額度
   ExtCredit: number; // 下單後變動的信用額度,只能增加
-  Lever:number;
+  Lever: number;
+  CreateTime: number;
 }
