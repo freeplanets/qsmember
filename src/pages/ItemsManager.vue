@@ -11,37 +11,27 @@
           align="justify"
         >
           <q-tab name="lists" :label="$t('Button.Lists')" />
-          <q-tab name="addnew" :label="$t('Button.Add')+'/'+$t('Button.Edit')" />
+          <q-tab name="addnew" :label="$t('Button.Add')+'/'+$t('Button.Edit')" @click="addNewPress" />
         </q-tabs>
 
-        <q-tab-panels v-model="tab" animated class="bg-secondary text-white">
+        <q-tab-panels v-model="tab" animated class="bg-blue-5 text-white">
           <q-tab-panel name="lists">
               <div class="q-pa-md">
               <q-table
-                :title="$t('Button.Lists')"
                 dense
                 :data="data"
                 :columns="columns"
                 row-key="name"
                 @row-click="onRowClick"
                 :rows-per-page-label="$t('Label.RecordCount')+' : '"
+                :visible-columns="visibleColumns"
+                separator="cell"
               />
             </div>
           </q-tab-panel>
 
           <q-tab-panel name="addnew">
-            <div class="text-h6">{{ updateid ? $t('Button.Edit') : $t('Button.Add')}}</div>
-            <div class="row" 
-              v-for="(keys,idx) in Object.keys(UpdateItem)"
-              :key="'modi:'+idx"
-              >
-              <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items."+keys)}}</div>
-              <div class="col-3"><q-input outlined  dense v-model="UpdateItem[keys]" label="" /></div>
-            </div>
-            <div class="row q-pa-md q-gutter-sm">
-              <q-btn color="primary" icon-right="send" :label="$t('Button.Send')" @click="SendData()" />
-              <q-btn color="red" icon-right="undo"  :label="$t('Label.Cancel')" @click="Cancel()" />
-            </div>
+            <CIB v-model="UpdateItem" @Save="SendData" :UserLevel="uInfo.Levels"></CIB>
           </q-tab-panel>
 
         </q-tab-panels>
@@ -50,13 +40,13 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component';
-import {Item} from '../components/if/dbif';
-import {getModule} from 'vuex-module-decorators';
+import { Vue, Component } from 'vue-property-decorator';
+import { CryptoItem } from '../components/if/dbif';
+import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
-import {Msg,WebParams} from '../layouts/data/if';
-//import {Watch} from 'vue-property-decorator';
+import { LoginInfo, Msg, WebParams } from '../layouts/data/if';
+import CryptoItemBlock from '../components/CryptoItemBlock.vue';
+
 interface TableColumn {
   name?:string;
   field?:string;
@@ -64,29 +54,44 @@ interface TableColumn {
   require?:boolean;
   align?:string;
   sortable?:boolean;
+  format?:Function;
+  headerStyle?:string;
 }
 
-@Component
+@Component({
+  components: {
+    CIB: CryptoItemBlock
+  }
+})
 export default class ItemsManager extends Vue{
   store = getModule(LayoutStoreModule);
-  uInfo = this.store.personal;
+  uInfo:LoginInfo = this.store.personal;
   tab = 'lists';
   updateid=0;
   modifyStatus = 0 // 0 add, 1 edit
-  initItemData:Item={
+  initItemData:CryptoItem={
     id:0,
     Title:'',
+    Code:'',
     OpenFee: 0,
     CloseFee: 0,
-    LoanFee: 0,
+    isLoan: 0,
     StopGain: 0,
     StopLose: 0,
-    Type: 1,
+    IMG:'',
   }
-  UpdateItem:Item=Object.assign({},this.initItemData);
+  UpdateItem:CryptoItem=Object.assign({},this.initItemData);
+  /*
+  @Watch('UpdateItem')
+  chk=0;
+  async onUpdateItemChange() {
+    console.log('onUpdateItemChange:', this.UpdateItem);
+    // await this.SendData();
+  }
+  */
   columns:TableColumn[]=[];
-  data:Item[]=[];
-  visibleColumns=['id','Code','ModifyID','ModifyTime'];
+  data:CryptoItem[]=[];
+  visibleColumns=['id', 'Title', 'OpenFee', 'CloseFee', 'isLoan', 'StopGain', 'StopLose'];
   async GetData(){
     const param:WebParams = {
       sid:this.uInfo.sid,
@@ -96,7 +101,8 @@ export default class ItemsManager extends Vue{
     const msg = await this.store.ax.getApi('cc/GetData',param);
     if(msg.ErrNo === 0) {
       if(msg.data) {
-        this.data = msg.data as Item[];
+        this.data = msg.data as CryptoItem[];
+        console.log('getDATA', this.data);
       }
     }
   }
@@ -104,6 +110,7 @@ export default class ItemsManager extends Vue{
     let msg:Msg={ErrNo:0};
     this.UpdateItem.ModifyID = this.uInfo.id;
     this.UpdateItem.id = this.updateid;
+    if(!this.UpdateItem.Title) return; 
     const param:WebParams = {
       sid:this.uInfo.sid,
       UserID:this.uInfo.id,
@@ -127,8 +134,13 @@ export default class ItemsManager extends Vue{
         label:`${this.$t('Table.Items.'+key)}${key.indexOf('Fee')>-1 ? '(%)' : '' }`,
         field: key, 
         sortable:false,
-        align:'left'};
+        headerStyle: 'text-align: center',
+        align:'center'
+      };
       if(typeof this.initItemData[key] === 'number' ) column.align = 'right';
+      if(key==='isLoan'){
+        column.format = (val:number) => `${ val ? 'Y' : 'N'}`;
+      }
       return column;
     })
   }
@@ -140,6 +152,11 @@ export default class ItemsManager extends Vue{
     //this.ItemData = row;
     //console.log('clicked on', row,evt);
     this.tab = 'addnew';
+  }
+  addNewPress() {
+    if (this.tab === 'lists') {
+      this.Cancel();
+    }
   }
   Cancel(){
     this.UpdateItem=Object.assign({},this.initItemData);
@@ -154,9 +171,7 @@ export default class ItemsManager extends Vue{
  }
 </script>
 <style scoped>
-.title {
-  text-align: right;
-  line-height: 40px;
-  margin-right: 8px;
+.q-table th {
+  background-color: #c1f4cd;
 }
 </style>

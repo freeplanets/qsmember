@@ -108,20 +108,22 @@ export default {
   },
   Select: {
     Crypto: {
-      AskType: ['市價','限價'],
-      BuyType: ['買','賣'],
+      AskType: ['市價', '限價'],
+      BuyType: ['買', '賣'],
+      ItemType: ['多', '空'],
     }
   },
   Table: {
     Items: {
       id: '序號',
       Title: '名稱',
+      Code: '資料源代碼',
       OpenFee: '買入手續費',
       CloseFee: '賣出手續費',
-      LoanFee: '槓桿手續費',
+      isLoan: '信用商品',
       StopGain: '停利',
       StopLose: '停損',
-      Type: '商品類型',
+      IMG: '圖片名稱',
     },
     Lever: {
       Multiples: '槓桿倍數',

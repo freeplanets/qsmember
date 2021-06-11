@@ -28,7 +28,7 @@ import { AskTable, AskReport } from '../components/if/dbif';
 import { getModule } from 'vuex-module-decorators';
 import Selector from '../components/Selector.vue';
 import ErrCode from '../layouts/data/ErrCode';
-import { Item } from '../components/if/dbif';
+import { CryptoItem } from '../components/if/dbif';
 import SEDate from '../layouts/components/SEDate.vue';
 import AskList from '../components/AskList.vue';
 
@@ -161,7 +161,7 @@ export default class CrytoReport extends Vue{
     const msg:Msg = await this.store.ax.getApi('cc/GetData',param);
     if (msg.ErrNo === ErrCode.PASS) {
       if( msg.data ) {
-        const list = msg.data as Item[];
+        const list = msg.data as CryptoItem[];
         this.options = list.map((itm)=>{
           const tmp:SelectOptions = {
             label: `${itm.Title}`,

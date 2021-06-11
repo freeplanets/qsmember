@@ -7,15 +7,16 @@ export interface TableData {
 export interface DataObject {
   [key:string]:number|string|boolean;
 }
-export interface Item extends HasID {
+export interface CryptoItem extends HasID {
   Title?:string;
   Code?:string;
   OpenFee?:number;
   CloseFee?:number;
-  LoanFee?:number;
+  isLoan?:number;       //信用類型 0: No, 1: Yes
   StopGain?:number;
   StopLose?:number;
-  Type?:number;
+  // Type?:number;
+  IMG?:string;
   ModifyID?:number;
 }
 

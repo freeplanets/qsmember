@@ -266,7 +266,6 @@ export interface MyUser {
 
 export interface HasID {
     id: number;
-    [key:string]:any;
 }
 export interface WebParams {
     sid: string;
