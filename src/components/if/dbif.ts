@@ -1,4 +1,5 @@
 import {HasID,KeyVal} from '../../layouts/data/if';
+import { FuncKey } from './ENum';
 export interface TableData {
   TableName: string;
   keys?: string[];
@@ -64,4 +65,49 @@ export interface AskReport {
   ExtCredit: number; // 下單後變動的信用額度,只能增加
   Lever: number;
   CreateTime: number;
+}
+export interface ReceiveData {
+  eventTime: number;
+  symbol: string;
+  currentClose: string;
+  priceChangePercent:string;
+  closeQuantity: string;
+  open?:string;
+}
+
+export interface MqttData {
+  eventType: string;
+  eventTime: number;
+  symbol: string;
+  priceChange: string;
+  priceChangePercent: string;
+  weightedAveragePrice: string;
+  previousClose: string;
+  currentClose: string;
+  closeQuantity: string;
+  bestBid: string;
+  bestBidQuantity: string;
+  bestAskPrice: string;
+  bestAskQuantity: string;
+  open: string;
+  high: string;
+  low: string;
+  baseAssetVolume: string;
+  quoteAssetVolume: string;
+  openTime: number;
+  closeTime: number;
+  firstTradeId: number;
+  lastTradeId: number;
+  trades: number;
+}
+export interface WsMsg {
+  Func?: FuncKey;
+  Asks?: AskTable |AskTable[];
+  Ask?: AskTable;
+  Balance?: number;
+  Message?: string;
+  ChannelName?: string;
+  // LedgerTotal?: LedgerTotal[];
+  UserID?: number;
+  [key:string]: any;
 }
