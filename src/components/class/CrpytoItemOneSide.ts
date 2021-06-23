@@ -1,0 +1,51 @@
+import { AskTable } from '../if/dbif';
+
+/**
+ * identify => ItemID + '-' + ItemType 
+ */
+export default class CryptoItemOneSide {
+	private list:AskTable[] = [];
+	private QtyAfterLever = 0;
+	private priceAverage = 0;
+	private curGainLose = 0;
+	constructor(private id:number,private type:number) {}
+	get Qty () {
+		return this.QtyAfterLever;
+	}
+	get Price() {
+		return this.priceAverage;
+	}
+	get GainLose() {
+		return this.curGainLose;
+	} 
+	add(ask:AskTable)	{
+		if ( ask.ItemID !== this.id || ask.ItemType !== this.type) return;
+		const fIdx = this.list.findIndex(itm=>itm.id === ask.id);
+		if (ask.ProcStatus > 1) {
+			this.addToList(ask, fIdx);
+		} else {
+			this.removeFromList(ask, fIdx);
+		}
+	}
+	acceptPrice(price:number) {
+		this.curGainLose = (price - this.priceAverage) * this.QtyAfterLever * this.type;
+	}
+	private addToList(ask:AskTable, fIdx:number) {
+		if (fIdx === -1 ) {
+			this.reCalQtyAndAvgPrice(ask.Qty, ask.Price, ask.Lever, 1);
+			this.list.push(ask)
+		}
+	}
+	private removeFromList(ask:AskTable, fIdx:number) {
+		if (fIdx !== -1 ) {
+			this.reCalQtyAndAvgPrice(ask.Qty, ask.Price, ask.Lever, -1);
+			this.list.splice(fIdx,1);
+		}
+	}
+	private reCalQtyAndAvgPrice(Qty:number,Price:number,Lever:number,add:number) {
+		const LeverQty = Qty * Lever;
+		const totalPrice = this.QtyAfterLever * this.priceAverage + LeverQty * Price * add;
+		this.QtyAfterLever = this.QtyAfterLever + LeverQty * add;
+		this.priceAverage = totalPrice / this.QtyAfterLever;
+	}
+}

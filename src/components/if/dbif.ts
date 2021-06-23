@@ -111,3 +111,7 @@ export interface WsMsg {
   UserID?: number;
   [key:string]: any;
 }
+
+export interface ObjectIdentify {
+  [key:string]:boolean;
+}
