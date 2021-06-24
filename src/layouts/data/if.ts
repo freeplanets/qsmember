@@ -273,7 +273,7 @@ export interface WebParams {
     TableName?: string;
     TableData?: HasID | HasID[] | string;
     Fields?: string | string[];
-    Filter?: KeyVal | KeyVal[];
+    Filter?: string | KeyVal | KeyVal[];
     [key: string]: any;
 }
 export interface LeverData extends HasID {

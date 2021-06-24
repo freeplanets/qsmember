@@ -20,25 +20,28 @@ export default class CryptoItemOneSide {
 	} 
 	add(ask:AskTable)	{
 		if ( ask.ItemID !== this.id || ask.ItemType !== this.type) return;
+		// console.log('CIOS add:', this.id,JSON.stringify(ask));		
 		const fIdx = this.list.findIndex(itm=>itm.id === ask.id);
-		if (ask.ProcStatus > 1) {
+		if (ask.ProcStatus < 2) {
 			this.addToList(ask, fIdx);
 		} else {
 			this.removeFromList(ask, fIdx);
 		}
+		console.log('CIOS after add:', this.list.length);
 	}
 	acceptPrice(price:number) {
 		this.curGainLose = (price - this.priceAverage) * this.QtyAfterLever * this.type;
+		// console.log(`itemid:${this.id}>${price}>${this.curGainLose}>${this.Qty}`);
 	}
 	private addToList(ask:AskTable, fIdx:number) {
 		if (fIdx === -1 ) {
-			this.reCalQtyAndAvgPrice(ask.Qty, ask.Price, ask.Lever, 1);
+			this.reCalQtyAndAvgPrice(ask.Qty, ask.AskPrice, ask.Lever, 1);
 			this.list.push(ask)
 		}
 	}
 	private removeFromList(ask:AskTable, fIdx:number) {
 		if (fIdx !== -1 ) {
-			this.reCalQtyAndAvgPrice(ask.Qty, ask.Price, ask.Lever, -1);
+			this.reCalQtyAndAvgPrice(ask.Qty, ask.AskPrice, ask.Lever, -1);
 			this.list.splice(fIdx,1);
 		}
 	}
@@ -47,5 +50,6 @@ export default class CryptoItemOneSide {
 		const totalPrice = this.QtyAfterLever * this.priceAverage + LeverQty * Price * add;
 		this.QtyAfterLever = this.QtyAfterLever + LeverQty * add;
 		this.priceAverage = totalPrice / this.QtyAfterLever;
+		console.log('CIOS reCalQtyAndAvgPrice', this.QtyAfterLever, this.priceAverage);
 	}
 }

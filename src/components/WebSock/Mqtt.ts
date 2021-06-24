@@ -2,7 +2,7 @@ import AWS from 'aws-sdk';
 import config from './config';
 import { ReceiveData, MqttData } from '../if/dbif';
 import { LoginInfo } from '../../layouts/data/if';
-import Items from './Items';
+import Items from '../class/Items';
 
 // import AWSMqttClient from 'aws-mqtt';
 

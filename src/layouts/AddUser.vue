@@ -64,8 +64,8 @@ interface Ans {
 @Component
 export default class AddUser extends Vue{
     store=getModule(LayoutStoreModule);
-    NewUser:User = {TableName:'User',id:0}
-    slt:SelectOptions={value:0}
+    NewUser:User = { TableName: 'User', id: 0 };
+    slt:SelectOptions={ value: 0, label: '' };
     showList=true;
     showEdit=false;
     data:User[]=[]

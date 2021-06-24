@@ -13,10 +13,12 @@ export interface CryptoItem extends HasID {
   Code?:string;
   OpenFee?:number;
   CloseFee?:number;
-  isLoan?:number;       //信用類型 0: No, 1: Yes
   StopGain?:number;
   StopLose?:number;
-  // Type?:number;
+  // Type?:number; // =>
+  isLoan:number; // 信用類型 0: No, 1: Yes
+  OneHand?:number;
+  Closed?:number; // 0 開放, 1 停多, 2 停空, 3 停收；
   IMG?:string;
   ModifyID?:number;
 }

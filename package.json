@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "aws-mqtt": "^1.0.0",
     "aws-sdk": "^2.932.0",
     "axios": "^0.21.1",
     "lodash": "^4.17.21",

@@ -3,6 +3,12 @@ $_red:red;
 .redColor {
   color: $_red;
 }
+.clrRed {
+	color: $negative;
+}
+.clrGreen {
+	color: $positive;
+}
 .tbox-pd {
   padding-top: 4px;
   padding-left: 4px;
