@@ -2,7 +2,7 @@ import { FuncKey } from '../if/ENum';
 import { AskTable, WsMsg } from '../if/dbif';
 // import { LayoutStoreModule } from '../../store/LayoutStoreModule';
 
-const ClientChannel = 'AskChannel';
+const ClientChannel = 'AdminChannel';
 
 export default class WSock {
     private sock!:WebSocket;

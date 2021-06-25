@@ -27,7 +27,7 @@ export default class CryptoItemOneSide {
 		} else {
 			this.removeFromList(ask, fIdx);
 		}
-		console.log('CIOS after add:', this.list.length);
+		// console.log('CIOS after add:', this.list.length);
 	}
 	acceptPrice(price:number) {
 		this.curGainLose = (price - this.priceAverage) * this.QtyAfterLever * this.type;
@@ -38,6 +38,9 @@ export default class CryptoItemOneSide {
 			this.reCalQtyAndAvgPrice(ask.Qty, ask.AskPrice, ask.Lever, 1);
 			this.list.push(ask)
 		}
+	}
+	cleanList() {
+		this.list = [];
 	}
 	private removeFromList(ask:AskTable, fIdx:number) {
 		if (fIdx !== -1 ) {

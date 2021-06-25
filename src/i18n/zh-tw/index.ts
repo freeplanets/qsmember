@@ -103,6 +103,8 @@ export default {
     RecordCount:'筆數',
     CryptoReport:'數字幣報表',
     CryptoRiskController: '數字幣風控',
+    CurGainLose: '及時損益',
+    OpenClose: '開關',
   },
   Tip:{
     UserFind: '請輸入名稱或代號'
@@ -125,6 +127,8 @@ export default {
       StopGain: '停利',
       StopLose: '停損',
       IMG: '圖片名稱',
+      Type: '多/空',
+      OneHand: '單手上限',
     },
     Lever: {
       Multiples: '槓桿倍數',
@@ -146,6 +150,7 @@ export default {
       ExtCredit: '補充額度',
       Lever: '槓桿倍數',
       CreateTime: '下單時間',
+      AvgPrice: '均價',
     },
     ItemName: '項目名稱',
     SubName: '指定名稱',

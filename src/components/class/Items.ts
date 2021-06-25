@@ -68,11 +68,16 @@ export default class Items {
     setClosed(v:number) {
         this.crypto.Closed = v;
     }
+    setOneHand(v:number) {
+        this.crypto.OneHand = v;
+    }
     addAsk(ask:AskTable) {
         this.Short.add(ask);
         this.Long.add(ask);
     }
     addAsks(asks:AskTable[]) {
+        this.Short.cleanList();
+        this.Long.cleanList();
         asks.forEach(ask=>{
             this.addAsk(ask);
         })

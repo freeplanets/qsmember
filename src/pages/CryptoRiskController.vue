@@ -1,12 +1,33 @@
 <template>
 	<div>
 		<div class="row">Risk Controller</div>
-		<BCIC
+		<div class="row">
+			<div class="row headblock col-10">
+				<div class="col-2 banhead">{{ $t('Table.AskTable.Item') }}</div>
+				<div class="col-2 banhead">{{ $t('Table.AskTable.Price') }}</div>
+				<div class="col">
+					<div class="row">
+						<div class="col banhead">{{ $t('Table.Items.Type') }}</div>
+						<div class="col-3 banhead">{{ $t('Table.AskTable.Qty') }}</div>
+						<div class="col-3 banhead">{{ $t('Table.AskTable.AvgPrice')}}</div>
+						<div class="col-3 banhead">{{ $t('Label.CurGainLose') }}</div>
+						<div class="col banhead">{{ $t('Label.OpenClose') }}</div>
+					</div>
+				</div>
+				<div class="col-2 banhead">{{ $t('Table.Items.OneHand') }}</div>
+			</div>
+		</div>
+		<div
 			v-for="(itm, idx) in list"
 			:key="'bcic'+idx"
-			:item="itm"
-			@setClosed="setClosed"
-		 />
+			class="row"
+		>
+			<BCIC
+				class="col-10"
+				:item="itm"
+				@updateItems="updateItems"
+			/>
+		 </div>
 	</div>
 </template>
 <script lang="ts">
@@ -16,13 +37,9 @@ import BanCryptoItemControl from '../components/Banner/CryptoItemControl.vue';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
 import Items from '../components/class/Items';
 import ApiFunc from '../components/class/ApiFunc';
-import { CryptoItem, AskTable } from '../components/if/dbif';
-import { Msg, HasID } from '../layouts/data/if';
+import { CryptoItem, AskTable, PartialCryptoItems } from '../components/if/dbif';
+import { Msg } from '../layouts/data/if';
 import Mqtt from '../components/WebSock/Mqtt';
-
-interface SubItems extends HasID {
-	Closed:number;
-}
 
 @Component({
 	components: {
@@ -34,6 +51,7 @@ export default class CryptoRiskController extends Vue {
 	Api = new ApiFunc(this.store);
 	list:Items[]=[];
 	Mqtt = new Mqtt(this.store.personal);
+	interval:NodeJS.Timeout | null = null;
 	getData() {
 		this.Api.getTableData('Items').then((msg:Msg)=>{
 			if(msg.ErrNo ===0 ) {
@@ -44,6 +62,10 @@ export default class CryptoRiskController extends Vue {
 				});
 			}
 		});
+		this.getAsks();
+		this.Mqtt.setItems(this.list);
+	}
+	getAsks() {
 		const filter = 'ProcStatus<2 and (USetID > 0 or SetID > 0)';
 		this.Api.getTableData('AskTable', filter).then((msg:Msg)=>{
 			console.log('getData AskTable', msg);
@@ -53,27 +75,49 @@ export default class CryptoRiskController extends Vue {
 					itm.addAsks(asks);
 				})
 			}
-		})
-		this.Mqtt.setItems(this.list);
+		})		
 	}
-	setClosed(itemid:number, closed:number) {
-		console.log('CRC setClosed:', itemid, closed);
-		const data:SubItems = {
-			id:itemid,
-			Closed: closed,
-		}
-		this.Api.setTableData<SubItems>('Items', data).then((msg:Msg)=>{
+	updateItems(data:PartialCryptoItems) {
+		console.log('CRC setClosed:', data);
+		this.Api.setTableData<PartialCryptoItems>('Items', data).then((msg:Msg)=>{
 			if(msg.ErrNo === 0){
-				const f = this.list.find(itm=>itm.id === itemid);
+				const f = this.list.find(itm=>itm.id === data.id);
 				if (f) {
-					console.log('setClosed:', f.Closed);
-					f.setClosed(closed);
+					// console.log('setClosed:', f.Closed);
+					if (data.Closed) f.setClosed(data.Closed);
+					if (data.OneHand){
+						f.setOneHand(data.OneHand);
+						this.$q.dialog({
+							title: this.$t('Label.Save') as string,
+							message: 'OK!!',
+            });
+					}
 				}
 			}
 		})
 	}
 	mounted() {
 		this.getData();
+		this.interval = setInterval(this.getAsks,5000);
+	}
+	beforeUnmount() {
+		console.log('before unmounted');
+		if (this.interval) {
+			clearInterval(this.interval);
+		}
 	}
 }
 </script>
+<style lang="scss" scoped>
+.headblock {
+	border: 1px seagreen solid;
+	background-color: $light-green-10;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+.banhead {
+	border-left: 1px seagreen solid;
+	text-align: center;
+	color: white;
+}
+</style>

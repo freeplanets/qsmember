@@ -117,3 +117,8 @@ export interface WsMsg {
 export interface ObjectIdentify {
   [key:string]:boolean;
 }
+
+export interface PartialCryptoItems extends HasID {
+	Closed?:number;
+	OneHand?:number;
+}
