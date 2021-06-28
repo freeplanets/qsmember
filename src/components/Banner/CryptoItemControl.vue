@@ -3,23 +3,25 @@
 		<div class="col-2 banmain">{{ item.Title }}</div>
 		<div class="col-2 banmain">{{ item.Price }}</div>
 		<div class="col">
-			<div class="row sublineTop">
+			<div class="row sublineTop" @click="showlist(item.Title, item.Long.List)">
 				<div class="col suba">多</div>
+				<div class="col-2 suba">{{ item.Long.Total.toFixed(2) }}</div>
 				<div class="col-3 suba">{{ item.Long.Qty.toFixed(8) }}</div>
-				<div class="col-3 suba">{{ item.Long.Price.toFixed(2) }}</div>
+				<div class="col-2 suba">{{ item.Long.Price.toFixed(2) }}</div>
 				<div 
-					:class="{'col-3 suba':true, clrRed: item.Long.GainLose<0, clrGreen: item.Long.GainLose > 0}">
+					:class="{'col-2 suba':true, clrRed: item.Long.GainLose<0, clrGreen: item.Long.GainLose > 0}">
 					{{ item.Long.GainLose.toFixed(2) }}
 				</div>
 				<div class="col subb">
 					<q-checkbox left-label v-model="longStop" label="停收" />
 				</div>
 			</div>
-			<div class="row sublineBottom">
+			<div class="row sublineBottom" @click="showlist(item.Title, item.Short.List)">
 				<div class="col suba">空</div>
+				<div class="col-2 suba">{{ item.Short.Total.toFixed(2) }}</div>				
 				<div class="col-3 suba">{{ item.Short.Qty.toFixed(8) }}</div>
-				<div class="col-3 suba">{{ item.Short.Price.toFixed(2) }}</div>
-				<div :class="{'col-3 suba':true, clrRed: item.Short.GainLose<0, clrGreen: item.Short.GainLose > 0}">
+				<div class="col-2 suba">{{ item.Short.Price.toFixed(2) }}</div>
+				<div :class="{'col-2 suba':true, clrRed: item.Short.GainLose<0, clrGreen: item.Short.GainLose > 0}">
 					{{ item.Short.GainLose.toFixed(2) }}
 				</div>
 				<div class="col subb">
@@ -32,16 +34,22 @@
 				<q-input class="col-8" color="grey-3" label-color="orange" dense outlined v-model="OneHand" :label="$t('Table.OneHand')" />
 				<q-btn class="col-3" color="primary" dense :label="$t('Button.Edit')" @click="EditOneHand" />
 			</div>
-		</div>	
+		</div>
+		<dialog-ask-list v-model="showDialogAskList" :list="dialogList" :title="dialogTitle"></dialog-ask-list>
 	</div>
 </template>
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import Crypto from '../class/Items';
-import { PartialCryptoItems } from '../if/dbif';
+import { PartialCryptoItems, AskTable } from '../if/dbif';
 import { StopType } from '../if/ENum';
+import DialogAskList from '../Dialog/AskList.vue';
 
-@Component
+@Component({
+	components: {
+		DialogAskList,
+	},
+})
 export default class CryptoItemControl extends Vue {
 	@Prop({ type: Object }) readonly item!:Crypto;
 	get Closed() {
@@ -51,6 +59,9 @@ export default class CryptoItemControl extends Vue {
 	OneHand = this.item.OneHand;
 	longStop = this.item.getClosed(StopType.LONG_STOP);
 	shortStop = this.item.getClosed(StopType.SHORT_STOP);
+	showDialogAskList = false;
+	dialogList:AskTable[]=[];
+	dialogTitle = '';
 	@Watch('Closed')
 	onClosedChange() {
 		this.setStopValue();
@@ -88,6 +99,13 @@ export default class CryptoItemControl extends Vue {
 			OneHand: this.OneHand, 
 		}
 		this.updateItems(data);
+	}
+	showlist(title:string, list:AskTable[]) {
+		if (list.length === 0) return;
+		this.dialogTitle = title;
+		this.dialogList = list;
+		this.showDialogAskList = true;
+		console.log(title, JSON.stringify(list));
 	}
 	mounted() {
 		// this.setStopValue();

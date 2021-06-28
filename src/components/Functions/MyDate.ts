@@ -1,0 +1,42 @@
+// import LStore from '../../store/LayoutStoreModule';
+
+class MyDate {
+	// private User = LStore.UserInfo;
+	private dOpt:Intl.DateTimeFormatOptions = {
+    hour12: false,
+		year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    // timeZone: 'Asia/Taipei', 
+  }
+	toLocalString(time?:string | number, lang?:string, opt?:Intl.DateTimeFormatOptions) {
+		const d = this.getDate(time);
+		if (!lang) lang = 'zh-TW';
+		if (!opt) opt = this.dOpt;
+		return d.toLocaleString(lang, opt);
+	}
+	toLocalStringNoYear(time?:string | number, lang?:string, opt?:Intl.DateTimeFormatOptions) {
+		const d = this.getDate(time);
+		if (!lang) lang = 'zh-TW';
+		if (!opt) opt = this.dOpt;
+		delete opt.year;
+		return d.toLocaleString(lang, opt);
+	}
+	dayDiff(d:number):string {
+		const dt = this.getDate();
+		const dts = dt.getTime();
+		const ts = dts - d * 60 * 60 * 24 * 1000;
+		return this.getDate(ts).toLocaleDateString();
+	}
+	private getDate(time?:string | number) {
+		if (!time) return new Date();
+		if (typeof time !== 'number') {
+			time = Date.parse(time);
+		}
+		return new Date(time);
+	}
+}
+export default new MyDate();

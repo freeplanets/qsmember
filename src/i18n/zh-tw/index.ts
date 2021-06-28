@@ -113,7 +113,7 @@ export default {
     Crypto: {
       AskType: ['市價', '限價'],
       BuyType: ['買', '賣'],
-      ItemType: ['多', '空'],
+      ItemType: ['空', '多'],
     }
   },
   Table: {

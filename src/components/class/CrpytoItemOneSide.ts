@@ -1,3 +1,4 @@
+import { HighlightSpanKind } from 'typescript';
 import { AskTable } from '../if/dbif';
 
 /**
@@ -8,6 +9,7 @@ export default class CryptoItemOneSide {
 	private QtyAfterLever = 0;
 	private priceAverage = 0;
 	private curGainLose = 0;
+	private totalPrice = 0;
 	constructor(private id:number,private type:number) {}
 	get Qty () {
 		return this.QtyAfterLever;
@@ -15,9 +17,15 @@ export default class CryptoItemOneSide {
 	get Price() {
 		return this.priceAverage;
 	}
+	get Total() {
+		return this.totalPrice;
+	}
 	get GainLose() {
 		return this.curGainLose;
-	} 
+	}
+	get List() {
+		return this.list;
+	}
 	add(ask:AskTable)	{
 		if ( ask.ItemID !== this.id || ask.ItemType !== this.type) return;
 		// console.log('CIOS add:', this.id,JSON.stringify(ask));		
@@ -41,6 +49,9 @@ export default class CryptoItemOneSide {
 	}
 	cleanList() {
 		this.list = [];
+		this.QtyAfterLever = 0;
+		this.priceAverage = 0;
+		// this.curGainLose = 0;
 	}
 	private removeFromList(ask:AskTable, fIdx:number) {
 		if (fIdx !== -1 ) {
@@ -50,9 +61,9 @@ export default class CryptoItemOneSide {
 	}
 	private reCalQtyAndAvgPrice(Qty:number,Price:number,Lever:number,add:number) {
 		const LeverQty = Qty * Lever;
-		const totalPrice = this.QtyAfterLever * this.priceAverage + LeverQty * Price * add;
+		this.totalPrice = this.QtyAfterLever * this.priceAverage + LeverQty * Price * add;
 		this.QtyAfterLever = this.QtyAfterLever + LeverQty * add;
-		this.priceAverage = totalPrice / this.QtyAfterLever;
+		this.priceAverage = this.totalPrice / this.QtyAfterLever;
 		console.log('CIOS reCalQtyAndAvgPrice', this.QtyAfterLever, this.priceAverage);
 	}
 }
