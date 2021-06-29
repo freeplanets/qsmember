@@ -22,6 +22,7 @@ export default class AskHeader extends Vue {
 	border-top: 1px $green-10 solid;
 	border-right: 1px $green-10 solid;
 	border-bottom: 1px $green-10 solid;
+	color: white;
 }
 .block_ask_header div {
 	border-left: 1px $green-10 solid;

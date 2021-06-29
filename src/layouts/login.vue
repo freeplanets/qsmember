@@ -41,6 +41,7 @@ import LayoutStoreModule from './data/LayoutStoreModule';
 import { getModule } from 'vuex-module-decorators';
 //import {User} from './data/schema';
 import { Msg,CommonParams,LoginInfo } from './data/if';
+import WSock from '../components/WebSock/WSock';
 
 @Components
 export default class Login extends Vue {
@@ -88,6 +89,10 @@ export default class Login extends Vue {
         this.isLogin = true;
         //this.store.leftDrawerOpen=true;
         //console.log('Login PInfo:',this.Personal);
+        if(msg.wsServer) {
+          const ws:WSock = new WSock(msg.wsServer,this.Personal.id);
+          this.store.setWSock(ws);
+        }
         if(this.Personal.forcePWChange){
           this.store.setCghPW(true);
         } else if(this.Personal.isChkGA){

@@ -1,5 +1,5 @@
 import {HasID,KeyVal} from '../../layouts/data/if';
-import { FuncKey } from './ENum';
+import { FuncKey, MsgType } from './ENum';
 export interface TableData {
   TableName: string;
   keys?: string[];
@@ -121,4 +121,8 @@ export interface ObjectIdentify {
 export interface PartialCryptoItems extends HasID {
 	Closed?:number;
 	OneHand?:number;
+}
+export interface GetMessage {
+  Type: MsgType,
+  getMessage(message:string | AskTable);
 }

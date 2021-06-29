@@ -40,3 +40,14 @@ export enum StopType {
   SHORT_STOP = 2,
   STOPED = 3
 }
+
+export enum MsgType {
+  ACCEPT_ASK = 0,
+  ACCEPT_OTHER = 1
+}
+
+export enum Channels {
+  ASK = 'AskChannel',
+  ADMIN = 'AdminChannel',
+  PUB = 'PublicChannel',
+}

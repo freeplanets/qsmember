@@ -60,10 +60,10 @@ export default class CryptoItemOneSide {
 		}
 	}
 	private reCalQtyAndAvgPrice(Qty:number,Price:number,Lever:number,add:number) {
-		const LeverQty = Qty * Lever;
+		const LeverQty = Qty * Lever;		
 		this.totalPrice = this.QtyAfterLever * this.priceAverage + LeverQty * Price * add;
 		this.QtyAfterLever = this.QtyAfterLever + LeverQty * add;
-		this.priceAverage = this.totalPrice / this.QtyAfterLever;
-		console.log('CIOS reCalQtyAndAvgPrice', this.QtyAfterLever, this.priceAverage);
+		this.priceAverage =  this.QtyAfterLever === 0 ? 0 : this.totalPrice / this.QtyAfterLever;
+		// console.log('CIOS reCalQtyAndAvgPrice', this.QtyAfterLever, this.priceAverage);
 	}
 }

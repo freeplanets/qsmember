@@ -1,8 +1,8 @@
-import { CryptoItem, ReceiveData, AskTable } from '../if/dbif';
-import { StopType } from '../if/ENum';
+import { CryptoItem, ReceiveData, AskTable, GetMessage } from '../if/dbif';
+import { StopType, MsgType } from '../if/ENum';
 import CryptoItemOneSide from './CrpytoItemOneSide';
 
-export default class Items {
+export default class Items implements GetMessage {
     private price = '';
     private upColor = 'green';
     private downColor = 'red';
@@ -13,6 +13,7 @@ export default class Items {
     private crypto:CryptoItem;
     public Long:CryptoItemOneSide;
 	public Short:CryptoItemOneSide;
+    public Type = MsgType.ACCEPT_ASK;
     constructor(crypto:CryptoItem) {
         this.crypto = crypto;
         this.Long = new CryptoItemOneSide(crypto.id, 1);
@@ -62,7 +63,7 @@ export default class Items {
     getClosed(v:StopType):boolean {
         const closed = this.crypto.Closed ? this.crypto.Closed : 0;
         const bClosed = !!(v & closed)
-        console.log('Item getClosed', bClosed, v, this.crypto.Closed);
+        // console.log('Item getClosed', bClosed, v, this.crypto.Closed);
         return bClosed;
     }
     setClosed(v:number) {
@@ -92,5 +93,9 @@ export default class Items {
             this.priceChangePercent = parseFloat(r.priceChangePercent);
             this.qty = parseFloat(r.closeQuantity);
         }
+    }
+    getMessage(ask:AskTable) {
+        this.Long.add(ask);
+        this.Short.add(ask);
     }
 }

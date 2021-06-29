@@ -1,14 +1,16 @@
 import { FuncKey } from '../if/ENum';
-import { AskTable, WsMsg } from '../if/dbif';
+import { AskTable, WsMsg, GetMessage } from '../if/dbif';
+import { MsgType, Channels } from '../if/ENum';
 // import { LayoutStoreModule } from '../../store/LayoutStoreModule';
 
-const ClientChannel = 'AdminChannel';
+const ClientChannel = Channels.ADMIN;
 
 export default class WSock {
     private sock!:WebSocket;
     private receivedWelcome=false;
     // private list:AskTable[]=[];
     // private ledger: LedgerTotal[]=[];
+    private list:GetMessage[] =[];
     private curMsg = '';
     constructor(private url:string, private UserID:number) {
         this.createConnection();
@@ -35,33 +37,9 @@ export default class WSock {
             }, 5000);
         };
     }
-
     get message() {
         return this.curMsg;
     }
-    /*
-  set List(asks:AskTable[]) {
-    // this.User.Asks = asks;
-    this.list = asks;
-  }
-  get List():AskTable[] {
-    // return this.LSM.UserAsks;
-    // return this.User.Asks;
-    return this.list;
-  }
-  get Ledger():LedgerTotal[] {
-    return this.ledger;
-  }
-  set Ledger(ldg:LedgerTotal[]) {
-    this.ledger = ldg;
-  }
-  */
-    /*
-  setList(asks:AskTable[]) {
-    // this.list = asks;
-    this.User.Asks = asks;
-  }
-  */
     send(message:string) {
         console.log('Try send:', message);
         if (!this.receivedWelcome) {
@@ -103,17 +81,17 @@ export default class WSock {
         });
     }
     doAsk(ask:AskTable) {
-    /*
-    let foundIdx = 0;
-    foundIdx = this.List.findIndex((itm) => itm.id === ask.id);
-    if (foundIdx === -1) {
-      if (ask.ProcStatus < 2) this.List.push(ask);
-    } else if (ask.ProcStatus > 1) {
-      this.List.splice(foundIdx, 1);
-    } else {
-      this.List.splice(foundIdx, 1, ask);
+        this.list.forEach(mbr=>{
+            if(mbr.Type === MsgType.ACCEPT_ASK) mbr.getMessage(ask);
+        })
     }
-    */
+    Add(mbr:GetMessage) {
+        const fidx = this.list.findIndex(itm=>itm===mbr);
+        if(fidx===-1) this.list.push(mbr);
+    }
+    Remove(mbr:GetMessage) {
+        const fidx = this.list.findIndex(itm=>itm===mbr);
+        if(fidx!==-1) this.list.splice(fidx,1);
     }
     private registerChannel(channel: string) {
         if (this.sock.readyState === this.sock.OPEN) {

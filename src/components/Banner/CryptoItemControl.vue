@@ -4,12 +4,12 @@
 		<div class="col-2 banmain">{{ item.Price }}</div>
 		<div class="col">
 			<div class="row sublineTop" @click="showlist(item.Title, item.Long.List)">
-				<div class="col suba">多</div>
-				<div class="col-2 suba">{{ item.Long.Total.toFixed(2) }}</div>
-				<div class="col-3 suba">{{ item.Long.Qty.toFixed(8) }}</div>
-				<div class="col-2 suba">{{ item.Long.Price.toFixed(2) }}</div>
+				<div class="col suba txtCenter">多</div>
+				<div class="col-2 suba txtRight">{{ item.Long.Total.toFixed(2) }}</div>
+				<div class="col-3 suba txtRight">{{ item.Long.Qty.toFixed(8) }}</div>
+				<div class="col-2 suba txtRight">{{ item.Long.Price.toFixed(2) }}</div>
 				<div 
-					:class="{'col-2 suba':true, clrRed: item.Long.GainLose<0, clrGreen: item.Long.GainLose > 0}">
+					:class="{'col-2 suba txtRight':true, clrRed: item.Long.GainLose<0, clrGreen: item.Long.GainLose > 0}">
 					{{ item.Long.GainLose.toFixed(2) }}
 				</div>
 				<div class="col subb">
@@ -17,11 +17,11 @@
 				</div>
 			</div>
 			<div class="row sublineBottom" @click="showlist(item.Title, item.Short.List)">
-				<div class="col suba">空</div>
-				<div class="col-2 suba">{{ item.Short.Total.toFixed(2) }}</div>				
-				<div class="col-3 suba">{{ item.Short.Qty.toFixed(8) }}</div>
-				<div class="col-2 suba">{{ item.Short.Price.toFixed(2) }}</div>
-				<div :class="{'col-2 suba':true, clrRed: item.Short.GainLose<0, clrGreen: item.Short.GainLose > 0}">
+				<div class="col suba txtCenter">空</div>
+				<div class="col-2 suba txtRight">{{ item.Short.Total.toFixed(2) }}</div>				
+				<div class="col-3 suba txtRight">{{ item.Short.Qty.toFixed(8) }}</div>
+				<div class="col-2 suba txtRight">{{ item.Short.Price.toFixed(2) }}</div>
+				<div :class="{'col-2 suba txtRight':true, clrRed: item.Short.GainLose<0, clrGreen: item.Short.GainLose > 0}">
 					{{ item.Short.GainLose.toFixed(2) }}
 				</div>
 				<div class="col subb">
@@ -52,6 +52,7 @@ import DialogAskList from '../Dialog/AskList.vue';
 })
 export default class CryptoItemControl extends Vue {
 	@Prop({ type: Object }) readonly item!:Crypto;
+	@Prop({ type: Boolean }) readonly inProcess!:boolean;
 	get Closed() {
 		return this.item.Closed;
 	}
@@ -120,9 +121,6 @@ export default class CryptoItemControl extends Vue {
 	background-color: $light-green-1;
 	margin-left: 4px;
 	margin-right: 4px;
-}
-.sublineTop div, .sublineBottom div {
-	text-align: right;
 }
 .sublineTop {
 	border-bottom: 1px seagreen solid;

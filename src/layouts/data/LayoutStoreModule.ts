@@ -1,6 +1,7 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 import Store from '../../store/index';
 import AxApi from '../components/AxApi';
+import WSock from '../../components/WebSock/WSock';
 import {LoginInfo} from './if';
 
 @Module({
@@ -24,6 +25,7 @@ export default class LayoutStoreModule extends VuexModule {
         Progs:[]
     };
     private showGA = false;
+    private ws!:WSock;
     //public ApiUrl:string=myApiUrl;
     public ax=AxApi;
     private sInfo='';
@@ -38,6 +40,9 @@ export default class LayoutStoreModule extends VuexModule {
             sid:this.personal.sid,
             UserID:this.personal.id            
         }
+    }
+    get WSock() {
+        return this.ws;
     }
     @Mutation
     private SET_SYSINFO(info:string){
@@ -70,7 +75,6 @@ export default class LayoutStoreModule extends VuexModule {
     public SET_PERSONAL(value:LoginInfo){
         this.personal = value;
     }
-
     @Action
     public setPersonal(value:LoginInfo){
         this.SET_PERSONAL(value);
@@ -133,5 +137,13 @@ export default class LayoutStoreModule extends VuexModule {
     @Action
     public Logout(value:boolean){
         this.SET_LOGOUT(value);
-    }  
+    }
+    @Mutation
+    private SET_WSOCK(ws:WSock) {
+        this.ws = ws;
+    }
+    @Action
+    public setWSock(ws:WSock) {
+        this.SET_WSOCK(ws);
+    }
 }

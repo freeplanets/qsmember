@@ -54,13 +54,21 @@ export default class CryptoRiskController extends Vue {
 	Mqtt = new Mqtt(this.store.personal);
 	interval:NodeJS.Timeout | null = null;
 	getData() {
-		this.Api.getTableData('Items').then((msg:Msg)=>{
+		this.Api.getTableData('Items', {isLoan:1}).then((msg:Msg)=>{
 			if(msg.ErrNo ===0 ) {
 				const data:CryptoItem[] = msg.data as CryptoItem[];
+				// console.log('CryptoRiskController getData', data);
 				data.forEach(itm=>{
-					console.log('getdata', itm.id, itm.Closed);
-					if(itm.isLoan) this.list.push(new Items(itm));
+					// console.log('getdata', itm.id, itm.Closed);
+					if(itm.isLoan) {
+						this.list.push(new Items(itm));
+					}
 				});
+				if (this.list.length > 0) {
+					this.list.forEach(itm=>{
+						this.store.WSock.Add(itm);
+					})
+				}
 			}
 		});
 		this.getAsks();
@@ -69,7 +77,7 @@ export default class CryptoRiskController extends Vue {
 	getAsks() {
 		const filter = 'ProcStatus<2 and (USetID > 0 or SetID > 0)';
 		this.Api.getTableData('AskTable', filter).then((msg:Msg)=>{
-			console.log('getData AskTable', msg);
+			// console.log('getData AskTable', msg);
 			if (msg.ErrNo == 0) {
 				const asks:AskTable[] = msg.data as AskTable[];
 				this.list.forEach(itm=>{
@@ -99,7 +107,8 @@ export default class CryptoRiskController extends Vue {
 	}
 	mounted() {
 		this.getData();
-		this.interval = setInterval(this.getAsks,5000);
+		this.getAsks();
+		// this.interval = setInterval(this.getAsks,500000);
 	}
 	beforeUnmount() {
 		console.log('before unmounted');
