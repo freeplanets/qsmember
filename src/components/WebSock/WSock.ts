@@ -61,7 +61,7 @@ export default class WSock {
     // console.log('onmessage', data);
         try {
             const msg:WsMsg = JSON.parse(data);
-            // console.log('onmessage', msg);
+            console.log('onmessage', msg);
             if (msg.Ask) {
                 this.doAsk(msg.Ask);
             } else if (msg.Asks) {
@@ -70,6 +70,8 @@ export default class WSock {
                 } else {
                     this.doAsk(msg.Asks);
                 }
+            } else if (msg.text) {
+
             }
         } catch (err) {
             console.log('err', data);

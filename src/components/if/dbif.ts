@@ -124,5 +124,17 @@ export interface PartialCryptoItems extends HasID {
 }
 export interface GetMessage {
   Type: MsgType,
-  getMessage(message:string | AskTable);
+  getMessage(message:string | AskTable):void;
+}
+export interface ChatMsg {
+  name:string; // for Chat Message 'name' 發話者名稱
+  text:string[]; // 訊息 for Chat Message 'text'
+  sent: boolean; // for Chat Message 'sent'
+  stamp?:string; // 顯示訊息時間 例: '4 minutes ago' for Chat Message 'stemp'
+  // bgColor?:string; // 訊息底色 for Chat Message 'bg-color'
+  // txtColor?:string; // 訊息字顏色 for Chat Message 'text-color'
+  avatar?:string; // 發話者圖片（或圖片網址）for Chat Message 'avatar'
+  inMessage?:boolean; // 收訊方用，發話方是否正在輸入訊息 for Chat Message tag q-spinner-dots
+  receiveTime:number|string;
+  SenderID:number;
 }
