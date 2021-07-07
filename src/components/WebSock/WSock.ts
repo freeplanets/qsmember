@@ -1,7 +1,8 @@
 import { FuncKey } from '../if/ENum';
-import { AskTable, WsMsg, GetMessage } from '../if/dbif';
+import { AskTable, WsMsg, GetMessage, ChatMsg } from '../if/dbif';
 import { MsgType, Channels } from '../if/ENum';
-// import { LayoutStoreModule } from '../../store/LayoutStoreModule';
+import LayoutStoreModule from 'src/layouts/data/LayoutStoreModule';
+import ChatManager from '../class/ChatManager';
 
 const ClientChannel = Channels.ADMIN;
 
@@ -10,10 +11,12 @@ export default class WSock {
     private receivedWelcome=false;
     // private list:AskTable[]=[];
     // private ledger: LedgerTotal[]=[];
+    private chatM:ChatManager;
     private list:GetMessage[] =[];
     private curMsg = '';
-    constructor(private url:string, private UserID:number) {
+    constructor(private LSM:LayoutStoreModule , private url:string) {
         this.createConnection();
+        this.chatM = new ChatManager(this);
     }
     private createConnection() {
         const ws = this.url === 'localhost:4001' ? 'ws' : 'wss';
@@ -37,19 +40,33 @@ export default class WSock {
             }, 5000);
         };
     }
+    get UserID() {
+        return this.LSM.UserInfo.id;
+    }
+    get UserName() {
+        return this.LSM.UserInfo.Account;
+    }
     get message() {
         return this.curMsg;
     }
-    send(message:string) {
+    get Chater() {
+        return this.chatM;
+    }
+    send(message:string | WsMsg) {
         console.log('Try send:', message);
         if (!this.receivedWelcome) {
             console.log('Wait for connect.......');
             return;
         }
         if (this.sock.readyState === WebSocket.OPEN) {
-            const msg:WsMsg = {
-                Message: message,
-            };
+            let msg:WsMsg;
+            if(typeof message === 'string') {
+                msg = {
+                    Message: message,
+                };
+            } else {
+                msg = message;
+            }
             this.sock.send(JSON.stringify(msg));
         } else {
             console.log('no server connect....');
@@ -62,6 +79,9 @@ export default class WSock {
         try {
             const msg:WsMsg = JSON.parse(data);
             console.log('onmessage', msg);
+            if(msg.Message) {
+                this.receivedWelcome = true;
+            }
             if (msg.Ask) {
                 this.doAsk(msg.Ask);
             } else if (msg.Asks) {
@@ -71,7 +91,8 @@ export default class WSock {
                     this.doAsk(msg.Asks);
                 }
             } else if (msg.text) {
-
+                console.log('WSock doMsg text:', msg.text);
+                this.chatM.accept(msg as ChatMsg);
             }
         } catch (err) {
             console.log('err', data);
@@ -94,6 +115,13 @@ export default class WSock {
     Remove(mbr:GetMessage) {
         const fidx = this.list.findIndex(itm=>itm===mbr);
         if(fidx!==-1) this.list.splice(fidx,1);
+    }
+    private JSONParse(v:string) {
+        try {
+            return JSON.parse(v);
+        } catch(err) {
+            return false;
+        }
     }
     private registerChannel(channel: string) {
         if (this.sock.readyState === this.sock.OPEN) {

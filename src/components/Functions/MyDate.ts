@@ -31,6 +31,11 @@ class MyDate {
 		const ts = dts - d * 60 * 60 * 24 * 1000;
 		return this.getDate(ts).toLocaleDateString();
 	}
+	howMinutesAgo(time:string | number) {
+		const curTime = new Date().getTime();
+		const chkTime = this.getDate(time).getTime();
+		return Math.floor((curTime - chkTime) / 1000 / 60);
+	}
 	private getDate(time?:string | number) {
 		if (!time) return new Date();
 		if (typeof time !== 'number') {

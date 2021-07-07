@@ -105,6 +105,11 @@ export default {
     CryptoRiskController: '數字幣風控',
     CurGainLose: '及時損益',
     OpenClose: '開關',
+    Stamp: {
+      Minutes: '分鐘前',
+      Hours: '小時前',
+      Days: '天前',
+    },
   },
   Tip:{
     UserFind: '請輸入名稱或代號'

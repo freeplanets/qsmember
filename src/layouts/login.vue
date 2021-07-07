@@ -42,6 +42,7 @@ import { getModule } from 'vuex-module-decorators';
 //import {User} from './data/schema';
 import { Msg,CommonParams,LoginInfo } from './data/if';
 import WSock from '../components/WebSock/WSock';
+import Mqtt from '../components/WebSock/Mqtt';
 
 @Components
 export default class Login extends Vue {
@@ -90,9 +91,10 @@ export default class Login extends Vue {
         //this.store.leftDrawerOpen=true;
         //console.log('Login PInfo:',this.Personal);
         if(msg.wsServer) {
-          const ws:WSock = new WSock(msg.wsServer,this.Personal.id);
+          const ws:WSock = new WSock(this.store, msg.wsServer);
           this.store.setWSock(ws);
         }
+        this.store.setMqtt(new Mqtt(this.Personal));
         if(this.Personal.forcePWChange){
           this.store.setCghPW(true);
         } else if(this.Personal.isChkGA){

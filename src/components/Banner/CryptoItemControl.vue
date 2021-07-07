@@ -12,7 +12,7 @@
 					:class="{'col-2 suba txtRight':true, clrRed: item.Long.GainLose<0, clrGreen: item.Long.GainLose > 0}">
 					{{ item.Long.GainLose.toFixed(2) }}
 				</div>
-				<div class="col subb">
+				<div v-if="ShowFunc" class="col subb">
 					<q-checkbox left-label v-model="longStop" label="停收" />
 				</div>
 			</div>
@@ -24,12 +24,12 @@
 				<div :class="{'col-2 suba txtRight':true, clrRed: item.Short.GainLose<0, clrGreen: item.Short.GainLose > 0}">
 					{{ item.Short.GainLose.toFixed(2) }}
 				</div>
-				<div class="col subb">
+				<div v-if="ShowFunc" class="col subb">
 					<q-checkbox left-label v-model="shortStop" label="停收" />
 				</div>
 			</div>
 		</div>
-		<div class="col-2 banmainL">
+		<div v-if="ShowFunc" class="col-2 banmainL">
 			<div class="row">
 				<q-input class="col-8" color="grey-3" label-color="orange" dense outlined v-model="OneHand" :label="$t('Table.OneHand')" />
 				<q-btn class="col-3" color="primary" dense :label="$t('Button.Edit')" @click="EditOneHand" />
@@ -44,6 +44,7 @@ import Crypto from '../class/Items';
 import { PartialCryptoItems, AskTable } from '../if/dbif';
 import { StopType } from '../if/ENum';
 import DialogAskList from '../Dialog/AskList.vue';
+import { LoginInfo } from 'src/layouts/data/if';
 
 @Component({
 	components: {
@@ -52,7 +53,11 @@ import DialogAskList from '../Dialog/AskList.vue';
 })
 export default class CryptoItemControl extends Vue {
 	@Prop({ type: Object }) readonly item!:Crypto;
-	@Prop({ type: Boolean }) readonly inProcess!:boolean;
+	@Prop({ type: Object }) readonly info!:LoginInfo;
+	// @Prop({ type: Boolean }) readonly inProcess!:boolean;
+	get ShowFunc() {
+		return this.info.Types > 2;
+	}
 	get Closed() {
 		return this.item.Closed;
 	}

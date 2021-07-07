@@ -14,6 +14,7 @@
         <q-toolbar-title>
           App {{ ProName }} v0.01
         </q-toolbar-title>
+        <BMG v-if="Personal.Account"></BMG>
         <q-btn flat round dense icon="edit" @click="showComment=!showComment" />
         <div v-if="Personal.Account">
           <q-btn-dropdown flat icon="account_circle" :label="Personal.Account">
@@ -66,89 +67,7 @@
           <q-item-section>
             <q-item-label>{{ $t(`Label.${func.Title}`) }}</q-item-label>
           </q-item-section>
-        </q-item>        
-        <!--
-        <q-item to="/basepayclass"  @click="ProName=$t('Label.BasePayClassManage')+'';showComment=false" clickable >
-          <q-item-section avatar>
-            <q-icon name="school" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{ $t('Label.BasePayClassManage') }}</q-item-label>
-          </q-item-section>
         </q-item>
-        <q-item to="/payclass"  @click="ProName=$t('Label.PayClassManage')+'';showComment=false" clickable >
-          <q-item-section avatar>
-            <q-icon name="school" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{ $t('Label.PayClassManage') }}</q-item-label>
-          </q-item-section>
-        </q-item>        
-        <q-item to="/betclass" @click="ProName=$t('Label.ClassName')+'';showComment=false" exact>
-          <q-item-section avatar>
-            <q-icon name="home" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{ $t('Label.ClassName')}}</q-item-label>
-          </q-item-section>          
-        </q-item>
-        <q-item to="/createpayclass" @click="ProName=$t('Label.CratePayClass')+'';showComment=false">
-          <q-item-section avatar>
-            <q-icon name="code" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{$t('Label.CratePayClass')}}</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item to="/termsmanager" @click="ProName=$t('Label.TermManager')+'';showComment=false">
-          <q-item-section avatar>
-            <q-icon name="chat" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{$t('Label.TermManager')}}</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item to="/gamemanager" @click="ProName=$t('Label.GameManager')+'';showComment=false">
-          <q-item-section avatar>
-            <q-icon name="chat" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{$t('Label.GameManager')}}</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item to="/adduser" @click="ProName=$t('Label.UserManager')+'';showComment=false">
-          <q-item-section avatar>
-            <q-icon name="people" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{$t('Label.UserManager')}}</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item to="/oddsmanager" @click="ProName=$t('Label.OddsManager')+'';showComment=false">
-          <q-item-section avatar>
-            <q-icon name="emoji_symbols" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{$t('Label.OddsManager')}}</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item to="/betlists" @click="ProName=$t('Label.BetLists')+'';showComment=false">
-          <q-item-section avatar>
-            <q-icon name="receipt" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{$t('Label.BetLists')}}</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item to="/betreport" @click="ProName=$t('Label.BetReport')+'';showComment=false">
-          <q-item-section avatar>
-            <q-icon name="receipt" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{$t('Label.BetReport')}}</q-item-label>
-          </q-item-section>
-        </q-item>
-        // -->                    
       </q-list>
     </q-drawer>
     <q-dialog v-model="showCp" persistent>
@@ -214,17 +133,25 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component';
+import { Vue, Component } from 'vue-property-decorator';
+// import Component from 'vue-class-component';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import {Msg,LoginInfo, CommonParams,Progs} from './data/if';
 import {Watch} from 'vue-property-decorator';
 //import {User} from './data/schema';
 import Comments from './components/Comments.vue';
-Vue.component('CMMT',Comments);
+import BdgMsgGroup from '../components/Badge/MsgControl.vue';
+// import BDMsgGroup from '../components/ButtonDropdown/MsgGroup.vue';
 
-@Component
+// Vue.component('CMMT',Comments);
+
+@Component({
+  components: {
+    CMMT: Comments,
+    BMG: BdgMsgGroup,
+  },
+})
 export default class MyLayout extends Vue {
   store = getModule(LayoutStoreModule);
   showComment:boolean=false;
@@ -246,6 +173,9 @@ export default class MyLayout extends Vue {
   }
   get chgPW(){
     return this.store.chgPW;
+  }
+  get WSock() {
+    return this.store.WSock;
   }
   @Watch('chgPW',{immediate:true,deep:true})
   onChgPW(){

@@ -1,23 +1,7 @@
 <template>
 	<div>
 		<div class="row">Risk Controller</div>
-		<div class="row">
-			<div class="row headblock col-10">
-				<div class="col-2 banhead">{{ $t('Table.AskTable.Item') }}</div>
-				<div class="col-2 banhead">{{ $t('Table.AskTable.Price') }}</div>
-				<div class="col">
-					<div class="row">
-						<div class="col banhead">{{ $t('Table.Items.Type') }}</div>
-						<div class="col-2 banhead">{{ $t('Table.AskTable.Amount') }}</div>
-						<div class="col-3 banhead">{{ $t('Table.AskTable.Qty') }}</div>
-						<div class="col-2 banhead">{{ $t('Table.AskTable.AvgPrice')}}</div>
-						<div class="col-2 banhead">{{ $t('Label.CurGainLose') }}</div>
-						<div class="col banhead">{{ $t('Label.OpenClose') }}</div>
-					</div>
-				</div>
-				<div class="col-2 banhead">{{ $t('Table.Items.OneHand') }}</div>
-			</div>
-		</div>
+		<BCIH :info="LoginInfo" />
 		<div
 			v-for="(itm, idx) in list"
 			:key="'bcic'+idx"
@@ -26,6 +10,7 @@
 			<BCIC
 				class="col-10"
 				:item="itm"
+				:info="LoginInfo"
 				@updateItems="updateItems"
 			/>
 		 </div>
@@ -35,6 +20,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators'; 
 import BanCryptoItemControl from '../components/Banner/CryptoItemControl.vue';
+import BanCryptoICHeader from '../components/Banner/CryptoICHeader.vue';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
 import Items from '../components/class/Items';
 import ApiFunc from '../components/class/ApiFunc';
@@ -45,14 +31,18 @@ import Mqtt from '../components/WebSock/Mqtt';
 @Component({
 	components: {
 		BCIC: BanCryptoItemControl,
+		BCIH: BanCryptoICHeader,
 	},
 })
 export default class CryptoRiskController extends Vue {
 	store = getModule(LayoutStoreModule);
 	Api = new ApiFunc(this.store);
 	list:Items[]=[];
-	Mqtt = new Mqtt(this.store.personal);
+	mqtt:Mqtt=this.store.Mqtt; 
 	interval:NodeJS.Timeout | null = null;
+	get LoginInfo() {
+		return this.store.personal;
+	}
 	getData() {
 		this.Api.getTableData('Items', {isLoan:1}).then((msg:Msg)=>{
 			if(msg.ErrNo ===0 ) {
@@ -72,10 +62,13 @@ export default class CryptoRiskController extends Vue {
 			}
 		});
 		this.getAsks();
-		this.Mqtt.setItems(this.list);
+		this.mqtt.setItems(this.list);
 	}
 	getAsks() {
-		const filter = 'ProcStatus<2 and (USetID > 0 or SetID > 0)';
+		let filter = 'ProcStatus<2 and (USetID > 0 or SetID > 0)';
+		if (this.LoginInfo.Types < 3) {
+			filter = `${filter} and UpId = ${this.LoginInfo.id}`;
+		}
 		this.Api.getTableData('AskTable', filter).then((msg:Msg)=>{
 			// console.log('getData AskTable', msg);
 			if (msg.ErrNo == 0) {
@@ -106,28 +99,10 @@ export default class CryptoRiskController extends Vue {
 		})
 	}
 	mounted() {
+		this.mqtt.subscribeTick();
 		this.getData();
 		this.getAsks();
 		// this.interval = setInterval(this.getAsks,500000);
 	}
-	beforeUnmount() {
-		console.log('before unmounted');
-		if (this.interval) {
-			clearInterval(this.interval);
-		}
-	}
 }
 </script>
-<style lang="scss" scoped>
-.headblock {
-	border: 1px seagreen solid;
-	background-color: $light-green-10;
-	margin-left: 4px;
-	margin-right: 4px;
-}
-.banhead {
-	border-left: 1px seagreen solid;
-	text-align: center;
-	color: white;
-}
-</style>

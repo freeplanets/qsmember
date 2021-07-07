@@ -35,9 +35,9 @@ export default class Mqtt {
         console.log('do connect');
         this.client.on('connect', () => {
             this.addLogEntry('Successfully connected to AWS MQTT Broker!:-)');
-            this.subscribe(config.topics.announcement); // 訂閱 公告頻道
-            this.subscribe(config.topics.tick); // 訂閱 報價頻道
-            this.subscribe(config.topics.room + clientId); // 訂閱 私人頻道 可發佈訊息
+            // this.subscribe(config.topics.announcement); // 訂閱 公告頻道
+            // this.subscribe(config.topics.tick); // 訂閱 報價頻道
+            // this.subscribe(config.topics.room + clientId); // 訂閱 私人頻道 可發佈訊息
             this.client.publish(config.topics.room + clientId, 'enter'); // 連線成功時 發佈 enter 訊息至私人頻道
         });
         this.client.on('message', (topic:string, message:string) => {
@@ -89,6 +89,9 @@ export default class Mqtt {
     }
     setItems(itms:Items[]) {
         this.items = itms;
+    }
+    subscribeTick() {
+        this.subscribe(config.topics.tick);
     }
     subscribe(topic:string) {
         this.client.subscribe(topic);

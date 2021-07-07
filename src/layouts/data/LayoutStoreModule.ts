@@ -2,6 +2,7 @@ import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 import Store from '../../store/index';
 import AxApi from '../components/AxApi';
 import WSock from '../../components/WebSock/WSock';
+import Mqtt from '../../components/WebSock/Mqtt';
 import {LoginInfo} from './if';
 
 @Module({
@@ -26,12 +27,16 @@ export default class LayoutStoreModule extends VuexModule {
     };
     private showGA = false;
     private ws!:WSock;
+    private mqtt!:Mqtt;
     //public ApiUrl:string=myApiUrl;
     public ax=AxApi;
     private sInfo='';
     public showProgress=false;
     public chgPW=false;
     public doLogout=false;
+    get UserInfo() {
+        return this.personal;
+    }
     get isShowGA(){
         return this.showGA;
     }
@@ -43,6 +48,9 @@ export default class LayoutStoreModule extends VuexModule {
     }
     get WSock() {
         return this.ws;
+    }
+    get Mqtt() {
+        return this.mqtt;
     }
     @Mutation
     private SET_SYSINFO(info:string){
@@ -145,5 +153,13 @@ export default class LayoutStoreModule extends VuexModule {
     @Action
     public setWSock(ws:WSock) {
         this.SET_WSOCK(ws);
+    }
+    @Mutation
+    private SET_MQTT(mqtt:Mqtt) {
+        this.mqtt = mqtt;
+    }
+    @Action
+    public setMqtt(mqtt:Mqtt) {
+        this.SET_MQTT(mqtt);
     }
 }
