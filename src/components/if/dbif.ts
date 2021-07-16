@@ -137,4 +137,7 @@ export interface ChatMsg {
   inMessage?:boolean; // 收訊方用，發話方是否正在輸入訊息 for Chat Message tag q-spinner-dots
   receiveTime:number|string;
   SenderID:number;
+  UpID?:number;
+  ReceiverID:number;
+  MKey:string;
 }

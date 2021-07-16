@@ -1,11 +1,12 @@
 import { ChatMsg } from '../if/dbif';
 import ServiceChat from './ServiceChat';
 import WSock from '../WebSock/WSock';
+import LayoutStoreModule from 'src/layouts/data/LayoutStoreModule';
 
 export default class ChatManager {
 	private list:ServiceChat[] = [];
 	private own:any = null;
-	constructor(private ws:WSock) {}
+	constructor(private ws:WSock, private LS:LayoutStoreModule) {}
 	get List() {
 		return this.list;
 	}
@@ -22,7 +23,8 @@ export default class ChatManager {
 	accept(msg:ChatMsg):void {
 		const fIdx = this.list.findIndex(itm=>itm.MemberID === msg.SenderID);
 		if(fIdx === -1) {
-			const newChat = new ServiceChat(this, this.ws, msg.SenderID);
+			console.log('accpet msg', msg);
+			const newChat = new ServiceChat(this, this.LS, msg.MKey, msg.SenderID);
 			// newChat.AcceptChat(msg);
 			this.list.push(newChat);
 		}

@@ -4,9 +4,9 @@
 		<div class="col-3 txtCenter">{{ CreateTime }}</div>
 		<div class="col-1 txtCenter">{{ ask.UserID }}</div>
 		<div :class="{ 'col-1 txtCenter':true, clrGreen:isGreen, clrRed:isRed }">{{ ItemType }}</div>
+		<div class="col-2 txtRight">{{ ask.Lever }}</div>
 		<div class="col-2 txtRight">{{ ask.Qty }}</div>
 		<div class="col-2 txtRight">{{ ask.AskPrice }}</div>
-		<div class="col-2 txtRight">{{ ask.Lever }}</div>
 	</div>
 </template>
 <script lang="ts">

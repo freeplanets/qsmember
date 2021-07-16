@@ -91,7 +91,7 @@ export default class Chat extends Vue {
 			this.message = '';
 			// console.log('Chat Send:', this.messages.length, this.chat.List.length);
 			// this.onMessagesChange();
-			this.chat.Readed();
+			// this.chat.Readed();
 		}
 	}
 	mounted() {

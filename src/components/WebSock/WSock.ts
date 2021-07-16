@@ -16,7 +16,7 @@ export default class WSock {
     private curMsg = '';
     constructor(private LSM:LayoutStoreModule , private url:string) {
         this.createConnection();
-        this.chatM = new ChatManager(this);
+        this.chatM = new ChatManager(this, LSM);
     }
     private createConnection() {
         const ws = this.url === 'localhost:4001' ? 'ws' : 'wss';

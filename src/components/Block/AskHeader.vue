@@ -4,9 +4,9 @@
 		<div class="col-3 txtCenter">{{ $t('Table.AskTable.CreateTime') }}</div>
 		<div class="col-1 txtCenter">{{ $t('Table.AskTable.User') }}</div>
 		<div class="col-1 txtCenter">{{ $t('Table.AskTable.AskType') }}</div>
+		<div class="col-2 txtCenter">{{ $t('Table.AskTable.Lever') }}</div>
 		<div class="col-2 txtCenter">{{ $t('Table.AskTable.Qty') }}</div>
 		<div class="col-2 txtCenter">{{ $t('Table.AskTable.Price') }}</div>
-		<div class="col-2 txtCenter">{{ $t('Table.AskTable.Lever') }}</div>
 	</div>
 </template>
 <script lang="ts">
