@@ -141,3 +141,42 @@ export interface ChatMsg {
   ReceiverID:number;
   MKey:string;
 }
+export interface ItemTypeTotal {
+  Records:number;
+  Amount:number;
+  LeverAmount:number;
+  AvgLever:number;
+  GainLose:number;
+  add(ll:LedgerLever):void;
+}
+export interface ItemTotal {
+  UpId:number;
+  Title:string;
+  Records:number;
+  Amount:number;
+  LeverAmount:number;
+  AvgLever:number;
+  Items:ItemTypeTotal[];
+  Fee:number;
+  GainLose:number;
+  add(ll:LedgerLever):void;
+  reCal():void;
+}
+export interface LedgerLever {
+  id:number;
+  UserID: number;
+  UpId: number;
+  ItemID: number;
+  ItemType: number;
+  BuyID: number; // 買進時 AskTable id
+  SellID?: number; // 賣出進時 AskTable id
+  Qty: number;
+  BuyPrice: number; // 建倉價格
+  SellPrice: number;
+  BuyFee:number;
+  SellFee:number;
+  Lever: number; // 槓桿
+  GainLose: number; // 輸贏
+  BuyTime?: number; // 買進時間
+  SellTime: number; // 賣出時間
+}

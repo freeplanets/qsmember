@@ -76,6 +76,7 @@ export default abstract class AChat {
 			receiveTime: new Date().getTime(),
 			SenderID: this.ws.UserID,
 			ReceiverID: 0,
+			MKey: '',
 		};
 	}
 }

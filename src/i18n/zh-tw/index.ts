@@ -54,6 +54,7 @@ export default {
     Member:'會員',
     Agent:'代理',
     WebOwner:'網站站主',
+    WebSite: '網站名稱',
     Operator:'操盤手',
     Programmer: '工程師',
     InputNums:'輸入號碼',
@@ -101,9 +102,10 @@ export default {
     ItemsManager:'項目管理',
     LeverModifier:'槓桿設定',
     RecordCount:'筆數',
-    CryptoReport:'數字幣報表',
+    CryptoReport:'數字幣下單查詢',
     CryptoRiskController: '數字幣風控',
-    CurGainLose: '及時損益',
+    CryptoItemReport: '數字幣報表',
+    CurGainLose: '及時盈虧',
     OpenClose: '開關',
     Stamp: {
       Minutes: '分鐘前',
@@ -119,6 +121,7 @@ export default {
       AskType: ['市價', '限價'],
       BuyType: ['買', '賣'],
       ItemType: ['空', '多'],
+      ItemTypeLong: ['空單', '多單'],
     }
   },
   Table: {
@@ -312,11 +315,15 @@ export default {
     SingleBet: '單注',
     SingleBT: '單場',
     OdrType: '下注項目',
-    OdrAmt: '下注金額',
+    OdrAmt: '下單金額',
+    LeverAmt: '槓桿金額',
+    AvgLever: '均槓桿比',
     Total: '合計',
     GeneralLedger:'總帳',
     Ledger:'分類帳',
-    DayReport:'日報表'
+    DayReport:'日報表',
+    TotalGainLose: '合計盈虧',
+    GainLose: '盈虧',
   },
   Common: {
     AccHistory: '帳戶歷史',

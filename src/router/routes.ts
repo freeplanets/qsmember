@@ -78,6 +78,10 @@ const routes: RouteConfig[] = [
         path: '/cryptoriskcontroller',
         component: () => import('pages/CryptoRiskController.vue')
       },
+      {
+        path: '/cryptoitemreport',
+        component: () => import('pages/CryptoItemReport.vue')
+      },
     ],
   }
 
