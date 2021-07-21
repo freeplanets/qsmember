@@ -34,7 +34,7 @@ export default abstract class AChat {
 		return this.length - this.readed;
 	}
 	Send(msg:string) {
-		console.log('AChat Send:', msg);
+		// console.log('AChat Send:', msg);
 		const cMsg = this.CreateMsg(msg);
 		// this.list.push(cMsg);
 		// this.AddToList(cMsg);
@@ -64,7 +64,7 @@ export default abstract class AChat {
 			if (this.list[listIdx].sent === msg.sent) {
 				const newT = msg.receiveTime as number;
 				const oldT = this.list[listIdx].receiveTime as number;
-				console.log('AddToList', newT, oldT, newT - oldT);
+				// console.log('AddToList', newT, oldT, newT - oldT);
 				if (newT - oldT < 60000) {
 					this.list[listIdx].text.push(msg.text[0]);
 				} else {

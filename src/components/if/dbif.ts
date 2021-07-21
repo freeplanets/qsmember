@@ -150,7 +150,7 @@ export interface ItemTypeTotal {
   add(ll:LedgerLever):void;
 }
 export interface ItemTotal {
-  UpId:number;
+  Key:number;
   Title:string;
   Records:number;
   Amount:number;
@@ -159,8 +159,9 @@ export interface ItemTotal {
   Items:ItemTypeTotal[];
   Fee:number;
   GainLose:number;
-  add(ll:LedgerLever):void;
+  add(ll:LedgerLever, key:number):void;
   reCal():void;
+  setTitle(t:HasID[]):void;
 }
 export interface LedgerLever {
   id:number;

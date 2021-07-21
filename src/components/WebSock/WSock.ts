@@ -21,7 +21,7 @@ export default class WSock {
     private createConnection() {
         const ws = this.url === 'localhost:4001' ? 'ws' : 'wss';
         const wsurl = `${ws}://${this.url}`;
-        console.log(`connect to ${wsurl}`);
+        // console.log(`connect to ${wsurl}`);
         this.sock = new window.WebSocket(wsurl);
         this.sock.onerror = (event:Event) => {
             console.log('Websocket server connecting error:', event);
@@ -53,7 +53,7 @@ export default class WSock {
         return this.chatM;
     }
     send(message:string | WsMsg) {
-        console.log('Try send:', message);
+        // console.log('Try send:', message);
         if (!this.receivedWelcome) {
             console.log('Wait for connect.......');
             return;

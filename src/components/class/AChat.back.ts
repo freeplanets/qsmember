@@ -37,7 +37,7 @@ export default abstract class AChat {
 		cMsg.sent = true;
 		// this.list.push(cMsg);
 		this.AddToList(cMsg);
-		console.log('AChat Sent:', this.list.length);
+		// console.log('AChat Sent:', this.list.length);
 		const wsmsg:WsMsg = {
 			Func: FuncKey.MESSAGE,
 			ChannelName: Channels.ASK,
@@ -53,7 +53,7 @@ export default abstract class AChat {
 			if (this.list[listIdx].sent === msg.sent) {
 				const newT = msg.receiveTime as number;
 				const oldT = this.list[listIdx].receiveTime as number;
-				console.log('AddToList', newT, oldT, newT - oldT);
+				// console.log('AddToList', newT, oldT, newT - oldT);
 				if (newT - oldT < 60000) {
 					this.list[listIdx].text.push(msg.text[0]);
 				} else {

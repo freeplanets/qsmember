@@ -71,7 +71,7 @@ export default class CryptoItemControl extends Vue {
 	@Watch('Closed')
 	onClosedChange() {
 		this.setStopValue();
-		console.log('onClosedChange');
+		// console.log('onClosedChange');
 	}
 	@Watch('longStop')
 	onLongStopChange() {
@@ -88,7 +88,7 @@ export default class CryptoItemControl extends Vue {
 	setClosed(v:boolean, st:StopType) {
 		let key = -1
 		if(v) key = 1;
-		console.log('setClosed:', v, key);
+		// console.log('setClosed:', v, key);
 		const data:PartialCryptoItems = {
 			id: this.item.id,
 			Closed: this.item.Closed + key*st, 
@@ -111,7 +111,7 @@ export default class CryptoItemControl extends Vue {
 		this.dialogTitle = title;
 		this.dialogList = list;
 		this.showDialogAskList = true;
-		console.log(title, JSON.stringify(list));
+		// console.log(title, JSON.stringify(list));
 	}
 	mounted() {
 		// this.setStopValue();

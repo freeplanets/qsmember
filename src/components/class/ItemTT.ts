@@ -27,7 +27,8 @@ export default class ItemTT implements ItemTypeTotal {
 	add(ll:LedgerLever) {
 		const amount = ll.BuyPrice * ll.Qty;
 		this.amount += amount;
-		this.leverAmount = amount * ll.Lever;
+		this.leverAmount += amount * ll.Lever;
+		this.gainlose += ll.GainLose;
 		this.list.push(ll);
 	}
 }

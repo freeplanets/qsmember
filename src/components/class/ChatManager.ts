@@ -23,13 +23,13 @@ export default class ChatManager {
 	accept(msg:ChatMsg):void {
 		const fIdx = this.list.findIndex(itm=>itm.MemberID === msg.SenderID);
 		if(fIdx === -1) {
-			console.log('accpet msg', msg);
+			// console.log('accpet msg', msg);
 			const newChat = new ServiceChat(this, this.LS, msg.MKey, msg.SenderID);
 			// newChat.AcceptChat(msg);
 			this.list.push(newChat);
 		}
 		this.acceptMsg(msg);
-		console.log('ChatManager accpet:', this.TotalUnread);
+		// console.log('ChatManager accpet:', this.TotalUnread);
 	}
 	setOwner(own:any) {
 		this.own = own;

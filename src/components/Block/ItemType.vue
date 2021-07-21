@@ -1,38 +1,55 @@
 <template>
-	<tr>
+	<tr v-if="item">
 		<td>{{ item.Title }}</td>
 		<td>{{ item.Records }}</td>
-		<td>{{ item.Amount }}</td>
-		<td>{{ item.LeverAmount }}</td>
-		<td>{{ item.AvgLever }}</td>
+		<td>{{ item.Amount.toFixed(2) }}</td>
+		<td>{{ item.LeverAmount.toFixed(2) }}</td>
+		<td>{{ item.AvgLever.toFixed(2) }}</td>
 
 		<td>{{ item.Items[1].Records }}</td>
-		<td>{{ item.Items[1].Amount }}</td>
-		<td>{{ item.Items[1].LeverAmount }}</td>
-		<td>{{ item.Items[1].AvgLever }}</td>
-		<td>{{ item.Items[1].GainLose }}</td>
+		<td>{{ item.Items[1].Amount.toFixed(2) }}</td>
+		<td>{{ item.Items[1].LeverAmount.toFixed(2) }}</td>
+		<td>{{ item.Items[1].AvgLever.toFixed(2) }}</td>
+		<td :class="{clrRed:item.Items[1].GainLose<0,clrGreen:item.Items[1].GainLose>0}">
+				{{ item.Items[1].GainLose.toFixed(2) }}</td>
 
 		<td>{{ item.Items[0].Records }}</td>
-		<td>{{ item.Items[0].Amount }}</td>
-		<td>{{ item.Items[0].LeverAmount }}</td>
-		<td>{{ item.Items[0].AvgLever }}</td>
-		<td>{{ item.Items[0].GainLose }}</td>
+		<td>{{ item.Items[0].Amount.toFixed(2) }}</td>
+		<td>{{ item.Items[0].LeverAmount.toFixed(2) }}</td>
+		<td>{{ item.Items[0].AvgLever.toFixed(2) }}</td>
+		<td :class="{clrRed:item.Items[0].GainLose<0,clrGreen:item.Items[0].GainLose>0}">
+			{{ item.Items[0].GainLose.toFixed(2) }}</td>
 
-		<td>{{ item.Fee }}</td>
-		<td>{{ item.GainLose }}</td>
+		<td>{{ item.Fee.toFixed(2) }}</td>
+		<td :class="{last:true, clrRed:item.GainLose<0,clrGreen:item.GainLose>0}">
+			{{ item.GainLose.toFixed(2) }}</td>
 	</tr>
 </template>
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { ItemTotal } from '../if/dbif';
 
 @Component
 export default class ItemType extends Vue {
-	@Prop({ type: Object })	readonly item!:ItemTotal;
+	@Prop({ type: Object })	readonly itemT!:ItemTotal;
+	item:ItemTotal | undefined;
+	@Watch('itemT', { deep:true, immediate:true })
+	onItemTChange() {
+		// console.log('ItemType onItemTChange', this.itemT);
+		this.item = this.itemT;
+	}
+
 }
 </script>
 <style lang="scss" scoped>
 td {
-	border: 1px solid black;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	text-align: right;
+	padding-right: 4px;
+	padding-left: 4px;
+}
+.last {
+		border-right: 1px solid black;
 }
 </style>

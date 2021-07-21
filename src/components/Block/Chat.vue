@@ -97,7 +97,7 @@ export default class Chat extends Vue {
 	mounted() {
 		this.chat.Readed();
 		this.scrollRef = this.$refs.scrollArea;
-		console.log('Chat mounted', this.chat.unReadedLength, this.chat.length);
+		// console.log('Chat mounted', this.chat.unReadedLength, this.chat.length);
 	}
 }
 </script>

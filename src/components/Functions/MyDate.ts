@@ -1,3 +1,4 @@
+import { KeyVal } from '../../layouts/data/if';
 // import LStore from '../../store/LayoutStoreModule';
 
 class MyDate {
@@ -35,6 +36,20 @@ class MyDate {
 		const curTime = new Date().getTime();
 		const chkTime = this.getDate(time).getTime();
 		return Math.floor((curTime - chkTime) / 1000 / 60);
+	}
+	getTime(time?:string) {
+		return this.getDate(time).getTime();
+	}
+	createDateFilter(v:string,key?:string):KeyVal{
+		const dates = v.split('-');
+		const d1 = dates[0];
+		const d2 = `${dates[1] ? dates[1] : dates[0]} 23:59:59.999`;
+		return {
+			Key: `${key ? key : 'ModifyTime'}`,
+			Val: this.getTime(d1),
+			Val2: this.getTime(d2),
+			Cond: 'between',
+		}
 	}
 	private getDate(time?:string | number) {
 		if (!time) return new Date();

@@ -1,6 +1,11 @@
 import { ItemTotal, ItemTypeTotal, LedgerLever } from '../if/dbif';
 import ItemTT from './ItemTT';
 
+export interface titleT {
+	id:number;
+	Title:string;
+}
+
 export default class ItemT implements ItemTotal {
 	private items:ItemTypeTotal[]=[];
 	private records = 0;
@@ -8,16 +13,17 @@ export default class ItemT implements ItemTotal {
 	private leverAmount = 0;
 	private avgLever = 0;
 	private fee = 0;
-	private gainlose = 0;	
-	constructor(private upid:number) {
+	private gainlose = 0;
+	private title = '';
+	constructor(private key:number) {
 		this.items.push(new ItemTT());
 		this.items.push(new ItemTT());		
 	}
-	get UpId() {
-		return this.upid;
+	get Key() {
+		return this.key;
 	}
 	get Title() {
-		return '';
+		return this.title;
 	}
 	get Records() {
 		return this.records;
@@ -35,13 +41,18 @@ export default class ItemT implements ItemTotal {
 		return this.fee;
 	}
 	get GainLose() {
-		return this.GainLose;
+		return this.gainlose;
 	}
 	get Items() {
 		return this.items;
 	}
-	add(ll:LedgerLever){
-		if(ll.UpId !== this.upid) return;
+	setTitle(t:titleT[]) {
+		const f = t.find(itm=>itm.id === this.key);
+		this.title = f ? f.Title : 'none';
+		// console.log('itemT:', this.key, f, this.title);
+	}
+	add(ll:LedgerLever, key:number){
+		if(key !== this.Key) return;
 		const itemType = ll.ItemType > 0 ? 1 : 0;
 		this.items[itemType].add(ll);
 		this.fee += (ll.BuyFee + ll.SellFee);
