@@ -112,6 +112,7 @@ export default {
       Hours: '小時前',
       Days: '天前',
     },
+    PriceLimitQty: '限',
   },
   Tip:{
     UserFind: '請輸入名稱或代號'
@@ -132,6 +133,7 @@ export default {
       OpenFee: '買入手續費',
       CloseFee: '賣出手續費',
       isLoan: '信用商品',
+      isActive: '啟用',
       StopGain: '停利',
       StopLose: '停損',
       IMG: '圖片名稱',
@@ -141,7 +143,9 @@ export default {
     Lever: {
       Multiples: '槓桿倍數',
       LongT: '多單',
-      ShortT: '空單'
+      ShortT: '空單',
+      Amount: '槓桿金額',
+      Qty: '槓桿數量',
     },
     AskTable: {
       User: '會員',

@@ -17,6 +17,7 @@ export interface CryptoItem extends HasID {
   StopLose?:number;
   // Type?:number; // =>
   isLoan:number; // 信用類型 0: No, 1: Yes
+  isActive:number; // 啟用 1 Yes, 0 No
   OneHand?:number;
   Closed?:number; // 0 開放, 1 停多, 2 停空, 3 停收；
   IMG?:string;

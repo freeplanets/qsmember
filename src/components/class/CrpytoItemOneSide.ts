@@ -1,4 +1,3 @@
-import { HighlightSpanKind } from 'typescript';
 import { AskTable } from '../if/dbif';
 
 /**
@@ -10,6 +9,8 @@ export default class CryptoItemOneSide {
 	private priceAverage = 0;
 	private curGainLose = 0;
 	private totalPrice = 0;
+	private priceLimit = 0;
+	private priceLimitQty = 0;
 	constructor(private id:number,private type:number) {}
 	get Qty () {
 		return this.QtyAfterLever;
@@ -25,6 +26,12 @@ export default class CryptoItemOneSide {
 	}
 	get List() {
 		return this.list;
+	}
+	get PriceLimit() {
+		return this.priceLimit;
+	}
+	get PriceLimitQty() {
+		return this.priceLimitQty;
 	}
 	add(ask:AskTable)	{
 		if ( ask.ItemID !== this.id || ask.ItemType !== this.type) return;
@@ -45,6 +52,10 @@ export default class CryptoItemOneSide {
 		if (fIdx === -1 ) {
 			this.reCalQtyAndAvgPrice(ask.Qty, ask.AskPrice, ask.Lever, 1);
 			this.list.push(ask)
+			if(ask.AskType) {
+				this.priceLimit += 1;
+				this.priceLimitQty += ask.Qty * ask.Lever;
+			}
 		}
 	}
 	cleanList() {
@@ -57,6 +68,10 @@ export default class CryptoItemOneSide {
 		if (fIdx !== -1 ) {
 			this.reCalQtyAndAvgPrice(ask.Qty, ask.AskPrice, ask.Lever, -1);
 			this.list.splice(fIdx,1);
+			if(ask.AskType) {
+				this.priceLimit -= 1;
+				this.priceLimitQty -= ask.Qty * ask.Lever;
+			}			
 		}
 	}
 	private reCalQtyAndAvgPrice(Qty:number,Price:number,Lever:number,add:number) {

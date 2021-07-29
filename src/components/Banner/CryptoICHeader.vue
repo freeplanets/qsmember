@@ -6,10 +6,11 @@
 			<div class="col">
 				<div class="row">
 					<div class="col banhead">{{ $t('Table.Items.Type') }}</div>
-					<div class="col-2 banhead">{{ $t('Table.AskTable.Amount') }}</div>
-					<div class="col-3 banhead">{{ $t('Table.AskTable.Qty') }}</div>
+					<div class="col-2 banhead">{{ $t('Table.Lever.Amount') }}</div>
+					<div class="col-2 banhead">{{ $t('Table.Lever.Qty') }}</div>
 					<div class="col-2 banhead">{{ $t('Table.AskTable.AvgPrice')}}</div>
 					<div class="col-2 banhead">{{ $t('Label.CurGainLose') }}</div>
+					<div class="col-1 banhead">{{ $t('Label.PriceLimitQty') }}</div>
 					<div v-if="ShowFunc" class="col banhead">{{ $t('Label.OpenClose') }}</div>
 				</div>
 			</div>

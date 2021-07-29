@@ -78,6 +78,7 @@ export default class ItemsManager extends Vue{
     isLoan: 0,
     StopGain: 0,
     StopLose: 0,
+    isActive: 0,
     IMG:'',
   }
   UpdateItem:CryptoItem=Object.assign({},this.initItemData);
@@ -91,7 +92,7 @@ export default class ItemsManager extends Vue{
   */
   columns:TableColumn[]=[];
   data:CryptoItem[]=[];
-  visibleColumns=['id', 'Title', 'OpenFee', 'CloseFee', 'isLoan', 'StopGain', 'StopLose'];
+  visibleColumns=['id', 'Title', 'OpenFee', 'CloseFee', 'isLoan', 'StopGain', 'StopLose','isActive'];
   async GetData(){
     const param:WebParams = {
       sid:this.uInfo.sid,
@@ -138,7 +139,7 @@ export default class ItemsManager extends Vue{
         align:'center'
       };
       if(typeof this.initItemData[key] === 'number' ) column.align = 'right';
-      if(key==='isLoan'){
+      if(key==='isLoan' || key==='isActive'){
         column.format = (val:number) => `${ val ? 'Y' : 'N'}`;
       }
       return column;

@@ -6,12 +6,13 @@
 			<div class="row sublineTop" @click="showlist(item.Title, item.Long.List)">
 				<div class="col suba txtCenter">多</div>
 				<div class="col-2 suba txtRight">{{ item.Long.Total.toFixed(2) }}</div>
-				<div class="col-3 suba txtRight">{{ item.Long.Qty.toFixed(8) }}</div>
+				<div class="col-2 suba txtRight">{{ item.Long.Qty.toFixed(8) }}</div>
 				<div class="col-2 suba txtRight">{{ item.Long.Price.toFixed(2) }}</div>
 				<div 
 					:class="{'col-2 suba txtRight':true, clrRed: item.Long.GainLose<0, clrGreen: item.Long.GainLose > 0}">
 					{{ item.Long.GainLose.toFixed(2) }}
 				</div>
+				<div class="col-1 suba txtRight">{{ `${item.Long.PriceLimit}/${item.Long.PriceLimitQty}` }}</div>
 				<div v-if="ShowFunc" class="col subb">
 					<q-checkbox left-label v-model="longStop" label="停收" />
 				</div>
@@ -19,11 +20,12 @@
 			<div class="row sublineBottom" @click="showlist(item.Title, item.Short.List)">
 				<div class="col suba txtCenter">空</div>
 				<div class="col-2 suba txtRight">{{ item.Short.Total.toFixed(2) }}</div>				
-				<div class="col-3 suba txtRight">{{ item.Short.Qty.toFixed(8) }}</div>
+				<div class="col-2 suba txtRight">{{ item.Short.Qty.toFixed(8) }}</div>
 				<div class="col-2 suba txtRight">{{ item.Short.Price.toFixed(2) }}</div>
 				<div :class="{'col-2 suba txtRight':true, clrRed: item.Short.GainLose<0, clrGreen: item.Short.GainLose > 0}">
 					{{ item.Short.GainLose.toFixed(2) }}
 				</div>
+				<div class="col-1 suba txtRight">{{ `${item.Short.PriceLimit}/${item.Short.PriceLimitQty}` }}</div>	
 				<div v-if="ShowFunc" class="col subb">
 					<q-checkbox left-label v-model="shortStop" label="停收" />
 				</div>

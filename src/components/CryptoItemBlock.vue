@@ -18,7 +18,7 @@
     </div>
     <div class="row">
       <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.isLoan") }}</div>
-      <div class="col-3"><q-toggle v-model="isLoan" /></div>
+      <div class="col-3">N<q-toggle v-model="isLoan" />Y</div>
     </div>
     <div class="row">
       <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.StopGain") }}</div>
@@ -31,6 +31,10 @@
     <div class="row">
       <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.IMG")}}</div>
       <div class="col-3"><q-input outlined  dense v-model="IMG" label="" /></div>
+    </div>
+    <div class="row">
+      <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.isActive") }}</div>
+      <div class="col-3">N<q-toggle v-model="isActive" />Y</div>
     </div>    
     <div class="row q-pa-md q-gutter-sm">
       <q-btn color="primary" icon-right="send" :label="$t('Button.Send')" @click="SendData()" />
@@ -51,6 +55,9 @@ export default class CryptoItemBlock extends Vue {
   onValueChange() {
     if(!this.Item) this.Item = { ...this.value };
     this.Cancel();
+    this.isLoan = this.Item.isLoan ? true : false;
+    this.isActive = this.Item.isActive ? true : false;    
+    console.log('CryptoItem onValueChange', this.isLoan, this.isActive, true);
   }
   /*
   @Watch('UserLevel', {deep:true, immediate:true})
@@ -90,12 +97,7 @@ export default class CryptoItemBlock extends Vue {
     if (this.Item) this.Item.StopLose = parseFloat(this.StopLose);
   }
   isLoan = false;
-  @Watch('isLoan')
-  onIsLoanChange() {
-    if (this.Item) {
-      this.Item.isLoan = this.isLoan ? 1 : 0; 
-    }
-  }
+  isActive = false;
   options:SelectOptions[] = [
     {label:`${this.$t('Select.Crypto.ItemType.0')}`,value:1},
     {label:`${this.$t('Select.Crypto.ItemType.1')}`,value:-1}
@@ -107,6 +109,8 @@ export default class CryptoItemBlock extends Vue {
   }
   SendData() {
     if(this.Item){
+      this.Item.isLoan = this.isLoan ? 1 : 0;
+      this.Item.isActive = this.isActive ? 1 : 0;
       this.$emit('input', this.Item);
       this.$emit('Save');
     } 
