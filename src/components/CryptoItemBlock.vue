@@ -21,6 +21,10 @@
       <div class="col-3">N<q-toggle v-model="isLoan" />Y</div>
     </div>
     <div class="row">
+      <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.PriceLimitPercentage") }}</div>
+      <div class="col-3"><q-input outlined  dense v-model="PriceLimitPercentage" label="" /></div>
+    </div>    
+    <div class="row">
       <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.StopGain") }}</div>
       <div class="col-3"><q-input outlined  dense v-model="StopGain" label="" /></div>
     </div>
@@ -28,6 +32,14 @@
       <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.StopLose")}}</div>
       <div class="col-3"><q-input outlined  dense v-model="StopLose" label="" /></div>
     </div>
+    <div class="row">
+      <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.DecimalPlaces")}}</div>
+      <div class="col-3"><q-input outlined  dense v-model="DecimalPlaces" label="" /></div>
+    </div>     
+    <div class="row">
+      <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.PerStep")}}</div>
+      <div class="col-3"><q-input outlined  dense v-model="PerStep" label="" /></div>
+    </div>    
     <div class="row">
       <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.IMG")}}</div>
       <div class="col-3"><q-input outlined  dense v-model="IMG" label="" /></div>
@@ -96,12 +108,27 @@ export default class CryptoItemBlock extends Vue {
   onStopLose() {
     if (this.Item) this.Item.StopLose = parseFloat(this.StopLose);
   }
+  PriceLimitPercentage = '';
+  @Watch('PriceLimitPercentage')
+  onPriceLimitPercentageChange() {
+    if (this.Item) this.Item.PriceLimitPercentage = parseFloat(this.PriceLimitPercentage);
+  }
   isLoan = false;
   isActive = false;
   options:SelectOptions[] = [
     {label:`${this.$t('Select.Crypto.ItemType.0')}`,value:1},
     {label:`${this.$t('Select.Crypto.ItemType.1')}`,value:-1}
   ]
+  DecimalPlaces = '';
+  @Watch('DecimalPlaces')
+  onDecimalPlacesChange() {
+    if (this.Item) this.Item.DecimalPlaces = parseInt(this.DecimalPlaces, 10);
+  }
+  PerStep = '';
+  @Watch('PerStep')
+  onPerStepChange(){
+    if(this.Item) this.Item.PerStep = parseFloat(this.PerStep);
+  }
   IMG='';
   @Watch('IMG')
   onIMGChange() {

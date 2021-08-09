@@ -9,6 +9,13 @@ export default {
     '額度不足',           //6
     '尚未登入',           //7
     '已有注單,無法刪除',   //8
+    'Fail!',  //9
+    '參數不足', //10
+    '號碼不足', //11
+    '連線錯誤', // 12
+    '查詢錯誤', // 13,
+    '錯誤', // 14,
+    '查無資料', //15,
   ],  
   Label: {
     GameName: '彩局名稱',
@@ -100,13 +107,14 @@ export default {
     Sorts:'排序',
     SortItem:['號碼','注額','風險'],
     ItemsManager:'項目管理',
-    LeverModifier:'槓桿設定',
+    LeverModifier:'槓桿/手續費設定',
     RecordCount:'筆數',
     CryptoReport:'數字幣下單查詢',
     CryptoRiskController: '數字幣風控',
     CryptoItemReport: '數字幣報表',
     CurGainLose: '及時盈虧',
     OpenClose: '開關',
+    CryptoOpManager: '操盤參數管理',
     Stamp: {
       Minutes: '分鐘前',
       Hours: '小時前',
@@ -133,9 +141,12 @@ export default {
       OpenFee: '買入手續費',
       CloseFee: '賣出手續費',
       isLoan: '信用商品',
+      PriceLimitPercentage: '限價價格差（%）',
       isActive: '啟用',
       StopGain: '停利',
       StopLose: '停損',
+      DecimalPlaces: '小數位數',
+      PerStep: '跳動點',
       IMG: '圖片名稱',
       Type: '多/空',
       OneHand: '單手上限',
@@ -215,6 +226,19 @@ export default {
     OpenNums:'開出獎號',
     ChaseNum:'追號',
     isParlay:'連碼'
+  },
+  CryptoOpParams: {
+    OpType: '類型',
+    isActive: '啟用',
+    Rules: '規則',
+    RuleName: {
+      OneHand: '單手上限',
+      FullStorage: '滿倉',
+      LeverLimit: '槓桿',
+      ShortTerm1: '短線1',
+      ShortTerm2: '短線2',
+      ShortTermFee: '短線手續費',
+    }
   },
   Title: {
     Dashboard: '大廳',

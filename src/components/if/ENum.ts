@@ -52,3 +52,11 @@ export enum Channels {
   ADMIN = 'AdminChannel',
   PUB = 'PublicChannel',
 }
+
+export enum OpTypes {
+  NONE = '',
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  D = 'D'
+}

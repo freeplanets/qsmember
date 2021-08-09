@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <div class="q-gutter-y-md" style="max-width: 700px">
+    <div class="q-gutter-y-md" style="max-width: 850px">
       <q-card>
         <q-tabs
           v-model="tab"
@@ -76,8 +76,11 @@ export default class ItemsManager extends Vue{
     OpenFee: 0,
     CloseFee: 0,
     isLoan: 0,
+    PriceLimitPercentage: 0,
     StopGain: 0,
     StopLose: 0,
+    DecimalPlaces: 2,
+    PerStep: 1,
     isActive: 0,
     IMG:'',
   }
@@ -92,7 +95,8 @@ export default class ItemsManager extends Vue{
   */
   columns:TableColumn[]=[];
   data:CryptoItem[]=[];
-  visibleColumns=['id', 'Title', 'OpenFee', 'CloseFee', 'isLoan', 'StopGain', 'StopLose','isActive'];
+  visibleColumns=['id', 'Title', 'OpenFee', 'CloseFee', 'isLoan', 'PriceLimitPercentage',
+   'StopGain', 'StopLose', 'DecimalPlaces', 'PerStep', 'isActive'];
   async GetData(){
     const param:WebParams = {
       sid:this.uInfo.sid,

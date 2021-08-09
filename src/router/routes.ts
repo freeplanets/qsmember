@@ -71,17 +71,21 @@ const routes: RouteConfig[] = [
         component: () => import('pages/LeverModifier.vue')
       },
       {
-        path: '/cryptoreport',
-        component: () => import('pages/CryptoReport.vue')
+        path: '/cryptoopmanager',
+        component: () => import('pages/CryptoOpManager.vue')
       },
       {
         path: '/cryptoriskcontroller',
         component: () => import('pages/CryptoRiskController.vue')
       },
       {
+        path: '/cryptoreport',
+        component: () => import('pages/CryptoReport.vue')
+      },
+      {
         path: '/cryptoitemreport',
         component: () => import('pages/CryptoItemReport.vue')
-      },
+      },      
     ],
   }
 
