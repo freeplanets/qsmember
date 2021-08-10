@@ -1,12 +1,11 @@
 <template>
-  <div class="row col-12">
+  <div class="row q-ma-xs">
     <div
-      class="col"
+      class="q-ml-sm"
       v-for="(itm,idx) in list"
       :key="'lst'+idx"
     >
       <q-btn
-        round
         :color="idx === curIdx ? 'teal-9' : 'teal-2' "
         size="xs"
         :label="itm.Title"
@@ -44,6 +43,7 @@ export default class BtnBar extends Vue {
     });
   }
   setValue(itm:CryptoItem, sltIdx:number) {
+    console.log('BtnBar setValue', itm, sltIdx);
     this.curIdx = sltIdx;
     this.$emit('setValue', itm);
   }

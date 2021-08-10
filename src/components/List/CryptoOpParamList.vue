@@ -1,34 +1,34 @@
 <template>
-	<div class="col">
-		<div class="row"><q-btn color="primary" :label="$t('Button.Add')" /></div>
-		<table>
+	<div class="col q-mt-xs">
+		<div class="row q-ma-xs"><q-btn color="red-10" size="sm" :label="$t('Button.Add')" @click="AddNew" /></div>
+		<table class="list" cellspacing="0" cellpadding="0" v-if="items">
 			<tr>
-				<th rowspan="2">{{ $t('Table.CryptoOpParams.OpType') }}</th>
-				<th rowspan="2">{{ $t('Table.CryptoOpParams.isActive') }}</th>
-				<th :colspan="rules.length">{{ $t('Table.CryptoOpParams.OpType') }}</th>
-				<th rowspan="2">{{ $t('Label.Save') }}</th>
+				<th rowspan="2"><div>{{ $t('Table.CryptoOpParams.OpType') }}</div></th>
+				<th rowspan="2"><div>{{ $t('Table.CryptoOpParams.isActive') }}</div></th>
+				<th colspan="6"><div>{{ $t('Table.CryptoOpParams.OpType') }}</div></th>
+				<th rowspan="2"><div>{{ $t('Label.Save') }}</div></th>
 			</tr>
-			<tr v-if="rules.length > 0">
-				<th 
-					v-for="(title,idx) in rules"
-					:key="idx"
-				>
-					{{ $t(`Table.CryptoOpParams.RuleName.${title}`) }}
-				</th>
+			<tr>
+				<th><div>{{ $t('Table.CryptoOpParams.RuleName.OneHand') }}(USDT)</div></th>
+				<th><div>{{ $t('Table.CryptoOpParams.RuleName.FullStorage') }}(USDT)</div></th>
+				<th><div>{{ $t('Table.CryptoOpParams.RuleName.LeverLimit') }}</div></th>
+				<th><div>{{ $t('Table.CryptoOpParams.RuleName.ShortTerm1') }}({{$t('Label.Sec')}})</div></th>
+				<th><div>{{ $t('Table.CryptoOpParams.RuleName.ShortTerm2') }}({{$t('Label.Sec')}})</div></th>
+				<th><div>{{ $t('Table.CryptoOpParams.RuleName.ShortTermFee') }}(&#8240;)</div></th>
 			</tr>
 			<tr
 				v-for="(itm,idx) in items"
 				:key="idx"
 			>
-				<td><q-select v-model="itm.OpType" :options="options" label="Standard" /></td>
-				<td>N<q-toggle v-model="itm.isActive" />Y</td>
-				<td
-					v-for="(rule, idx) in rules"
-					:key="`rule-${idx}`"
-				>
-					{{ itm.Rules(rule) }}
-				</td>
-				<td><q-btn v-if="itm.isChaned" color="primary" :label="$t('Label.Save')" @click="Save(itm)" /></td>
+				<td><div><q-select outlined dense v-model="itm.OpType" :options="options" /></div></td>
+				<td><div>N<q-toggle v-model="itm.isActive" />Y</div></td>
+				<td><div><q-input outlined dense v-model="itm.OneHand" /></div></td>
+				<td><div><q-input outlined dense v-model="itm.FullStorage" /></div></td>
+				<td><div><q-input outlined dense v-model="itm.LeverLimit" /></div></td>
+				<td><div><q-input outlined dense v-model="itm.ShortTerm1" /></div></td>
+				<td><div><q-input outlined dense v-model="itm.ShortTerm2" /></div></td>
+				<td><div><q-input outlined dense v-model="itm.ShortTermFee" /></div></td>
+				<td><div><q-btn v-if="itm.isChanged" color="primary" :label="$t('Label.Save')" @click="Save(itm,idx)" /></div></td>
 			</tr>
 		</table>
 	</div>
@@ -46,17 +46,24 @@ import { QDialogOptions } from 'quasar';
 
 @Component
 export default class CryptoOpParamList extends Vue {
+	@Prop({ type: Number }) readonly ItemID!:number;
 	@Prop({ type: Array }) readonly items!:OpParams[];
-	store = getModule(LStore);
-	options = OpTypes;
-	get rules():string[] {
-		let ans:string[] = [];
-		if(this.items){
-			ans = this.items[0].getRulesKey();
-		}
-		return ans;
+	/*
+	@Watch('items', { deep:true, immediate:true })
+	onItemsChange() {
+		console.log('test items change');
 	}
-	Save(itm:OpParams) {
+	*/
+	store = getModule(LStore);
+	options = this.getENum();
+	getENum() {
+		const a = { ...OpTypes };
+		const n = Object.keys(a).map(key=>{
+			return eval(`a.${key}`);
+		});
+		return n;
+	}
+	Save(itm:OpParams,idx:number) {
 		itm.ModifyID = this.store.personal.id;
 		const param:WebParams = { ...this.store.Param };
 		param.TableName = 'CryptoOpParams';
@@ -66,11 +73,38 @@ export default class CryptoOpParamList extends Vue {
 				title: `${this.$t('Label.Save')}`,
 				message: 'OK!',
 			}
+			console.log('Save:', res);
 			if(res.ErrNo !== ErrCode.PASS) {
 				opt.message = String(this.$t(`Error.${res.ErrNo}`));
+			} else {
+				if(res.insertId && itm.id === 0) {
+					this.items[idx].setID(res.insertId);
+				}
+				this.items[idx].isChanged = true;
 			}
-			this.$q.dialog(opt);			
+			this.$q.dialog(opt);
 		})
 	}
+	AddNew() {
+		this.items.push(new OpParams(this.ItemID));
+	}
+
 }
 </script>
+<style lang="scss" scoped>
+.list {
+	border-top: 1px solid $indigo-10;
+	border-right: 1px solid $indigo-10;		
+}
+.list th, .list td {
+	border-left: 1px solid $indigo-10;
+	border-bottom: 1px solid $indigo-10;
+}
+.list div {
+	margin: 2px 2px 2px 2px;
+}
+.list th {
+	background-color: $cyan-10;
+	color: white;
+}
+</style>

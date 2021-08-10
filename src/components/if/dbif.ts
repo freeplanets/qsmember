@@ -186,19 +186,16 @@ export interface LedgerLever {
   SellTime: number; // 賣出時間
 }
 
-export interface CryptoRules {
+export interface CryptoOpParams extends HasID {
+  ItemID: number; // 項目代號
+  OpType: OpTypes;  // 控盤類型 None, A, B, C, D
+  isActive: number; // 是否啟用
   OneHand: number;  // 單注上限
   FullStorage: number;  // 滿倉
   LeverLimit: number; // 最大槓桿倍數
   ShortTerm1: number; // 短線1 不可平倉時間
   ShortTerm2: number; // 短線2 可平倉但加收手續費
-  ShortTermFee: number; // 短線手續費
-}
-
-export interface CryptoOpParams extends HasID {
-  ItemID: number; // 項目代號
-  OpType: OpTypes;  // 控盤類型 None, A, B, C, D
-  isActive: number; // 是否啟用
-  Rules: string | CryptoRules;  // 控盤規則
+  ShortTermFee: number; // 短線手續費則
   ModifyID: number; //
+  [key:string]:any;
 }

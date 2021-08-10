@@ -175,6 +175,19 @@ export default {
       CreateTime: '下單時間',
       AvgPrice: '均價',
     },
+    CryptoOpParams: {
+      OpType: '類型',
+      isActive: '啟用',
+      Rules: '規則',
+      RuleName: {
+        OneHand: '單手上限',
+        FullStorage: '滿倉',
+        LeverLimit: '槓桿',
+        ShortTerm1: '短線1',
+        ShortTerm2: '短線2',
+        ShortTermFee: '短線手續費',
+      }
+    },
     ItemName: '項目名稱',
     SubName: '指定名稱',
     NoAdjust: '不調盤',
@@ -226,19 +239,6 @@ export default {
     OpenNums:'開出獎號',
     ChaseNum:'追號',
     isParlay:'連碼'
-  },
-  CryptoOpParams: {
-    OpType: '類型',
-    isActive: '啟用',
-    Rules: '規則',
-    RuleName: {
-      OneHand: '單手上限',
-      FullStorage: '滿倉',
-      LeverLimit: '槓桿',
-      ShortTerm1: '短線1',
-      ShortTerm2: '短線2',
-      ShortTermFee: '短線手續費',
-    }
   },
   Title: {
     Dashboard: '大廳',
