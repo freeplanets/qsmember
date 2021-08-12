@@ -1,4 +1,3 @@
-import { HighlightSpanKind } from 'typescript';
 import { CryptoOpParams } from '../if/dbif';
 import { OpTypes } from '../if/ENum';
 
@@ -7,7 +6,7 @@ export default class CryptoParams {
 	private ischanged = false;
 	private FeeDenominator = 1000;
 	constructor(private itemID:number, data?:CryptoOpParams) {
-		if(!data){
+		if (!data) {
 			this.data = this.createData();
 		} else {
 			this.data = data;
@@ -86,8 +85,8 @@ export default class CryptoParams {
 		this.data.ModifyID = v;
 	}
 	get Data() {
-		if(this.data.ModifyTime) delete this.data.ModifyTime;
-		if(this.data.CreateTime) delete this.data.CreateTime;
+		if (this.data.ModifyTime) delete this.data.ModifyTime;
+		if (this.data.CreateTime) delete this.data.CreateTime;
 		return this.data;
 	}
 	get isChanged() {
@@ -109,7 +108,7 @@ export default class CryptoParams {
 			ShortTerm2: 0,
 			ShortTermFee: 0,
 			ModifyID: 0,
-		}
+		};
 		return data;
 	}
 }

@@ -66,8 +66,8 @@ export default class Chat extends Vue {
 				// ref.scrollPosition = ref.scrollSize + 50;
 				// ref.setScrollPercentage('vertical', 0.9, 300);
 			}
-			//console.log('after', ref.scrollPosition, ref.getScrollPosition());
-		}		
+			// console.log('after', ref.scrollPosition, ref.getScrollPosition());
+		}
 	}
 	getStamp(v:number) {
 		if (v === 0) return '';

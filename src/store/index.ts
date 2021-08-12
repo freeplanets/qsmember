@@ -6,5 +6,5 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  strict: process.env.DEV === 'true'
-})
+  strict: process.env.DEV === 'true',
+});

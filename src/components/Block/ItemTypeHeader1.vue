@@ -15,13 +15,13 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
-export default class ItemTypeHeader1 extends Vue{
+export default class ItemTypeHeader1 extends Vue {
 	@Prop({ type: Boolean }) readonly isLedger!:boolean;
 }
 </script>
 <style lang="scss" scoped>
 th {
-	border-top: 1px solid black;	
+	border-top: 1px solid black;
 	border-left: 1px solid black;
 	border-bottom: 1px solid black;
 }

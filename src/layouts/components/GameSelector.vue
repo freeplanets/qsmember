@@ -5,10 +5,10 @@
     </div>
 </template>
 <script lang="ts">
-import Vue from 'vue'
+import Vue from 'vue';
 import Component from 'vue-class-component';
-import {Prop} from 'vue-property-decorator';
-import {SelectOptions} from '../data/if';
+import { Prop } from 'vue-property-decorator';
+import { SelectOptions } from '../data/if';
 import LayoutStoreModule from '../data/LayoutStoreModule';
 /**
  * :store='yourvalue'
@@ -17,9 +17,9 @@ import LayoutStoreModule from '../data/LayoutStoreModule';
 @Component
 export default class GameSelector extends Vue {
     @Prop() readonly store?:LayoutStoreModule;
-    @Prop() AddAllItem?:boolean;   //增加GameID=0的選項=> Select ALL
+    @Prop() AddAllItem?:boolean; // 增加GameID=0的選項=> Select ALL
     @Prop() ReturnList?:boolean;
-    @Prop() readonly showall?:boolean;  
+    @Prop() readonly showall?:boolean;
     /*
     @Prop() GameID?:number;
     @Watch('GameID',{ immediate: true, deep: true })
@@ -34,43 +34,43 @@ export default class GameSelector extends Vue {
         }
     }
     */
-    ChangeFromUp:boolean=false;
-    models:SelectOptions = {value: 0,label:''};
+    ChangeFromUp=false;
+    models:SelectOptions = { value: 0, label: '' };
     options:SelectOptions[] = []
-    AllItem:SelectOptions = {value:0,label:'ALL'};
-    get UserPayClass(){
-        if(this.store){
-            if(this.store.personal.PayClass){
+    AllItem:SelectOptions = { value: 0, label: 'ALL' };
+    get UserPayClass() {
+        if (this.store) {
+            if (this.store.personal.PayClass) {
                 return this.store.personal.PayClass;
             }
         }
         return [];
     }
-	set model(v:SelectOptions){
+	set model(v:SelectOptions) {
         this.models = v;
-        //console.log('GameSelector',this.ChangeFromUp);
-        if(!this.ChangeFromUp) this.$emit('setGames',v);
-        this.ChangeFromUp=false;
+        // console.log('GameSelector',this.ChangeFromUp);;
+        if (!this.ChangeFromUp) this.$emit('setGames', v);
+        this.ChangeFromUp = false;
 	}
-	get model(){
-        //console.log('get Model:', this.models);
-		return this.models as SelectOptions;
+	get model() {
+        // console.log('get Model:', this.models);
+		return this.models;
     }
-	async getGames(){
-        //console.log('GameSelector getGames AddAllItem:',this.AddAllItem);
-        if(!this.store) return;
-        let ans:SelectOptions[] | undefined = await this.store.ax.getGames(this.store.personal.id,this.store.personal.sid,this.showall)
-        if(ans){
-            if(this.UserPayClass.length>0){
-                let tmp:SelectOptions[]=ans;
-                let tmpWK:SelectOptions[]=[];
-                this.UserPayClass.map(itm=>{
-                    const f=tmp.find(sl=>sl.value===itm.GameID && itm.PayClassID>0);
-                    if(f) tmpWK.push(f);
-                })
+	async getGames() {
+        // console.log('GameSelector getGames AddAllItem:',this.AddAllItem);
+        if (!this.store) return;
+        let ans:SelectOptions[] | undefined = await this.store.ax.getGames(this.store.personal.id, this.store.personal.sid, this.showall);
+        if (ans) {
+            if (this.UserPayClass.length > 0) {
+                const tmp:SelectOptions[] = ans;
+                const tmpWK:SelectOptions[] = [];
+                this.UserPayClass.map((itm) => {
+                    const f = tmp.find((sl) => sl.value === itm.GameID && itm.PayClassID > 0);
+                    if (f) tmpWK.push(f);
+                });
                 ans = tmpWK;
             }
-            if(this.AddAllItem){
+            if (this.AddAllItem) {
                 this.options = [this.AllItem].concat(ans);
                 this.model = this.AllItem;
             } else {
@@ -78,13 +78,13 @@ export default class GameSelector extends Vue {
                 this.model = this.options[0];
             }
         }
-        if(this.ReturnList){
-            this.$emit('setLists',this.options);
+        if (this.ReturnList) {
+            this.$emit('setLists', this.options);
         }
-        //console.log('GameSelector getGames:',this.options);
-    }    
-    async mounted(){
-        //console.log('GameSelector mounted');
+        // console.log('GameSelector getGames:',this.options);
+    }
+    async mounted() {
+        // console.log('GameSelector mounted');
         await this.getGames();
     }
 }

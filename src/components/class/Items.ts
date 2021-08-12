@@ -17,7 +17,7 @@ export default class Items implements GetMessage {
     constructor(crypto:CryptoItem) {
         this.crypto = crypto;
         this.Long = new CryptoItemOneSide(crypto.id, 1);
-		this.Short = new CryptoItemOneSide(crypto.id, -1)
+		this.Short = new CryptoItemOneSide(crypto.id, -1);
     }
     get id() {
         return this.crypto.id;
@@ -62,7 +62,7 @@ export default class Items implements GetMessage {
     }
     getClosed(v:StopType):boolean {
         const closed = this.crypto.Closed ? this.crypto.Closed : 0;
-        const bClosed = !!(v & closed)
+        const bClosed = !!(v & closed);
         // console.log('Item getClosed', bClosed, v, this.crypto.Closed);
         return bClosed;
     }
@@ -79,9 +79,9 @@ export default class Items implements GetMessage {
     addAsks(asks:AskTable[]) {
         this.Short.cleanList();
         this.Long.cleanList();
-        asks.forEach(ask=>{
+        asks.forEach((ask) => {
             this.addAsk(ask);
-        })
+        });
     }
     setPrice(r:ReceiveData) {
         if (r.symbol === this.Code) {

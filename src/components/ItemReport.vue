@@ -2,7 +2,7 @@
 	<table v-if="list.length > 0" border="0" cellpadding="0" cellspacing="0">
 		<blk-item-header-1 :isLedger="isLedger" />
 		<blk-item-header-2 />
-		<blk-item-type 
+		<blk-item-type
 			v-for = "(item,idx) in items"
 			:key="`item:${idx}`"
 			:itemT="item"
@@ -27,7 +27,7 @@ export default class ItemReport extends Vue {
 	@Prop({ type: Array }) readonly list!:ItemTotal[];
 	@Prop({ type: Boolean }) readonly isLedger!:boolean;
 	items:ItemTotal[] = [];
-	@Watch('list',{ deep:true, immediate:true })
+	@Watch('list', { deep: true, immediate: true })
 	onListChange() {
 		// console.log('ItemReport onListChange', this.list);
 		this.items = this.list;

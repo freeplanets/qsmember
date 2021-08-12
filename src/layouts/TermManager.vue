@@ -6,14 +6,14 @@
             <div class="pd"><q-btn color="secondary" :label="$t('Report.Today')" @click="getToday()" /></div>
             <div class="pd"><q-btn color="secondary" :label="$t('Report.Yesterday')" @click="getYesterday()" /></div>
             <div class="pd"><q-btn color="secondary" :label="$t('Report.Beforeday')" @click="getBeforeday()" /></div>
-            <div class="miniBtn-pd"><q-btn color="secondary" dense icon="date_range" @click="DateSlt=true"/></div>    
+            <div class="miniBtn-pd"><q-btn color="secondary" dense icon="date_range" @click="DateSlt=true"/></div>
             <div class="tbox-pd"><q-input class="tbox-w" outlined dense v-model="sdate" /></div>
             <div class="pd"><q-btn color="secondary" :label="$t('Button.Search')" @click="getTerms()" /></div>
 		</div>
         <div v-if="data.length>0" class='mytable'>
             <div class="row">
                 <div class='col-2 mytable-head mytable-field'>{{$t('Label.TermID')}}</div>
-                <div class='col-2 mytable-head mytable-field'>{{`${$t('Label.OpenDate')} ${$t('Label.Time')}`}}</div>
+                <div class='col-2 mytable-head mytable-fielab'>{{`${$t('Label.OpenDate')} ${$t('Label.Time')}`}}</div>
                 <div class='col-1 mytable-head mytable-field'>{{$t('Label.BetEndTime')}}</div>
                 <div class='col-1 mytable-head mytable-field'>{{$t('Label.SPEndTime')}}</div>
                 <div class='col-2 mytable-head mytable-field'>{{$t('Dialog.OpenResult')}}</div>
@@ -38,7 +38,7 @@
                         <div class='col' v-if="itm.isSettled===0 && itm.isCanceled===0"><q-btn color="red" dense :label="$t('Label.Delete')" @click="DelTerm(itm.id);" /></div>
                         <div class='col' v-if="itm.isSettled===0 && itm.isCanceled===0"><q-btn color="red" dense :label="$t('Label.Cancel')" @click="CancelTerm(itm.id,itm.TermID);" /></div>
                     </div>
-                </div>             
+                </div>
             </div>
         </div>
         <div class="q-pa-md q-gutter-sm">
@@ -63,7 +63,7 @@
             <div class="text-h6">{{$t('Label.InputNums')}}</div>
             </q-card-section>
 
-            <q-card-section 
+            <q-card-section
                 v-if="curGType && curGType.GType !== 'SGPools' "
                 class="q-pt-none">
                 <div class="row">
@@ -73,7 +73,7 @@
                     outlined dense v-model="nums[idx]" />
                 </div>
             </q-card-section>
-            <q-card-section 
+            <q-card-section
                 v-if="curGType && curGType.GType === 'SGPools' "
                 class="q-pt-none">
                 <div class="row">
@@ -109,26 +109,26 @@
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[9]" /></div>
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[14]" /></div>
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[19]" /></div>
-                </div> 
+                </div>
                 <div class="row">
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[5]" /></div>
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[10]" /></div>
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[15]" /></div>
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[20]" /></div>
-                </div> 
+                </div>
                 <div class="row">
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[6]" /></div>
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[11]" /></div>
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[16]" /></div>
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[21]" /></div>
-                </div> 
+                </div>
                 <div class="row">
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[7]" /></div>
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[12]" /></div>
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[17]" /></div>
                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[22]" /></div>
-                </div>                                                                 
-            </q-card-section>            
+                </div>
+            </q-card-section>
 
             <q-card-actions align="right" class="text-primary">
                 <q-btn flat label="Gens" @click="RandNums()" />
@@ -149,7 +149,7 @@
                     <div>
                         <q-input outlined dense v-model="TDate" mask="####-##-##"/>
                     </div>
-                    <div><q-btn color="primary" icon-right="date_range" :label="$t('Label.Date')"  @click="datePickerShow=true"/></div>                    
+                    <div><q-btn color="primary" icon-right="date_range" :label="$t('Label.Date')"  @click="datePickerShow=true"/></div>
                     <div><q-chip square>{{$t('Label.Time')}}</q-chip></div>
                     <div><q-input outlined dense v-model="term.PTime" mask="fulltime" /></div>
                 </div>
@@ -171,10 +171,10 @@
             </q-card>
         </q-dialog>
         <q-dialog v-model="datePickerShow">
-            <q-card>            
+            <q-card>
                 <q-card-section>
                 <q-date v-model="TDate" mask="YYYY-MM-DD" />
-                </q-card-section>                
+                </q-card-section>
             </q-card>
         </q-dialog>
         <q-dialog v-model="showEditRecord">
@@ -187,7 +187,7 @@
           <q-btn dense flat icon="close" v-close-popup>
             <q-tooltip>Close</q-tooltip>
           </q-btn>
-        </q-bar>          
+        </q-bar>
         <q-card-section class="bg-white text-black">
           <table>
             <tr>
@@ -196,7 +196,7 @@
                 <th>{{$t('Title.NValue')}}</th>
                 <th>{{$t('Title.EditMan')}}</th>
             </tr>
-            <tr 
+            <tr
                 v-for="(itm,key) in EditRecord"
                 :key="'term'+key"
             >
@@ -209,20 +209,20 @@
         </q-card-section>
       </q-card>
         </q-dialog>
-    </div>    
+    </div>
 </template>
 <script lang="ts">
-import Vue from 'vue'
+import Vue from 'vue';
 import Component from 'vue-class-component';
+import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
-import {getModule} from 'vuex-module-decorators';
-import {SelectOptions,CommonParams,Msg,ParamLog,LoginInfo} from './data/if';
-import {Game} from './data/schema';
-import {Terms} from './data/schema';
-import JDate from './components/Date/JDate'
-import {dateAddZero} from './components/func';
+import { SelectOptions, CommonParams, Msg, ParamLog, LoginInfo } from './data/if';
+import { Game, Terms } from './data/schema';
+import JDate from './components/Date/JDate';
+import { dateAddZero } from './components/func';
 import GameSelector from './components/GameSelector.vue';
-Vue.component('GS',GameSelector);
+
+Vue.component('GS', GameSelector);
 
 interface GameType {
     GType:string;
@@ -239,47 +239,47 @@ export default class TermManager extends Vue {
     private models:SelectOptions | null = null;
     datePickerShow=false;
     options:SelectOptions[] = [
-		{value: 0,label:'default'}
+		{ value: 0, label: 'default' },
     ]
     term:Terms={
-        id:0,
-        GameID:0,
-        TermID:'',
-        PDate:'',
-        PTime:'',
-        StopTime:'',
-        StopTimeS:'',
-        ModifyID: this.User.id as number,
+        id: 0,
+        GameID: 0,
+        TermID: '',
+        PDate: '',
+        PTime: '',
+        StopTime: '',
+        StopTimeS: '',
+        ModifyID: this.User.id,
     }
     oldTerm:Terms|undefined;
     nums:string[]=[];
     data:Terms[]=[];
-    isAddTerm:boolean=false;
-    isInputNum:boolean=false;
-    curTermSettleStatus:number=0;
-    curTid:number=0;
-    sdate:string='';
-    DateSlt:boolean=false;
+    isAddTerm=false;
+    isInputNum=false;
+    curTermSettleStatus=0;
+    curTid=0;
+    sdate='';
+    DateSlt=false;
     PLog:ParamLog[]|undefined;
-    showEditRecord:boolean=false;
+    showEditRecord=false;
     EditRecord:ParamLog[]=[];
     curResult:string|undefined;
-    InProcess:boolean=false;
+    InProcess=false;
     curGame:Game|undefined;
-    hasSPNO:boolean=false;
-    NoSettleDate:string='';
+    hasSPNO=false;
+    NoSettleDate='';
     GTypes:GameType[]=[];
     curGType:GameType|undefined;
-    get showProgress(){
+    get showProgress() {
         return this.store.showProgress;
     }
-    set showProgress(v:boolean){
+    set showProgress(v:boolean) {
         this.store.setShowProgress(v);
-    }    
-    get ax(){
+    }
+    get ax() {
         return this.store.ax;
     }
-    get User():LoginInfo{
+    get User():LoginInfo {
         return this.store.personal;
     }
     get TDate() {
@@ -287,138 +287,137 @@ export default class TermManager extends Vue {
     }
     set TDate(v:string) {
         this.term.PDate = v;
-        if(this.datePickerShow){
-            this.datePickerShow=false;
+        if (this.datePickerShow) {
+            this.datePickerShow = false;
         }
-        //console.log('TDate:',this.TDate)
+        // console.log('TDate:',this.TDate)
     }
-    setCurGames(v:SelectOptions){
+    setCurGames(v:SelectOptions) {
         this.models = v;
-        this.term.GameID = v.value as number;
-        if(v.GType){
+        this.term.GameID = v.value;
+        if (v.GType) {
             this.setCurGType(v.GType);
         }
-        //this.nums=new Array(v.OpenNums);
+        // this.nums=new Array(v.OpenNums);
         this.getTerms();
     }
-    setCurGType(GType:string){
-        this.curGType = this.GTypes.find(itm=>itm.GType===GType);
-        if(this.curGType){
-            this.nums=new Array(this.curGType.OpenNums);
-        }        
+    setCurGType(GType:string) {
+        this.curGType = this.GTypes.find((itm) => itm.GType === GType);
+        if (this.curGType) {
+            this.nums = new Array(this.curGType.OpenNums);
+        }
     }
-    ShowAdd(){
-        if(this.NoSettleDate){
+    ShowAdd() {
+        if (this.NoSettleDate) {
             this.$q.dialog({
                 title: this.$t('Dialog.NoSettle') as string,
-                message: this.NoSettleDate
-            })            
+                message: this.NoSettleDate,
+            });
             return;
         }
-        if(this.models){
-            this.isAddTerm = !this.isAddTerm
+        if (this.models) {
+            this.isAddTerm = !this.isAddTerm;
             this.getLastTerm();
         }
     }
     async getEditRecord(id:number) {
-        const param:CommonParams={
-            UserID:this.User.id,
-            sid:this.User.sid,
+        const param:CommonParams = {
+            UserID: this.User.id,
+            sid: this.User.sid,
             id,
-            tb:'Terms'
-        }
-        const msg:Msg=await this.ax.getApi('getEditRecord',param);
-        if(msg.ErrNo===0){
+            tb: 'Terms',
+        };
+        const msg:Msg = await this.ax.getApi('getEditRecord', param);
+        if (msg.ErrNo === 0) {
             this.EditRecord = msg.data as ParamLog[];
         }
-        this.showEditRecord=true;
+        this.showEditRecord = true;
     }
-    async getLastTerm(){
-        const param:CommonParams={
+    async getLastTerm() {
+        const param:CommonParams = {
             GameID: this.term.GameID,
             UserID: this.store.personal.id,
-            sid: this.store.personal.sid
-        }
-        const msg:Msg=await this.store.ax.getApi('getLastTerm',param);
-        if(msg.ErrNo===0){
-            //console.log(msg.data);
-            if(msg.data){
-                const lsTerm:Terms=msg.data[0] as Terms;
+            sid: this.store.personal.sid,
+        };
+        const msg:Msg = await this.store.ax.getApi('getLastTerm', param);
+        if (msg.ErrNo === 0) {
+            // console.log(msg.data);
+            if (Array.isArray(msg.data) && msg.data.length > 0) {
+                const lsTerm:Terms = msg.data[0] as Terms;
                 this.term.PDate = this.dateString;
-                if(lsTerm && lsTerm.PTime){
+                if (lsTerm && lsTerm.PTime) {
                     this.term.PTime = lsTerm.PTime;
                     this.term.StopTime = lsTerm.StopTime;
                     this.term.StopTimeS = lsTerm.StopTimeS;
-                    this.term.TermID = this.TermIDAdd(lsTerm.TermID)
+                    this.term.TermID = this.TermIDAdd(lsTerm.TermID);
                 }
             }
-
         }
     }
-    TermIDAdd(TermID:string):string{
-        const len:number=TermID.length;
-        let rs:string=(parseInt(TermID,10)+1).toString();
-        while(rs.length<len){
-            rs='0'+rs;
+    TermIDAdd(TermID:string):string {
+        const len:number = TermID.length;
+        let rs:string = (parseInt(TermID, 10) + 1).toString();
+        while (rs.length < len) {
+            rs = `0${rs}`;
         }
         return rs;
     }
-    showDatePicker(){
-        this.datePickerShow=!this.datePickerShow;
+    showDatePicker() {
+        this.datePickerShow = !this.datePickerShow;
     }
-    async SaveTerm(){
-        if(this.oldTerm){
-            const OLD=this.oldTerm;
+    async SaveTerm() {
+        if (this.oldTerm) {
+            const OLD = this.oldTerm;
             const adminid = this.User.id;
-            Object.keys(OLD).map(key=>{
-                if(OLD[key]!==this.term[key]){
-                    const pl:ParamLog={
-                        id:0,
-                        tb:'Terms',
-                        uid:OLD.id ? OLD.id : 0,
-                        mykey:key,
-                        ovalue:OLD[key],
-                        nvalue:this.term[key],
-                        adminid
-                    }
-                    if(!this.PLog) this.PLog=[];
+            Object.keys(OLD).map((key) => {
+                if (OLD[key] !== this.term[key]) {
+                    const pl:ParamLog = {
+                        id: 0,
+                        tb: 'Terms',
+                        uid: OLD.id ? OLD.id : 0,
+                        mykey: key,
+                        ovalue: OLD[key],
+                        nvalue: this.term[key],
+                        adminid,
+                    };
+                    if (!this.PLog) this.PLog = [];
                     this.PLog.push(pl);
                 }
-            })
+            });
         }
-        const ans = await this.ax.saveTerms(this.User.id,this.User.sid,this.term,this.PLog);
-        //console.log('SaveTerm',this.term,ans);
-        if(ans.ErrNo === 0) {
-            this.PLog=undefined;
-            this.isAddTerm = false;    
-            await this.getTerms()
+        const ans = await this.ax.saveTerms(this.User.id, this.User.sid, this.term, this.PLog);
+        // console.log('SaveTerm',this.term,ans);
+        if (ans.ErrNo === 0) {
+            this.PLog = undefined;
+            this.isAddTerm = false;
+            await this.getTerms();
         }
     }
-    get dateString(){
-        const d:Date=new Date();
+    get dateString() {
+        const d:Date = new Date();
         const reg1 = /(\d+)-(\d+)-(\d+).*/;
         return d.toJSON().replace(reg1, '$1-$2-$3');
     }
-    async getTerms(){
-        if(this.InProcess) return;
-        if(!this.term.GameID) return;
-        this.InProcess=true;
-        this.showProgress=true;
-        const GameID:number=this.term.GameID;
-        this.data=[];
-        const ans=await this.ax.getTerms(this.store.personal.id,this.store.personal.sid,GameID,this.sdate.split('/').join('-'))
-        if(ans.ErrNo===0){
-            this.data=ans.data as Terms[];
-            if(ans.Game) {
-                this.curGame=ans.Game as Game;
+    async getTerms() {
+        if (this.InProcess) return;
+        if (!this.term.GameID) return;
+        this.InProcess = true;
+        this.showProgress = true;
+        const GameID:number = this.term.GameID;
+        this.data = [];
+        const ans = await this.ax.getTerms(this.store.personal.id, this.store.personal.sid, GameID, this.sdate.split('/').join('-'));
+        if (ans.ErrNo === 0) {
+            this.data = ans.data as Terms[];
+            if (ans.Game) {
+                this.curGame = ans.Game as Game;
                 this.hasSPNO = !!this.curGame.hasSPNO;
             }
-            if(ans.PDate){
-                this.NoSettleDate=ans.PDate;
+            if (ans.PDate) {
+                this.NoSettleDate = ans.PDate;
             } else {
                 this.NoSettleDate = '';
             }
-            this.PLog=undefined;
+            this.PLog = undefined;
             /*
             this.data.map(itm=>{
                 if(itm.ResultFmt){
@@ -427,228 +426,226 @@ export default class TermManager extends Vue {
             })
             */
         }
-        this.InProcess=false;
-        this.showProgress=false;
+        this.InProcess = false;
+        this.showProgress = false;
     }
-    Edit(v:Terms){
-        this.oldTerm=Object.assign({},v);
-        this.term=Object.assign(this.term,v);
-        console.log('Edit',this.oldTerm);
+    Edit(v:Terms) {
+        this.oldTerm = { ...v };
+        this.term = Object.assign(this.term, v);
+        console.log('Edit', this.oldTerm);
         /*
         Object.keys(v).map(key=>{
             this.term[key]=v[key];
         })
         */
-        //v.ModifyID = this.User.id as number;
-        this.term.ModifyID = this.User.id as number;
+        // v.ModifyID = this.User.id as number;
+        this.term.ModifyID = this.User.id;
         this.isAddTerm = true;
     }
-    InputNum(v:Terms,rlt?:string,spno?:string){
-        if(rlt){
-            this.nums=rlt.split(',');
-            if(spno){
+    InputNum(v:Terms, rlt?:string, spno?:string) {
+        if (rlt) {
+            this.nums = rlt.split(',');
+            if (spno) {
                 this.nums.push(spno);
             }
-            this.curResult=this.nums.join(',');
-        } 
-        if(v.isSettled){
+            this.curResult = this.nums.join(',');
+        }
+        if (v.isSettled) {
             this.curTermSettleStatus = v.isSettled;
         }
-        if(v.Result){
-            this.nums=v.Result.split(',');
-            if(v.SpNo) this.nums.push(v.SpNo);
+        if (v.Result) {
+            this.nums = v.Result.split(',');
+            if (v.SpNo) this.nums.push(v.SpNo);
         }
-        this.isInputNum=true;
-        //console.log('InputNum',v);
-        if(v.id){
+        this.isInputNum = true;
+        // console.log('InputNum',v);
+        if (v.id) {
             this.curTid = v.id;
         }
-        //const nums:string[]=v.split(',');
+        // const nums:string[]=v.split(',');
     }
-    chkNums(nums:string[]):boolean{
-        console.log('chkNums:',nums);
-        if(this.curGType){
-            let cGType=this.curGType.GType;
-            if(nums.length != this.curGType.OpenNums)  return false;
-            const GT=this.curGType;
-            const tmpA:number[]=[];
-            let hasSpace = false
-            nums.map(num=>{
-                if(hasSpace) return;
-                if(num==='') {
+    chkNums(nums:string[]):boolean {
+        console.log('chkNums:', nums);
+        if (this.curGType) {
+            const cGType = this.curGType.GType;
+            if (nums.length !== this.curGType.OpenNums) return false;
+            const GT = this.curGType;
+            const tmpA:number[] = [];
+            let hasSpace = false;
+            nums.map((num) => {
+                if (hasSpace) return;
+                if (num === '') {
                     hasSpace = true;
                     return;
                 }
-                const iNum:number = parseInt(num,10);
-                if(cGType==='SGPools'){
-                    if(num.length<4) return false;
+                const iNum:number = parseInt(num, 10);
+                if (cGType === 'SGPools') {
+                    if (num.length < 4) return; // false;
                 } else {
-                    if(iNum < GT.StartNum) return false;
-                    if(iNum > GT.EndNum) return false;
+                    if (iNum < GT.StartNum) return; // false;
+                    if (iNum > GT.EndNum) return; // false;
                 }
-                if(tmpA.indexOf(iNum)===-1) tmpA.push(iNum);
-            })
-            if(hasSpace) return false;
-            if(!GT.SameNum){
-                if(nums.length !== tmpA.length) return false;
+                if (tmpA.indexOf(iNum) === -1) tmpA.push(iNum);
+            });
+            if (hasSpace) return false;
+            if (!GT.SameNum) {
+                if (nums.length !== tmpA.length) return false;
             }
         } else {
             return true;
         }
         return true;
     }
-    RandNums(){
-        const RN=()=>{
-            let num=Math.round(Math.random()*10000);
-            if(num>9999) num=9999;
-            let str=num.toString();
-            while(str.length<4){
-                str='0'+str;
+    RandNums() {
+        const RN = () => {
+            let num = Math.round(Math.random() * 10000);
+            if (num > 9999) num = 9999;
+            let str = num.toString();
+            while (str.length < 4) {
+                str = `0${str}`;
             }
             return str;
-        }
-        const tmp:string[]=[];
-        while(tmp.length<23){
+        };
+        const tmp:string[] = [];
+        while (tmp.length < 23) {
             tmp.push(RN());
         }
-        this.nums=tmp;
+        this.nums = tmp;
     }
-    async SendNums(){
-        if(!this.chkNums(this.nums)) {
+    async SendNums() {
+        if (!this.chkNums(this.nums)) {
             this.$q.dialog({
                 title: this.$t('Label.InputNums') as string,
-                message: 'Error!!'
-            }) 
-            return ;
+                message: 'Error!!',
+            });
+            return;
         }
-        this.isInputNum=false;
-        this.showProgress=true;
-        if(this.curResult){
+        this.isInputNum = false;
+        this.showProgress = true;
+        if (this.curResult) {
             const tmp:ParamLog = {
-                id:0,
-                tb:'Terms',
+                id: 0,
+                tb: 'Terms',
                 uid: this.curTid,
-                mykey:'Result',
-                ovalue:this.curResult,
-                nvalue:this.nums.join(','),
-                adminid: this.User.id
-            }
-            if(!this.PLog) this.PLog=[];
+                mykey: 'Result',
+                ovalue: this.curResult,
+                nvalue: this.nums.join(','),
+                adminid: this.User.id,
+            };
+            if (!this.PLog) this.PLog = [];
             this.PLog.push(tmp);
         }
-        const ax=this.store.ax;
-        const ans=await ax.saveNums(this.store.personal.id,this.store.personal.sid,this.curTid,this.term.GameID,this.nums.join(','),this.curTermSettleStatus,this.PLog);
-        //console.log('SendNums',ans);
-        if(ans.ErrNo===0){
-            this.showProgress=false;  
+        const ax = this.store.ax;
+        const ans = await ax.saveNums(this.store.personal.id, this.store.personal.sid, this.curTid, this.term.GameID, this.nums.join(','), this.curTermSettleStatus, this.PLog);
+        // console.log('SendNums',ans);
+        if (ans.ErrNo === 0) {
+            this.showProgress = false;
             this.$q.dialog({
                 title: this.$t('Label.Save') as string,
-                message: 'OK!!'
-            }).onOk(async ()=>{
+                message: 'OK!!',
+            }).onOk(async () => {
                 await this.getTerms();
             });
-            
-        } 
-    }
-    async DelTerm(tid:number){
-        const param:CommonParams={
-            UserID:this.User.id,
-            sid:this.User.sid,
-            tid
         }
-        const msg:Msg=await this.ax.getApi('DelTerm',param);
-        if(msg.ErrNo===0){
+    }
+    async DelTerm(tid:number) {
+        const param:CommonParams = {
+            UserID: this.User.id,
+            sid: this.User.sid,
+            tid,
+        };
+        const msg:Msg = await this.ax.getApi('DelTerm', param);
+        if (msg.ErrNo === 0) {
             this.$q.dialog({
                 title: this.$t('Label.Delete') as string,
-                message: 'OK!!'
-            }).onOk(async ()=>{
+                message: 'OK!!',
+            }).onOk(async () => {
                 await this.getTerms();
-            });            
+            });
         } else {
             this.$q.dialog({
                 title: this.$t('Label.Delete') as string,
-                message: this.$t(`Error.${msg.ErrNo}`) as string
-            })            
+                message: this.$t(`Error.${msg.ErrNo}`) as string,
+            });
         }
     }
-    CancelTerm(tid:number,TermID:string){
-        let GTitle =this.models ? this.models.label : '';
+    CancelTerm(tid:number, TermID:string) {
+        const GTitle = this.models ? this.models.label : '';
         this.$q.dialog({
             title: this.$t('Label.Cancel') as string,
             message: `${this.$t('Label.Cancel')} ${GTitle} ${this.$t('Label.TermID')} : ${TermID} ?`,
             ok: true,
-            cancel: true
-        }).onCancel( ()=>{
+            cancel: true,
+        }).onCancel(() => {
             console.log('cancel');
-            return;
-        }).onOk(async ()=>{
+        }).onOk(async () => {
             await this.doCancelTerm(tid);
         });
         console.log('after cancel');
     }
-    async doCancelTerm(tid:number){
-        const param:CommonParams={
-            UserID:this.User.id,
-            sid:this.User.sid,
-            tid
-        }
-        const msg:Msg=await this.ax.getApi('CancelTerm',param);
-        if(msg.ErrNo===0){
+    async doCancelTerm(tid:number) {
+        const param:CommonParams = {
+            UserID: this.User.id,
+            sid: this.User.sid,
+            tid,
+        };
+        const msg:Msg = await this.ax.getApi('CancelTerm', param);
+        if (msg.ErrNo === 0) {
             this.$q.dialog({
                 title: this.$t('Label.Cancel') as string,
-                message: 'OK!!'
-            }).onOk(async ()=>{
+                message: 'OK!!',
+            }).onOk(async () => {
                 await this.getTerms();
-            });            
+            });
         } else {
             this.$q.dialog({
                 title: this.$t('Label.Cancel') as string,
-                message: this.$t(`Error.${msg.ErrNo}`) as string
-            })            
-        }
-    }    
-    async getGameType(){
-        const param:CommonParams={
-            UserID:this.User.id,
-            sid:this.User.sid,
-        }
-        let ans:Msg=await this.ax.getApi('getGameType',param);
-        if(ans.ErrNo===0){
-            this.GTypes = ans.data as GameType[];
-            if(!this.curGType){
-                if(this.models){
-                    this.setCurGType(this.models.GType ? this.models.GType : '')
-                }
-            }
-            //console.log('getGameType:',this.GTypes);
+                message: this.$t(`Error.${msg.ErrNo}`) as string,
+            });
         }
     }
-    getToday(){
+    async getGameType() {
+        const param:CommonParams = {
+            UserID: this.User.id,
+            sid: this.User.sid,
+        };
+        const ans:Msg = await this.ax.getApi('getGameType', param);
+        if (ans.ErrNo === 0) {
+            this.GTypes = ans.data as GameType[];
+            if (!this.curGType) {
+                if (this.models) {
+                    this.setCurGType(this.models.GType ? this.models.GType : '');
+                }
+            }
+            // console.log('getGameType:',this.GTypes);
+        }
+    }
+    getToday() {
         this.sdate = JDate.today.start;
         this.getTerms();
     }
-    getYesterday(){
+    getYesterday() {
         this.sdate = JDate.yesterday.start;
         this.getTerms();
     }
-    getBeforeday(){
-        //console.log('getBeforeday',this.sdate);
-        if(!this.sdate) return;
-        const d=new Date(this.sdate);
-        const ds=d.getTime()-86400000;
-        const d1=new Date(ds);
-        this.sdate=dateAddZero(d1.toLocaleDateString());
+    getBeforeday() {
+        // console.log('getBeforeday',this.sdate);
+        if (!this.sdate) return;
+        const d = new Date(this.sdate);
+        const ds = d.getTime() - 86400000;
+        const d1 = new Date(ds);
+        this.sdate = dateAddZero(d1.toLocaleDateString());
         this.getTerms();
-        //console.log('getBeforeday',this.sdate,d1.toJSON(),d.toUTCString(),d.toLocaleDateString(),d.toISOString());
+        // console.log('getBeforeday',this.sdate,d1.toJSON(),d.toUTCString(),d.toLocaleDateString(),d.toISOString());
     }
-    mounted(){
-        if(!this.store.isLogin){
-            this.$router.push({path:'/login'});
-        }     
-        this.term.PDate=this.dateString;
+    mounted() {
+        if (!this.store.isLogin) {
+            this.$router.push({ path: '/login' });
+        }
+        this.term.PDate = this.dateString;
         this.getToday();
         this.getGameType();
-        //console.log(this.$t(`Label.Settled`),this.$t(`Label.Settled.${1}`));
+        // console.log(this.$t(`Label.Settled`),this.$t(`Label.Settled.${1}`));
     }
 }
 </script>
@@ -671,7 +668,7 @@ td {
     vertical-align: middle;
 }
 .mytable {
-    max-width: 1350px; 
+    max-width: 1350px;
     padding-left: 8px;
 }
 .mytable-head {
@@ -698,7 +695,7 @@ td {
     padding: 0 0 0 8px;
 }
 .mytable-field div {
-  text-align: center;  
+  text-align: center;
 }
 .my-card {
     max-width: 800px;

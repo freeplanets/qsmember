@@ -1,9 +1,12 @@
 import { LeverData } from '../../layouts/data/if';
 
 export default class Lever {
-  static fields:string[] = ['Multiples','LongT','ShortT'];
-  private ischanged:boolean = false;
-  constructor(private data:LeverData){}
+  static fields:string[] = ['Multiples', 'LongT', 'ShortT'];
+  private ischanged = false;
+  private data:LeverData;
+  constructor(Data:LeverData) {
+    this.data = Data;
+  }
   get id():number {
     return this.data.id;
   }
@@ -37,7 +40,7 @@ export default class Lever {
   get Data():LeverData {
     return this.data;
   }
-  MultiUpdate(v:LeverData){
+  MultiUpdate(v:LeverData) {
     this.data = v;
     this.ischanged = false;
   }

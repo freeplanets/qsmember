@@ -10,7 +10,7 @@ export default abstract class AChat {
 	// protected ws:WSock;
 	protected memid:number;
 	private UserID:number;
-	constructor(protected CM:ChatManager,protected LS:LayoutStoreModule, protected MKey:string, MemberID:number) {
+	constructor(protected CM:ChatManager, protected LS:LayoutStoreModule, protected MKey:string, MemberID:number) {
 		// this.ws = ws;
 		this.memid = MemberID;
 		this.UserID = this.LS.UserInfo.id;
@@ -54,7 +54,7 @@ export default abstract class AChat {
 			}
 		}).catch((err) => {
 			console.log('AChat Send Error:', err);
-		})
+		});
 		this.Readed();
 	}
 	AddToList(msg:ChatMsg) {
@@ -86,7 +86,7 @@ export default abstract class AChat {
 		cMsg.name = this.LS.UserInfo.Account;
 		cMsg.sent = true;
 		return cMsg;
-	}	
+	}
 	protected createEmptyMsg():ChatMsg {
 		return {
 			name: '',

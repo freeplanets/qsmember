@@ -1,5 +1,6 @@
-import {HasID,KeyVal} from '../../layouts/data/if';
+import { HasID, KeyVal } from '../../layouts/data/if';
 import { FuncKey, MsgType, OpTypes } from './ENum';
+
 export interface TableData {
   TableName: string;
   keys?: string[];
@@ -45,14 +46,14 @@ export interface AskTable {
   LeverCredit: number; // 下單時暫扣的信用額度
   ExtCredit: number; // 下單後變動的信用額度,只能增加
   Lever:number;
-  StopGain:number;     // 獲利平倉比
-  StopLose:number;     // 損失平倉保証金比
-  ProcStatus: number;  // 0 等待處理, 1 處理中, 2 成交, 3 取消
+  StopGain:number; // 獲利平倉比
+  StopLose:number; // 損失平倉保証金比
+  ProcStatus: number; // 0 等待處理, 1 處理中, 2 成交, 3 取消
   CreateTime: number; // 建單時間
   DealTime?: number; // 成交時間
   ModifyTime?: string; // 修改時間
   SetID: number; // 平倉對象ID -> System下單
-  USetID: number;  // 平倉對象ID -> User下單
+  USetID: number; // 平倉對象ID -> User下單
 }
 export interface AskReport {
   User: string;
@@ -188,10 +189,10 @@ export interface LedgerLever {
 
 export interface CryptoOpParams extends HasID {
   ItemID: number; // 項目代號
-  OpType: OpTypes;  // 控盤類型 None, A, B, C, D
+  OpType: OpTypes; // 控盤類型 None, A, B, C, D
   isActive: number; // 是否啟用
-  OneHand: number;  // 單注上限
-  FullStorage: number;  // 滿倉
+  OneHand: number; // 單注上限
+  FullStorage: number; // 滿倉
   LeverLimit: number; // 最大槓桿倍數
   ShortTerm1: number; // 短線1 不可平倉時間
   ShortTerm2: number; // 短線2 可平倉但加收手續費

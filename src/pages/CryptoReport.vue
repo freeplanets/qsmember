@@ -5,7 +5,7 @@
       <div class="col-2"><q-input class="" outlined dense v-model="SelectDate" /></div>
       <div class="pbtn2"><q-btn color="primary" dense icon="date_range" @click="isDateSlt=true"/></div>
       <div class='row col pbtn2'>
-        <q-btn dense color="green" icon-right="search" :label="$t('Button.Search')"  @click="SearchData"/>      
+        <q-btn dense color="green" icon-right="search" :label="$t('Button.Search')"  @click="SearchData"/>
         <q-btn dense color="blue" icon-right="clear" :label="$t('Button.Clear')"  @click="ClearSearch"/>
       </div>
     </div>
@@ -17,18 +17,17 @@
           <SED v-model="SelectDate" @closeme="isDateSlt=false"></SED>
         </q-card-section>
       </q-card>
-    </q-dialog>  
+    </q-dialog>
   </div>
 </template>
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator';
-import LStore from '../layouts/data/LayoutStoreModule';
-import { KeyVal, Msg, SelectOptions, WebParams } from 'src/layouts/data/if';
-import { AskTable, AskReport } from '../components/if/dbif';
 import { getModule } from 'vuex-module-decorators';
+import { KeyVal, Msg, SelectOptions, WebParams } from 'src/layouts/data/if';
+import { AskTable, AskReport, CryptoItem } from '../components/if/dbif';
+import LStore from '../layouts/data/LayoutStoreModule';
 import Selector from '../components/Selector.vue';
 import ErrCode from '../layouts/data/ErrCode';
-import { CryptoItem } from '../components/if/dbif';
 import SEDate from '../layouts/components/SEDate.vue';
 import AskList from '../components/AskList.vue';
 
@@ -42,9 +41,9 @@ interface UserName {
     Selector,
     SED: SEDate,
     AL: AskList,
-  }
+  },
 })
-export default class CrytoReport extends Vue{
+export default class CrytoReport extends Vue {
   store = getModule(LStore);
   options:SelectOptions[] = [];
   itemid = 0;
@@ -52,10 +51,10 @@ export default class CrytoReport extends Vue{
   SelectDate = '';
   askReports:AskReport[]=[];
   @Watch('SelectDate')
-  onSDChange(){
+  onSDChange() {
     console.log('onSDChange:', this.SelectDate);
   }
-  setItem(itemid:number){
+  setItem(itemid:number) {
     console.log('setItem', itemid);
     this.itemid = itemid;
   }
@@ -64,7 +63,7 @@ export default class CrytoReport extends Vue{
     this.SelectDate = '';
   }
   async SearchData() {
-    if ( !this.SelectDate ) return;
+    if (!this.SelectDate) return;
     this.store.setShowProgress(true);
     this.askReports = [];
     const param:WebParams = { ...this.store.Param };
@@ -72,35 +71,34 @@ export default class CrytoReport extends Vue{
     const sdate = tmp[0];
     const edate = tmp[1] ? tmp[1] : tmp[0];
     param.TableName = 'AskTable';
-    param.Fields = [ 'id', 'UserID', 'ItemID', 'AskType', 'BuyType','Qty','Price','Amount',
-        'Fee','AskFee','AskPrice','LeverCredit','ExtCredit','Lever',
-        'UNIX_TIMESTAMP(CreateTime) CreateTime',
-    ]
+    param.Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'Qty', 'Price', 'Amount',
+        'Fee', 'AskFee', 'AskPrice', 'LeverCredit', 'ExtCredit', 'Lever',
+        'UNIX_TIMESTAMP(CreateTime) CreateTime'];
     param.Filter = [];
-    if(this.itemid){
+    if (this.itemid) {
       param.Filter.push({
         Key: 'ItemID',
-        Val: this.itemid
-      })
+        Val: this.itemid,
+      });
     }
     param.Filter.push({
       Key: 'CreateTime',
       Val: `${sdate} 00:00:00`,
       Val2: `${edate} 23:59:59`,
-      Cond: 'between'
-    })
-    const msg:Msg = await this.store.ax.getApi('cc/GetData',param);
+      Cond: 'between',
+    });
+    const msg:Msg = await this.store.ax.getApi('cc/GetData', param);
     if (msg.ErrNo === ErrCode.PASS) {
-      if(msg.data) {
+      if (msg.data) {
         const asks:AskTable[] = msg.data as AskTable[];
-        const users:number[]=[];
-        asks.forEach( (itm) => {
+        const users:number[] = [];
+        asks.forEach((itm) => {
           if (users.indexOf(itm.UserID) === -1) users.push(itm.UserID);
-        })
-        if(users.length > 0) {
+        });
+        if (users.length > 0) {
           const Usrs = await this.getUsers(users);
           console.log('after getUsers', Usrs);
-          if(Usrs.length > 0) {
+          if (Usrs.length > 0) {
             this.askReports = this.getAskReports(asks, Usrs, this.options);
             console.log('after getAskReports', this.askReports);
           }
@@ -109,12 +107,12 @@ export default class CrytoReport extends Vue{
     }
     this.store.setShowProgress(false);
   }
-  getAskReports(asks:AskTable[],users:UserName[],items:SelectOptions[]):AskReport[] {
-    return asks.map(ask=>{
-      const fu = users.find(usr=>usr.id===ask.UserID);
-      let UsrName=''
-      if(fu) UsrName = fu.Nickname;
-      const fi = items.find(itm=>itm.value === ask.ItemID);
+  getAskReports(asks:AskTable[], users:UserName[], items:SelectOptions[]):AskReport[] {
+    return asks.map((ask) => {
+      const fu = users.find((usr) => usr.id === ask.UserID);
+      let UsrName = '';
+      if (fu) UsrName = fu.Nickname;
+      const fi = items.find((itm) => itm.value === ask.ItemID);
       let ItemName = '';
       if (fi) ItemName = fi.label;
       const tmp:AskReport = {
@@ -134,45 +132,45 @@ export default class CrytoReport extends Vue{
         ExtCredit: ask.ExtCredit,
         Lever: ask.Lever,
         CreateTime: ask.CreateTime,
-      }
+      };
       return tmp;
-    })
+    });
   }
-  async getUsers(users:number[]):Promise<UserName[]>{
+  async getUsers(users:number[]):Promise<UserName[]> {
     const param:WebParams = { ...this.store.Param };
     const filter:KeyVal = {
       Key: 'id',
       Val: `(${users.join(',')})`,
-      Cond: 'in'
-    }
+      Cond: 'in',
+    };
     param.TableName = 'Member';
     param.Fields = ['id', 'Nickname'];
     param.Filter = filter;
-    const msg:Msg = await this.store.ax.getApi('cc/GetData',param);
-    if( msg.ErrNo === ErrCode.PASS ) {
+    const msg:Msg = await this.store.ax.getApi('cc/GetData', param);
+    if (msg.ErrNo === ErrCode.PASS) {
       return msg.data as UserName[];
     }
     return [];
   }
-  async getData(){
+  async getData() {
     const param:WebParams = { ...this.store.Param };
     param.TableName = 'Items';
-    param.Fields = ['id','Title'];
-    const msg:Msg = await this.store.ax.getApi('cc/GetData',param);
+    param.Fields = ['id', 'Title'];
+    const msg:Msg = await this.store.ax.getApi('cc/GetData', param);
     if (msg.ErrNo === ErrCode.PASS) {
-      if( msg.data ) {
+      if (msg.data) {
         const list = msg.data as CryptoItem[];
-        this.options = list.map((itm)=>{
+        this.options = list.map((itm) => {
           const tmp:SelectOptions = {
             label: `${itm.Title}`,
-            value: itm.id
-          }
+            value: itm.id,
+          };
           return tmp;
-        })
+        });
         const sltOne:SelectOptions = {
           label: 'ALL',
-          value: 0
-        }
+          value: 0,
+        };
         this.options.splice(0, 0, sltOne);
       }
     }

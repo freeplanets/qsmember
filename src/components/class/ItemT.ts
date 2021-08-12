@@ -17,7 +17,7 @@ export default class ItemT implements ItemTotal {
 	private title = '';
 	constructor(private key:number) {
 		this.items.push(new ItemTT());
-		this.items.push(new ItemTT());		
+		this.items.push(new ItemTT());
 	}
 	get Key() {
 		return this.key;
@@ -47,12 +47,12 @@ export default class ItemT implements ItemTotal {
 		return this.items;
 	}
 	setTitle(t:titleT[]) {
-		const f = t.find(itm=>itm.id === this.key);
+		const f = t.find((itm) => itm.id === this.key);
 		this.title = f ? f.Title : 'none';
 		// console.log('itemT:', this.key, f, this.title);
 	}
-	add(ll:LedgerLever, key:number){
-		if(key !== this.Key) return;
+	add(ll:LedgerLever, key:number) {
+		if (key !== this.Key) return;
 		const itemType = ll.ItemType > 0 ? 1 : 0;
 		this.items[itemType].add(ll);
 		this.fee += (ll.BuyFee + ll.SellFee);
@@ -63,12 +63,12 @@ export default class ItemT implements ItemTotal {
 		this.records = 0;
 		this.avgLever = 0;
 		this.gainlose = 0;
-		this.items.forEach((itm)=>{
+		this.items.forEach((itm) => {
 			this.records += itm.Records;
 			this.amount += itm.Amount;
 			this.leverAmount += itm.LeverAmount;
 			this.gainlose += itm.GainLose;
-		})
+		});
 		if (this.amount > 0) {
 			this.avgLever = this.leverAmount / this.amount;
 		}

@@ -37,14 +37,14 @@ export default class ChatBlock extends Vue {
 	dialog = false;
 	@Watch('value')
 	onValueChange() {
-    if(this.value){
-      if(this.chat){
+    if (this.value) {
+      if (this.chat) {
         this.dialog = true;
       }
-    } 
+    }
 	}
 	CloseMe() {
-    this.dialog = false
+    this.dialog = false;
 		this.$emit('input', false);
 	}
 }

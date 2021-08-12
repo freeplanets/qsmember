@@ -12,7 +12,7 @@
 				/>
 			</div>
       <div class='row col pbtn2'>
-        <q-btn dense color="green" icon-right="search" :label="$t('Button.Search')"  @click="SearchData"/>      
+        <q-btn dense color="green" icon-right="search" :label="$t('Button.Search')"  @click="SearchData"/>
         <q-btn dense color="blue" icon-right="clear" :label="$t('Button.Clear')"  @click="ClearSearch"/>
       </div>
 		</div>
@@ -24,16 +24,16 @@
           <SED v-model="SelectDate" @closeme="isDateSlt=false"></SED>
         </q-card-section>
       </q-card>
-    </q-dialog> 		
+    </q-dialog>
 	</div>
 </template>
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import { getModule } from 'vuex-module-decorators';
 import ItemReport from '../components/ItemReport.vue';
 import SEDate from '../layouts/components/SEDate.vue';
 import ItemTot from '../components/class/ItemTot';
 import LStore from '../layouts/data/LayoutStoreModule';
-import { getModule } from 'vuex-module-decorators';
 import FuncDate from '../components/Functions/MyDate';
 import { ItemTotal } from '../components/if/dbif';
 
@@ -43,7 +43,7 @@ import { ItemTotal } from '../components/if/dbif';
 		ITRPT: ItemReport,
 	},
 })
-export default class CryptoItemReport extends Vue{
+export default class CryptoItemReport extends Vue {
 	store = getModule(LStore);
 	isLedger = false;
 	isLedgerT = false;
@@ -52,13 +52,13 @@ export default class CryptoItemReport extends Vue{
 	list:ItemTotal[]=[];
 	itemTot = new ItemTot(this.store);
 	SearchData() {
-		if(this.SelectDate) {
+		if (this.SelectDate) {
 			this.list = [];
 			this.store.setShowProgress(true);
-			this.isLedger = this.isLedgerT
+			this.isLedger = this.isLedgerT;
 			const filter = FuncDate.createDateFilter(this.SelectDate, 'SellTime');
 			// console.log('SeachData filter', filter);
-			this.itemTot.getItemReport(filter, this.isLedger).then(res=>{
+			this.itemTot.getItemReport(filter, this.isLedger).then((res) => {
 				this.list = res;
 				console.log('SearchData list', this.list);
 				this.store.setShowProgress(false);

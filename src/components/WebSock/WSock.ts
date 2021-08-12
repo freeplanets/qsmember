@@ -1,7 +1,6 @@
-import { FuncKey } from '../if/ENum';
-import { AskTable, WsMsg, GetMessage, ChatMsg } from '../if/dbif';
-import { MsgType, Channels } from '../if/ENum';
 import LayoutStoreModule from 'src/layouts/data/LayoutStoreModule';
+import { FuncKey, MsgType, Channels } from '../if/ENum';
+import { AskTable, WsMsg, GetMessage, ChatMsg } from '../if/dbif';
 import ChatManager from '../class/ChatManager';
 
 const ClientChannel = Channels.ADMIN;
@@ -14,7 +13,7 @@ export default class WSock {
     private chatM:ChatManager;
     private list:GetMessage[] =[];
     private curMsg = '';
-    constructor(private LSM:LayoutStoreModule , private url:string) {
+    constructor(private LSM:LayoutStoreModule, private url:string) {
         this.createConnection();
         this.chatM = new ChatManager(this, LSM);
     }
@@ -60,7 +59,7 @@ export default class WSock {
         }
         if (this.sock.readyState === WebSocket.OPEN) {
             let msg:WsMsg;
-            if(typeof message === 'string') {
+            if (typeof message === 'string') {
                 msg = {
                     Message: message,
                 };
@@ -79,7 +78,7 @@ export default class WSock {
         try {
             const msg:WsMsg = JSON.parse(data);
             console.log('onmessage', msg);
-            if(msg.Message) {
+            if (msg.Message) {
                 this.receivedWelcome = true;
             }
             if (msg.Ask) {
@@ -104,22 +103,22 @@ export default class WSock {
         });
     }
     doAsk(ask:AskTable) {
-        this.list.forEach(mbr=>{
-            if(mbr.Type === MsgType.ACCEPT_ASK) mbr.getMessage(ask);
-        })
+        this.list.forEach((mbr) => {
+            if (mbr.Type === MsgType.ACCEPT_ASK) mbr.getMessage(ask);
+        });
     }
     Add(mbr:GetMessage) {
-        const fidx = this.list.findIndex(itm=>itm===mbr);
-        if(fidx===-1) this.list.push(mbr);
+        const fidx = this.list.findIndex((itm) => itm === mbr);
+        if (fidx === -1) this.list.push(mbr);
     }
     Remove(mbr:GetMessage) {
-        const fidx = this.list.findIndex(itm=>itm===mbr);
-        if(fidx!==-1) this.list.splice(fidx,1);
+        const fidx = this.list.findIndex((itm) => itm === mbr);
+        if (fidx !== -1) this.list.splice(fidx, 1);
     }
     private JSONParse(v:string) {
         try {
             return JSON.parse(v);
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }

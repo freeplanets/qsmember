@@ -33,12 +33,11 @@ import { ItemTotal } from '../if/dbif';
 export default class ItemType extends Vue {
 	@Prop({ type: Object })	readonly itemT!:ItemTotal;
 	item:ItemTotal | undefined;
-	@Watch('itemT', { deep:true, immediate:true })
+	@Watch('itemT', { deep: true, immediate: true })
 	onItemTChange() {
 		// console.log('ItemType onItemTChange', this.itemT);
 		this.item = this.itemT;
 	}
-
 }
 </script>
 <style lang="scss" scoped>

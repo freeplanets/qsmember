@@ -3,7 +3,7 @@
 		<div class="row q-pa-sm">
             <div class='col-2'><GS :store='store' @setGames="setCurGames"></GS></div>
             <div class='pbtn'><q-btn color="blue" icon-right="save" label="Save" @click="SaveData();" /></div>
-		    <div class='col' 
+            <div class='col'
                 v-if='curGameID'
                 >
                 <BTC :store='store' :GameID='curGameID' :pinfo='store.personal' @SltBT='SltBetTypes' ></BTC>
@@ -35,7 +35,7 @@
                 <td class="test">{{$t('Table.MaxHand')}}</td>
                 <td class="test">{{$t('Table.PerStep')}}</td>
                 <td class="test">{{$t('Table.ChangeStart')}}</td>
-                <td class="test">{{$t('Table.BetForChange')}}</td>                
+                <td class="test">{{$t('Table.BetForChange')}}</td>
                 <td class="test">{{$t('Table.Steps')}}</td>
                 <td class="test">{{$t('Table.NoAdjust')}}</td>
                 <td class="test">{{$t('Table.UseAvg')}}</td>
@@ -93,7 +93,7 @@
         <q-card-actions align="right">
           <q-btn flat label="Cancel" color="primary" v-close-popup />
           <q-btn flat label="OK" color="primary" @click="SaveStepG()" />
-        </q-card-actions>        
+        </q-card-actions>
       </q-card>
     </q-dialog>
 	</div>
@@ -101,15 +101,15 @@
 <script lang="ts">
 // import Vue from 'vue';
 // import Component from 'vue-class-component';
-import {Vue, Component, Watch} from 'vue-property-decorator';
-//import axios, { AxiosResponse } from 'axios';
-import LayoutStoreModule from './data/LayoutStoreModule';
-import {getModule} from 'vuex-module-decorators';
-//import {Games} from './data/schema';
-import {SelectOptions,BasePayRateItm,IbtCls,CommonParams,Msg,StepG,LoginInfo} from './data/if';
-import PayRateData from './data/PayRateList';
-import {BasePayRate,ExtPR} from './class/BasePayRate';
+import { Vue, Component, Watch } from 'vue-property-decorator';
+// import axios, { AxiosResponse } from 'axios';
+import { getModule } from 'vuex-module-decorators';
 import { cloneDeep } from 'lodash';
+import LayoutStoreModule from './data/LayoutStoreModule';
+// import {Games} from './data/schema';
+import { SelectOptions, BasePayRateItm, IbtCls, CommonParams, Msg, StepG, LoginInfo, AnyObject } from './data/if';
+import PayRateData from './data/PayRateList';
+import { BasePayRate, ExtPR } from './class/BasePayRate';
 import GameSelector from './components/GameSelector.vue';
 import BetTypeClass from './components/BetTypeClass.vue';
 import RateChangeOption from './components/RateChangeOption.vue';
@@ -137,12 +137,12 @@ interface BItem {
 
 @Component({
     components: {
-        GS:GameSelector,
-        BTC:BetTypeClass,
-        RCO:RateChangeOption
-    }
+        GS: GameSelector,
+        BTC: BetTypeClass,
+        RCO: RateChangeOption,
+    },
 })
-export default class BetClass extends Vue{
+export default class BetClass extends Vue {
 	store = getModule(LayoutStoreModule);
     models:SelectOptions | null = null;
     BasePayR:BasePayRate<BasePayRateItm>[]=[];
@@ -151,117 +151,117 @@ export default class BetClass extends Vue{
     BtClass:IbtCls[] = [];
     BFCS:StepG[]=[];
     spArr:number[] | undefined;
-    @Watch('BFCS',{immediate:true,deep:true})
-    onBFCSChange(){
-        let needAddLine=true;
-        this.BFCS.map(itm=>{
-            if(itm.Step===0) needAddLine=false;
-        })
-        if(needAddLine){
-            this.BFCS.push({Start:0,Step:0})
+    @Watch('BFCS', { immediate: true, deep: true })
+    onBFCSChange() {
+        let needAddLine = true;
+        this.BFCS.map((itm) => {
+            if (itm.Step === 0) needAddLine = false;
+        });
+        if (needAddLine) {
+            this.BFCS.push({ Start: 0, Step: 0 });
         }
     }
-    BFCTitle:string='';
+    BFCTitle='';
 	options:SelectOptions[] = [
-		{value: 0,label:'default'}
+		{ value: 0, label: 'default' },
     ]
-    showBFCG:boolean=false;
-    //showProgress:boolean=false;
-    showDataTable:boolean=false;
-    get showProgress(){
+    showBFCG=false;
+    // showProgress:boolean=false;
+    showDataTable=false;
+    get showProgress() {
         return this.store.showProgress;
     }
-    set showProgress(v:boolean){
+    set showProgress(v:boolean) {
         this.store.setShowProgress(v);
     }
-	get UserID():string{
-		if(this.store.personal.id) {
-			return this.store.personal.id + '';
-		} 
+	get UserID():string {
+		if (this.store.personal.id) {
+			return `${this.store.personal.id}`;
+		}
         return '';
     }
-    get PInfo():LoginInfo{
+    get PInfo():LoginInfo {
         return this.store.personal;
     }
-    async setCurGames(v:SelectOptions){
+    async setCurGames(v:SelectOptions) {
         this.models = v;
-        let GType:string = this.models.GType ? this.models.GType : '';
-        if(GType==='MarkSix'){
+        const GType:string = this.models.GType ? this.models.GType : '';
+        if (GType === 'MarkSix') {
             // 8,72 三中二
             // 10,73 二中特
-            this.spArr=[8,72,10,73];
-        } else if(GType==='HashSix') {
-            this.spArr=[8,79,80,81];
+            this.spArr = [8, 72, 10, 73];
+        } else if (GType === 'HashSix') {
+            this.spArr = [8, 79, 80, 81];
         } else {
             this.spArr = undefined;
         }
-        this.showProgress=true;
-        this.showDataTable=false;
-        await this.chkdata(v,GType);
+        this.showProgress = true;
+        this.showDataTable = false;
+        await this.chkdata(v, GType);
     }
-    async chkdata(v:SelectOptions,GType:string){
+    async chkdata(v:SelectOptions, GType:string) {
         // console.log('chkdata:', v);
-        //const gid:string = v.value as string;
-        this.curGameID = v.value as number;
-        //const btg=BTG[this.curGameID];
-        if(!PayRateData[GType]){
-            this.showProgress=false;
+        // const gid:string = v.value as string;
+        this.curGameID = v.value;
+        // const btg=BTG[this.curGameID];
+        if (!PayRateData[GType]) {
+            this.showProgress = false;
             return;
-        } else {
-            console.log('chkdata no do!!');
         }
-        const tmp:object=PayRateData[GType].data;
-        const order:string[]=PayRateData[GType].order;
-        let itms:BasePayRateItm[];
-        this.BasePayR=[];
-        //console.log('BasePayClass tmp',btg,tmp);
-        order.map(key=>{
-            let itm:BItem[] = tmp[key];
-            //if(key=='1') console.log('itm',itm);
-            itm.map((p:BItem,i:number)=>{
-                const BetType:number=parseInt(key,10);
-                const SubType:number=i;
-                const bpr:BasePayRateItm=this.createBPRItem(p,BetType,SubType);
-                //if(p.BetType=='1') console.log('bb:',p);
+            console.log('chkdata no do!!');
+        
+        const tmp:AnyObject = PayRateData[GType].data;
+        const order:string[] = PayRateData[GType].order;
+        // let itms:BasePayRateItm[];
+        this.BasePayR = [];
+        // console.log('BasePayClass tmp',btg,tmp);
+        order.map((key) => {
+            const itm:BItem[] = tmp[key];
+            // if(key=='1') console.log('itm',itm);
+            itm.map((p:BItem, i:number) => {
+                const BetType:number = parseInt(key, 10);
+                const SubType:number = i;
+                const bpr:BasePayRateItm = this.createBPRItem(p, BetType, SubType);
+                // if(p.BetType=='1') console.log('bb:',p);
                 this.BasePayR.push(new BasePayRate<BasePayRateItm>(bpr));
-            })
+            });
         });
-        itms=await this.getBasePayRate(this.curGameID);
-        //console.log('getBasePayRate itms:',itms);
-        if(itms.length>0){
-            itms.map(itm=>{
-                const e = this.BasePayR.find(elm => elm.BetType == itm.BetType && elm.SubType == itm.SubType)
-                if(e){
-                    e.Datas= itm
+        const itms = await this.getBasePayRate(this.curGameID);
+        // console.log('getBasePayRate itms:',itms);
+        if (itms.length > 0) {
+            itms.map((itm) => {
+                const e = this.BasePayR.find((elm) => elm.BetType === itm.BetType && elm.SubType === itm.SubType);
+                if (e) {
+                    e.Datas = itm;
                 }
-            })
-            if(this.spArr){
-                this.spArr.map(bt=>{
-                    this.BasePayR.map(itm=>{
-                        if(itm.BetType === bt){
+            });
+            if (this.spArr) {
+                this.spArr.map((bt) => {
+                    this.BasePayR.map((itm) => {
+                        if (itm.BetType === bt) {
                             this.chainEdit(itm);
                         }
                     });
                 });
-            } 
-            //this.BasePayR=cloneDeep(this.BasePayR);
+            }
+            // this.BasePayR=cloneDeep(this.BasePayR);
         }
-        //console.log('BasePayR:',this.BasePayR)
-        //console.log('PayRateData',tmp);
+        // console.log('BasePayR:',this.BasePayR)
+        // console.log('PayRateData',tmp);
         // console.log('BasePayR before if:', this.BasePayR, this.BasePayR.length);
-        //if(this.BasePayR.length==0) return;
-        this.showDataTable=true;
-        this.showProgress=false;
+        // if(this.BasePayR.length==0) return;
+        this.showDataTable = true;
+        this.showProgress = false;
     }
-    chainEdit(b:BasePayRate<BasePayRateItm>){
-        let itm = this.BasePayR.find(elm => elm.BetType === b.BetType && elm.SubType ===b.SubType);
-        if(itm){
-            if(itm.isParlay){
-                //itm.resetExtPR();
-                itm=this.setExtPR(itm)
+    chainEdit(b:BasePayRate<BasePayRateItm>) {
+        let itm = this.BasePayR.find((elm) => elm.BetType === b.BetType && elm.SubType === b.SubType);
+        if (itm) {
+            if (itm.isParlay) {
+                // itm.resetExtPR();
+                itm = this.setExtPR(itm);
             }
         } else {
-            console.log( b, ' not procss!!!');
+            console.log(b, ' not procss!!!');
         }
         /*
         const e0 = this.BasePayR.find(elm => elm.BetType == bt && elm.SubType == 0);
@@ -274,144 +274,142 @@ export default class BetClass extends Vue{
         }
         */
     }
-    setExtPR(itm:BasePayRate<BasePayRateItm>){
-        //console.log('setExtPR',itm.BetType ,itm.SubType);
-        this.BasePayR.map(elm=>{
-            if(elm.isParlay && elm.BetType === itm.BetType && elm.SubType !== itm.SubType){
-                let tmp:ExtPR={
+    setExtPR(itm:BasePayRate<BasePayRateItm>) {
+        // console.log('setExtPR',itm.BetType ,itm.SubType);
+        this.BasePayR.map((elm) => {
+            if (elm.isParlay && elm.BetType === itm.BetType && elm.SubType !== itm.SubType) {
+                const tmp:ExtPR = {
                     SubType: itm.SubType ? itm.SubType : 0,
                     Rate: itm.Rate ? itm.Rate : 0,
-                    Probability: itm.Probability ? itm.Probability : 0
-                }
+                    Probability: itm.Probability ? itm.Probability : 0,
+                };
                 elm.addExtPRS(tmp);
             }
-        })
-        //console.log('setExtPR',itm);
+        });
+        // console.log('setExtPR',itm);
         return itm;
     }
-    createBPRItem(p:BItem,BetType:number,SubType:number):BasePayRateItm{
-        let bpr:BasePayRateItm = Object.assign({},{
-            Title:p.Title,
+    createBPRItem(p:BItem, BetType:number, SubType:number):BasePayRateItm {
+        const bpr:BasePayRateItm = { Title: p.Title,
             SubTitle: p.SubTitle ? p.SubTitle : '',
-            BetType: BetType,
-            SubType: SubType,
-            NoAdjust:0,
-            Profit:0,
-            DfRate:0,
-            TopRate:0,
-            Probability:0,
-            Steps:0,
-            //TopPay:0,
-            //OneHand:0
-            isParlay:0,
-            TotalNums:0,
-            UseAvg:0,
-            SingleNum:0,
-            UnionNum:0,
-            MinHand:0,
-            MaxHand:0,
-            BetForChange:0,
-            StepsGroup:''
-        });
+            BetType,
+            SubType,
+            NoAdjust: 0,
+            Profit: 0,
+            DfRate: 0,
+            TopRate: 0,
+            Probability: 0,
+            Steps: 0,
+            // TopPay:0,
+            // OneHand:0
+            isParlay: 0,
+            TotalNums: 0,
+            UseAvg: 0,
+            SingleNum: 0,
+            UnionNum: 0,
+            MinHand: 0,
+            MaxHand: 0,
+            BetForChange: 0,
+            StepsGroup: '' };
         return bpr;
-    }  
-    async getBasePayRate(gid:number):Promise<BasePayRateItm[]>{
-        let dta:BasePayRateItm[]=[];
+    }
+    async getBasePayRate(gid:number):Promise<BasePayRateItm[]> {
+        let dta:BasePayRateItm[] = [];
         const param:CommonParams = {
             GameID: gid,
             UserID: this.store.personal.id,
-            sid: this.store.personal.sid
-        }
-        let msg:Msg = await this.store.ax.getApi('getBasePayRate',param);
-        if(msg.ErrNo==0){
-            dta=msg.data as BasePayRateItm[]; 
+            sid: this.store.personal.sid,
+        };
+        const msg:Msg = await this.store.ax.getApi('getBasePayRate', param);
+        if (msg.ErrNo === 0) {
+            dta = msg.data as BasePayRateItm[];
         }
         return dta;
     }
-    updateRateTop(v:number){
-        if(v>0){
-            this.BasePayR.map(itm=>{
-                if(itm.Selected){
+    updateRateTop(v:number) {
+        if (v > 0) {
+            this.BasePayR.map((itm) => {
+                if (itm.Selected) {
                     itm.updateRateTopByProfit(v);
                 }
-            })
+            });
         }
     }
-    updateRateDefault(v:number){
-        if(v>0){
-            this.BasePayR.map(itm=>{
-                if(itm.Selected){
+    updateRateDefault(v:number) {
+        if (v > 0) {
+            this.BasePayR.map((itm) => {
+                if (itm.Selected) {
                     itm.updateDefaultRateByProfit(v);
                 }
-            })
+            });
         }
     }
-    updateSingleNum(risk:number){
-        if(risk>0){
-            this.BasePayR.map(itm=>{
-                if(itm.Selected){
+    updateSingleNum(risk:number) {
+        if (risk > 0) {
+            this.BasePayR.map((itm) => {
+                if (itm.Selected) {
                     itm.updateSingleNumFull(risk);
                 }
-            })
-        }        
-    }
-    updateMinBet(v:number){
-        if(v>0){
-            this.BasePayR.map(itm=>{
-                if(itm.Selected){
-                    itm.MinHand=v;
-                }
-            })
+            });
         }
     }
-    updateMaxBet(v:number){
-        if(v>0){
-            this.BasePayR.map(itm=>{
-                if(itm.Selected){
-                    itm.MaxHand=v;
+    updateMinBet(v:number) {
+        if (v > 0) {
+            this.BasePayR.map((itm) => {
+                if (itm.Selected) {
+                    itm.MinHand = v;
                 }
-            })
+            });
         }
     }
-    updateChangeStart(v:number){
-        if(v){
-            this.BasePayR.map(itm=>{
-                if(itm.Selected){
+    updateMaxBet(v:number) {
+        if (v > 0) {
+            this.BasePayR.map((itm) => {
+                if (itm.Selected) {
+                    itm.MaxHand = v;
+                }
+            });
+        }
+    }
+    updateChangeStart(v:number) {
+        if (v) {
+            this.BasePayR.map((itm) => {
+                if (itm.Selected) {
                     itm.updateChangeStart(v);
                 }
-            })
-            this.BasePayR=cloneDeep(this.BasePayR);
+            });
+            this.BasePayR = cloneDeep(this.BasePayR);
         }
     }
-    updateBetForChange(v:number){
-        if(v){
-            this.BasePayR.map(itm=>{
-                if(itm.Selected){
+    updateBetForChange(v:number) {
+        if (v) {
+            this.BasePayR.map((itm) => {
+                if (itm.Selected) {
                     itm.updateBetForChange(v);
                 }
-            })
+            });
         }
     }
-    updateBetSteps(v:number){
-        if(v){
-            this.BasePayR.map(itm=>{
-                if(itm.Selected){
+    updateBetSteps(v:number) {
+        if (v) {
+            this.BasePayR.map((itm) => {
+                if (itm.Selected) {
                     itm.updateSteps(v);
                 }
-            })
+            });
         }
     }
-    SltBetTypes(slt:string){
+    SltBetTypes(slt:string) {
         const bts:string[] = slt.split(':');
-        this.BasePayR.map(itm=>{
+        this.BasePayR.map((itm) => {
             itm.Selected = false;
-        })
-        this.BasePayR.map(itm=>{
-            const f = bts.find(bt=>parseInt(bt,10)===itm.BetType);
-            if(f){
+        });
+        this.BasePayR.map((itm) => {
+            const f = bts.find((bt) => parseInt(bt, 10) === itm.BetType);
+            if (f) {
                 itm.Selected = true;
             }
-        })
+        });
         /*
         bts.map(bt=>{
             const  f=this.BasePayR.find(bpr=>bpr.BetType===parseInt(bt,10));
@@ -420,32 +418,32 @@ export default class BetClass extends Vue{
             }
         })
         */
-        //console.log('SltBetTypes',bts);
+        // console.log('SltBetTypes',bts);
     }
-    SaveData(){
+    SaveData() {
         const dtas:BasePayRateItm[] = [];
-        this.BasePayR.map(itm=>{
-            if(itm.DataChanged) {
-                if(itm.Datas.StepsGroup){
+        this.BasePayR.map((itm) => {
+            if (itm.DataChanged) {
+                if (itm.Datas.StepsGroup) {
                     itm.Datas.StepsGroup = JSON.parse(itm.Datas.StepsGroup as string);
                 }
                 dtas.push(itm.Datas);
             }
-        })
-        if(dtas.length>0){
+        });
+        if (dtas.length > 0) {
             this.sendData(dtas);
         }
     }
-    async sendData(dtas:BasePayRateItm[]){
-        if(!this.models) return;
-        const param:CommonParams={
-            UserID:this.PInfo.id,
-            sid:this.PInfo.sid,
+    async sendData(dtas:BasePayRateItm[]) {
+        if (!this.models) return;
+        const param:CommonParams = {
+            UserID: this.PInfo.id,
+            sid: this.PInfo.sid,
             GameID: this.models.value,
             GType: this.models.GType,
             ModifyID: this.PInfo.id,
-            data: JSON.stringify(dtas)            
-        }
+            data: JSON.stringify(dtas),
+        };
         /*
  		const data = {
 			GameID: this.models.value,
@@ -453,23 +451,23 @@ export default class BetClass extends Vue{
             data: JSON.stringify(dtas)
         }
         */
-        const msg:Msg=await this.store.ax.getApi('batch/saveBasePayRate',param,'post');
-        if(msg.ErrNo===0){
+        const msg:Msg = await this.store.ax.getApi('batch/saveBasePayRate', param, 'post');
+        if (msg.ErrNo === 0) {
             this.$q.dialog({
                 title: this.$t('Label.Save') as string,
-                message: 'OK!!'
+                message: 'OK!!',
             });
-            dtas.map(itm=>{
-                const tmp = this.BasePayR.find(elm => elm.BetType == itm.BetType && elm.SubType == itm.SubType)
-                if(tmp){
+            dtas.map((itm) => {
+                const tmp = this.BasePayR.find((elm) => elm.BetType === itm.BetType && elm.SubType === itm.SubType);
+                if (tmp) {
                     tmp.DataChanged = false;
                 }
-            })            
+            });
         } else {
             this.$q.dialog({
                 title: this.$t('Label.Save') as string,
-                message: msg.ErrCon
-            });            
+                message: msg.ErrCon,
+            });
         }
         /*
         const url:string=this.store.ax.Host+'/api/batch/saveBasePayRate';
@@ -490,44 +488,44 @@ export default class BetClass extends Vue{
 		}).catch(err=>{
 			console.log(err);
         })
-        */       
+        */
     }
-    showStepGroup(itm:BasePayRate<BasePayRateItm>){
-        this.BFCTitle=itm.Title + (itm.SubTitle ? ' / ' + itm.SubTitle : '');
-        this.curItem=itm;
-        const EmptyItm:StepG={
-            Start:0,
-            Step:0
-        }
-        this.BFCS=itm.StepsGroup;
-        this.BFCS.push(EmptyItm)
-        this.showBFCG=true;
+    showStepGroup(itm:BasePayRate<BasePayRateItm>) {
+        this.BFCTitle = itm.Title + (itm.SubTitle ? ` / ${itm.SubTitle}` : '');
+        this.curItem = itm;
+        const EmptyItm:StepG = {
+            Start: 0,
+            Step: 0,
+        };
+        this.BFCS = itm.StepsGroup;
+        this.BFCS.push(EmptyItm);
+        this.showBFCG = true;
     }
-    SaveStepG(){
-        if(this.curItem){
-            this.curItem.StepsGroup=this.BFCS;
+    SaveStepG() {
+        if (this.curItem) {
+            this.curItem.StepsGroup = this.BFCS;
         }
-        this.showBFCG=false;
+        this.showBFCG = false;
     }
     /*
     updateBPR(){
         this.BasePayR=cloneDeep(this.BasePayR);
     }
     */
-    chkItem(itm){
-        //console.log('chkItem',itm.BetType,this.spArr);
-        if(this.spArr){
-            const f = this.spArr.find(bt=>bt===itm.BetType)
-            if(f){
+    chkItem(itm:BasePayRate<BasePayRateItm>) {
+        // console.log('chkItem',itm.BetType,this.spArr);
+        if (this.spArr) {
+            const f = this.spArr.find((bt) => bt === itm.BetType);
+            if (f) {
                 this.chainEdit(itm);
             }
         }
     }
-  mounted(){
-        if(!this.store.isLogin){
-        this.$router.push({path:'/login'});
-        }      
-        this.BasePayR=[];
+  mounted() {
+        if (!this.store.isLogin) {
+        this.$router.push({ path: '/login' });
+        }
+        this.BasePayR = [];
   }
 }
 </script>
@@ -563,7 +561,7 @@ table {
 .test1 {
     border: 1px gray solid;
     text-align: center;
-    vertical-align: middle;    
+    vertical-align: middle;
 }
 
 </style>

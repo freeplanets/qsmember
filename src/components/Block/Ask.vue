@@ -16,8 +16,8 @@ import NumsFunc from '../Functions/Nums';
 import { AskTable } from '../if/dbif';
 
 @Component
-export default class Ask extends Vue{
-	@Prop( { type: Object }) readonly ask!:AskTable;
+export default class Ask extends Vue {
+	@Prop({ type: Object }) readonly ask!:AskTable;
 	get CreateTime() {
 		return DateFunc.toLocalString(this.ask.CreateTime);
 	}

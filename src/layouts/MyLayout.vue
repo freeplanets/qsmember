@@ -41,7 +41,7 @@
                 </q-item-section>
               </q-item>
             </q-list>
-          </q-btn-dropdown>          
+          </q-btn-dropdown>
         </div>
         <div v-if="!Personal.Account">App v{{ $q.version }}</div>
       </q-toolbar>
@@ -56,7 +56,7 @@
     >
       <q-list>
         <q-item-label header>Essential Links</q-item-label>
-        <q-item 
+        <q-item
           v-for="(func,idx) in Funcs"
           :key="`func${idx}`"
           :to="`/${func.Paths}`"
@@ -94,14 +94,14 @@
         <q-card-actions align="right" class="text-primary">
           <q-btn v-close-popup flat :label="$t('Label.Cancel')" />
           <q-btn flat :label="$t('Button.Confirm')" @click="ChangePW" />
-        </q-card-actions>        
+        </q-card-actions>
       </q-card>
     </q-dialog>
     <q-dialog v-model="showGAPop">
       <q-card class="my-card">
         <q-card-section>
           <div class="text-h6">{{$t('Label.GAMsg')}}</div>
-        </q-card-section>        
+        </q-card-section>
         <q-separator />
         <div v-html="GAIMG">
           </div>
@@ -110,12 +110,12 @@
           <q-btn v-close-popup flat color="primary" :label="$t('Label.Close')" />
         </q-card-actions>
       </q-card>
-    </q-dialog>    
+    </q-dialog>
     <q-page-container>
       <router-view />
       <q-dialog v-model="showComment" seamless position="bottom">
           <CMMT style="width: 80%" :store='store'></CMMT>
-      </q-dialog>      
+      </q-dialog>
     </q-page-container>
     <q-dialog v-model="showProgress" persistent>
         <q-card>
@@ -133,13 +133,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 // import Component from 'vue-class-component';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
-import {Msg,LoginInfo, CommonParams,Progs} from './data/if';
-import {Watch} from 'vue-property-decorator';
-//import {User} from './data/schema';
+import { Msg, LoginInfo, CommonParams, Progs } from './data/if';
+// import {User} from './data/schema';
 import Comments from './components/Comments.vue';
 import BdgMsgGroup from '../components/Badge/MsgControl.vue';
 // import BDMsgGroup from '../components/ButtonDropdown/MsgGroup.vue';
@@ -154,190 +153,190 @@ import BdgMsgGroup from '../components/Badge/MsgControl.vue';
 })
 export default class MyLayout extends Vue {
   store = getModule(LayoutStoreModule);
-  showComment:boolean=false;
-  ProName:string='*';
-  showCp:boolean=false;
-  OPassword:string='';
-  NPassword:string='';
-  CPassword:string='';
-  GAIMG:string='';
-  showGAPop:boolean=false;
+  showComment=false;
+  ProName='*';
+  showCp=false;
+  OPassword='';
+  NPassword='';
+  CPassword='';
+  GAIMG='';
+  showGAPop=false;
   get Funcs():Progs[] {
     return this.store.personal.Progs;
   }
-  get showProgress(){
+  get showProgress() {
     return this.store.showProgress;
   }
-  set showProgress(v:boolean){
+  set showProgress(v:boolean) {
     this.store.setShowProgress(v);
   }
-  get chgPW(){
+  get chgPW() {
     return this.store.chgPW;
   }
   get WSock() {
     return this.store.WSock;
   }
-  @Watch('chgPW',{immediate:true,deep:true})
-  onChgPW(){
+  @Watch('chgPW', { immediate: true, deep: true })
+  onChgPW() {
     this.showCp = this.store.chgPW;
   }
   get leftDrawerOpen() {
-    //console.log('leftDrawerOpen get:',this.store.leftDrawerOpen);
+    // console.log('leftDrawerOpen get:',this.store.leftDrawerOpen);
     return this.store.leftDrawerOpen;
   }
-  set leftDrawerOpen(value:boolean){
-    //console.log('MyLayout leftDrawerOpen set:',value,this.store.isLogin);
+  set leftDrawerOpen(value:boolean) {
+    // console.log('MyLayout leftDrawerOpen set:',value,this.store.isLogin);
     this.store.setLeftDrawerOpen(value);
   }
-  get showGA(){
+  get showGA() {
     return this.store.isShowGA;
   }
-  set showGA(v:boolean){
-    this.store.setShowGA(v);    
+  set showGA(v:boolean) {
+    this.store.setShowGA(v);
   }
-  @Watch('showGA',{immediate:true,deep:true})
-  onShowGAChange(){
-    //console.log('onShowGAChange',this.store.SysInfo);
-    if(this.store.isShowGA){
+  @Watch('showGA', { immediate: true, deep: true })
+  onShowGAChange() {
+    // console.log('onShowGAChange',this.store.SysInfo);
+    if (this.store.isShowGA) {
       this.getGAImg();
     }
   }
-  get isLogin(){
+  get isLogin() {
     return this.store.isLogin;
   }
-  get Personal():LoginInfo{
-    return this.store.personal as LoginInfo;
+  get Personal():LoginInfo {
+    return this.store.personal;
   }
-  setProName(v:string){
-    this.ProName=this.$t(`Label.${v}`)+'';
-    this.showComment=false;
+  setProName(v:string) {
+    this.ProName = `${this.$t(`Label.${v}`)}`;
+    this.showComment = false;
   }
-  async getGAImg(){
-    this.showProgress=true;
-    const param:CommonParams={
-      UserID:this.store.personal.id,
-      sid:this.store.personal.sid,
-      AppName:this.store.SysInfo
-    }
-    const msg:Msg=await this.store.ax.getApi('getGAImg',param);
-    if(msg.ErrNo===0){
-      this.GAIMG=msg.ErrCon ? msg.ErrCon : '';
-      this.showProgress=false;
+  async getGAImg() {
+    this.showProgress = true;
+    const param:CommonParams = {
+      UserID: this.store.personal.id,
+      sid: this.store.personal.sid,
+      AppName: this.store.SysInfo,
+    };
+    const msg:Msg = await this.store.ax.getApi('getGAImg', param);
+    if (msg.ErrNo === 0) {
+      this.GAIMG = msg.ErrCon ? msg.ErrCon : '';
+      this.showProgress = false;
       this.showGAPop = true;
-    } 
-    //console.log(msg);
+    }
+    // console.log(msg);
   }
-  async SaveGAImg(){
-    const param:CommonParams={
-      UserID:this.store.personal.id,
-      sid:this.store.personal.sid
+  async SaveGAImg() {
+    const param:CommonParams = {
+      UserID: this.store.personal.id,
+      sid: this.store.personal.sid,
+    };
+    const msg:Msg = await this.store.ax.getApi('SaveGAImg', param);
+    if (msg.ErrNo === 0) {
+      this.GAIMG = msg.ErrCon ? msg.ErrCon : '';
     }
-    const msg:Msg=await this.store.ax.getApi('SaveGAImg',param);
-    if(msg.ErrNo===0){
-      this.GAIMG=msg.ErrCon ? msg.ErrCon : '';
-    } 
-    //console.log(msg);
-  }  
-  async getSysInfo(){
-    const param:CommonParams={
-      UserID:0,
-      sid:''
-    }
-    const msg:Msg=await this.store.ax.getApi('getSysInfo',param);
-    //console.log(msg);
-    if(msg.ErrNo===0){
-      //Object.assign(this.store.SysInfo,msg.data);
-      let a:any=msg.data;
+    // console.log(msg);
+  }
+  async getSysInfo() {
+    const param:CommonParams = {
+      UserID: 0,
+      sid: '',
+    };
+    const msg:Msg = await this.store.ax.getApi('getSysInfo', param);
+    // console.log(msg);
+    if (msg.ErrNo === 0) {
+      // Object.assign(this.store.SysInfo,msg.data);
+      const a:any = msg.data;
       this.store.setSysInfo(a.SysName);
     }
   }
-  cleanPW(){
-    this.OPassword='';
-    this.NPassword='';
-    this.CPassword='';
-    this.showCp=true;
+  cleanPW() {
+    this.OPassword = '';
+    this.NPassword = '';
+    this.CPassword = '';
+    this.showCp = true;
   }
-  async ChangePW(){
-    if(this.CPassword !== this.NPassword){
+  async ChangePW() {
+    if (this.CPassword !== this.NPassword) {
         this.$q.dialog({
             title: this.$t('Title.ChangePassword') as string,
-            message: this.$t('Title.PassERR') as string
+            message: this.$t('Title.PassERR') as string,
         });
         return;
     }
-    const param:CommonParams={
-      UserID:this.store.personal.id,
-      sid:this.store.personal.sid,
+    const param:CommonParams = {
+      UserID: this.store.personal.id,
+      sid: this.store.personal.sid,
       OPassword: this.OPassword,
       NPassword: this.NPassword,
-      CPassword: this.CPassword
-    }
-    const msg:Msg= await this.store.ax.getApi('ChangePassword',param,'post');
-    if(msg.ErrNo===0){
-      this.showCp=false;
+      CPassword: this.CPassword,
+    };
+    const msg:Msg = await this.store.ax.getApi('ChangePassword', param, 'post');
+    if (msg.ErrNo === 0) {
+      this.showCp = false;
       this.$q.dialog({
           title: this.$t('Title.ChangePassword') as string,
-          message: this.$t('Title.PassChgMsg') as string
-      });    
-      //this.$router.push({path:'/login'});
+          message: this.$t('Title.PassChgMsg') as string,
+      });
+      // this.$router.push({path:'/login'});
       await this.logout();
     }
   }
-  async logout(){
-    const param:CommonParams={
-      UserID:this.Personal.id,
-      sid: this.Personal.sid
-    }
-    const msg:Msg= await this.store.ax.getApi('logout',param);
+  async logout() {
+    const param:CommonParams = {
+      UserID: this.Personal.id,
+      sid: this.Personal.sid,
+    };
+    const msg:Msg = await this.store.ax.getApi('logout', param);
     console.log(msg);
     this.store.clearPInfo();
-    this.$router.push({path:'/login'}).catch(err=>{
-      console.log('router error',err);
+    this.$router.push({ path: '/login' }).catch((err) => {
+      console.log('router error', err);
     });
   }
-  CancelPass2(){
+  CancelPass2() {
       this.$q.dialog({
-          title: this.$t('Label.Pass2Lvl') + '',
-          message: this.$t('Label.CancelPass2') + '?',
-          cancel:true,
-          persistent:true
-      }).onOk(async()=>{
+          title: `${this.$t('Label.Pass2Lvl')}`,
+          message: `${this.$t('Label.CancelPass2')}?`,
+          cancel: true,
+          persistent: true,
+      }).onOk(async () => {
         await this.doCancelPass2();
-      });       
+      });
   }
-  async doCancelPass2(){
-    const param:CommonParams={
-      UserID:this.Personal.id,
+  async doCancelPass2() {
+    const param:CommonParams = {
+      UserID: this.Personal.id,
       sid: this.Personal.sid,
-      isChkGA: '0'
+      isChkGA: '0',
     };
-    const msg:Msg=await this.store.ax.getApi('SetUser',param);
-    if(msg.ErrNo===0){
+    const msg:Msg = await this.store.ax.getApi('SetUser', param);
+    if (msg.ErrNo === 0) {
       this.$q.dialog({
-          title: this.$t('Label.CancelPass2') + '',
+          title: `${this.$t('Label.CancelPass2')}`,
           message: 'OK',
-          ok:true
-      }).onOk(()=>{
+          ok: true,
+      }).onOk(() => {
         this.logout();
       });
     } else {
       this.$q.dialog({
-          title: this.$t('Label.CancelPass2') + '(Error)',
-          message: msg.ErrCon
+          title: `${this.$t('Label.CancelPass2')}(Error)`,
+          message: msg.ErrCon,
       });
     }
   }
   mounted() {
-    //console.log('MyLayout mounted');
+    // console.log('MyLayout mounted');
     this.getSysInfo();
-    if(!this.isLogin){      
-      //console.log('MyLayout:',this.$route);
+    if (!this.isLogin) {
+      // console.log('MyLayout:',this.$route);
       this.store.ax.Router = this.$router;
-      if(this.$route.path !== '/login'){
-        this.$router.push({path:'/login'});
+      if (this.$route.path !== '/login') {
+        this.$router.push({ path: '/login' });
       }
     } else {
-         this.$router.push({path:'/'});
+         this.$router.push({ path: '/' });
     }
   }
 }

@@ -18,63 +18,64 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue'
+import Vue from 'vue';
 import Component from 'vue-class-component';
-import {Prop} from 'vue-property-decorator';
-import {CommonParams,Msg} from '../data/if';
+import { Prop } from 'vue-property-decorator';
+import { CommonParams, Msg } from '../data/if';
 import LayoutStoreModule from '../data/LayoutStoreModule';
+
 @Component
 export default class Comments extends Vue {
     @Prop() readonly PageName?:string;
     @Prop() readonly store?:LayoutStoreModule;
-    private comment:string='';
-    private page:string='';
-    async saveWork(){
-      if(this.comment==='') return;
-      if(this.store){
-        let cp:CommonParams={
-          UserID:this.store.personal.id,
-          sid:this.store.personal.sid,
-          PageName:this.page,
-          Comments:this.comment
-        }
-        //const ans:Msg = await AxApi.getApi('saveComments',cp,'post');
-        const ans:Msg = await this.store.ax.getApi('saveComments',cp,'post');
-        if(ans.ErrNo===0){
-          let msg={
+    private comment='';
+    private page='';
+    async saveWork() {
+      if (this.comment === '') return;
+      if (this.store) {
+        const cp:CommonParams = {
+          UserID: this.store.personal.id,
+          sid: this.store.personal.sid,
+          PageName: this.page,
+          Comments: this.comment,
+        };
+        // const ans:Msg = await AxApi.getApi('saveComments',cp,'post');
+        const ans:Msg = await this.store.ax.getApi('saveComments', cp, 'post');
+        if (ans.ErrNo === 0) {
+          const msg = {
             title: 'Save Comments',
-            message: 'Ok!!'
-          }
-          this.$q.dialog(msg).onOk(()=>{}).onCancel(()=>{}).onDismiss(()=>{});
+            message: 'Ok!!',
+          };
+          this.$q.dialog(msg).onOk(() => {}).onCancel(() => {}).onDismiss(() => {});
         }
       }
     }
-    async getComment(){
-      if(this.page==='') return;
-      if(this.store){
-        let cp:CommonParams={
-          UserID:this.store.personal.id,
-          sid:this.store.personal.sid,          
-          PageName:this.page
-        }
-        //const ans:Msg = await AxApi.getApi('getComments',cp,'post');
-        const ans:Msg = await this.store.ax.getApi('getComments',cp,'post');
-        //console.log('getComment',ans);
-        if(ans.ErrNo===0){
-          const dta:any=ans.data;
-          if(dta.length>0){
-            this.comment=dta[0].Comments;
+    async getComment() {
+      if (this.page === '') return;
+      if (this.store) {
+        const cp:CommonParams = {
+          UserID: this.store.personal.id,
+          sid: this.store.personal.sid,
+          PageName: this.page,
+        };
+        // const ans:Msg = await AxApi.getApi('getComments',cp,'post');
+        const ans:Msg = await this.store.ax.getApi('getComments', cp, 'post');
+        // console.log('getComment',ans);
+        if (ans.ErrNo === 0) {
+          const dta:any = ans.data;
+          if (dta.length > 0) {
+            this.comment = dta[0].Comments;
           }
         }
       }
     }
-    mounted(){
-        this.page=this.$route.path.replace('/',':');
-        if(this.page===':'){
-          this.page='root';
+    mounted() {
+        this.page = this.$route.path.replace('/', ':');
+        if (this.page === ':') {
+          this.page = 'root';
         }
         this.getComment();
-        //console.log('mounted getComment');
+        // console.log('mounted getComment');
     }
 }
 </script>

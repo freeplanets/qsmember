@@ -36,13 +36,13 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
+import { QDialogOptions } from 'quasar';
 import LStore from '../../layouts/data/LayoutStoreModule';
 import { WebParams, Msg } from '../../layouts/data/if';
 import ErrCode from '../../layouts/data/ErrCode';
 import { OpTypes } from '../if/ENum';
 // import { CryptoOpParams } from '../if/dbif';
 import OpParams from '../class/CryptoOpParams';
-import { QDialogOptions } from 'quasar';
 
 @Component
 export default class CryptoOpParamList extends Vue {
@@ -57,46 +57,47 @@ export default class CryptoOpParamList extends Vue {
 	store = getModule(LStore);
 	options = this.getENum();
 	getENum() {
-		const a = { ...OpTypes };
-		const n = Object.keys(a).map(key=>{
-			return eval(`a.${key}`);
-		});
-		return n;
+		// const a = { ...OpTypes };
+		// const n = Object.keys(a).map((key) => a[key]);
+		return Object.values(OpTypes);
 	}
-	Save(itm:OpParams,idx:number) {
+	Save(itm:OpParams, idx:number) {
 		itm.ModifyID = this.store.personal.id;
 		const param:WebParams = { ...this.store.Param };
 		param.TableName = 'CryptoOpParams';
 		param.TableData = itm.Data;
-		this.store.ax.getApi('cc/SaveData', param).then((res:Msg)=>{
+		this.store.ax.getApi('cc/SaveData', param).then((res:Msg) => {
 			const opt:QDialogOptions = {
 				title: `${this.$t('Label.Save')}`,
 				message: 'OK!',
-			}
+			};
 			console.log('Save:', res);
-			if(res.ErrNo !== ErrCode.PASS) {
+			if (res.ErrNo !== ErrCode.PASS) {
 				opt.message = String(this.$t(`Error.${res.ErrNo}`));
 			} else {
-				if(res.insertId && itm.id === 0) {
+				if (res.insertId && itm.id === 0) {
 					this.items[idx].setID(res.insertId);
 				}
 				this.items[idx].isChanged = true;
 			}
 			this.$q.dialog(opt);
-		})
+		});
 	}
 	AddNew() {
 		this.items.push(new OpParams(this.ItemID));
 	}
-
 }
 </script>
 <style lang="scss" scoped>
 .list {
 	border-top: 1px solid $indigo-10;
-	border-right: 1px solid $indigo-10;		
+	border-right: 1px solid $indigo-10;
 }
-.list th, .list td {
+.list th {
+	border-left: 1px solid $indigo-3;
+	border-bottom: 1px solid $indigo-3;
+}
+.list td {
 	border-left: 1px solid $indigo-10;
 	border-bottom: 1px solid $indigo-10;
 }

@@ -21,7 +21,7 @@ import ListAsks from '../List/Asks.vue';
 @Component({
 	components: {
 		ListAsks,
-	}
+	},
 })
 export default class extends Vue {
 	@Prop({ type: Array }) readonly list!:AskTable[];
@@ -42,7 +42,7 @@ export default class extends Vue {
 		return Math.round(window.screen.width * 0.4);
 	}
 	get maxWidth() {
-		return window.screen.width;	
+		return window.screen.width;
 	}
 }
 </script>

@@ -8,7 +8,7 @@
 				<div class="col-2 suba txtRight">{{ item.Long.Total.toFixed(2) }}</div>
 				<div class="col-2 suba txtRight">{{ item.Long.Qty.toFixed(8) }}</div>
 				<div class="col-2 suba txtRight">{{ item.Long.Price.toFixed(2) }}</div>
-				<div 
+				<div
 					:class="{'col-2 suba txtRight':true, clrRed: item.Long.GainLose<0, clrGreen: item.Long.GainLose > 0}">
 					{{ item.Long.GainLose.toFixed(2) }}
 				</div>
@@ -19,13 +19,13 @@
 			</div>
 			<div class="row sublineBottom" @click="showlist(item.Title, item.Short.List)">
 				<div class="col suba txtCenter">空</div>
-				<div class="col-2 suba txtRight">{{ item.Short.Total.toFixed(2) }}</div>				
+				<div class="col-2 suba txtRight">{{ item.Short.Total.toFixed(2) }}</div>
 				<div class="col-2 suba txtRight">{{ item.Short.Qty.toFixed(8) }}</div>
 				<div class="col-2 suba txtRight">{{ item.Short.Price.toFixed(2) }}</div>
 				<div :class="{'col-2 suba txtRight':true, clrRed: item.Short.GainLose<0, clrGreen: item.Short.GainLose > 0}">
 					{{ item.Short.GainLose.toFixed(2) }}
 				</div>
-				<div class="col-1 suba txtRight">{{ `${item.Short.PriceLimit}/${item.Short.PriceLimitQty}` }}</div>	
+				<div class="col-1 suba txtRight">{{ `${item.Short.PriceLimit}/${item.Short.PriceLimitQty}` }}</div>
 				<div v-if="ShowFunc" class="col subb">
 					<q-checkbox left-label v-model="shortStop" label="停收" />
 				</div>
@@ -42,11 +42,11 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { LoginInfo } from 'src/layouts/data/if';
 import Crypto from '../class/Items';
 import { PartialCryptoItems, AskTable } from '../if/dbif';
 import { StopType } from '../if/ENum';
 import DialogAskList from '../Dialog/AskList.vue';
-import { LoginInfo } from 'src/layouts/data/if';
 
 @Component({
 	components: {
@@ -88,13 +88,13 @@ export default class CryptoItemControl extends Vue {
 		this.shortStop = this.item.getClosed(StopType.SHORT_STOP);
 	}
 	setClosed(v:boolean, st:StopType) {
-		let key = -1
-		if(v) key = 1;
+		let key = -1;
+		if (v) key = 1;
 		// console.log('setClosed:', v, key);
 		const data:PartialCryptoItems = {
 			id: this.item.id,
-			Closed: this.item.Closed + key*st, 
-		}
+			Closed: this.item.Closed + key * st,
+		};
 		this.updateItems(data);
 	}
 	updateItems(data:PartialCryptoItems) {
@@ -104,8 +104,8 @@ export default class CryptoItemControl extends Vue {
 		if (this.OneHand === this.item.OneHand) return;
 		const data:PartialCryptoItems = {
 			id: this.item.id,
-			OneHand: this.OneHand, 
-		}
+			OneHand: this.OneHand,
+		};
 		this.updateItems(data);
 	}
 	showlist(title:string, list:AskTable[]) {

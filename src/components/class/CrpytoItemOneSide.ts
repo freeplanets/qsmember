@@ -11,8 +11,13 @@ export default class CryptoItemOneSide {
 	private totalPrice = 0;
 	private priceLimit = 0;
 	private priceLimitQty = 0;
-	constructor(private id:number,private type:number) {}
-	get Qty () {
+	private id=0;
+	private type=0;
+	constructor(id:number, type:number) {
+		this.id = id;
+		this.type = type;
+	}
+	get Qty() {
 		return this.QtyAfterLever;
 	}
 	get Price() {
@@ -34,9 +39,9 @@ export default class CryptoItemOneSide {
 		return this.priceLimitQty;
 	}
 	add(ask:AskTable)	{
-		if ( ask.ItemID !== this.id || ask.ItemType !== this.type) return;
+		if (ask.ItemID !== this.id || ask.ItemType !== this.type) return;
 		// console.log('CIOS add:', this.id,JSON.stringify(ask));		
-		const fIdx = this.list.findIndex(itm=>itm.id === ask.id);
+		const fIdx = this.list.findIndex((itm) => itm.id === ask.id);
 		if (ask.ProcStatus < 2) {
 			this.addToList(ask, fIdx);
 		} else {
@@ -49,10 +54,10 @@ export default class CryptoItemOneSide {
 		// console.log(`itemid:${this.id}>${price}>${this.curGainLose}>${this.Qty}`);
 	}
 	private addToList(ask:AskTable, fIdx:number) {
-		if (fIdx === -1 ) {
+		if (fIdx === -1) {
 			this.reCalQtyAndAvgPrice(ask.Qty, ask.AskPrice, ask.Lever, 1);
-			this.list.push(ask)
-			if(ask.AskType) {
+			this.list.push(ask);
+			if (ask.AskType) {
 				this.priceLimit += 1;
 				this.priceLimitQty += ask.Qty * ask.Lever;
 			}
@@ -65,20 +70,20 @@ export default class CryptoItemOneSide {
 		// this.curGainLose = 0;
 	}
 	private removeFromList(ask:AskTable, fIdx:number) {
-		if (fIdx !== -1 ) {
+		if (fIdx !== -1) {
 			this.reCalQtyAndAvgPrice(ask.Qty, ask.AskPrice, ask.Lever, -1);
-			this.list.splice(fIdx,1);
-			if(ask.AskType) {
+			this.list.splice(fIdx, 1);
+			if (ask.AskType) {
 				this.priceLimit -= 1;
 				this.priceLimitQty -= ask.Qty * ask.Lever;
-			}			
+			}
 		}
 	}
-	private reCalQtyAndAvgPrice(Qty:number,Price:number,Lever:number,add:number) {
-		const LeverQty = Qty * Lever;		
+	private reCalQtyAndAvgPrice(Qty:number, Price:number, Lever:number, add:number) {
+		const LeverQty = Qty * Lever;
 		this.totalPrice = this.QtyAfterLever * this.priceAverage + LeverQty * Price * add;
-		this.QtyAfterLever = this.QtyAfterLever + LeverQty * add;
-		this.priceAverage =  this.QtyAfterLever === 0 ? 0 : this.totalPrice / this.QtyAfterLever;
+		this.QtyAfterLever += LeverQty * add;
+		this.priceAverage = this.QtyAfterLever === 0 ? 0 : this.totalPrice / this.QtyAfterLever;
 		// console.log('CIOS reCalQtyAndAvgPrice', this.QtyAfterLever, this.priceAverage);
 	}
 }

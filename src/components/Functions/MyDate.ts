@@ -40,16 +40,16 @@ class MyDate {
 	getTime(time?:string) {
 		return this.getDate(time).getTime();
 	}
-	createDateFilter(v:string,key?:string):KeyVal{
+	createDateFilter(v:string, key?:string):KeyVal {
 		const dates = v.split('-');
 		const d1 = dates[0];
 		const d2 = `${dates[1] ? dates[1] : dates[0]} 23:59:59.999`;
 		return {
-			Key: `${key ? key : 'ModifyTime'}`,
+			Key: `${key || 'ModifyTime'}`,
 			Val: this.getTime(d1),
 			Val2: this.getTime(d2),
 			Cond: 'between',
-		}
+		};
 	}
 	private getDate(time?:string | number) {
 		if (!time) return new Date();

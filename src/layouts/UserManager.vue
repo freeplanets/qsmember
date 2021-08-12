@@ -13,20 +13,20 @@
                         <q-item-label>None</q-item-label>
                     </q-item-section>
                     </q-item>
-                    <q-item 
+                    <q-item
                         v-for="(typ,idx) in options"
                         :key="'typ'+idx"
-                        clickable 
-                        v-close-popup 
+                        clickable
+                        v-close-popup
                         @click="setTypes(typ.value,typ.label)">
                     <q-item-section>
                         <q-item-label>{{ typ.label }}</q-item-label>
                     </q-item-section>
-                    </q-item>                        
+                    </q-item>
                 </q-list>
                 </q-btn-dropdown>
-            </div>           
-            <q-btn flat round dense icon="search" @click="SearchUser" />            
+            </div>
+            <q-btn flat round dense icon="search" @click="SearchUser" />
         </div>
       </q-toolbar-title>
 
@@ -35,16 +35,16 @@
     </q-toolbar>
     <div class="q-pa-md ListUser"
       v-show="showList"
-    >  
+    >
         <div class='row'>
-            <div class="col-1 test testheader" 
+            <div class="col-1 test testheader"
                 v-for="(hd,idxu) in cols"
                 :key="'m'+idxu"
-            > 
+            >
                 {{  hd.label }}
             </div>
         </div>
-        <div class="row" 
+        <div class="row"
             v-for="(itm,idx) in data"
             :key="'u'+idx"
         >
@@ -54,7 +54,7 @@
             <div class='col-1 test lnh'><q-btn  flat round dense v-if='itm.Types===1 || itm.Types===2' :label="$t('Common.Setup')" @click="SetupGames(itm.id,itm.PayClass ? itm.PayClass : '')" /></div>
             <div class='col-1 test lnh'><q-btn  flat round dense  v-if='itm.Types && itm.Types < 9' :label="$t('Common.Setup')" @click="SetupPrograms(itm.id,itm.Programs)" /></div>
             <div class='col-1 test lnh'><q-btn  flat round dense  v-if='itm.Types && itm.Types < 4' :label="$t('Common.Setup')" @click="ResetPW(itm.id,itm.Account)" /></div>
-        </div>
+       </div>
     </div>
     <div class='UserModify'
       v-show="showEdit"
@@ -79,9 +79,9 @@
       <div class="row">
           <div><q-btn color="green" icon-right="save" label="Save" @click="saveUser();" /></div>
           <div><q-btn color="red" icon-right="cancel" label="Cancel" @click="Cancel();" /></div>
-      </div>       
+      </div>
     </div>
-    <q-dialog 
+    <q-dialog
       v-model="showPayClass">
       <q-card class="my-min-wd">
         <q-card-section>
@@ -98,7 +98,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-dialog 
+    <q-dialog
       v-model="showPrograms">
       <q-card>
         <q-card-section>
@@ -112,11 +112,11 @@
           >
             <q-item-section avatar>
               <q-checkbox v-model="itm.isChecked" />
-            </q-item-section>          
+            </q-item-section>
             <q-item-section avatar>
               <q-icon color="primary" :name="itm.Icon" />
             </q-item-section>
-            <q-item-section>{{ $t(`Label.${itm.Title}`)}}</q-item-section>          
+            <q-item-section>{{ $t(`Label.${itm.Title}`)}}</q-item-section>
           </q-item>
         </q-list>
         </q-card-section>
@@ -147,13 +147,14 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import LayoutStoreModule from './data/LayoutStoreModule'
-import {getModule} from 'vuex-module-decorators';
-import {User} from './data/schema'
-import { SelectOptions,TableHeader,CommonParams,LoginInfo, Msg,Progs} from './data/if';
-import {UserTypes} from './class/Users'
+import { getModule } from 'vuex-module-decorators';
+import LayoutStoreModule from './data/LayoutStoreModule';
+import { User } from './data/schema';
+import { SelectOptions, TableHeader, CommonParams, LoginInfo, Msg, Progs } from './data/if';
+import { UserTypes } from './class/Users';
 import GamePayClassSelector from './components/GamePayClassSelector.vue';
-Vue.component('GPCS',GamePayClassSelector);
+
+Vue.component('GPCS', GamePayClassSelector);
 interface Ans {
   affectedRow?:number;
   insertId?:number;
@@ -166,102 +167,102 @@ interface EPrograms extends Progs{
   isChecked:boolean;
 }
 @Component
-export default class UserManager extends Vue{
+export default class UserManager extends Vue {
     store=getModule(LayoutStoreModule);
-    NewUser:User = {TableName:'User',id:0,Types:0}
-    slt:SelectOptions={value:0, label:''}
+    NewUser:User = { TableName: 'User', id: 0, Types: 0 }
+    slt:SelectOptions={ value: 0, label: '' }
     showList=true;
     showEdit=false;
-    Userf:string='';
+    Userf='';
     data:User[]=[]
-    typeNameTip:string='';
-    curTypeName:string='';
+    typeNameTip='';
+    curTypeName='';
     curType:number|undefined;
-    curUserID:number=0;
-    curPayClass:string='';
-    showPayClass:boolean=false;
-    PayClassSlted:string='';
+    curUserID=0;
+    curPayClass='';
+    showPayClass=false;
+    PayClassSlted='';
     Programs:EPrograms[]=[];
-    showPrograms:boolean=false;
-    showResetPW:boolean=false;
-    NPassword:string='';
-    SetUid:number=0;
-    WhosName:string='';
+    showPrograms=false;
+    showResetPW=false;
+    NPassword='';
+    SetUid=0;
+    WhosName='';
     cols:TableHeader[]=[
       {
-        name:'Account',
+        name: 'Account',
         label: 'Account',
-        field:'Account'
+        field: 'Account',
       },
       {
-        name:'Nickname',
+        name: 'Nickname',
         label: 'Nickname',
-        field:'Nickname'
+        field: 'Nickname',
       },
       {
-        name:'Types',
+        name: 'Types',
         label: 'Types',
-        field:'TypeName'
+        field: 'TypeName',
       },
       {
-        name:'GameItems',
+        name: 'GameItems',
         label: 'GameItems',
-        field:'GameItems'
+        field: 'GameItems',
       },
       {
-        name:'Programs',
+        name: 'Programs',
         label: 'Programs',
-        field: 'Programs'
+        field: 'Programs',
       },
       {
-        name:'ResetPW',
+        name: 'ResetPW',
         label: 'ResetPW',
-        field: 'ResetPW'
-      }
+        field: 'ResetPW',
+      },
     ]
     private typesOption:SelectOptions[]=[]
-    //paycls:SelectOptions={}
-    //payclss:SelectOptions[]=[];
+    // paycls:SelectOptions={}
+    // payclss:SelectOptions[]=[];
     private slted=[]
-    get Selected(){
+    get Selected() {
       return this.slted;
     }
-    set Selected(v:User[]){
-      //console.log('Selected',v,v.length)
-      //this.slted = v;
+    set Selected(v:User[]) {
+      // console.log('Selected',v,v.length)
+      // this.slted = v;
       this.showEdit = true;
       this.showList = false;
       this.setUser(v[0]);
     }
-    get model(){
+    get model() {
       return this.slt;
     }
-    set model(v:SelectOptions){
-      this.slt=v;
-      this.NewUser.Types = v.value as number;
+    set model(v:SelectOptions) {
+      this.slt = v;
+      this.NewUser.Types = v.value;
     }
-    get options(){
+    get options() {
       return this.typesOption;
     }
-    get UserID(){
+    get UserID() {
       return this.store.personal.id;
     }
-    get PInfo():LoginInfo{
+    get PInfo():LoginInfo {
       return this.store.personal;
     }
-    getTypeOptions(){
-      const tmp:SelectOptions[]=[]
-      UserTypes.map(itm=>{
-        //console.log('getTypeOptions:',itm);
+    getTypeOptions() {
+      const tmp:SelectOptions[] = [];
+      UserTypes.map((itm) => {
+        // console.log('getTypeOptions:',itm);
         const im:SelectOptions = {
-          label: this.$t('Label.' + itm.title) as string,
-          value: itm.value
-        }
+          label: this.$t(`Label.${itm.title}`) as string,
+          value: itm.value,
+        };
         tmp.push(im);
-      })
-      this.typesOption=tmp;
-      //console.log('options',tmp);
-      //return tmp;
+      });
+      this.typesOption = tmp;
+      // console.log('options',tmp);
+      // return tmp;
     }
     /*
     get payc(){
@@ -271,13 +272,13 @@ export default class UserManager extends Vue{
       this.paycls = v;
     }
     */
-    SavePayClass(){
-      const User:User={
-        TableName:'User',
-        id:this.curUserID
-      }
-      //let payclass:string='';
-      //const ugpc:UserGPC={};
+    SavePayClass() {
+      const user:User = {
+        TableName: 'User',
+        id: this.curUserID,
+      };
+      // let payclass:string='';
+      // const ugpc:UserGPC={};
       /*
       this.PayClassSlted.map(itm=>{
         const p:SelectOptions=itm.PayClass as SelectOptions;
@@ -286,39 +287,39 @@ export default class UserManager extends Vue{
       })
       User.Payclass = JSON.stringify(ugpc);
       */
-      User.PayClass = this.PayClassSlted;
-      this.saveUser(User);
-      this.showPayClass=false;
+      user.PayClass = this.PayClassSlted;
+      this.saveUser(user);
+      this.showPayClass = false;
     }
-    ResetPW(userid:number,username?:string){
-      //console.log('ResetPW:',userid);
-      this.showResetPW=true;
+    ResetPW(userid:number, username = '') {
+      // console.log('ResetPW:',userid);
+      this.showResetPW = true;
       this.SetUid = userid;
-      this.WhosName = username ? username : '';
+      this.WhosName = username;
     }
-    async DoResetPW(){
-      if(this.NPassword && this.NPassword =='' ){
+    async DoResetPW() {
+      if (this.NPassword && this.NPassword === '') {
           this.$q.dialog({
               title: this.$t('Table.ResetPW') as string,
-              message: 'Empty is not allowed!'
+              message: 'Empty is not allowed!',
           });
           return;
       }
-      const param:CommonParams={
-        UserID:this.store.personal.id,
-        sid:this.store.personal.sid,
+      const param:CommonParams = {
+        UserID: this.store.personal.id,
+        sid: this.store.personal.sid,
         WhosID: this.SetUid,
         NPassword: this.NPassword,
-      }
-      const msg:Msg= await this.store.ax.getApi('ResetPassword',param,'post');
-      if(msg.ErrNo===0){
+      };
+      const msg:Msg = await this.store.ax.getApi('ResetPassword', param, 'post');
+      if (msg.ErrNo === 0) {
         this.$q.dialog({
             title: this.$t('Table.ResetPW') as string,
-            message: `${this.WhosName}'s Password is changed!`
-        });    
+            message: `${this.WhosName}'s Password is changed!`,
+        });
       }
     }
-    setPayClass(slted:string){
+    setPayClass(slted:string) {
       this.PayClassSlted = slted;
       /*
       let fidx:number|undefined;
@@ -339,177 +340,175 @@ export default class UserManager extends Vue{
       }
       */
     }
-    SetupGames(uid:number,PayClass:string){
-      this.curUserID=uid;
-      this.curPayClass=PayClass;
-      this.showPayClass=true;
+    SetupGames(uid:number, PayClass:string) {
+      this.curUserID = uid;
+      this.curPayClass = PayClass;
+      this.showPayClass = true;
     }
-    async SetupPrograms(uid:number,Programs?:string){
+    async SetupPrograms(uid:number, Programs?:string) {
       this.SetUid = uid;
-      if(this.Programs.length==0){
+      if (this.Programs.length === 0) {
         await this.getPrograms();
       }
-      this.Programs.map(itm=>{
-        itm.isChecked=false;
-      })
-      if(Programs){
-        let progs=Programs.split(',').map(v=>{
-          return parseInt(v,10);
-        })
-        progs.map(v=>{
-          const f=this.Programs.find(itm=>itm.id===v);
-          if(f){
-            f.isChecked=true;
+      this.Programs.map((itm) => {
+        itm.isChecked = false;
+      });
+      if (Programs) {
+        const progs = Programs.split(',').map((v) => parseInt(v, 10));
+        progs.map((v) => {
+          const f = this.Programs.find((itm) => itm.id === v);
+          if (f) {
+            f.isChecked = true;
           }
-        })
+        });
       }
       this.showPrograms = true;
     }
-    setTypes(v?:number,n?:string){
+    setTypes(v?:number, n?:string) {
         this.curType = v;
         this.curTypeName = this.typeNameTip;
-        if(v !== undefined) {
-            this.curTypeName = n ? n : ''; 
+        if (v !== undefined) {
+            this.curTypeName = `${n}`;
         }
     }
-    setUser(v:User){
-      Object.keys(v).map(key=>{
-        if(key==='TypeName') return;
-        this.NewUser[key]=v[key];
-      })
-      this.typesOption.map(itm=>{
-        if(itm.value==v.Types){
-          this.model=itm;
-        }
-      })
-    }
-    async SavePrograms(){
-      const ax=this.store.ax;
-      const param:CommonParams={
-        UserID:this.PInfo.id,
-        sid:this.PInfo.sid,
-        SetUserID: this.SetUid
-      };
-      const prog:number[]=[];
-      this.Programs.map(itm=>{
-        if(itm.isChecked) prog.push(itm.id);
-      })
-      if(prog.length===0) return;
-      param.Programs = prog.join(',');
-      const msg:Msg=await ax.getApi('SetUser',param);
-      this.$q.dialog({
-        title: this.$t('Label.ProgramsSet')+'',
-        message: msg.ErrNo ? msg.ErrCon : 'Ok!!'
+    setUser(v:User) {
+      Object.keys(v).map((key) => {
+        if (key === 'TypeName') return;
+        this.NewUser[key] = v[key];
       });
-      if(msg.ErrNo===0){
-        const fuser=this.data.find(itm=>itm.id===this.SetUid);
-        if(fuser){
+      this.typesOption.map((itm) => {
+        if (itm.value === v.Types) {
+          this.model = itm;
+        }
+      });
+    }
+    async SavePrograms() {
+      const ax = this.store.ax;
+      const param:CommonParams = {
+        UserID: this.PInfo.id,
+        sid: this.PInfo.sid,
+        SetUserID: this.SetUid,
+      };
+      const prog:number[] = [];
+      this.Programs.map((itm) => {
+        if (itm.isChecked) prog.push(itm.id);
+      });
+      if (prog.length === 0) return;
+      param.Programs = prog.join(',');
+      const msg:Msg = await ax.getApi('SetUser', param);
+      this.$q.dialog({
+        title: `${this.$t('Label.ProgramsSet')}`,
+        message: msg.ErrNo ? msg.ErrCon : 'Ok!!',
+      });
+      if (msg.ErrNo === 0) {
+        const fuser = this.data.find((itm) => itm.id === this.SetUid);
+        if (fuser) {
           fuser.Programs = param.Programs;
-          console.log(fuser)
+          console.log(fuser);
         } else {
           console.log('not found');
         }
       } else {
         console.log(msg);
       }
-      this.showPrograms=false;
+      this.showPrograms = false;
     }
-    async getPrograms(){
-      const ax=this.store.ax;
-      const param:CommonParams={
-        UserID:this.PInfo.id,
-        sid:this.PInfo.sid
+    async getPrograms() {
+      const ax = this.store.ax;
+      const param:CommonParams = {
+        UserID: this.PInfo.id,
+        sid: this.PInfo.sid,
       };
-      const msg:Msg=await ax.getApi('getPrograms',param);
-      if(msg.ErrNo===0){
-        let data = msg.data as EPrograms[];
-        data.map(itm=>{
-          itm.isChecked=false;
+      const msg:Msg = await ax.getApi('getPrograms', param);
+      if (msg.ErrNo === 0) {
+        const data = msg.data as EPrograms[];
+        data.map((itm) => {
+          itm.isChecked = false;
           this.Programs.push(itm);
-        })
+        });
       }
     }
-    async saveUser(user?:User){
+    async saveUser(user?:User) {
       let curUser:User;
-      if(user){
-        curUser=user;
+      if (user) {
+        curUser = user;
       } else {
-        curUser=this.NewUser;
+        curUser = this.NewUser;
       }
       curUser.ModifyID = this.UserID;
-      const ax=this.store.ax;
-      const ans:Msg=await ax.saveUser(this.PInfo.id,this.PInfo.sid,curUser);
-      //console.log('saveUSer',ans);
-      if(ans.ErrNo===0){
+      const ax = this.store.ax;
+      const ans:Msg = await ax.saveUser(this.PInfo.id, this.PInfo.sid, curUser);
+      // console.log('saveUSer',ans);
+      if (ans.ErrNo === 0) {
         this.clearUser();
         this.getUsers();
-        this.showList=true;
-        this.showEdit=false;
+        this.showList = true;
+        this.showEdit = false;
       }
     }
     clearUser() {
-      Object.keys(this.NewUser).map(key=>{
-        if(key==='TableName') return;
-        if(typeof this.NewUser[key]=== 'string'){
-          this.NewUser[key]='';
+      Object.keys(this.NewUser).map((key) => {
+        if (key === 'TableName') return;
+        if (typeof this.NewUser[key] === 'string') {
+          this.NewUser[key] = '';
         } else {
-          this.NewUser[key]=0;
+          this.NewUser[key] = 0;
         }
-      })
+      });
     }
-    addNewUser(){
-      if(!this.showEdit){
+    addNewUser() {
+      if (!this.showEdit) {
         this.clearUser();
-        this.showEdit=true;
-        this.showList=false;
+        this.showEdit = true;
+        this.showList = false;
       }
     }
-    Cancel(){
-      this.NewUser={TableName:'User',id:0,Types:0};
-      this.showList=true;
-      this.showEdit=false;
+    Cancel() {
+      this.NewUser = { TableName: 'User', id: 0, Types: 0 };
+      this.showList = true;
+      this.showEdit = false;
     }
-    async getUsers(){
-      const ax=this.store.ax;
-      const param:CommonParams={
-        UserID:this.PInfo.id,
-        sid:this.PInfo.sid
+    async getUsers() {
+      const ax = this.store.ax;
+      const param:CommonParams = {
+        UserID: this.PInfo.id,
+        sid: this.PInfo.sid,
       };
-      if(this.Userf) param.findString = this.Userf;
-      if(this.curType !== undefined) param.userType = this.curType;
+      if (this.Userf) param.findString = this.Userf;
+      if (this.curType !== undefined) param.userType = this.curType;
     
-      const ans:Msg=await ax.getUsers(param);
-      if(ans.ErrNo===0){
+      const ans:Msg = await ax.getUsers(param);
+      if (ans.ErrNo === 0) {
         this.data = ans.data as [];
-        console.log('getUsers',this.data);
-        this.data.map(u=>{
-          if(u.PayClass){
-            u.PayClass = u.PayClass.replace(/\\/g,'')
+        console.log('getUsers', this.data);
+        this.data.map((u) => {
+          if (u.PayClass) {
+            u.PayClass = u.PayClass.replace(/\\/g, '');
           }
-          const tmp=this.typesOption.find(itm => itm.value===u.Types);
-          if(tmp){
+          const tmp = this.typesOption.find((itm) => itm.value === u.Types);
+          if (tmp) {
             u.TypeName = tmp.label;
           }
-        })
+        });
       }
-      //console.log('getUsers',ans);
+      // console.log('getUsers',ans);
     }
-    SearchUser(){
+    SearchUser() {
         this.getUsers();
     }
 
-    mounted(){
-        if(!this.store.isLogin){
-            this.$router.push({path:'/login'});
+    mounted() {
+        if (!this.store.isLogin) {
+            this.$router.push({ path: '/login' });
         }
-        this.cols.map(itm=>{
-            itm.label = this.$t('Table.'+itm.label) as string;
-        })          
-        //console.log('language',this.$t('Table.Account'));
+        this.cols.map((itm) => {
+            itm.label = this.$t(`Table.${itm.label}`) as string;
+        });
+        // console.log('language',this.$t('Table.Account'));
         this.getTypeOptions();
         this.getUsers();
-        this.typeNameTip=this.$t('Label.InputClassName') as string;
-        this.curTypeName=this.typeNameTip;
+        this.typeNameTip = this.$t('Label.InputClassName') as string;
+        this.curTypeName = this.typeNameTip;
     }
 }
 </script>
@@ -518,7 +517,7 @@ export default class UserManager extends Vue{
   margin: 20px;
 }
 .UserModify div {
-  margin-bottom: 5px; 
+  margin-bottom: 5px;
 }
 .testheader div{
     background-color: cadetblue;

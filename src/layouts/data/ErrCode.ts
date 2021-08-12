@@ -16,4 +16,4 @@ enum ErrCode {
   TRY_CATCH_ERROR = 14,
   NO_DATA_FOUND = 15,
 }
-export default ErrCode
+export default ErrCode;

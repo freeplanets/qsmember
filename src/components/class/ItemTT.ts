@@ -5,7 +5,6 @@ export default class ItemTT implements ItemTypeTotal {
 	private amount = 0;
 	private leverAmount = 0;
 	private gainlose = 0;
-	constructor(){}
 	get Records() {
 		// return this.data.Records;
 		return this.list.length;
@@ -17,7 +16,7 @@ export default class ItemTT implements ItemTypeTotal {
 		return this.leverAmount;
 	}
 	get AvgLever() {
-		let avgl=0;
+		let avgl = 0;
 		if (this.amount > 0) avgl = this.leverAmount / this.amount;
 		return avgl;
 	}

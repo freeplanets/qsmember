@@ -1,9 +1,10 @@
-import {PayRateItm} from '../data/if';
-//import BClass from './BClass';
-import {BasePayRate} from './BasePayRate';
+import { PayRateItm } from '../data/if';
+// import BClass from './BClass';
+import { BasePayRate } from './BasePayRate';
+
 export class PayRate extends BasePayRate<PayRateItm> {
-    constructor(v:PayRateItm){
-        v.Profit=0;
+    constructor(v:PayRateItm) {
+        v.Profit = 0;
         super(v);
     }
     /*
@@ -18,29 +19,34 @@ export class PayRate extends BasePayRate<PayRateItm> {
         }
     }
     */
-    get Rate(){
-         //this.data.Rate ? this.data.Rate : 0;
-        return this.fetchValueToSteps((this.data.Rate ? this.data.Rate : 0) + this.data.DfRate);
+    get Rate() {
+         // this.data.Rate ? this.data.Rate : 0;
+         let r = 0;
+         const dfR = this.data.DfRate as number;
+         if (this.data.Rate) {
+             r = this.data.Rate as number;
+         }
+        return this.fetchValueToSteps(r + dfR);
     }
-    set Rate(v:number|undefined){
-        console.log('Rate:',this.data.DfRate,this.data);
-        v = v as number - this.data.DfRate as number;
-        console.log('Rate:',v);
+    set Rate(v:number|undefined) {
+        console.log('Rate:', this.data.DfRate, this.data);
+        v = v as number - this.data.DfRate;
+        console.log('Rate:', v);
         this.data.Rate = this.fetchValueToSteps(v);
         this.DataChanged = true;
     }
-    get LowestBet(){
+    get LowestBet() {
         return this.data.LowestBet;
     }
-    set LowestBet(v:number|undefined){
+    set LowestBet(v:number|undefined) {
         this.data.LowestBet = v;
         this.DataChanged = true;
     }
-    get SingleBet(){
+    get SingleBet() {
         return this.data.SingleBet;
     }
-    set SingleBet(v:number|undefined){
+    set SingleBet(v:number|undefined) {
         this.data.SingleBet = v;
         this.DataChanged = true;
-    }   
+    }
 }

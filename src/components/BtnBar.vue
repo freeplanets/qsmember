@@ -20,7 +20,7 @@ import { getModule } from 'vuex-module-decorators';
 import LStore from '../layouts/data/LayoutStoreModule';
 import { CryptoItem } from './if/dbif';
 import { WebParams, Msg } from '../layouts/data/if';
-import ErrCode from '../layouts/data/ErrCode'
+import ErrCode from '../layouts/data/ErrCode';
 
 @Component
 export default class BtnBar extends Vue {
@@ -31,14 +31,14 @@ export default class BtnBar extends Vue {
     const param:WebParams = { ...this.store.Param };
     param.TableName = 'Items';
     param.Filter = { isLoan: 1 };
-    this.store.ax.getApi('cc/GetData',param).then((res:Msg)=>{
-      if(res.ErrNo === ErrCode.PASS ) {
+    this.store.ax.getApi('cc/GetData', param).then((res:Msg) => {
+      if (res.ErrNo === ErrCode.PASS) {
         this.list = res.data as CryptoItem[];
         if (this.list.length > 0) {
           this.setValue(this.list[0], 0);
         }
       }
-    }).catch(err=>{
+    }).catch((err) => {
       console.log('BtnBar getData:', err);
     });
   }

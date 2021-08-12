@@ -16,15 +16,15 @@
 			</div>
 			<div v-if="ShowFunc" class="col-2 banhead">{{ $t('Table.Items.OneHand') }}</div>
 		</div>
-	</div>	
+	</div>
 </template>
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { LoginInfo } from 'src/layouts/data/if';
 
 @Component
-export default class CryptoICHeader extends Vue{
-	@Prop({ type: Object}) readonly info!:LoginInfo;
+export default class CryptoICHeader extends Vue {
+	@Prop({ type: Object }) readonly info!:LoginInfo;
 	get ShowFunc():boolean {
 		return this.info.Types > 2;
 	}

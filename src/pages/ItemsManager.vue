@@ -35,17 +35,18 @@
           </q-tab-panel>
 
         </q-tab-panels>
-      </q-card>      
+      </q-card>
     </div>
   </div>
 </template>
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { CryptoItem } from '../components/if/dbif';
 import { getModule } from 'vuex-module-decorators';
+import { CryptoItem } from '../components/if/dbif';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
 import { LoginInfo, Msg, WebParams } from '../layouts/data/if';
 import CryptoItemBlock from '../components/CryptoItemBlock.vue';
+// import { FunctionDeclaration, FunctionLikeDeclaration } from 'typescript';
 
 interface TableColumn {
   name?:string;
@@ -54,25 +55,26 @@ interface TableColumn {
   require?:boolean;
   align?:string;
   sortable?:boolean;
-  format?:Function;
+  // format?:Function;
+  format?: any;
   headerStyle?:string;
 }
 
 @Component({
   components: {
-    CIB: CryptoItemBlock
-  }
+    CIB: CryptoItemBlock,
+  },
 })
-export default class ItemsManager extends Vue{
+export default class ItemsManager extends Vue {
   store = getModule(LayoutStoreModule);
   uInfo:LoginInfo = this.store.personal;
   tab = 'lists';
   updateid=0;
   modifyStatus = 0 // 0 add, 1 edit
-  initItemData:CryptoItem={
-    id:0,
-    Title:'',
-    Code:'',
+  initItemData:CryptoItem = {
+    id: 0,
+    Title: '',
+    Code: '',
     OpenFee: 0,
     CloseFee: 0,
     isLoan: 0,
@@ -82,9 +84,9 @@ export default class ItemsManager extends Vue{
     DecimalPlaces: 2,
     PerStep: 1,
     isActive: 0,
-    IMG:'',
+    IMG: '',
   }
-  UpdateItem:CryptoItem=Object.assign({},this.initItemData);
+  UpdateItem:CryptoItem = { ...this.initItemData };
   /*
   @Watch('UpdateItem')
   chk=0;
@@ -93,69 +95,71 @@ export default class ItemsManager extends Vue{
     // await this.SendData();
   }
   */
-  columns:TableColumn[]=[];
-  data:CryptoItem[]=[];
-  visibleColumns=['id', 'Title', 'OpenFee', 'CloseFee', 'isLoan', 'PriceLimitPercentage',
+  columns:TableColumn[] = [];
+  data:CryptoItem[] = [];
+  visibleColumns = ['id', 'Title', 'OpenFee', 'CloseFee', 'isLoan', 'PriceLimitPercentage',
    'StopGain', 'StopLose', 'DecimalPlaces', 'PerStep', 'isActive'];
-  async GetData(){
+  async GetData() {
     const param:WebParams = {
-      sid:this.uInfo.sid,
-      UserID:this.uInfo.id,
-      TableName:'Items'
-    }    
-    const msg = await this.store.ax.getApi('cc/GetData',param);
-    if(msg.ErrNo === 0) {
-      if(msg.data) {
+      sid: this.uInfo.sid,
+      UserID: this.uInfo.id,
+      TableName: 'Items',
+    };
+    const msg = await this.store.ax.getApi('cc/GetData', param);
+    if (msg.ErrNo === 0) {
+      if (msg.data) {
         this.data = msg.data as CryptoItem[];
         console.log('getDATA', this.data);
       }
     }
   }
-  async SendData(){
-    let msg:Msg={ErrNo:0};
+  async SendData() {
+    let msg:Msg = { ErrNo: 0 };
     this.UpdateItem.ModifyID = this.uInfo.id;
     this.UpdateItem.id = this.updateid;
-    if(!this.UpdateItem.Title) return; 
+    if (!this.UpdateItem.Title) return;
     const param:WebParams = {
-      sid:this.uInfo.sid,
-      UserID:this.uInfo.id,
-      id:this.uInfo.id,
-      TableName:'Items',
-      TableData:this.UpdateItem
-    }
-    msg = await this.store.ax.getApi('cc/Save',param);
-    //console.log(msg);
-    if(msg.ErrNo === 0){
+      sid: this.uInfo.sid,
+      UserID: this.uInfo.id,
+      id: this.uInfo.id,
+      TableName: 'Items',
+      TableData: this.UpdateItem,
+    };
+    msg = await this.store.ax.getApi('cc/Save', param);
+    // console.log(msg);
+    if (msg.ErrNo === 0) {
       this.updateid = 0;
-      this.UpdateItem=Object.assign({},this.initItemData);
+      this.UpdateItem = { ...this.initItemData };
       await this.GetData();
       this.tab = 'lists';
     }
   }
-  setColumns(){
-    this.columns=Object.keys(this.initItemData).map(key=>{
+  setColumns() {
+    this.columns = Object.keys(this.initItemData).map((key) => {
+      const lab = this.$t(`Table.Items.${key}`);
       const column:TableColumn = {
         name: key,
-        label:`${this.$t('Table.Items.'+key)}${key.indexOf('Fee')>-1 ? '(%)' : '' }`,
-        field: key, 
-        sortable:false,
+        label: `${lab}${key.indexOf('Fee') > -1 ? '(%)' : ''}`,
+        field: key,
+        sortable: false,
         headerStyle: 'text-align: center',
-        align:'center'
+        align: 'center',
       };
-      if(typeof this.initItemData[key] === 'number' ) column.align = 'right';
-      if(key==='isLoan' || key==='isActive'){
-        column.format = (val:number) => `${ val ? 'Y' : 'N'}`;
+      if (typeof this.initItemData[key] === 'number') column.align = 'right';
+      if (key === 'isLoan' || key === 'isActive') {
+        column.format = (val:number) => `${val ? 'Y' : 'N'}`;
       }
       return column;
-    })
+    });
   }
-  onRowClick (evt, row) {
-    Object.keys(this.UpdateItem).map(key=>{
+  onRowClick(evt:any, row:any) {
+    Object.keys(this.UpdateItem).map((key) => {
       this.UpdateItem[key] = row[key];
-    })
-    this.updateid=row.id;
-    //this.ItemData = row;
-    //console.log('clicked on', row,evt);
+      // eval(`this.UpdateItem.${key} = row.${key}`);
+    });
+    this.updateid = row.id;
+    // this.ItemData = row;
+    // console.log('clicked on', row,evt);
     this.tab = 'addnew';
   }
   addNewPress() {
@@ -163,17 +167,17 @@ export default class ItemsManager extends Vue{
       this.Cancel();
     }
   }
-  Cancel(){
-    this.UpdateItem=Object.assign({},this.initItemData);
+  Cancel() {
+    // this.UpdateItem=Object.assign({}, this.initItemData);
+    this.UpdateItem = { ...this.initItemData };
     this.updateid = 0;
-    this.tab='lists';
+    this.tab = 'lists';
   }
-  async mounted(){
+  async mounted() {
     this.setColumns();
     await this.GetData();
   }
-
- }
+}
 </script>
 <style scoped>
 .q-table th {

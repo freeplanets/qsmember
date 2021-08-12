@@ -12,7 +12,7 @@
           <q-icon name="vpn_key" />
         </template>
       </q-input>
-      <q-btn color="red" icon-right="send" label="Login" @click="login()" />  
+      <q-btn color="red" icon-right="send" label="Login" @click="login()" />
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
@@ -30,17 +30,17 @@
           <q-btn flat :label="$t('Button.Confirm')" v-close-popup @click="GAValidate"/>
         </q-card-actions>
       </q-card>
-    </q-dialog>    
+    </q-dialog>
   </div>
 </template>
 <script lang="ts">
 import Vue from 'vue';
 import Components from 'vue-class-component';
-//import axios, { AxiosRequestConfig,AxiosResponse} from 'axios';
-import LayoutStoreModule from './data/LayoutStoreModule';
+// import axios, { AxiosRequestConfig,AxiosResponse} from 'axios';
 import { getModule } from 'vuex-module-decorators';
-//import {User} from './data/schema';
-import { Msg,CommonParams,LoginInfo } from './data/if';
+import LayoutStoreModule from './data/LayoutStoreModule';
+// import {User} from './data/schema';
+import { Msg, CommonParams, LoginInfo } from './data/if';
 import WSock from '../components/WebSock/WSock';
 import Mqtt from '../components/WebSock/Mqtt';
 
@@ -52,19 +52,19 @@ export default class Login extends Vue {
   Pin='';
   prompt=false;
   GAError=false;
-  set Personal(value:LoginInfo){
+  set Personal(value:LoginInfo) {
     this.store.setPersonal(value);
   }
   get Personal():LoginInfo {
     return this.store.personal;
   }
-  set isLogin(value:boolean){
+  set isLogin(value:boolean) {
     this.store.setIsLogin(value);
   }
   get isLogin():boolean {
     return this.store.isLogin;
   }
-  async login(){
+  async login() {
     /*
     const config:AxiosRequestConfig = {
       //withCredentials: true,
@@ -78,37 +78,37 @@ export default class Login extends Vue {
     const params:CommonParams = {
         Account: this.Account,
         Password: this.Password,
-        UserID:0,
-        sid:''
-    }
-    //const url:string=this.store.ax.Host+'/login';
-    const msg:Msg=await this.store.ax.getApi('/login',params);
-    if(msg.ErrNo===0){
-        this.Account='';
-        this.Password='';
+        UserID: 0,
+        sid: '',
+    };
+    // const url:string=this.store.ax.Host+'/login';
+    const msg:Msg = await this.store.ax.getApi('/login', params);
+    if (msg.ErrNo === 0) {
+        this.Account = '';
+        this.Password = '';
         this.Personal = msg.data as LoginInfo;
         this.isLogin = true;
-        //this.store.leftDrawerOpen=true;
-        //console.log('Login PInfo:',this.Personal);
-        if(msg.wsServer) {
+        // this.store.leftDrawerOpen=true;
+        // console.log('Login PInfo:',this.Personal);
+        if (msg.wsServer) {
           const ws:WSock = new WSock(this.store, msg.wsServer);
           this.store.setWSock(ws);
         }
         this.store.setMqtt(new Mqtt(this.Personal));
-        if(this.Personal.forcePWChange){
+        if (this.Personal.forcePWChange) {
           this.store.setCghPW(true);
-        } else if(this.Personal.isChkGA){
-          this.prompt=true;
+        } else if (this.Personal.isChkGA) {
+          this.prompt = true;
         } else {
-          this.$router.push({path:'/'});      
+          this.$router.push({ path: '/' });
         }
     } else {
       this.$q.dialog({
           title: this.$t('Title.PersonalInfo') as string,
-          message: this.$t('Title.LoginERR') as string
-      });      
+          message: this.$t('Title.LoginERR') as string,
+      });
     }
-    //console.log('login:',url);
+    // console.log('login:',url);
     /*
     await axios.get(url,config).then((res:AxiosResponse)=>{
       const ans:Msg=res.data as Msg;
@@ -123,34 +123,33 @@ export default class Login extends Vue {
       console.error('login error:',err);
     })
     */
-    //console.log('login',this.Account,this.Password);
+    // console.log('login',this.Account,this.Password);
   }
-  async GAValidate(){
+  async GAValidate() {
     this.store.setShowProgress(true);
-    const param:CommonParams={
-      UserID:this.store.personal.id,
-      sid:this.store.personal.sid,
-      Pin:this.Pin
-    }
-    const msg:Msg=await this.store.ax.getApi('GAValidate',param);
-    console.log('GAValidate:',msg);
-    if(msg.ErrNo===0){
-      //this.GAIMG=msg.ErrCon ? msg.ErrCon : '';
-      this.$router.push({path:'/'});  
+    const param:CommonParams = {
+      UserID: this.store.personal.id,
+      sid: this.store.personal.sid,
+      Pin: this.Pin,
+    };
+    const msg:Msg = await this.store.ax.getApi('GAValidate', param);
+    console.log('GAValidate:', msg);
+    if (msg.ErrNo === 0) {
+      // this.GAIMG=msg.ErrCon ? msg.ErrCon : '';
+      this.$router.push({ path: '/' });
     } else {
       this.Pin = '';
-      this.GAError=true;
-      this.prompt=true;
+      this.GAError = true;
+      this.prompt = true;
     }
     this.store.setShowProgress(false);
   }
-  mounted(){
+  mounted() {
     this.store.setIsLogin(false);
-    //console.log('login SysInfo:',this.store.SysInfo);
-    //console.log('login locale:',this.$i18n);
-    //this.$i18n.locale='zh-cn';
-    //console.log('login user agent',navigator.userAgent);
-
+    // console.log('login SysInfo:',this.store.SysInfo);
+    // console.log('login locale:',this.$i18n);
+    // this.$i18n.locale='zh-cn';
+    // console.log('login user agent',navigator.userAgent);
   }
 }
 </script>

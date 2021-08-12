@@ -1,15 +1,15 @@
 export default {
-  Error : [
-    "OK!!",             //0
-    "低于最小下注金额",   //1
-    "高于最大下注金额",   //2
-    "单码满仓",          //3
-    "联码满仓",           //4
-    "停押",               //5
-    "额度不足",           //6
-    "尚未登入",           //7
-    "已有注单,无法删除",   //8
-  ],  
+  Error: [
+    'OK!!', // 0
+    '低于最小下注金额', // 1
+    '高于最大下注金额', // 2
+    '单码满仓', // 3
+    '联码满仓', // 4
+    '停押', // 5
+    '额度不足', // 6
+    '尚未登入', // 7
+    '已有注单,无法删除', // 8
+  ],
   Label: {
     GameName: '彩局名称',
     ClassName: '类别名称',
@@ -21,104 +21,104 @@ export default {
     SavePayClassName: '储存分盘名称',
     EditPayClassName: '修改分盘名称',
     DeletePayClass: '删除分盘',
-    BasePayRate:"基本盘",
-    RefPayRate:"参考分盘",
-    CratePayClass:"新增分盘",
-    PayClassFunc: "基本盘赔率%,基本盘利润差,固定利润,浮动利润",
-    RateDiff:"赔率差距",
-    RateDiffInfo:"正数,表示分盘赔率占基本盘比率不可以小于90",
-    ProfitDiff:"利润差距",
-    ProfitDiffInfo:"正值表示利润比基本盘高，负值表示比基本盘低",
-    FixProfit:"固定利润",
-    FixProfitInfo:"所有下注项目都是相同利润",
-    FloatProfit:"浮动利润",
-    FloatProfitInfo:"根据中奖机率设定不同利润",
-    WinChance:"中奖机率",
+    BasePayRate: '基本盘',
+    RefPayRate: '参考分盘',
+    CratePayClass: '新增分盘',
+    PayClassFunc: '基本盘赔率%,基本盘利润差,固定利润,浮动利润',
+    RateDiff: '赔率差距',
+    RateDiffInfo: '正数,表示分盘赔率占基本盘比率不可以小于90',
+    ProfitDiff: '利润差距',
+    ProfitDiffInfo: '正值表示利润比基本盘高，负值表示比基本盘低',
+    FixProfit: '固定利润',
+    FixProfitInfo: '所有下注项目都是相同利润',
+    FloatProfit: '浮动利润',
+    FloatProfitInfo: '根据中奖机率设定不同利润',
+    WinChance: '中奖机率',
     Time: '时间',
     Date: '日期',
-    TermManager:"彩期管理",
-    AddTerm: "新增彩期",
-    EditTerm: "修改彩期",
-    OpenDate:"开奖日期",
-    BetEndTime:"下注截止时间",
-    SpNo:"特码",
-    Save:"存档",
-    Cancel:"取消",
-    Delete:"删除",
-    Unselected:"未选取过项目",
-    TermID:"期次",
-    GameManager:"彩票管理",
-    SPEndTime:"特码截止时间",
-    AddUser:"新增用户",
-    UserManager:"用户管理",
-    Member:'会员',
-    Agent:'代理',
-    WebOwner:'网站站主',
-    Operator:'操盘手',
+    TermManager: '彩期管理',
+    AddTerm: '新增彩期',
+    EditTerm: '修改彩期',
+    OpenDate: '开奖日期',
+    BetEndTime: '下注截止时间',
+    SpNo: '特码',
+    Save: '存档',
+    Cancel: '取消',
+    Delete: '删除',
+    Unselected: '未选取过项目',
+    TermID: '期次',
+    GameManager: '彩票管理',
+    SPEndTime: '特码截止时间',
+    AddUser: '新增用户',
+    UserManager: '用户管理',
+    Member: '会员',
+    Agent: '代理',
+    WebOwner: '网站站主',
+    Operator: '操盘手',
     Programmer: '工程师',
-    InputNums:'输入号码',
-    Status:'状态',
-    Settled:['','己结账','','己重结'],
-    OpenParams:'开盘参数',
-    OddsManager:'控盘',
-    BetLists:'注单查询',
-    NameOrNick:'名称/代号',
-    TotalN:'共 {N} 笔',
-    BetReport:'下注报表',
-    UseAvgMsg:'启用为均赔率派彩。不启用为最小赔率派彩。',
-    Sec:'秒',
-    Refresh:'更新',
+    InputNums: '输入号码',
+    Status: '状态',
+    Settled: ['', '己结账', '', '己重结'],
+    OpenParams: '开盘参数',
+    OddsManager: '控盘',
+    BetLists: '注单查询',
+    NameOrNick: '名称/代号',
+    TotalN: '共 {N} 笔',
+    BetReport: '下注报表',
+    UseAvgMsg: '启用为均赔率派彩。不启用为最小赔率派彩。',
+    Sec: '秒',
+    Refresh: '更新',
     TicketStatus: [
       '成交',
       '会员取消',
-      '系统注销'
+      '系统注销',
     ],
-    GAMsg:'请用手机APP-Google Authenticator 扫瞄后存档.',
-    InputGA:'请输入Google 认证码(6位数).',
-    GAError:'认证码错误!!',
-    ProgramsSlt:'请选择程序',
-    ProgramsSet:'程序设定',
+    GAMsg: '请用手机APP-Google Authenticator 扫瞄后存档.',
+    InputGA: '请输入Google 认证码(6位数).',
+    GAError: '认证码错误!!',
+    ProgramsSlt: '请选择程序',
+    ProgramsSet: '程序设定',
     Pass2Lvl: '设定二阶段密码',
     CancelPass2: '取消二阶段密码',
     Close: '关闭',
     ProbabilityManage: '机率管理',
     Game: {
       MarkSix: '六合彩',
-      '3D' : '3D',
+      '3D': '3D',
       Happy: '快乐10分',
       Always: '时时彩',
       Cars: '赛车',
-      Speed3 : '骰宝',
-      Happy8 : '快乐8',
-      BTCHash : '哈希'   
+      Speed3: '骰宝',
+      Happy8: '快乐8',
+      BTCHash: '哈希',
     },
-    PlsSlt: '请选择....'
+    PlsSlt: '请选择....',
   },
-  Tip:{
-    UserFind: "请输入名称或代号"
+  Tip: {
+    UserFind: '请输入名称或代号',
   },
   Table: {
-    ItemName: "项目名称",
-    SubName: "指定名称",
-    NoAdjust: "不调盘",
-    Profit:"利润",
-    RateDefault:"赔率",
-    RateTop:"赔率上限",
-    Probability:"机率",
-    TopPay:"最高派彩",
-    OneHand: "公司单注",
-    PlusRate: "加本金",
-    LowestBet:"最小下注",
-    SingleBet:"最大单注",
+    ItemName: '项目名称',
+    SubName: '指定名称',
+    NoAdjust: '不调盘',
+    Profit: '利润',
+    RateDefault: '赔率',
+    RateTop: '赔率上限',
+    Probability: '机率',
+    TopPay: '最高派彩',
+    OneHand: '公司单注',
+    PlusRate: '加本金',
+    LowestBet: '最小下注',
+    SingleBet: '最大单注',
     OfficeSite: '官网',
-    StopBeforeEnd:"提前封盘秒数",
-    BothSideAdjust:"采用两面押码",
-    AutoOpen:"自动开放下注",
-    TwoMoreGame:"过闗赔率差距",
-    TwoSide:"两面",
-    ColorWave:"色波",
-    DelAfterBet:"会员可删除秒数",
-    DelBeforeEnd:"截止删除注单秒数",
+    StopBeforeEnd: '提前封盘秒数',
+    BothSideAdjust: '采用两面押码',
+    AutoOpen: '自动开放下注',
+    TwoMoreGame: '过闗赔率差距',
+    TwoSide: '两面',
+    ColorWave: '色波',
+    DelAfterBet: '会员可删除秒数',
+    DelBeforeEnd: '截止删除注单秒数',
     PayClassID: '盘口',
     Account: '账号',
     Password: '密码',
@@ -127,27 +127,27 @@ export default {
     Types: '类别',
     Levels: '层级',
     CreateDate: '新增日期',
-    TotalNums:'号数',
-    UseAvg:'平均值押码',
-    SingleNum:'单码满仓',
-    UnionNum:'连码满仓',
-    MinHand:'最小单注',
-    MaxHand:'最大单注',
-    UseAvgOdds:'使用均成本(或最小)',
-    GType:"游戏代号",
-    GameItems:'游戏项目',
-    ChangeStart:"押码启动全额",
-    BetForChange:"押码全额",
-    PerStep:"跳动点",
-    Steps:"押码点数",
-    StepsGroup:"押码级距",
-    StopTimeS:"特码下注截止时间",
-    StopTime:"下注截止时间",
-    Result:'开奖结果',
-    hasSPNO:'有开特码',
-    OpenNums:'开出奖号',
-    ChaseNum:'追号',
-    isParlay:'连码'
+    TotalNums: '号数',
+    UseAvg: '平均值押码',
+    SingleNum: '单码满仓',
+    UnionNum: '连码满仓',
+    MinHand: '最小单注',
+    MaxHand: '最大单注',
+    UseAvgOdds: '使用均成本(或最小)',
+    GType: '游戏代号',
+    GameItems: '游戏项目',
+    ChangeStart: '押码启动全额',
+    BetForChange: '押码全额',
+    PerStep: '跳动点',
+    Steps: '押码点数',
+    StepsGroup: '押码级距',
+    StopTimeS: '特码下注截止时间',
+    StopTime: '下注截止时间',
+    Result: '开奖结果',
+    hasSPNO: '有开特码',
+    OpenNums: '开出奖号',
+    ChaseNum: '追号',
+    isParlay: '连码',
   },
   Title: {
     Dashboard: '大厅',
@@ -160,10 +160,10 @@ export default {
     PassERR: '新登入密码和碓认码不同',
     PassChgMsg: '密码已修改,请重新登入!',
     LoginERR: '帐码或密码错误!!',
-    Item:'项目',
-    OValue:'旧值',
-    NValue:'新值',
-    EditMan:'修改人员'
+    Item: '项目',
+    OValue: '旧值',
+    NValue: '新值',
+    EditMan: '修改人员',
   },
   Button: {
     Num: '号码',
@@ -173,16 +173,16 @@ export default {
     ClearSlt: '清空选取',
     TotalSlted: '共选了',
     Ball: '球',
-    Send: '确定送出', 
+    Send: '确定送出',
     TotalStop: '总停押',
     PageStop: '本页停押',
     TotalOpen: '总开放',
     PageOpen: '本页开放',
     Confirm: '碓认',
-    Search:'查询',
-    Clear:'清除',
-    EditRecord:'修改记录',
-    Edit:'修改'
+    Search: '查询',
+    Clear: '清除',
+    EditRecord: '修改记录',
+    Edit: '修改',
   },
   Dialog: {
     MTitle: '主选单',
@@ -197,12 +197,12 @@ export default {
     NumAllTotal: '总数',
     Attention: '注意',
     DelBCMsg: '是否要删除分类',
-    NoSettle:'彩期未结'
+    NoSettle: '彩期未结',
   },
   InputSwitch: [
     { title: '一般', isActive: 'false' },
     { title: '键盘', isActive: 'false' },
-    { title: '包牌', isActive: 'false' }
+    { title: '包牌', isActive: 'false' },
   ],
   NotOpen: '非开放',
   Exit: '离开',
@@ -227,12 +227,12 @@ export default {
     BigOdd: '大单',
     BigEven: '大双',
     SmallOdd: '小单',
-    SmallEven: '小双'
+    SmallEven: '小双',
   },
   Report: {
     Today: '今日',
-    Yesterday:'昨日',
-    Beforeday:"前一日",
+    Yesterday: '昨日',
+    Beforeday: '前一日',
     Orders: '投注额',
     Result: '结果',
     Commission: '退水',
@@ -251,9 +251,9 @@ export default {
     OdrType: '下注项目',
     OdrAmt: '下注金额',
     Total: '合计',
-    GeneralLedger:'总账',
-    Ledger:'分类账',
-    DayReport:'日报表'
+    GeneralLedger: '总账',
+    Ledger: '分类账',
+    DayReport: '日报表',
   },
   Common: {
     AccHistory: '账户历史',
@@ -272,7 +272,7 @@ export default {
     PersonalParams: '会员参数',
     Rule: '规则',
     RuleInfo: '规则说明',
-    LongDragon: '长龙'
+    LongDragon: '长龙',
   },
   LongDragon: { CoOut: '连续开奖', NoOut: '连续未开' },
   FastSlt: {
@@ -283,43 +283,43 @@ export default {
     Pair: '对子',
     Hundreds: '百位',
     Tens: '十位',
-    Units: '个位'
+    Units: '个位',
   },
-  GameTitle : {
-    '1' : '六合彩',
-    '2': '中国体彩',
-    '3': '中国福彩',
-    '4': '七星彩',
-    '5': '广西快乐 10分',
-    '6': '上海时时乐',
-    '7': '旧重庆时时彩',
-    '8': '天津时时彩',
-    '9' : '哈希彩',
-    '11': '新疆时时彩',
-    '12': '广东快乐10分',
-    '13': '天津快乐10分',
-    '14': '重庆幸运农场',
-    '15': '山东11选5',
-    '16': '重庆11选5',
-    '17': '江西11选5',
-    '18': '广东11选5',
-    '19': '重庆时时彩',
-    '20': '北京赛车',
-    '21': '江苏骰宝',
-    '22': '快乐 8',
-    '23': '大众赛车',
-    '24': '大众时时彩',
-    '25': '大众快乐10分',
-    '26': '大众3D',
-    '27': '大众六合彩',
-    '28': '大众快3',
-    '29': '大众快乐8',
-    '30': '台湾宾果',
-    '31': '越南彩北部',
-    '32': '越南彩南部18A',
-    '33': '越南彩南部18B',
-    '34': '越南彩南部18C',
-    '35': '越南彩南部18A+B'
+  GameTitle: {
+    1: '六合彩',
+    2: '中国体彩',
+    3: '中国福彩',
+    4: '七星彩',
+    5: '广西快乐 10分',
+    6: '上海时时乐',
+    7: '旧重庆时时彩',
+    8: '天津时时彩',
+    9: '哈希彩',
+    11: '新疆时时彩',
+    12: '广东快乐10分',
+    13: '天津快乐10分',
+    14: '重庆幸运农场',
+    15: '山东11选5',
+    16: '重庆11选5',
+    17: '江西11选5',
+    18: '广东11选5',
+    19: '重庆时时彩',
+    20: '北京赛车',
+    21: '江苏骰宝',
+    22: '快乐 8',
+    23: '大众赛车',
+    24: '大众时时彩',
+    25: '大众快乐10分',
+    26: '大众3D',
+    27: '大众六合彩',
+    28: '大众快3',
+    29: '大众快乐8',
+    30: '台湾宾果',
+    31: '越南彩北部',
+    32: '越南彩南部18A',
+    33: '越南彩南部18B',
+    34: '越南彩南部18C',
+    35: '越南彩南部18A+B',
   },
   Game: {
     Cars: {
@@ -338,69 +338,69 @@ export default {
               { id: 7, name: '第 7 名' },
               { id: 8, name: '第 8 名' },
               { id: 9, name: '第 9 名' },
-              { id: 10, name: '第 10 名' }
+              { id: 10, name: '第 10 名' },
             ],
-            SubMenu: [ '号码投注', '双面盘' ]
+            SubMenu: ['号码投注', '双面盘'],
           },
-          { title: '冠亚总和', SubItem: [], SubMenu: [ '号码投注', '双面盘' ] },
-          { title: '前 2/3/4 组合', SubMenu: [ '前2组合', '前3组合', '前4组合' ] }
+          { title: '冠亚总和', SubItem: [], SubMenu: ['号码投注', '双面盘'] },
+          { title: '前 2/3/4 组合', SubMenu: ['前2组合', '前3组合', '前4组合'] },
         ],
         BothSide: {
-          BigSmall: [ '大', '小' ],
-          OddEven: [ '单', '双' ],
-          Animal: [ '龙', '虎' ]
-        }
+          BigSmall: ['大', '小'],
+          OddEven: ['单', '双'],
+          Animal: ['龙', '虎'],
+        },
       },
       Item: {
-        '1': {
+        1: {
           title: '1-10名 车号',
           sctitle: [
-            '',   '冠军',  '亚军',
-            '3名', '4名',  '5名',
-            '6名', '7名',  '8名',
-            '9名', '10名'
-          ]
+            '', '冠军', '亚军',
+            '3名', '4名', '5名',
+            '6名', '7名', '8名',
+            '9名', '10名',
+          ],
         },
-        '2': {
+        2: {
           title: '1-10名 大小',
           sctitle: [
-            '',    '冠军',   '亚军',
-            '第 3', '第 4',  '第 5',
-            '第 6', '第 7',  '第 8',
-            '第 9', '第 10'
+            '', '冠军', '亚军',
+            '第 3', '第 4', '第 5',
+            '第 6', '第 7', '第 8',
+            '第 9', '第 10',
           ],
-          subTitle: [ '大', '小' ]
+          subTitle: ['大', '小'],
         },
-        '3': {
+        3: {
           title: '1-10名 单双',
           sctitle: [
-            '',    '冠军',   '亚军',
-            '第 3', '第 4',  '第 5',
-            '第 6', '第 7',  '第 8',
-            '第 9', '第 10'
+            '', '冠军', '亚军',
+            '第 3', '第 4', '第 5',
+            '第 6', '第 7', '第 8',
+            '第 9', '第 10',
           ],
-          subTitle: [ '单', '双' ]
+          subTitle: ['单', '双'],
         },
-        '4': {
+        4: {
           title: '1-5 龙虎',
-          sctitle: [ '', '冠军', '亚军', '第 3', '第 4', '第 5' ],
-          subTitle: [ '龙', '虎' ]
+          sctitle: ['', '冠军', '亚军', '第 3', '第 4', '第 5'],
+          subTitle: ['龙', '虎'],
         },
-        '5': { title: '冠亚和大小', sctitle: [ '冠亚和' ], subTitle: [ '大', '小' ] },
-        '6': { title: '冠亚和单双', sctitle: [ '冠亚和' ], subTitle: [ '单', '双' ] },
-        '7': { title: '冠亚和值' },
-        '8': { title: '前2组合' },
-        '9': { title: '前3组合' },
-        '10': { title: '前4组合' }
+        5: { title: '冠亚和大小', sctitle: ['冠亚和'], subTitle: ['大', '小'] },
+        6: { title: '冠亚和单双', sctitle: ['冠亚和'], subTitle: ['单', '双'] },
+        7: { title: '冠亚和值' },
+        8: { title: '前2组合' },
+        9: { title: '前3组合' },
+        10: { title: '前4组合' },
       },
       Ball: [
-        '',       '冠军',
-        '亚军',     '第 3 名',
-        '第 4 名',  '第 5 名',
-        '第 6 名',  '第 7 名',
-        '第 8 名',  '第 9 名',
-        '第 10 名'
-      ]
+        '', '冠军',
+        '亚军', '第 3 名',
+        '第 4 名', '第 5 名',
+        '第 6 名', '第 7 名',
+        '第 8 名', '第 9 名',
+        '第 10 名',
+      ],
     },
     MarkSix: {
       Menu: {
@@ -422,396 +422,396 @@ export default {
           { title: '尾数连', SubMenu: [] },
           { title: '七码', SubMenu: [] },
           { title: '正码过关', SubMenu: [] },
-          { title: '其他', SubMenu: [] }
+          { title: '其他', SubMenu: [] },
         ],
         BothSide: {
-          BigSmall: [ '大', '小' ],
-          OddEven: [ '单', '双' ],
-          Animal: [ '龙', '虎' ]
-        }
+          BigSmall: ['大', '小'],
+          OddEven: ['单', '双'],
+          Animal: ['龙', '虎'],
+        },
       },
       Item: {
-        '1': { title: '特码A' },
-        '2': { title: '特码单双', shortT: '', subtitle: [ '单', '双' ] },
-        '3': { title: '特码大小', shortT: '', subtitle: [ '大', '小' ] },
-        '4': { title: '正码' },
-        '5': { title: '总和', shortT: '合', subtitle: [ '单', '双' ] },
-        '6': { title: '总和', shortT: '合', subtitle: [ '大', '小' ] },
-        '7': { title: '三全中' },
-        '8': { title: '三中二 I' },
-        '9': { title: '二全中' },
-        '10': { title: '二中特 I' },
-        '11': { title: '特串' },
-        '12': {
+        1: { title: '特码A' },
+        2: { title: '特码单双', shortT: '', subtitle: ['单', '双'] },
+        3: { title: '特码大小', shortT: '', subtitle: ['大', '小'] },
+        4: { title: '正码' },
+        5: { title: '总和', shortT: '合', subtitle: ['单', '双'] },
+        6: { title: '总和', shortT: '合', subtitle: ['大', '小'] },
+        7: { title: '三全中' },
+        8: { title: '三中二 I' },
+        9: { title: '二全中' },
+        10: { title: '二中特 I' },
+        11: { title: '特串' },
+        12: {
           title: '正码1-6单双',
           sctitle: [
-            '',   '正1', '正2',
+            '', '正1', '正2',
             '正3', '正4', '正5',
-            '正6'
+            '正6',
           ],
-          subtitle: [ '单', '双' ]
+          subtitle: ['单', '双'],
         },
-        '13': {
+        13: {
           title: '正码1-6大小',
           sctitle: [
-            '',   '正1', '正2',
+            '', '正1', '正2',
             '正3', '正4', '正5',
-            '正6'
+            '正6',
           ],
-          subtitle: [ '大', '小' ]
+          subtitle: ['大', '小'],
         },
-        '14': {
+        14: {
           title: '正码1-6色波',
           sctitle: [
-            '',   '正1', '正2',
+            '', '正1', '正2',
             '正3', '正4', '正5',
-            '正6'
+            '正6',
           ],
-          subtitle: [ '红波', '蓝波', '绿波' ]
+          subtitle: ['红波', '蓝波', '绿波'],
         },
-        '15': {
+        15: {
           title: '正码过关',
           sctitle: [
-            '',   '正1', '正2',
+            '', '正1', '正2',
             '正3', '正4', '正5',
-            '正6'
-          ]
+            '正6',
+          ],
         },
-        '16': { title: '特码合数', shortT: '合', subtitle: [ '单', '双' ] },
-        '17': { title: '特码色波', shortT: '', subtitle: [ '红波', '蓝波', '绿波' ] },
-        '18': {
+        16: { title: '特码合数', shortT: '合', subtitle: ['单', '双'] },
+        17: { title: '特码色波', shortT: '', subtitle: ['红波', '蓝波', '绿波'] },
+        18: {
           title: '特码生肖',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '兔', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '19': {
+        19: {
           title: '生肖',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '兔', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '20': {
+        20: {
           title: '尾数',
           shortT: '',
           subtitle: [
             '0尾', '1尾', '2尾',
             '3尾', '4尾', '5尾',
             '6尾', '7尾', '8尾',
-            '9尾'
-          ]
+            '9尾',
+          ],
         },
-        '21': { title: '正1特' },
-        '22': { title: '正2特' },
-        '23': { title: '正3特' },
-        '24': { title: '正4特' },
-        '25': { title: '正5特' },
-        '26': { title: '正6特' },
-        '27': {
+        21: { title: '正1特' },
+        22: { title: '正2特' },
+        23: { title: '正3特' },
+        24: { title: '正4特' },
+        25: { title: '正5特' },
+        26: { title: '正6特' },
+        27: {
           title: '正1-6合数',
           sctitle: [
-            '',   '正1', '正2',
+            '', '正1', '正2',
             '正3', '正4', '正5',
-            '正6'
+            '正6',
           ],
           shortT: '合',
-          subtitle: [ '单', '双' ]
+          subtitle: ['单', '双'],
         },
-        '28': { title: '特码B' },
-        '29': {
+        28: { title: '特码B' },
+        29: {
           title: '半波',
           shortT: '',
           subtitle: [
             '红单', '红双', '红大',
             '红小', '蓝单', '蓝双',
             '蓝大', '蓝小', '绿单',
-            '绿双', '绿大', '绿小'
-          ]
+            '绿双', '绿大', '绿小',
+          ],
         },
-        '30': {
+        30: {
           title: '六肖',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '免', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '31': { title: '五不中' },
-        '32': {
+        31: { title: '五不中' },
+        32: {
           title: '二肖连-中',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '兔', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '33': {
+        33: {
           title: '三肖连-中',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '兔', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '34': {
+        34: {
           title: '四肖连-中',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '兔', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '35': {
+        35: {
           title: '二肖连-不中',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '兔', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '36': {
+        36: {
           title: '三肖连-不中',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '兔', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '37': {
+        37: {
           title: '四肖连-不中',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '兔', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '38': {
+        38: {
           title: '二尾连-中',
           shortT: '',
           subtitle: [
             '0尾', '1尾', '2尾',
             '3尾', '4尾', '5尾',
             '6尾', '7尾', '8尾',
-            '9尾'
-          ]
+            '9尾',
+          ],
         },
-        '39': {
+        39: {
           title: '三尾连-中',
           shortT: '',
           subtitle: [
             '0尾', '1尾', '2尾',
             '3尾', '4尾', '5尾',
             '6尾', '7尾', '8尾',
-            '9尾'
-          ]
+            '9尾',
+          ],
         },
-        '40': {
+        40: {
           title: '四尾连-中',
           shortT: '',
           subtitle: [
             '0尾', '1尾', '2尾',
             '3尾', '4尾', '5尾',
             '6尾', '7尾', '8尾',
-            '9尾'
-          ]
+            '9尾',
+          ],
         },
-        '41': {
+        41: {
           title: '二尾连-不中',
           shortT: '',
           subtitle: [
             '0尾', '1尾', '2尾',
             '3尾', '4尾', '5尾',
             '6尾', '7尾', '8尾',
-            '9尾'
-          ]
+            '9尾',
+          ],
         },
-        '42': {
+        42: {
           title: '三尾连-不中',
           shortT: '',
           subtitle: [
             '0尾', '1尾', '2尾',
             '3尾', '4尾', '5尾',
             '6尾', '7尾', '8尾',
-            '9尾'
-          ]
+            '9尾',
+          ],
         },
-        '43': {
+        43: {
           title: '四尾连-不中',
           shortT: '',
           subtitle: [
             '0尾', '1尾', '2尾',
             '3尾', '4尾', '5尾',
             '6尾', '7尾', '8尾',
-            '9尾'
-          ]
+            '9尾',
+          ],
         },
-        '44': {
+        44: {
           title: '五肖连-中',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '兔', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '45': {
+        45: {
           title: '五肖连-不中',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '兔', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '46': {
+        46: {
           title: '五尾连-中',
           shortT: '',
           subtitle: [
             '0尾', '1尾', '2尾',
             '3尾', '4尾', '5尾',
             '6尾', '7尾', '8尾',
-            '9尾'
-          ]
+            '9尾',
+          ],
         },
-        '47': {
+        47: {
           title: '五尾连-不中',
           shortT: '',
           subtitle: [
             '0尾', '1尾', '2尾',
             '3尾', '4尾', '5尾',
             '6尾', '7尾', '8尾',
-            '9尾'
-          ]
+            '9尾',
+          ],
         },
-        '48': { title: '六不中' },
-        '49': { title: '七不中' },
-        '50': { title: '八不中' },
-        '51': { title: '九不中' },
-        '52': { title: '十不中' },
-        '53': { title: '七码', shortT: '', subtitle: [ '单', '双', '大', '小' ] },
-        '54': {
+        48: { title: '六不中' },
+        49: { title: '七不中' },
+        50: { title: '八不中' },
+        51: { title: '九不中' },
+        52: { title: '十不中' },
+        53: { title: '七码', shortT: '', subtitle: ['单', '双', '大', '小'] },
+        54: {
           title: '五行',
           shortT: '',
-          subtitle: [ '金', '木', '水', '火', '土' ]
+          subtitle: ['金', '木', '水', '火', '土'],
         },
-        '55': {
+        55: {
           title: '一肖量',
           shortT: '',
-          subtitle: [ '肖2', '肖3', '肖4', '肖5', '肖6', '肖7' ]
+          subtitle: ['肖2', '肖3', '肖4', '肖5', '肖6', '肖7'],
         },
-        '56': {
+        56: {
           title: '尾数量',
           shortT: '',
-          subtitle: [ '尾2', '尾3', '尾4', '尾5', '尾6', '尾7' ]
+          subtitle: ['尾2', '尾3', '尾4', '尾5', '尾6', '尾7'],
         },
-        '57': { title: '五中一' },
-        '58': { title: '六中一' },
-        '59': { title: '七中一' },
-        '60': { title: '八中一' },
-        '61': { title: '九中一' },
-        '62': { title: '十中一' },
-        '63': { title: '一粒任中' },
-        '64': { title: '二粒任中' },
-        '65': { title: '三粒任中' },
-        '66': { title: '四粒任中' },
-        '67': { title: '五粒任中' },
-        '68': { title: '龙虎', shortT: '', subtitle: [ '龙', '虎' ] },
-        '69': {
+        57: { title: '五中一' },
+        58: { title: '六中一' },
+        59: { title: '七中一' },
+        60: { title: '八中一' },
+        61: { title: '九中一' },
+        62: { title: '十中一' },
+        63: { title: '一粒任中' },
+        64: { title: '二粒任中' },
+        65: { title: '三粒任中' },
+        66: { title: '四粒任中' },
+        67: { title: '五粒任中' },
+        68: { title: '龙虎', shortT: '', subtitle: ['龙', '虎'] },
+        69: {
           title: '一肖不中',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '免', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '70': {
+        70: {
           title: '尾数不中',
           shortT: '',
           subtitle: [
             '0尾', '1尾', '2尾',
             '3尾', '4尾', '5尾',
             '6尾', '7尾', '8尾',
-            '9尾'
-          ]
+            '9尾',
+          ],
         },
-        '71': { title: '四中一' },
-        '72': { title: '三中二 II' },
-        '73': { title: '二中特 II' },
-        '74': { title: '特码尾大小', shortT: '尾', subtitle: [ '大', '小' ] },
-        '75': {
+        71: { title: '四中一' },
+        72: { title: '三中二 II' },
+        73: { title: '二中特 II' },
+        74: { title: '特码尾大小', shortT: '尾', subtitle: ['大', '小'] },
+        75: {
           title: '二肖',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '免', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '76': {
+        76: {
           title: '三肖',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '免', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '77': {
+        77: {
           title: '四肖',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '免', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
+            '猪',
+          ],
         },
-        '78': {
+        78: {
           title: '五肖',
           shortT: '',
           subtitle: [
-            '',  '鼠', '牛', '虎',
+            '', '鼠', '牛', '虎',
             '免', '龙', '蛇', '马',
             '羊', '猴', '鸡', '狗',
-            '猪'
-          ]
-        }
+            '猪',
+          ],
+        },
       },
       TitleSP: {
         SNO: [
-          '',  '一', '二',
+          '', '一', '二',
           '三', '四', '五',
-          '六'
-        ]
-      }
+          '六',
+        ],
+      },
     },
     Happy: {
       Menu: {
@@ -819,113 +819,113 @@ export default {
           { title: '两面盘', SubItem: [] },
           { title: '数字盘', SubItem: [], SubMenu: [] },
           { title: '正码', SubItem: [], SubMenu: [] },
-          { title: '连码', SubMenu: [] }
-        ]
+          { title: '连码', SubMenu: [] },
+        ],
       },
       Item: {
-        '1': {
+        1: {
           title: '单码',
           sctitle: [
-            '',   '1球', '2球',
+            '', '1球', '2球',
             '3球', '4球', '5球',
-            '6球', '7球', '8球'
-          ]
+            '6球', '7球', '8球',
+          ],
         },
-        '2': {
+        2: {
           title: '单双',
           sctitle: [
-            '',   '1球', '2球',
+            '', '1球', '2球',
             '3球', '4球', '5球',
-            '6球', '7球', '8球'
+            '6球', '7球', '8球',
           ],
-          subtitle: [ '单', '双' ]
+          subtitle: ['单', '双'],
         },
-        '3': {
+        3: {
           title: '大小',
           sctitle: [
-            '',   '1球', '2球',
+            '', '1球', '2球',
             '3球', '4球', '5球',
-            '6球', '7球', '8球'
+            '6球', '7球', '8球',
           ],
-          subtitle: [ '大', '小' ]
+          subtitle: ['大', '小'],
         },
-        '4': {
+        4: {
           title: '合数单双',
           sctitle: [
-            '',   '1球', '2球',
+            '', '1球', '2球',
             '3球', '4球', '5球',
-            '6球', '7球', '8球'
+            '6球', '7球', '8球',
           ],
           shortT: '合数',
-          subtitle: [ '单', '双' ]
+          subtitle: ['单', '双'],
         },
-        '5': {
+        5: {
           title: '尾数大小',
           sctitle: [
-            '',   '1球', '2球',
+            '', '1球', '2球',
             '3球', '4球', '5球',
-            '6球', '7球', '8球'
+            '6球', '7球', '8球',
           ],
           shortT: '尾数',
-          subtitle: [ '大', '小' ]
+          subtitle: ['大', '小'],
         },
-        '7': { title: '方位', subtitle: [ '东','南','西','北' ] },
-        '9': { title: '中发白', subtitle: [ '中','发','白' ] },
-        '10': { title: '总和大小', shortT: '总和', subtitle: [ '大', '小' ] },
-        '11': { title: '总和单双', shortT: '总和', subtitle: [ '单', '双' ] },
-        '12': { title: '总和尾数大小', shortT: '和尾', subtitle: [ '大', '小' ] },
-        '13': {
+        7: { title: '方位', subtitle: ['东', '南', '西', '北'] },
+        9: { title: '中发白', subtitle: ['中', '发', '白'] },
+        10: { title: '总和大小', shortT: '总和', subtitle: ['大', '小'] },
+        11: { title: '总和单双', shortT: '总和', subtitle: ['单', '双'] },
+        12: { title: '总和尾数大小', shortT: '和尾', subtitle: ['大', '小'] },
+        13: {
           title: '龙虎',
           sctitle: [
-            '',   '1球', '2球',
+            '', '1球', '2球',
             '3球', '4球', '5球',
-            '6球', '7球', '8球'
+            '6球', '7球', '8球',
           ],
-          subtitle: [ '龙', '虎' ]
+          subtitle: ['龙', '虎'],
         },
-        '14': { title: '正码' },
-        '15': { title: '任选二' },
-        '16': { title: '前二组合' },
-        '17': { title: '任选三' },
-        '18': { title: '前三组合' },
-        '19': { title: '任选四' },
-        '20': { title: '任选五' }
+        14: { title: '正码' },
+        15: { title: '任选二' },
+        16: { title: '前二组合' },
+        17: { title: '任选三' },
+        18: { title: '前三组合' },
+        19: { title: '任选四' },
+        20: { title: '任选五' },
       },
       Ball: [
-        '',    '第一球', '第二球',
+        '', '第一球', '第二球',
         '第三球', '第四球', '第五球',
-        '第六球', '第七球', '第八球'
-      ]
+        '第六球', '第七球', '第八球',
+      ],
     },
     Always: {
       Menu: {
         Group: [
           { title: '两面盘', SubItem: [] },
           { title: '数字盘', SubItem: [], SubMenu: [] },
-          { title: '杂项', SubMenu: [] }
-        ]
+          { title: '杂项', SubMenu: [] },
+        ],
       },
       Item: {
-        '1': { title: '单码', sctitle: [ '', '1球', '2球', '3球', '4球', '5球' ] },
-        '2': {
+        1: { title: '单码', sctitle: ['', '1球', '2球', '3球', '4球', '5球'] },
+        2: {
           title: '1-5 大小',
-          sctitle: [ '', '1球', '2球', '3球', '4球', '5球' ],
-          subtitle: [ '大', '小' ]
+          sctitle: ['', '1球', '2球', '3球', '4球', '5球'],
+          subtitle: ['大', '小'],
         },
-        '3': {
+        3: {
           title: '1-5 单双',
-          sctitle: [ '', '1球', '2球', '3球', '4球', '5球' ],
-          subtitle: [ '单', '双' ]
+          sctitle: ['', '1球', '2球', '3球', '4球', '5球'],
+          subtitle: ['单', '双'],
         },
-        '5': { title: '总和', subtitle: [ '大', '小' ] },
-        '6': { title: '总和', subtitle: [ '单', '双' ] },
-        '7': { title: '龙虎', subtitle: [ '龙', '虎' ] },
-        '8': { title: '龙虎', subtitle: [ '和', '' ] },
-        '12': { title: '前三', subtitle: [ '', '豹子', '顺子', '对子', '半顺', '杂六' ] },
-        '13': { title: '中三', subtitle: [ '', '豹子', '顺子', '对子', '半顺', '杂六' ] },
-        '14': { title: '后三', subtitle: [ '', '豹子', '顺子', '对子', '半顺', '杂六' ] }
+        5: { title: '总和', subtitle: ['大', '小'] },
+        6: { title: '总和', subtitle: ['单', '双'] },
+        7: { title: '龙虎', subtitle: ['龙', '虎'] },
+        8: { title: '龙虎', subtitle: ['和', ''] },
+        12: { title: '前三', subtitle: ['', '豹子', '顺子', '对子', '半顺', '杂六'] },
+        13: { title: '中三', subtitle: ['', '豹子', '顺子', '对子', '半顺', '杂六'] },
+        14: { title: '后三', subtitle: ['', '豹子', '顺子', '对子', '半顺', '杂六'] },
       },
-      Ball: [ '', '第一球', '第二球', '第三球', '第四球', '第五球' ]
+      Ball: ['', '第一球', '第二球', '第三球', '第四球', '第五球'],
     },
     '3D': {
       Menu: {
@@ -942,134 +942,134 @@ export default {
           { title: '组选 6', SubMenu: [] },
           { title: '过关', SubMenu: [] },
           { title: '杂项', SubMenu: [] },
-          { title: '其他', SubMenu: [] }
-        ]
+          { title: '其他', SubMenu: [] },
+        ],
       },
       Item: {
-        '1': { title: '一定位-个' },
-        '2': { title: '一定位-个单双', shortT: '', subtitle: [ '单', '双' ] },
-        '3': { title: '一定位-个大小', shortT: '', subtitle: [ '大', '小' ] },
-        '4': { title: '一定位-拾' },
-        '5': { title: '一定位-拾单双', shortT: '', subtitle: [ '单', '双' ] },
-        '6': { title: '一定位-拾大小', shortT: '', subtitle: [ '大', '小' ] },
-        '7': { title: '一定位-佰' },
-        '8': { title: '一定位-佰单双', shortT: '', subtitle: [ '单', '双' ] },
-        '9': { title: '一定位-佰大小', shortT: '', subtitle: [ '大', '小' ] },
-        '10': { title: '一字组合' },
-        '11': { title: '三字和数' },
-        '12': { title: '三字和数单双', shortT: '', subtitle: [ '单', '双' ] },
-        '13': { title: '三字和数大小', shortT: '', subtitle: [ '大', '小' ] },
-        '14': { title: '二定位拾个' },
-        '15': { title: '二定位佰个' },
-        '16': { title: '二定位佰拾' },
-        '17': { title: '二字组合' },
-        '18': { title: '组 3全包', shortT: '', subtitle: [ '全包', '' ] },
-        '19': { title: '组 3转直-5', shortT: '5号' },
-        '20': { title: '组 3转直-6', shortT: '6号' },
-        '21': { title: '组 3转直-7', shortT: '7号' },
-        '22': { title: '组 3转直-8', shortT: '8号' },
-        '23': { title: '组 6转直-4', shortT: '4号' },
-        '24': { title: '组 6转直-5', shortT: '5号' },
-        '25': { title: '组 6转直-6', shortT: '6号' },
-        '26': { title: '组 6转直-7', shortT: '7号' },
-        '27': { title: '组 6转直-8', shortT: '8号' },
-        '28': { title: '3x3x3', shortT: '', subtitle: [ '' ] },
-        '29': { title: '4x4x4', shortT: '', subtitle: [ '' ] },
-        '30': { title: '5x5x5', shortT: '', subtitle: [ '' ] },
-        '31': { title: '6x6x6', shortT: '', subtitle: [ '' ] },
-        '32': { title: '7x7x7', shortT: '', subtitle: [ '' ] },
-        '33': { title: '中 3 保 3', shortT: '', subtitle: [ '' ] },
-        '34': { title: '一定位-个质合', shortT: '', subtitle: [ '质', '合' ] },
-        '35': { title: '一定位-拾质合', shortT: '', subtitle: [ '质', '合' ] },
-        '36': { title: '一定位-佰质合', shortT: '', subtitle: [ '质', '合' ] },
-        '37': {
+        1: { title: '一定位-个' },
+        2: { title: '一定位-个单双', shortT: '', subtitle: ['单', '双'] },
+        3: { title: '一定位-个大小', shortT: '', subtitle: ['大', '小'] },
+        4: { title: '一定位-拾' },
+        5: { title: '一定位-拾单双', shortT: '', subtitle: ['单', '双'] },
+        6: { title: '一定位-拾大小', shortT: '', subtitle: ['大', '小'] },
+        7: { title: '一定位-佰' },
+        8: { title: '一定位-佰单双', shortT: '', subtitle: ['单', '双'] },
+        9: { title: '一定位-佰大小', shortT: '', subtitle: ['大', '小'] },
+        10: { title: '一字组合' },
+        11: { title: '三字和数' },
+        12: { title: '三字和数单双', shortT: '', subtitle: ['单', '双'] },
+        13: { title: '三字和数大小', shortT: '', subtitle: ['大', '小'] },
+        14: { title: '二定位拾个' },
+        15: { title: '二定位佰个' },
+        16: { title: '二定位佰拾' },
+        17: { title: '二字组合' },
+        18: { title: '组 3全包', shortT: '', subtitle: ['全包', ''] },
+        19: { title: '组 3转直-5', shortT: '5号' },
+        20: { title: '组 3转直-6', shortT: '6号' },
+        21: { title: '组 3转直-7', shortT: '7号' },
+        22: { title: '组 3转直-8', shortT: '8号' },
+        23: { title: '组 6转直-4', shortT: '4号' },
+        24: { title: '组 6转直-5', shortT: '5号' },
+        25: { title: '组 6转直-6', shortT: '6号' },
+        26: { title: '组 6转直-7', shortT: '7号' },
+        27: { title: '组 6转直-8', shortT: '8号' },
+        28: { title: '3x3x3', shortT: '', subtitle: [''] },
+        29: { title: '4x4x4', shortT: '', subtitle: [''] },
+        30: { title: '5x5x5', shortT: '', subtitle: [''] },
+        31: { title: '6x6x6', shortT: '', subtitle: [''] },
+        32: { title: '7x7x7', shortT: '', subtitle: [''] },
+        33: { title: '中 3 保 3', shortT: '', subtitle: [''] },
+        34: { title: '一定位-个质合', shortT: '', subtitle: ['质', '合'] },
+        35: { title: '一定位-拾质合', shortT: '', subtitle: ['质', '合'] },
+        36: { title: '一定位-佰质合', shortT: '', subtitle: ['质', '合'] },
+        37: {
           title: '定位单双过关',
           shortT: '',
           subtitle: [
             '单单单', '单单双',
             '单双双', '单双单',
             '双双双', '双双单',
-            '双单单', '双单双'
-          ]
+            '双单单', '双单双',
+          ],
         },
-        '38': {
+        38: {
           title: '定位大小过关',
           shortT: '',
           subtitle: [
             '大大大', '大大小',
             '大小小', '大小大',
             '小小小', '小小大',
-            '小大大', '小大小'
-          ]
+            '小大大', '小大小',
+          ],
         },
-        '39': {
+        39: {
           title: '定位质合过关',
           shortT: '',
           subtitle: [
             '质质质', '质质合',
             '质合合', '质合质',
             '合合合', '合合质',
-            '合质质', '合质合'
-          ]
+            '合质质', '合质合',
+          ],
         },
-        '40': { title: '跨度' },
-        '41': { title: '合值' },
-        '42': { title: '三定位' },
-        '43': { title: '三字组合' },
-        '44': {
+        40: { title: '跨度' },
+        41: { title: '合值' },
+        42: { title: '三定位' },
+        43: { title: '三字组合' },
+        44: {
           title: '拾个和数',
           shortT: '',
           subtitle: [
-            '',   '',    '',
-            '',   '0~4', '5',
-            '6',  '7',   '8',
-            '9',  '10',  '11',
-            '12', '13',  '14~18'
-          ]
+            '', '', '',
+            '', '0~4', '5',
+            '6', '7', '8',
+            '9', '10', '11',
+            '12', '13', '14~18',
+          ],
         },
-        '45': {
+        45: {
           title: '佰个和数',
           shortT: '',
           subtitle: [
-            '',   '',    '',
-            '',   '0~4', '5',
-            '6',  '7',   '8',
-            '9',  '10',  '11',
-            '12', '13',  '14~18'
-          ]
+            '', '', '',
+            '', '0~4', '5',
+            '6', '7', '8',
+            '9', '10', '11',
+            '12', '13', '14~18',
+          ],
         },
-        '46': {
+        46: {
           title: '佰拾和数',
           shortT: '',
           subtitle: [
-            '',   '',    '',
-            '',   '0~4', '5',
-            '6',  '7',   '8',
-            '9',  '10',  '11',
-            '12', '13',  '14~18'
-          ]
+            '', '', '',
+            '', '0~4', '5',
+            '6', '7', '8',
+            '9', '10', '11',
+            '12', '13', '14~18',
+          ],
         },
-        '47': { title: '拾个和数单双', shortT: '', subtitle: [ '单', '双' ] },
-        '48': { title: '佰个和数单双', shortT: '', subtitle: [ '单', '双' ] },
-        '49': { title: '佰拾和数单双', shortT: '', subtitle: [ '单', '双' ] },
-        '50': { title: '拾个和数尾数' },
-        '51': { title: '佰个和数尾数' },
-        '52': { title: '佰拾和数尾数' },
-        '53': { title: '拾个和数尾数大小', shortT: '', subtitle: [ '大', '小' ] },
-        '54': { title: '佰个和数尾数大小', shortT: '', subtitle: [ '大', '小' ] },
-        '55': { title: '佰拾和数尾数大小', shortT: '', subtitle: [ '大', '小' ] },
-        '56': { title: '拾个和数尾数质合', shortT: '', subtitle: [ '质', '合' ] },
-        '57': { title: '佰个和数尾数质合', shortT: '', subtitle: [ '质', '合' ] },
-        '58': { title: '佰拾和数尾数质合', shortT: '', subtitle: [ '质', '合' ] },
-        '59': { title: '杂六', shortT: '', subtitle: [ '杂六', '' ] },
-        '60': { title: '顺子', shortT: '', subtitle: [ '顺子', '' ] },
-        '61': { title: '豹子', shortT: '', subtitle: [ '豹子', '' ] },
-        '62': { title: '不出' },
-        '63': { title: '对子', shortT: '', subtitle: [ '对子', '' ] },
-        '64': { title: '准对' },
-        '65': { title: '半顺', shortT: '', subtitle: [ '半顺', '' ] },
-        '66': { title: '杀号' }
-      }
+        47: { title: '拾个和数单双', shortT: '', subtitle: ['单', '双'] },
+        48: { title: '佰个和数单双', shortT: '', subtitle: ['单', '双'] },
+        49: { title: '佰拾和数单双', shortT: '', subtitle: ['单', '双'] },
+        50: { title: '拾个和数尾数' },
+        51: { title: '佰个和数尾数' },
+        52: { title: '佰拾和数尾数' },
+        53: { title: '拾个和数尾数大小', shortT: '', subtitle: ['大', '小'] },
+        54: { title: '佰个和数尾数大小', shortT: '', subtitle: ['大', '小'] },
+        55: { title: '佰拾和数尾数大小', shortT: '', subtitle: ['大', '小'] },
+        56: { title: '拾个和数尾数质合', shortT: '', subtitle: ['质', '合'] },
+        57: { title: '佰个和数尾数质合', shortT: '', subtitle: ['质', '合'] },
+        58: { title: '佰拾和数尾数质合', shortT: '', subtitle: ['质', '合'] },
+        59: { title: '杂六', shortT: '', subtitle: ['杂六', ''] },
+        60: { title: '顺子', shortT: '', subtitle: ['顺子', ''] },
+        61: { title: '豹子', shortT: '', subtitle: ['豹子', ''] },
+        62: { title: '不出' },
+        63: { title: '对子', shortT: '', subtitle: ['对子', ''] },
+        64: { title: '准对' },
+        65: { title: '半顺', shortT: '', subtitle: ['半顺', ''] },
+        66: { title: '杀号' },
+      },
     },
     Speed3: {
       Menu: {
@@ -1079,75 +1079,75 @@ export default {
           { title: '围骰', SubMenu: [] },
           { title: '短牌', SubMenu: [] },
           { title: '点数', SubMenu: [] },
-          { title: '长牌', SubMenu: [] }
-        ]
+          { title: '长牌', SubMenu: [] },
+        ],
       },
       Item: {
-        '1': { title: '三军' },
-        '2': { title: '大小', subtitle: [ '大', '小' ] },
-        '3': {
+        1: { title: '三军' },
+        2: { title: '大小', subtitle: ['大', '小'] },
+        3: {
           title: '围骰',
           subtitle: [
-            '',    '111',
+            '', '111',
             '222', '333',
             '444', '555',
-            '666'
-          ]
+            '666',
+          ],
         },
-        '4': { title: '全骰', subtitle: [ '全骰', '' ] },
-        '5': { title: '点数' },
-        '6': {
+        4: { title: '全骰', subtitle: ['全骰', ''] },
+        5: { title: '点数' },
+        6: {
           title: '长牌',
           subtitle: [
             '12', '13', '14', '15',
             '16', '23', '24', '25',
             '26', '34', '35', '36',
-            '45', '46', '56'
-          ]
+            '45', '46', '56',
+          ],
         },
-        '7': {
+        7: {
           title: '短牌',
           subtitle: [
-            '',   '11', '22',
+            '', '11', '22',
             '33', '44', '55',
-            '66'
-          ]
-        }
-      }
+            '66',
+          ],
+        },
+      },
     },
     Happy8: {
       Menu: {
         Group: [
           { title: '总和五行', SubItem: [] },
-          { title: '正码', SubItem: [] }
-        ]
+          { title: '正码', SubItem: [] },
+        ],
       },
       Item: {
-        '1': { title: '正码' },
-        '2': { title: '总和大小', shortT: '总和', subtitle: [ '大', '小' ] },
-        '3': { title: '总和单双', shortT: '总和', subtitle: [ '单', '双' ] },
-        '4': { title: '总和810', shortT: '总和', subtitle: [ '810', '' ] },
-        '5': {
+        1: { title: '正码' },
+        2: { title: '总和大小', shortT: '总和', subtitle: ['大', '小'] },
+        3: { title: '总和单双', shortT: '总和', subtitle: ['单', '双'] },
+        4: { title: '总和810', shortT: '总和', subtitle: ['810', ''] },
+        5: {
           title: '总和过关',
           shortT: '',
-          subtitle: [ '大单', '大双', '小单', '小双' ]
+          subtitle: ['大单', '大双', '小单', '小双'],
         },
-        '6': {
+        6: {
           title: '前后和',
           shortT: '',
-          subtitle: [ '前(多)', '后(多)', '前后(和)' ]
+          subtitle: ['前(多)', '后(多)', '前后(和)'],
         },
-        '7': {
+        7: {
           title: '单双和',
           shortT: '',
-          subtitle: [ '单(多)', '双(多)', '单双(和)' ]
+          subtitle: ['单(多)', '双(多)', '单双(和)'],
         },
-        '8': {
+        8: {
           title: '五行',
           shortT: '',
-          subtitle: [ '金', '木', '水', '火', '土' ]
-        }
-      }
+          subtitle: ['金', '木', '水', '火', '土'],
+        },
+      },
     },
     BTCHash: {
       Menu: {
@@ -1161,57 +1161,57 @@ export default {
           { title: '五字', SubItem: [] },
           { title: '杂项', SubMenu: [] },
           { title: '过关', SubMenu: [] },
-        ]
+        ],
       },
       Item: {
-        '1': { title: '个位-单双',sctitle: ['个位'], subtitle: [ '单', '双' ] },
-        '2': { title: '十位-单双',sctitle: ['十位'], subtitle: [ '单', '双' ] },
-        '3': { title: '百位-单双',sctitle: ['百位'], subtitle: [ '单', '双' ] },
-        '4': { title: '千位-单双',sctitle: ['千位'], subtitle: [ '单', '双' ] },
-        '5': { title: '万位-单双',sctitle: ['万位'], subtitle: [ '单', '双' ] },
-        '6': { title: '个位-大小',sctitle: ['个位'], subtitle: [ '大', '小' ] },
-        '7': { title: '十位-大小',sctitle: ['十位'], subtitle: [ '大', '小' ] },
-        '8': { title: '百位-大小',sctitle: ['百位'], subtitle: [ '大', '小' ] },
-        '9': { title: '千位-大小',sctitle: ['千位'], subtitle: [ '大', '小' ] },
-        '10': { title: '万位-大小',sctitle: ['万位'], subtitle: [ '大', '小' ] },
-        '11': { title: '个位-质合',sctitle: ['个位'], subtitle: [ '质', '合' ] },
-        '12': { title: '十位-质合',sctitle: ['十位'], subtitle: [ '质', '合' ] },
-        '13': { title: '百位-质合',sctitle: ['百位'], subtitle: [ '质', '合' ] },
-        '14': { title: '千位-质合',sctitle: ['千位'], subtitle: [ '质', '合' ] },
-        '15': { title: '万位-质合',sctitle: ['万位'], subtitle: [ '质', '合' ] },
-        '16': {title: '总和-单双',sctitle: ['总和'],  subtitle: [ '单', '双' ]},
-        '17': {title: '总和-大小',sctitle: ['总和'],  subtitle: [ '大', '小' ]},
-        '18': {title: '前3和-单双',sctitle: ['前3和'],  subtitle: [ '单', '双' ]},
-        '19': {title: '前3和-大小',sctitle: ['前3和'],  subtitle: [ '大', '小' ]},
-        '20': {title: '中3和-单双',sctitle: ['中3和'],  subtitle: [ '单', '双' ]},
-        '21': {title: '中3和-大小',sctitle: ['中3和'],  subtitle: [ '大', '小' ]},
-        '22': {title: '后3和-单双',sctitle: ['后3和'],  subtitle: [ '单', '双' ]},
-        '23': {title: '后3和-大小',sctitle: ['后3和'],  subtitle: [ '大', '小' ]},
-        '24': {title: '一定位-个',shortT:'个位'},
-        '25': {title: '一定位-十',shortT:'十位'},
-        '26': {title: '一定位-百',shortT:'百位'},
-        '27': {title: '一定位-千',shortT:'千位'},
-        '28': {title: '一定位-万',shortT:'万位'},
-        '29': {title: '一字现'},
-        '30': {title: '一字现-前3'},
-        '31': {title: '一字现-中3'},
-        '32': {title: '一字现-后3'},
-        '33': {title: '二字现'},
-        '34': {title: '二字现-前3'},
-        '35': {title: '二字现-中3'},
-        '36': {title: '二字现-后3'},
-        '37': {title: '三字现'},
-        '38': {title: '三字现-前3'},
-        '39': {title: '三字现-中3'},
-        '40': {title: '三字现-后3'},
-        '41': {title: '四字现'},
-        '42': {title: '五字现'},
-        '43': {title: '杂项-前3',sctitle: ['前3'],subtitle:['豹子','顺子','对子','半顺','杂六']},
-        '44': {title: '杂项-中3',sctitle: ['中3'],subtitle:['豹子','顺子','对子','半顺','杂六']},
-        '45': {title: '杂项-后3',sctitle: ['后3'],subtitle:['豹子','顺子','对子','半顺','杂六']},
-        '46': {title: '炸金花',subtitle:['五同号','四条','葫芦','顺子','三条','两对','一对','杂牌']},
-        '47': {title: '两面过关'}
-      }
-    }
-  }
-}
+        1: { title: '个位-单双', sctitle: ['个位'], subtitle: ['单', '双'] },
+        2: { title: '十位-单双', sctitle: ['十位'], subtitle: ['单', '双'] },
+        3: { title: '百位-单双', sctitle: ['百位'], subtitle: ['单', '双'] },
+        4: { title: '千位-单双', sctitle: ['千位'], subtitle: ['单', '双'] },
+        5: { title: '万位-单双', sctitle: ['万位'], subtitle: ['单', '双'] },
+        6: { title: '个位-大小', sctitle: ['个位'], subtitle: ['大', '小'] },
+        7: { title: '十位-大小', sctitle: ['十位'], subtitle: ['大', '小'] },
+        8: { title: '百位-大小', sctitle: ['百位'], subtitle: ['大', '小'] },
+        9: { title: '千位-大小', sctitle: ['千位'], subtitle: ['大', '小'] },
+        10: { title: '万位-大小', sctitle: ['万位'], subtitle: ['大', '小'] },
+        11: { title: '个位-质合', sctitle: ['个位'], subtitle: ['质', '合'] },
+        12: { title: '十位-质合', sctitle: ['十位'], subtitle: ['质', '合'] },
+        13: { title: '百位-质合', sctitle: ['百位'], subtitle: ['质', '合'] },
+        14: { title: '千位-质合', sctitle: ['千位'], subtitle: ['质', '合'] },
+        15: { title: '万位-质合', sctitle: ['万位'], subtitle: ['质', '合'] },
+        16: { title: '总和-单双', sctitle: ['总和'], subtitle: ['单', '双'] },
+        17: { title: '总和-大小', sctitle: ['总和'], subtitle: ['大', '小'] },
+        18: { title: '前3和-单双', sctitle: ['前3和'], subtitle: ['单', '双'] },
+        19: { title: '前3和-大小', sctitle: ['前3和'], subtitle: ['大', '小'] },
+        20: { title: '中3和-单双', sctitle: ['中3和'], subtitle: ['单', '双'] },
+        21: { title: '中3和-大小', sctitle: ['中3和'], subtitle: ['大', '小'] },
+        22: { title: '后3和-单双', sctitle: ['后3和'], subtitle: ['单', '双'] },
+        23: { title: '后3和-大小', sctitle: ['后3和'], subtitle: ['大', '小'] },
+        24: { title: '一定位-个', shortT: '个位' },
+        25: { title: '一定位-十', shortT: '十位' },
+        26: { title: '一定位-百', shortT: '百位' },
+        27: { title: '一定位-千', shortT: '千位' },
+        28: { title: '一定位-万', shortT: '万位' },
+        29: { title: '一字现' },
+        30: { title: '一字现-前3' },
+        31: { title: '一字现-中3' },
+        32: { title: '一字现-后3' },
+        33: { title: '二字现' },
+        34: { title: '二字现-前3' },
+        35: { title: '二字现-中3' },
+        36: { title: '二字现-后3' },
+        37: { title: '三字现' },
+        38: { title: '三字现-前3' },
+        39: { title: '三字现-中3' },
+        40: { title: '三字现-后3' },
+        41: { title: '四字现' },
+        42: { title: '五字现' },
+        43: { title: '杂项-前3', sctitle: ['前3'], subtitle: ['豹子', '顺子', '对子', '半顺', '杂六'] },
+        44: { title: '杂项-中3', sctitle: ['中3'], subtitle: ['豹子', '顺子', '对子', '半顺', '杂六'] },
+        45: { title: '杂项-后3', sctitle: ['后3'], subtitle: ['豹子', '顺子', '对子', '半顺', '杂六'] },
+        46: { title: '炸金花', subtitle: ['五同号', '四条', '葫芦', '顺子', '三条', '两对', '一对', '杂牌'] },
+        47: { title: '两面过关' },
+      },
+    },
+  },
+};

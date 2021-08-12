@@ -10,20 +10,20 @@
 </template>
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import { getModule } from 'vuex-module-decorators';
+import { WebParams, Msg } from '../layouts/data/if';
+import { CryptoItem, CryptoOpParams } from '../components/if/dbif';
 import OpParamList from '../components/List/CryptoOpParamList.vue';
 import BtnBar from '../components/BtnBar.vue';
-import { CryptoItem, CryptoOpParams } from '../components/if/dbif';
-import { WebParams, Msg } from '../layouts/data/if';
 import ErrCode from '../layouts/data/ErrCode';
-import { getModule } from 'vuex-module-decorators';
 import LStore from '../layouts/data/LayoutStoreModule';
 import OpParams from '../components/class/CryptoOpParams';
 
 @Component({
 	components: {
 		OpParamList,
-		BtnBar
-	}
+		BtnBar,
+	},
 })
 export default class CryptoOpManager extends Vue {
 	store = getModule(LStore);
@@ -36,15 +36,13 @@ export default class CryptoOpManager extends Vue {
 		const param:WebParams = { ...this.store.Param };
 		param.TableName = 'CryptoOpParams';
 		param.Filter = { ItemID: itm.id };
-		this.store.ax.getApi('cc/GetData', param).then((res:Msg)=>{
-			if(res.ErrNo === ErrCode.PASS) {
+		this.store.ax.getApi('cc/GetData', param).then((res:Msg) => {
+			if (res.ErrNo === ErrCode.PASS) {
 				this.list = [];
 				const ans:CryptoOpParams[] = res.data as CryptoOpParams[];
-				this.list = ans.map(itm=>{
-					return new OpParams(this.curItemID, itm);
-				})
+				this.list = ans.map((r) => new OpParams(this.curItemID, r));
 			}
-		})
+		});
 	}
 }
 </script>

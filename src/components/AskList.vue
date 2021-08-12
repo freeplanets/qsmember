@@ -46,14 +46,14 @@ import { AskReport } from './if/dbif';
 
 @Component
 export default class AskList extends Vue {
-  @Prop({type:Array}) readonly list!:AskReport[];
+  @Prop({ type: Array }) readonly list!:AskReport[];
   @Watch('list')
-  onListChange(){
+  onListChange() {
     console.log('OnListChange:', this.list);
   }
   lang='zh-TW';
   dOpt = {
-    hour12:false,
+    hour12: false,
     month: '2-digit',
     day: '2-digit',
     hour: '2-digit',
@@ -62,7 +62,7 @@ export default class AskList extends Vue {
     // timeZone: 'Asia/Taipei',
     weekday: 'short',
   }
-  d  = new Date();
+  d = new Date();
 }
 </script>
 <style scoped>
@@ -81,7 +81,7 @@ table {
   border-bottom: 1px solid cornflowerblue;
   border-right: 1px solid forestgreen;
   padding-left: 4px;
-  padding-right: 4px;  
+  padding-right: 4px;
 }
 .colorBuy {
   color: #c23437;

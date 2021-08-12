@@ -5,10 +5,10 @@ class Nums {
 		return reg.test(v);
 	}
 	isGreen(v:number):boolean {
-		return v > 0 ? true : false;
+		return v > 0;
 	}
 	isRed(v:number):boolean {
-		return v < 0 ? true : false;
+		return v < 0;
 	}
 }
 export default new Nums();

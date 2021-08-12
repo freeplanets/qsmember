@@ -14,10 +14,10 @@
             text-color="primary"
             :options="ledgers"
           />
-        </div>        
+        </div>
         <div class="tbox-pd"><q-input class="tbox-w" outlined dense v-model="dateSet" /></div>
         <div class="miniBtn-pd"><q-btn color="primary" dense icon="date_range" @click="DateSlt=true"/></div>
-        <div class='miniBtn-pd'><q-btn dense color="green" icon-right="search" :label="$t('Button.Search')"  @click="SearchData()"/></div>    
+        <div class='miniBtn-pd'><q-btn dense color="green" icon-right="search" :label="$t('Button.Search')"  @click="SearchData()"/></div>
     </div>
     <q-separator inset />
     <div v-if='showTotal' class="mytable">
@@ -29,7 +29,7 @@
           <td class="mytable-head mytable-field-txt">{{$t('Report.OdrAmt')}}</td>
           <td class="mytable-head mytable-field-txt">{{$t('Report.Result')}}</td>
         </tr>
-      <tr 
+      <tr
         v-for="(itm,idx) in Tlist"
         :key="'bh'+idx"
         >
@@ -37,14 +37,14 @@
         <td class="mytable-field-txt">{{itm.Account}}</td>
         <td v-if="hasBTField"  class="col-1 mytable-field-txt" ><q-btn dense flat @click="getBTDetail(itm.UpId,itm.BetType)" :label="itm.BTName" /></td>
         <td class="mytable-field-num">{{itm.Total.toFixed(2)}}</td>
-        <td :class="{'mytable-field-num':true,RedColor:itm.WinLose<0}">{{itm.WinLose.toFixed(2)}}</td>        
+        <td :class="{'mytable-field-num':true,RedColor:itm.WinLose<0}">{{itm.WinLose.toFixed(2)}}</td>
       </tr>
       <tr class="linetotal">
           <td class="mytable-field-txt" :colspan="hasBTField || curLedger===2 ? 2: 1">{{$t('Report.Total')}}</td>
           <td class="mytable-field-num">{{total.toFixed(2)}}</td>
           <td :class="{'mytable-field-num':true,RedColor:winlose<0}">{{winlose.toFixed(2)}}</td>
       </tr>
-      </table>          
+      </table>
     </div>
     <!-- detail  //-->
     <div v-if="showDetail" class="myDetail">
@@ -61,7 +61,7 @@
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.Result')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.WebOwner')}}</td>
         </tr>
-      <tr 
+      <tr
         v-for="(itm,idx) in list"
         :key="'bh'+idx"
         >
@@ -83,28 +83,28 @@
           <td class="col-1 mytable-field-txt"></td>
       </tr>
       </table>
-      </div>    
+      </div>
     <q-dialog v-model="DateSlt">
       <q-card class='diaDate'>
         <q-card-section class="q-pt-none">
           <SED v-model="dateSet" @closeme="DateSlt=false"></SED>
         </q-card-section>
       </q-card>
-    </q-dialog>      
+    </q-dialog>
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
-import Compnent from 'vue-class-component';
-import {Watch} from 'vue-property-decorator';
+// import Vue from 'vue';
+// import Compnent from 'vue-class-component';
+import { Vue, Component, Watch } from 'vue-property-decorator';
+import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
-import {getModule} from 'vuex-module-decorators';
-import {BHRemaster,datetime} from './components/func';
-import { SelectOptions, CommonParams,Msg,LoginInfo,BetHeader,MyUser } from './data/if';
+import { BHRemaster, datetime } from './components/func';
+import { SelectOptions, CommonParams, Msg, LoginInfo, BetHeader, MyUser } from './data/if';
 import GameSelector from './components/GameSelector.vue';
 import SEDate from './components/SEDate.vue';
-Vue.component('GS',GameSelector);
-Vue.component('SED',SEDate);
+// Vue.component('GS',GameSelector);
+// Vue.component('SED',SEDate);
 
 interface TData {
   UpId:number;
@@ -117,152 +117,157 @@ interface TData {
   WinLose:number;
 }
 
-@Compnent
-export default class BetReport extends Vue{
+@Component({
+  components: {
+    GS: GameSelector,
+    SED: SEDate,
+  },
+})
+export default class BetReport extends Vue {
   store=getModule(LayoutStoreModule);
-  dateSet:string='';
-  @Watch('dateSet',{immediate:true,deep:true})
-  onDateSetChange(){
-    //console.log('onDateSetChange',this.DateSlt);
-    this.DateSlt=false;
+  dateSet='';
+  @Watch('dateSet', { immediate: true, deep: true })
+  onDateSetChange() {
+    // console.log('onDateSetChange',this.DateSlt);
+    this.DateSlt = false;
   }
-  curGameID:number=0;
-  DateSlt:boolean=false;
-  curGType:string='';
-  curLedger:number=0;
+  curGameID=0;
+  DateSlt=false;
+  curGType='';
+  curLedger=0;
   ledgers:SelectOptions[]=[
-    //{value:0,label:'Report.GeneralLedger'},
-    //{value:1,label:'Report.Ledger'}
+    // {value:0,label:'Report.GeneralLedger'},
+    // {value:1,label:'Report.Ledger'}
   ];
   Tlist:TData[]=[];
   list:BetHeader[]=[];
   GameList:SelectOptions[]=[];
-  total:number=0;
-  winlose:number=0;
-  hasBTField:boolean=false;
-  curDateSet:string='';
-  showTotal:boolean=false;
-  showDetail:boolean=false;
-  get Ledger(){
+  total=0;
+  winlose=0;
+  hasBTField=false;
+  curDateSet='';
+  showTotal=false;
+  showDetail=false;
+  get Ledger() {
     return this.curLedger;
   }
-  set Ledger(v){
-    if(!this.curGameID && v===1) return;
-    this.showTotal=false;
-    this.curLedger=v;
+  set Ledger(v) {
+    if (!this.curGameID && v === 1) return;
+    this.showTotal = false;
+    this.curLedger = v;
   }
   get PInfo():LoginInfo {
     return this.store.personal;
   }
-  setGameLists(v:SelectOptions[]){
+  setGameLists(v:SelectOptions[]) {
     this.GameList = v;
   }
-  setCurGames(v:SelectOptions){
-    this.curGameID=v.value;
-    this.curGType=v.GType ? v.GType : '';
-    if(!this.curGameID){
-      this.curLedger=0;
+  setCurGames(v:SelectOptions) {
+    this.curGameID = v.value;
+    this.curGType = v.GType ? v.GType : '';
+    if (!this.curGameID) {
+      this.curLedger = 0;
     }
   }
-  DTString(v?:string|number,style?:string){
-    if(!v) v='';
-    return datetime(v,style);
+  DTString(v?:string|number, style?:string) {
+    if (!v) v = '';
+    return datetime(v, style);
   }
-  async getBTDetail(UpId:number,BetType?:string){
-    const param:CommonParams={
-      UserID:this.PInfo.id,
-      sid:this.PInfo.sid,
-      Table:'BetTable',
+  async getBTDetail(UpId:number, BetType?:string) {
+    const param:CommonParams = {
+      UserID: this.PInfo.id,
+      sid: this.PInfo.sid,
+      Table: 'BetTable',
       UpId,
-      BetType
+      BetType,
+    };
+    if (this.curDateSet) {
+      const tmp:string[] = this.curDateSet.split('-');
+      if (tmp[0]) param.SDate = tmp[0];
+      if (tmp[1]) param.EDate = tmp[1];
     }
-    if(this.curDateSet){
-      const tmp:string[]=this.curDateSet.split('-');
-      if(tmp[0]) param.SDate = tmp[0];
-      if(tmp[1]) param.EDate = tmp[1];
-    }
-    console.log('getBTDetail',param);
-    const msg:Msg=await this.store.ax.getApi('getBetHeaders',param);
-    if(msg.ErrNo===0){
-      const bhs:BetHeader[]=msg.data as BetHeader[];
-      bhs.map(bh=>{
-        let f:MyUser|undefined=msg.users.find(itm=>itm.id===bh.UserID);
-        if(f){
-          bh.UName=f.Account;
+    console.log('getBTDetail', param);
+    const msg:Msg = await this.store.ax.getApi('getBetHeaders', param);
+    if (msg.ErrNo === 0) {
+      const bhs:BetHeader[] = msg.data as BetHeader[];
+      bhs.map((bh) => {
+        let f:MyUser|undefined = msg.users.find((itm:any) => itm.id === bh.UserID);
+        if (f) {
+          bh.UName = f.Account;
         }
-        f=msg.UpUser.find(itm=>itm.id===bh.UpId);
-        if(f){
+        f = msg.UpUser.find((itm:any) => itm.id === bh.UpId);
+        if (f) {
           bh.UPName = f.Account;
         }
-        bh.BetContent=JSON.parse(bh.BetContent);
-        bh=BHRemaster(bh,this.GameList,this);
-      })
-      //console.log('SearchData ok!!',bhs);
-      //this.list = msg.data as BetHeader[];
+        bh.BetContent = JSON.parse(bh.BetContent);
+        bh = BHRemaster(bh, this.GameList, this);
+      });
+      // console.log('SearchData ok!!',bhs);
+      // this.list = msg.data as BetHeader[];
       this.list = bhs;
-      this.total=0;
-      this.winlose=0;
-      this.list.map(itm=>{
+      this.total = 0;
+      this.winlose = 0;
+      this.list.map((itm) => {
         this.total += itm.Total;
         this.winlose += itm.WinLose ? itm.WinLose : 0;
-      })
-      this.showTotal=false;
-      this.showDetail=true;
+      });
+      this.showTotal = false;
+      this.showDetail = true;
     }
   }
-  async SearchData(){
-    this.showDetail=false;
-    const param:CommonParams={
-      UserID:this.PInfo.id,
-      sid:this.PInfo.sid,
+  async SearchData() {
+    this.showDetail = false;
+    const param:CommonParams = {
+      UserID: this.PInfo.id,
+      sid: this.PInfo.sid,
     };
-    if(this.PInfo.Types===1){
-      param.UpId=this.PInfo.id;
+    if (this.PInfo.Types === 1) {
+      param.UpId = this.PInfo.id;
     }
-    if(this.dateSet){
-      const tmp:string[]=this.dateSet.split('-');
-      if(tmp[0]) param.SDate=tmp[0];
-      if(tmp[1]) param.EDate=tmp[1];
+    if (this.dateSet) {
+      const tmp:string[] = this.dateSet.split('-');
+      if (tmp[0]) param.SDate = tmp[0];
+      if (tmp[1]) param.EDate = tmp[1];
     } else {
       return;
     }
-    if(this.curGameID){
-      param.GameID=this.curGameID;
+    if (this.curGameID) {
+      param.GameID = this.curGameID;
     }
-    if(this.curLedger){
-      param.Ledger=this.curLedger;
+    if (this.curLedger) {
+      param.Ledger = this.curLedger;
     }
-    const msg:Msg=await this.store.ax.getApi('getBetTotal',param);
-    if(msg.ErrNo===0){
-      this.curDateSet=this.dateSet;
+    const msg:Msg = await this.store.ax.getApi('getBetTotal', param);
+    if (msg.ErrNo === 0) {
+      this.curDateSet = this.dateSet;
       this.Tlist = msg.data as TData[];
-      const User=msg.User;
-      this.total=0;
-      this.winlose=0;
-      this.Tlist.map(itm=>{
-        this.total+=itm.Total;
-        this.winlose+=itm.WinLose;
-        const f=User.find(u=>u.id===itm.UpId);
-        if(f){
-          itm.Account=f.Account;
+      const User = msg.User;
+      this.total = 0;
+      this.winlose = 0;
+      this.Tlist.map((itm) => {
+        this.total += itm.Total;
+        this.winlose += itm.WinLose;
+        const f = User.find((u:any) => u.id === itm.UpId);
+        if (f) {
+          itm.Account = f.Account;
         }
-        //itm.SDate = this.DTString(itm.UXTimeStamp ? itm.UXTimeStamp : 0,'date');
-        if(itm.BetType){
-          this.hasBTField=true;
-          itm.BTName=this.$t(`Game.${this.curGType}.Item.${itm.BetType}.title`)+'';
+        // itm.SDate = this.DTString(itm.UXTimeStamp ? itm.UXTimeStamp : 0,'date');
+        if (itm.BetType) {
+          this.hasBTField = true;
+          itm.BTName = `${this.$t(`Game.${this.curGType}.Item.${itm.BetType}.title`)}`;
         } else {
-          this.hasBTField=false;
+          this.hasBTField = false;
         }
-      })
-      this.showTotal=true;
-      //console.log('SearchData:',this.list);
+      });
+      this.showTotal = true;
+      // console.log('SearchData:',this.list);
     }
   }
-  mounted(){
-    this.ledgers.push({value:0,label:`${this.$t('Report.GeneralLedger')}`});
-    this.ledgers.push({value:1,label:`${this.$t('Report.Ledger')}`});
-    this.ledgers.push({value:2,label:`${this.$t('Report.DayReport')}`});
-    //console.log('BetReport mounted:',this.ledgers);
+  mounted() {
+    this.ledgers.push({ value: 0, label: `${this.$t('Report.GeneralLedger')}` });
+    this.ledgers.push({ value: 1, label: `${this.$t('Report.Ledger')}` });
+    this.ledgers.push({ value: 2, label: `${this.$t('Report.DayReport')}` });
+    // console.log('BetReport mounted:',this.ledgers);
   }
 }
 </script>
@@ -282,11 +287,11 @@ export default class BetReport extends Vue{
   border: 1px solid #027be3
 }
 .myDetail {
-    max-width: 1400px; 
+    max-width: 1400px;
     padding: 4px 0 8px 8px;
 }
 .mytable {
-    max-width: 600px; 
+    max-width: 600px;
     padding: 4px 0 8px 8px;
 }
 .mytable table,.myDetail table {
@@ -313,7 +318,7 @@ export default class BetReport extends Vue{
 .mytable-field-num {
     border: 1px gray solid;
     text-align: right;
-    vertical-align: middle;  
+    vertical-align: middle;
 }
 .RedColor {
   color:red;

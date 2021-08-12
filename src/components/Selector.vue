@@ -10,7 +10,7 @@
       emit-value
       map-options
     />
-  </div>  
+  </div>
 </template>
 <script lang="ts">
 import { SelectOptions } from 'src/layouts/data/if';

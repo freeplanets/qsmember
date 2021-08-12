@@ -8,9 +8,9 @@
       <div class="pbtn2"><q-input outlined dense v-model="UpName" :label="`${$t('Label.Agent')}/${$t('Label.WebOwner')}`" /></div>
       <div class="pbtn2"><q-input outlined dense v-model="BetID" :label="$t('Report.OrderNo')+'(n,1,2,3,...)'" /></div>
       <div class="tbox-pd"><q-input class="tbox-w" outlined dense v-model="dateSet" /></div>
-      <div class="miniBtn-pd"><q-btn color="primary" dense icon="date_range" @click="DateSlt=true"/></div>      
+      <div class="miniBtn-pd"><q-btn color="primary" dense icon="date_range" @click="DateSlt=true"/></div>
       <div v-if="showTimeEdit" class='pbtn2'><q-input outlined dense v-model="STime" label="hh:mm:ss" mask="##:##:##"/></div>
-      <div v-if="showTimeEdit" class='pbtn2'><q-input outlined dense v-model="ETime" label="hh:mm:ss" mask="##:##:##"/></div>      
+      <div v-if="showTimeEdit" class='pbtn2'><q-input outlined dense v-model="ETime" label="hh:mm:ss" mask="##:##:##"/></div>
     </div>
     <div class="row">
       <div class="talign2">{{$t('Report.OdrAmt')}}</div>
@@ -26,7 +26,7 @@
       <div class='pbtn2'>
         <q-select outlined dense v-model="sltedTS" :options="TStatus"  />
       </div>
-      <div class='pbtn'><q-btn dense color="green" icon-right="search" :label="$t('Button.Search')"  @click="SearchData()"/></div>      
+      <div class='pbtn'><q-btn dense color="green" icon-right="search" :label="$t('Button.Search')"  @click="SearchData()"/></div>
       <div class='pbtn'><q-btn dense color="blue" icon-right="clear" :label="$t('Button.Clear')"  @click="ClearSearch()"/></div>
     </div>
     <q-separator inset />
@@ -43,7 +43,7 @@
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.Result')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.WebOwner')}}</td>
         </tr>
-      <tr 
+      <tr
         v-for="(itm,idx) in list"
         :key="'bh'+idx"
         >
@@ -72,165 +72,166 @@
           <SED v-model="dateSet" @closeme="DateSlt=false"></SED>
         </q-card-section>
       </q-card>
-    </q-dialog>            
+    </q-dialog>
   </div>
 </template>
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {Watch} from 'vue-property-decorator';
-import LayoutStoreModule from './data/LayoutStoreModule'
-import {getModule} from 'vuex-module-decorators';
-import {SelectOptions,CommonParams,Msg,BetHeader,LoginInfo,MyUser} from './data/if';
-import {BHRemaster,datetime} from './components/func';
+import { Watch } from 'vue-property-decorator';
+import { getModule } from 'vuex-module-decorators';
+import LayoutStoreModule from './data/LayoutStoreModule';
+import { SelectOptions, CommonParams, Msg, BetHeader, LoginInfo, MyUser } from './data/if';
+import { BHRemaster, datetime } from './components/func';
 import GameSelector from './components/GameSelector.vue';
 import TermIDSelector from './components/TermIDSelector.vue';
 import BetTypeSelector from './components/BetTypeSelector.vue';
 import SEDate from './components/SEDate.vue';
-Vue.component('GS',GameSelector);
-Vue.component('SED',SEDate);
-Vue.component('TIDS',TermIDSelector);
-Vue.component('BTS',BetTypeSelector);
+
+Vue.component('GS', GameSelector);
+Vue.component('SED', SEDate);
+Vue.component('TIDS', TermIDSelector);
+Vue.component('BTS', BetTypeSelector);
 
 @Component
 export default class BetLists extends Vue {
   store=getModule(LayoutStoreModule);
-  NameOrNick:string='';
-  curGameID:number=0;
-  curGType:string='';
-  STime:string='';
-  ETime:string='';
+  NameOrNick='';
+  curGameID=0;
+  curGType='';
+  STime='';
+  ETime='';
   list:BetHeader[]=[];
   GameList:SelectOptions[]=[];
-  total:number=0;
-  winlose:number=0;
-  BetID:string='';
-  UpName:string='';
-  termid:number=0;
-  bettype:number=0;
-  OrdAmtS:number=0;
-  OrdAmtE:number=0;
-  WinLoseS:number=0;
-  WinLoseE:number=0;
-  DateSlt:boolean=false;
-  showTimeEdit:boolean=false;
-  dateSet:string='';
+  total=0;
+  winlose=0;
+  BetID='';
+  UpName='';
+  termid=0;
+  bettype=0;
+  OrdAmtS=0;
+  OrdAmtE=0;
+  WinLoseS=0;
+  WinLoseE=0;
+  DateSlt=false;
+  showTimeEdit=false;
+  dateSet='';
   TStatus:SelectOptions[]=[];
-  sltedTS:SelectOptions={value:0, label:''};
-  @Watch('dateSet',{immediate:true,deep:true})
-  onDateSetChange(){
-    //console.log('onDateSetChange',this.DateSlt);
-    this.DateSlt=false;
-    if(this.dateSet && this.dateSet.indexOf('-')<0){
-      this.showTimeEdit=true;
+  sltedTS:SelectOptions={ value: 0, label: '' };
+  @Watch('dateSet', { immediate: true, deep: true })
+  onDateSetChange() {
+    // console.log('onDateSetChange',this.DateSlt);
+    this.DateSlt = false;
+    if (this.dateSet && this.dateSet.indexOf('-') < 0) {
+      this.showTimeEdit = true;
     } else {
-      this.showTimeEdit=false;
+      this.showTimeEdit = false;
     }
   }
   get PInfo():LoginInfo {
     return this.store.personal;
   }
-  setCurGames(v:SelectOptions){
-    //console.log('setCurGames',v);
-    this.curGameID=v.value;
-    this.curGType=v.GType ? v.GType : '';
+  setCurGames(v:SelectOptions) {
+    // console.log('setCurGames',v);
+    this.curGameID = v.value;
+    this.curGType = v.GType ? v.GType : '';
   }
-  ClearSearch(){
-    this.NameOrNick='';
-    this.curGameID=0;
-    this.BetID='';
-    this.UpName='';
-    this.termid=0;
-    this.bettype=0;
-    this.dateSet='';
-    this.STime='';
-    this.ETime='';
-    this.OrdAmtS=0;
-    this.OrdAmtE=0;
-    this.WinLoseS=0;
-    this.WinLoseE=0;
-    this.sltedTS=this.TStatus[0];
+  ClearSearch() {
+    this.NameOrNick = '';
+    this.curGameID = 0;
+    this.BetID = '';
+    this.UpName = '';
+    this.termid = 0;
+    this.bettype = 0;
+    this.dateSet = '';
+    this.STime = '';
+    this.ETime = '';
+    this.OrdAmtS = 0;
+    this.OrdAmtE = 0;
+    this.WinLoseS = 0;
+    this.WinLoseE = 0;
+    this.sltedTS = this.TStatus[0];
   }
-  async SearchData(){
-    const param:CommonParams={
+  async SearchData() {
+    const param:CommonParams = {
       UserID: this.PInfo.id,
       sid: this.PInfo.sid,
-      Types: this.PInfo.Types
-    }
+      Types: this.PInfo.Types,
+    };
     param.findString = this.NameOrNick;
-    param.GameID=this.curGameID;
-    if(this.BetID) param.BetID=this.BetID;
-    param.UpName=this.UpName;
-    if(this.termid) param.tid = this.termid;
-    if(this.bettype) param.BetType = this.bettype;
-    if(this.dateSet){
-      const tmp:string[]=this.dateSet.split('-');
-      if(tmp[0]) param.SDate = tmp[0];
-      if(tmp[1]) param.EDate = tmp[1];
+    param.GameID = this.curGameID;
+    if (this.BetID) param.BetID = this.BetID;
+    param.UpName = this.UpName;
+    if (this.termid) param.tid = this.termid;
+    if (this.bettype) param.BetType = this.bettype;
+    if (this.dateSet) {
+      const tmp:string[] = this.dateSet.split('-');
+      if (tmp[0]) param.SDate = tmp[0];
+      if (tmp[1]) param.EDate = tmp[1];
     }
-    if(this.STime) param.STime = this.STime;
-    if(this.ETime) param.ETime = this.ETime;
-    if(this.OrdAmtS) param.OrdAmtS = this.OrdAmtS;
-    if(this.OrdAmtE) param.OrdAmtE = this.OrdAmtE;
-    if(this.WinLoseS) param.WinLoseS = this.WinLoseS;
-    if(this.WinLoseE) param.WinLoseE = this.WinLoseE;
-    if(this.sltedTS) param.isCanceled = this.sltedTS.value;
-    const msg:Msg = await this.store.ax.getApi('getBetHeaders',param);
-    //console.log('SearchData',msg);
-    if(msg.ErrNo==0){
-      const bhs:BetHeader[]=msg.data as BetHeader[];
-      //console.log('GameList:',this.GameList);
-      bhs.map(bh=>{
-        let f:MyUser|undefined=msg.users.find(itm=>itm.id===bh.UserID);
-        if(f){
-          bh.UName=f.Account;
+    if (this.STime) param.STime = this.STime;
+    if (this.ETime) param.ETime = this.ETime;
+    if (this.OrdAmtS) param.OrdAmtS = this.OrdAmtS;
+    if (this.OrdAmtE) param.OrdAmtE = this.OrdAmtE;
+    if (this.WinLoseS) param.WinLoseS = this.WinLoseS;
+    if (this.WinLoseE) param.WinLoseE = this.WinLoseE;
+    if (this.sltedTS) param.isCanceled = this.sltedTS.value;
+    const msg:Msg = await this.store.ax.getApi('getBetHeaders', param);
+    // console.log('SearchData',msg);
+    if (msg.ErrNo === 0) {
+      const bhs:BetHeader[] = msg.data as BetHeader[];
+      // console.log('GameList:',this.GameList);
+      bhs.map((bh) => {
+        let f:MyUser|undefined = msg.users.find((itm:any) => itm.id === bh.UserID);
+        if (f) {
+          bh.UName = f.Account;
         }
-        f=msg.UpUser.find(itm=>itm.id===bh.UpId);
-        if(f){
+        f = msg.UpUser.find((itm:any) => itm.id === bh.UpId);
+        if (f) {
           bh.UPName = f.Account;
         }
-        bh.BetContent=JSON.parse(bh.BetContent);
-        bh=BHRemaster(bh,this.GameList,this);
-      })
-      //console.log('SearchData ok!!',bhs);
+        bh.BetContent = JSON.parse(bh.BetContent);
+        bh = BHRemaster(bh, this.GameList, this);
+      });
+      // console.log('SearchData ok!!',bhs);
       this.list = msg.data as BetHeader[];
-      this.total=0;
-      this.winlose=0;
-      this.list.map(itm=>{
+      this.total = 0;
+      this.winlose = 0;
+      this.list.map((itm) => {
         this.total += itm.Total;
         this.winlose += itm.WinLose ? itm.WinLose : 0;
-      })
+      });
     } else {
       console.log('SearchData error!!');
     }
   }
-  setGameLists(v:SelectOptions[]){
+  setGameLists(v:SelectOptions[]) {
     this.GameList = v;
   }
-  DTString(v?:string){
-    if(!v) v='';
+  DTString(v?:string) {
+    if (!v) v = '';
     return datetime(v);
   }
-  setTermID(v:number){
-    this.termid=v;
+  setTermID(v:number) {
+    this.termid = v;
   }
-  setBetType(v:number){
-    this.bettype=v;
+  setBetType(v:number) {
+    this.bettype = v;
   }
-  mounted(){
-      if(!this.store.isLogin){
-          this.$router.push({path:'/login'});
+  mounted() {
+      if (!this.store.isLogin) {
+          this.$router.push({ path: '/login' });
       }
       const Tmp = this.$t('Label.TicketStatus') as any;
-      Tmp.map((itm,idx)=>{
-        const so:SelectOptions={
-          value:idx,
-          label:itm
-        }
+      Tmp.map((itm:string, idx:number) => {
+        const so:SelectOptions = {
+          value: idx,
+          label: itm,
+        };
         this.TStatus.push(so);
-      })
-      this.sltedTS=this.TStatus[0];
-      //console.log('BetLists mounted',this.TStatus);
+      });
+      this.sltedTS = this.TStatus[0];
+      // console.log('BetLists mounted',this.TStatus);
   }
 }
 </script>
@@ -242,7 +243,7 @@ export default class BetLists extends Vue {
     padding: 4px 4px;
 }
 .mytable {
-    max-width: 1400px; 
+    max-width: 1400px;
     padding: 4px 0 8px 8px;
 }
 .mytable table {
@@ -265,7 +266,7 @@ export default class BetLists extends Vue {
 .mytable-field-num {
     border: 1px gray solid;
     text-align: right;
-    vertical-align: middle;  
+    vertical-align: middle;
 }
 
 .Nums {

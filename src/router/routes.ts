@@ -1,4 +1,4 @@
-import { RouteConfig } from 'vue-router'
+import { RouteConfig } from 'vue-router';
 
 const routes: RouteConfig[] = [
   {
@@ -8,87 +8,86 @@ const routes: RouteConfig[] = [
       { path: '', component: () => import('pages/Index.vue') },
       {
         path: '/login',
-        component: () => import('layouts/login.vue')
+        component: () => import('layouts/login.vue'),
       },
       {
         path: '/betclass',
-        component: () => import('layouts/BetClass.vue')
+        component: () => import('layouts/BetClass.vue'),
       },
       {
         path: '/basepayclass',
-        component: () => import('layouts/BasePayClass.vue')
+        component: () => import('layouts/BasePayClass.vue'),
       },
       {
         path: '/payclass',
-        component: () => import('layouts/PayClass.vue')
+        component: () => import('layouts/PayClass.vue'),
       },
       {
         path: '/createpayclass',
-        component: () => import('layouts/CreatePayClass.vue')
+        component: () => import('layouts/CreatePayClass.vue'),
       },
       {
         path: '/termsmanager',
-        component: () => import('layouts/TermManager.vue')
+        component: () => import('layouts/TermManager.vue'),
       },
       {
         path: '/gamemanager',
-        component: () => import('layouts/GameManager.vue')
+        component: () => import('layouts/GameManager.vue'),
       },
       {
         path: '/adduser',
-        component: () => import('layouts/UserManager.vue')
-      }, 
+        component: () => import('layouts/UserManager.vue'),
+      },
       {
         path: '/openparams',
-        component: () => import('layouts/OpenParams.vue')
+        component: () => import('layouts/OpenParams.vue'),
       },
       {
         path: '/oddsmanager',
-        component: () => import('layouts/OddsManager.vue')
+        component: () => import('layouts/OddsManager.vue'),
       },
       {
         path: '/betlists',
-        component: () => import('layouts/BetLists.vue')
-      }, 
+        component: () => import('layouts/BetLists.vue'),
+      },
       {
         path: '/betreport',
-        component: () => import('layouts/BetReport.vue')
-      },                          
+        component: () => import('layouts/BetReport.vue'),
+      },
       {
         path: '/probabilitytable',
-        component: () => import('layouts/Probability.vue')
+        component: () => import('layouts/Probability.vue'),
       },
       {
         path: '/btchash',
-        component: () => import('layouts/BTCHashDataAna.vue')
+        component: () => import('layouts/BTCHashDataAna.vue'),
       },
       {
         path: '/itemsmanager',
-        component: () => import('pages/ItemsManager.vue')
+        component: () => import('pages/ItemsManager.vue'),
       },
       {
         path: '/levermodifier',
-        component: () => import('pages/LeverModifier.vue')
+        component: () => import('pages/LeverModifier.vue'),
       },
       {
         path: '/cryptoopmanager',
-        component: () => import('pages/CryptoOpManager.vue')
+        component: () => import('pages/CryptoOpManager.vue'),
       },
       {
         path: '/cryptoriskcontroller',
-        component: () => import('pages/CryptoRiskController.vue')
+        component: () => import('pages/CryptoRiskController.vue'),
       },
       {
         path: '/cryptoreport',
-        component: () => import('pages/CryptoReport.vue')
+        component: () => import('pages/CryptoReport.vue'),
       },
       {
         path: '/cryptoitemreport',
-        component: () => import('pages/CryptoItemReport.vue')
-      },      
+        component: () => import('pages/CryptoItemReport.vue'),
+      },
     ],
-  }
-
+  },
 ];
 
 // Always leave this as last one

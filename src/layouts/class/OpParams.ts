@@ -1,5 +1,6 @@
 import BClass from './BClass';
-import {StepG} from '../data/if';
+import { StepG } from '../data/if';
+
 export interface IOParam {
     id:number;
     GameID:number;
@@ -14,79 +15,76 @@ export interface IOParam {
     Steps:number;
     StepsGroup:string;
 }
-export default class OpParams extends BClass<IOParam>{
-    private BetName:string='';
-    constructor(data:IOParam){
-        super(data);
-    }
-    get BTName():string{
+export default class OpParams extends BClass<IOParam> {
+    private BetName='';
+    get BTName():string {
         return this.BetName;
     }
-    set BTName(val:string){
-        this.BetName=val;
+    set BTName(val:string) {
+        this.BetName = val;
     }
     get TotalNums():number {
         return this.data.TotalNums;
     }
-    set TotalNums(val:number){
-        this.isDataChanged=true;
-        this.data.TotalNums=val;
+    set TotalNums(val:number) {
+        this.isDataChanged = true;
+        this.data.TotalNums = val;
     }
-    get UseAvg():boolean{
-        return this.data.UseAvg===1;
+    get UseAvg():boolean {
+        return this.data.UseAvg === 1;
     }
-    set UseAvg(val:boolean){
-        this.isDataChanged=true;
-        this.data.UseAvg=(val? 1 : 0);
+    set UseAvg(val:boolean) {
+        this.isDataChanged = true;
+        this.data.UseAvg = (val ? 1 : 0);
     }
-    get SingleNum():number{
+    get SingleNum():number {
         return this.data.SingleNum;
     }
-    set SingleNum(val:number){
-        this.isDataChanged=true;
+    set SingleNum(val:number) {
+        this.isDataChanged = true;
         this.data.SingleNum = val;
     }
-    get UnionNum():number{
+    get UnionNum():number {
         return this.data.UnionNum;
     }
-    set UnionNum(val:number){
-        this.isDataChanged=true;
-        this.data.UnionNum=val;
+    set UnionNum(val:number) {
+        this.isDataChanged = true;
+        this.data.UnionNum = val;
     }
-    get MinHand():number{
+    get MinHand():number {
         return this.data.MinHand;
-    } 
-    set MinHand(val:number){
-        this.isDataChanged=true;
-        this.data.MinHand=val;
     }
-    get MaxHand():number{
+    set MinHand(val:number) {
+        this.isDataChanged = true;
+        this.data.MinHand = val;
+    }
+    get MaxHand():number {
         return this.data.MaxHand;
     }
-    set MaxHand(val:number){
-        this.isDataChanged=true;
-        this.data.MaxHand=val;
+    set MaxHand(val:number) {
+        this.isDataChanged = true;
+        this.data.MaxHand = val;
     }
-    get BetForChange():number{
+    get BetForChange():number {
         return this.data.BetForChange;
     }
-    set BetForChange(val:number){
-        this.isDataChanged=true;
-        this.data.BetForChange=val;
+    set BetForChange(val:number) {
+        this.isDataChanged = true;
+        this.data.BetForChange = val;
     }
-    get Steps():number{
+    get Steps():number {
         return this.data.Steps;
     }
-    set Steps(val:number){
-        this.isDataChanged=true;
-        this.data.Steps=val;
+    set Steps(val:number) {
+        this.isDataChanged = true;
+        this.data.Steps = val;
     }
-    get StepsGroup():StepG[]{
-        if(!this.data.StepsGroup) return [];
+    get StepsGroup():StepG[] {
+        if (!this.data.StepsGroup) return [];
         return JSON.parse(this.data.StepsGroup);
     }
-    set StepsGroup(val:StepG[]){
-        this.isDataChanged=true;
+    set StepsGroup(val:StepG[]) {
+        this.isDataChanged = true;
         this.data.StepsGroup = JSON.stringify(val);
     }
 }

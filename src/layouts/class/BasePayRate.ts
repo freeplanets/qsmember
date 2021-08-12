@@ -1,6 +1,6 @@
 import BClass from './BClass';
-import {fixlen,NoSientificNotation} from '../components/func';
-import {StepG} from '../data/if';
+import { fixlen, NoSientificNotation } from '../components/func';
+import { StepG } from '../data/if';
 /*
 interface T {
     [n:string]: string | number | undefined;
@@ -11,17 +11,17 @@ export interface ExtPR {
     Rate:number;
     Probability:number;
 }
-export class BasePayRate<T>{
+export class BasePayRate<T> {
     protected olddata:T | any ;
     protected data:T |any ;
-    protected isDataChanged: boolean = false;
-    protected isSelected:boolean = false;
+    protected isDataChanged = false;
+    protected isSelected = false;
     protected BC:BClass<T>;
     protected extProbability:number|undefined;
-    protected extRate:number=0;
+    protected extRate=0;
     protected extPR:ExtPR[]=[];
-    constructor(v:T | any){ 
-        this.BC=new BClass(v);
+    constructor(v:T | any) {
+        this.BC = new BClass(v);
         this.data = this.BC.Datas;
         /*
         let d = {};
@@ -39,35 +39,35 @@ export class BasePayRate<T>{
         })
         */
     }
-    get Title():string{
+    get Title():string {
         return this.data.Title;
     }
     get SubTitle():string | undefined {
         return this.data.SubTitle;
     }
-    get BetType():number{
+    get BetType():number {
         return this.data.BetType ? this.data.BetType : 0;
     }
-    get SubType():number | undefined{
+    get SubType():number | undefined {
         return this.data.SubType;
     }
     get NoAdjust():boolean {
-        //console.log('get NoAdjust:',this.data.NoAdjust);
-        return this.data.NoAdjust===1;
+        // console.log('get NoAdjust:',this.data.NoAdjust);
+        return this.data.NoAdjust === 1;
     }
-    set NoAdjust(v:boolean){
+    set NoAdjust(v:boolean) {
         this.data.NoAdjust = (v ? 1 : 0);
-        this.isDataChanged=true;
-        //console.log('set NoAdjust:',v,this.data.NoAdjust);
+        this.isDataChanged = true;
+        // console.log('set NoAdjust:',v,this.data.NoAdjust);
     }
     get Profit():any {
-        //console.log('Profit',this.data.Profit);
-        if(!this.data.Profit){
+        // console.log('Profit',this.data.Profit);
+        if (!this.data.Profit) {
             this.calProfit();
         }
-        const p:number=this.data.Profit
+        const p:number = this.data.Profit;
         return parseFloat(p.toFixed(4));
-        //return Math.round(this.data.Profit*10000)/10000;        
+        // return Math.round(this.data.Profit*10000)/10000;        
     }
     /*
     set Profit(v:any){
@@ -78,36 +78,36 @@ export class BasePayRate<T>{
         this.isDataChanged = true;
     }
     */
-    get isParlay(){
+    get isParlay() {
         return this.data.isParlay;
     }
-    get Rate():number | undefined{
+    get Rate():number | undefined {
         return this.data.DfRate;
     }
     set Rate(v:number | undefined) {
-        v=this.checkNum(v);
-        if((v || v===0) && v<=0) return;
-        //this.data.DfRate = this.fetchValueToSteps(v);
+        v = this.checkNum(v);
+        if ((v || v === 0) && v <= 0) return;
+        // this.data.DfRate = this.fetchValueToSteps(v);
         this.data.DfRate = v;
-        if(this.data.TopRate > 0 && this.data.DfRate > this.data.TopRate){
+        if (this.data.TopRate > 0 && this.data.DfRate > this.data.TopRate) {
             this.data.DfRate = this.data.TopRate;
         }
         this.calProfit();
         this.isDataChanged = true;
     }
-    get TopRate():number | undefined{
+    get TopRate():number | undefined {
         return this.data.TopRate;
     }
-    set TopRate(v:number | undefined){
-        v=this.checkNum(v);
-        if((v || v===0) && v<=0) return;
+    set TopRate(v:number | undefined) {
+        v = this.checkNum(v);
+        if ((v || v === 0) && v <= 0) return;
         this.data.TopRate = this.fetchValueToSteps(v);
         this.isDataChanged = true;
     }
-    get ProbabilityS():string{
+    get ProbabilityS():string {
         return this.Probability ? NoSientificNotation(this.Probability) : '0';
     }
-    get Probability():number |undefined{
+    get Probability():number |undefined {
         return this.data.Probability;
     }
     /*
@@ -118,37 +118,37 @@ export class BasePayRate<T>{
         this.isDataChanged = true;
     }
     */
-    set ExtProb(v:number){
+    set ExtProb(v:number) {
         this.extProbability = v;
     }
-    set ExtRate(v:number){
+    set ExtRate(v:number) {
         this.extRate = v;
     }
-    get PerStep():number | undefined{
+    get PerStep():number | undefined {
         return this.data.PerStep;
     }
-    set PerStep(v:number  | undefined){
-        this.data.PerStep=v;
-        //console.log('set Steps',this.data.Steps,v);
+    set PerStep(v:number | undefined) {
+        this.data.PerStep = v;
+        // console.log('set Steps',this.data.Steps,v);
         this.data.DfRate = this.fetchValueToSteps(this.data.DfRate);
         this.data.TopRate = this.fetchValueToSteps(this.data.TopRate);
         this.isDataChanged = true;
     }
-    get Steps():number{
-        return this.data.Steps ;
+    get Steps():number {
+        return this.data.Steps;
     }
-    set Steps(v:number){
+    set Steps(v:number) {
         this.data.Steps = this.fetchValueToSteps(v);
-        //console.log('set Steps',this.data.Steps,v);
+        // console.log('set Steps',this.data.Steps,v);
         this.isDataChanged = true;
     }
-    get ChangeStart():number{
-        return this.data.ChangeStart ;
+    get ChangeStart():number {
+        return this.data.ChangeStart;
     }
-    set ChangeStart(v:number){
+    set ChangeStart(v:number) {
         this.isDataChanged = true;
         this.data.ChangeStart = v;
-        //console.log('set Steps',this.data.Steps,v);
+        // console.log('set Steps',this.data.Steps,v);
     }
 
     /*
@@ -170,83 +170,83 @@ export class BasePayRate<T>{
    get TotalNums():number {
     return this.data.TotalNums;
     }
-    set TotalNums(val:number){
-        this.isDataChanged=true;
-        this.data.TotalNums=val;
+    set TotalNums(val:number) {
+        this.isDataChanged = true;
+        this.data.TotalNums = val;
     }
-    get UseAvg():boolean{
-        return this.data.UseAvg===1;
+    get UseAvg():boolean {
+        return this.data.UseAvg === 1;
     }
-    set UseAvg(val:boolean){
-        this.isDataChanged=true;
-        this.data.UseAvg=(val? 1 : 0);
+    set UseAvg(val:boolean) {
+        this.isDataChanged = true;
+        this.data.UseAvg = (val ? 1 : 0);
     }
-    get SingleNum():number{
+    get SingleNum():number {
         return this.data.SingleNum;
     }
-    set SingleNum(val:number){
-        this.isDataChanged=true;
+    set SingleNum(val:number) {
+        this.isDataChanged = true;
         this.data.SingleNum = val;
     }
-    get UnionNum():number{
+    get UnionNum():number {
         return this.data.UnionNum;
     }
-    set UnionNum(val:number){
-        this.isDataChanged=true;
-        this.data.UnionNum=val;
+    set UnionNum(val:number) {
+        this.isDataChanged = true;
+        this.data.UnionNum = val;
     }
-    get MinHand():number{
+    get MinHand():number {
         return this.data.MinHand;
-    } 
-    set MinHand(val:number){
-        this.isDataChanged=true;
-        this.data.MinHand=val;
     }
-    get MaxHand():number{
+    set MinHand(val:number) {
+        this.isDataChanged = true;
+        this.data.MinHand = val;
+    }
+    get MaxHand():number {
         return this.data.MaxHand;
     }
-    set MaxHand(val:number){
-        this.isDataChanged=true;
-        this.data.MaxHand=val;
+    set MaxHand(val:number) {
+        this.isDataChanged = true;
+        this.data.MaxHand = val;
     }
-    get BetForChange():number{
+    get BetForChange():number {
         return this.data.BetForChange;
     }
-    set BetForChange(val:number){
-        this.isDataChanged=true;
-        this.data.BetForChange=val;
+    set BetForChange(val:number) {
+        this.isDataChanged = true;
+        this.data.BetForChange = val;
     }
-    get StepsGroup():StepG[]{
-        if(!this.data.StepsGroup) return [];
+    get StepsGroup():StepG[] {
+        if (!this.data.StepsGroup) return [];
         return JSON.parse(this.data.StepsGroup);
     }
-    set StepsGroup(val:StepG[]){
-        this.isDataChanged=true;
-        const tmp:StepG[]=[];
-        val.map(itm=>{
-            if(itm.Step){
-                itm.Start = typeof(itm.Start)==='string' ?  parseInt(itm.Start,10) : itm.Start;
-                itm.Step = typeof(itm.Step)==='string' ?  parseFloat(itm.Step) : itm.Step;
-                const ans =  this.fetchValueToSteps(itm.Step);
-                if(ans){
+    set StepsGroup(val:StepG[]) {
+        this.isDataChanged = true;
+        const tmp:StepG[] = [];
+        val.map((itm) => {
+            if (itm.Step) {
+                itm.Start = typeof (itm.Start) === 'string' ? parseInt(itm.Start, 10) : itm.Start;
+                itm.Step = typeof (itm.Step) === 'string' ? parseFloat(itm.Step) : itm.Step;
+                const ans = this.fetchValueToSteps(itm.Step);
+                if (ans) {
                     itm.Step = ans;
                 }
                 tmp.push(itm);
-            } 
-        })
+            }
+        });
         this.data.StepsGroup = JSON.stringify(tmp);
     }
-    get ChaseNum(){
-        return !!this.data.ChaseNum; 
+    get ChaseNum() {
+        return !!this.data.ChaseNum;
     }
-    set ChaseNum(v:boolean){
-        this.data.ChaseNum=v ? 1 : 0;
-        this.isDataChanged=true;
+    set ChaseNum(v:boolean) {
+        this.data.ChaseNum = v ? 1 : 0;
+        this.isDataChanged = true;
     }
     get Datas():T {
         return this.data;
     }
-    set Datas(v:T){
+    set Datas(v:T) {
         this.BC.Datas = v;
         this.data = this.BC.Datas;
         this.DataChanged = this.BC.DataChanged;
@@ -256,121 +256,121 @@ export class BasePayRate<T>{
             this.olddata[key]=v[key];
         })
         */
-    }    
+    }
     get DataChanged() {
         return this.isDataChanged;
     }
-    set DataChanged(v:boolean){
+    set DataChanged(v:boolean) {
         this.isDataChanged = v;
     }
-    get Selected(){
+    get Selected() {
         return this.isSelected;
     }
-    set Selected(v:boolean){
+    set Selected(v:boolean) {
         this.isSelected = v;
     }
-    public restoreData(){
-        //this.data = this.olddata;
+    public restoreData() {
+        // this.data = this.olddata;
         /*
         Object.keys(this.data).map(key=>{
             this.data[key]=this.olddata[key];
         })
         */
         this.BC.restoreData();
-        this.data=this.BC.Datas;
+        this.data = this.BC.Datas;
         this.isDataChanged = false;
     }
-    updateRateTopByProfit(pft:number){
-        if(this.Probability){
-            this.TopRate = (1-pft/100)/this.Probability;
+    updateRateTopByProfit(pft:number) {
+        if (this.Probability) {
+            this.TopRate = (1 - pft / 100) / this.Probability;
         }
     }
-    updateDefaultRateByProfit(pft:number){
-        //console.log('updateDefaultRateByProfit:',pft)
-        if(typeof(pft)==='string') pft=parseFloat(pft);
-        if(this.Probability){
-            //console.log('updateDefaultRateByProfit cal:',(1-pft/100)/this.Probability,typeof(pft),typeof(this.Probability));
-            this.Rate = (1-pft/100)/this.Probability;
-            //console.log('updateDefaultRateByProfit Rate:',this.Rate,this.Probability)
+    updateDefaultRateByProfit(pft:number) {
+        // console.log('updateDefaultRateByProfit:',pft)
+        if (typeof (pft) === 'string') pft = parseFloat(pft);
+        if (this.Probability) {
+            // console.log('updateDefaultRateByProfit cal:',(1-pft/100)/this.Probability,typeof(pft),typeof(this.Probability));
+            this.Rate = (1 - pft / 100) / this.Probability;
+            // console.log('updateDefaultRateByProfit Rate:',this.Rate,this.Probability)
         }
     }
-    //單碼滿倉=風險金額 (    )/不含本金賠率
-    updateSingleNumFull(risk:number){
-        if(this.Rate){
-            this.SingleNum=Math.abs(Math.round(risk/(this.Rate-1)));
+    // 單碼滿倉=風險金額 (    )/不含本金賠率
+    updateSingleNumFull(risk:number) {
+        if (this.Rate) {
+            this.SingleNum = Math.abs(Math.round(risk / (this.Rate - 1)));
         }
     }
-    //押碼啟動金額 = 不降賠可承受風險(      )/不含本金賠率
-    updateChangeStart(topRisk:number){
-        if(this.Rate){
-            this.ChangeStart = Math.abs(Math.round(topRisk/(this.Rate-1)));
+    // 押碼啟動金額 = 不降賠可承受風險(      )/不含本金賠率
+    updateChangeStart(topRisk:number) {
+        if (this.Rate) {
+            this.ChangeStart = Math.abs(Math.round(topRisk / (this.Rate - 1)));
         }
     }
-    //押碼金額 = 押碼風險金額(      )/不含本金賠率
-    updateBetForChange(betRisk:number){
-        if(this.Rate){
-            this.BetForChange = Math.abs(Math.round(betRisk/(this.Rate-1)));
+    // 押碼金額 = 押碼風險金額(      )/不含本金賠率
+    updateBetForChange(betRisk:number) {
+        if (this.Rate) {
+            this.BetForChange = Math.abs(Math.round(betRisk / (this.Rate - 1)));
         }
     }
-    //押碼點數 = 跳動點 * (     )
-    updateSteps(v:number){
-        if(v && this.PerStep){
+    // 押碼點數 = 跳動點 * (     )
+    updateSteps(v:number) {
+        if (v && this.PerStep) {
             this.Steps = this.PerStep * v;
         }
     }
-    setToStep(){
+    setToStep() {
         this.Rate = this.fetchValueToSteps(this.Rate);
     }
-    protected fetchValueToSteps(v:number|undefined){
-        if(v){
-            if(this.data.PerStep ){
-                //v=parseFloat(v.toPrecision(6));
-                if(this.data.PerStep <=0) return v;
-                //if(typeof v ==='string') v=parseFloat(v);
-                const ba=fixlen(this.data.PerStep);
-                const a = (Math.round(v/this.data.PerStep)*this.data.PerStep).toFixed(ba);
-                //console.log('fetchValueToSteps',a,v,this.data.Steps,typeof v,typeof this.data.Steps,Math.floor(v/this.data.Steps)*this.data.Steps);
+    protected fetchValueToSteps(v:number|undefined) {
+        if (v) {
+            if (this.data.PerStep) {
+                // v=parseFloat(v.toPrecision(6));
+                if (this.data.PerStep <= 0) return v;
+                // if(typeof v ==='string') v=parseFloat(v);
+                const ba = fixlen(this.data.PerStep);
+                const a = (Math.round(v / this.data.PerStep) * this.data.PerStep).toFixed(ba);
+                // console.log('fetchValueToSteps',a,v,this.data.Steps,typeof v,typeof this.data.Steps,Math.floor(v/this.data.Steps)*this.data.Steps);
                 return parseFloat(a);
             }
         }
         return v;
     }
-    private calTopRate(){
-        if(this.Profit && this.Probability){
-            if(this.Probability > 0) {
-                if(!this.olddata.TopRate){
-                    const r:number = (1-this.Profit)/this.Probability;
+    private calTopRate() {
+        if (this.Profit && this.Probability) {
+            if (this.Probability > 0) {
+                if (!this.olddata.TopRate) {
+                    const r:number = (1 - this.Profit) / this.Probability;
                     this.TopRate = this.fetchValueToSteps(r);
                 }
             }
         }
     }
-    addExtPRS(itm:ExtPR){
-        const f:ExtPR|undefined = this.extPR.find(elm=> elm.SubType === itm.SubType);
-        if(f){
+    addExtPRS(itm:ExtPR) {
+        const f:ExtPR|undefined = this.extPR.find((elm) => elm.SubType === itm.SubType);
+        if (f) {
             f.Rate = itm.Rate;
         } else {
             this.extPR.push(itm);
         }
-        //console.log('addExtPRS',this.BetType,this.SubType,this.extPR);
+        // console.log('addExtPRS',this.BetType,this.SubType,this.extPR);
         this.calProfit();
-    }    
-    resetExtPR(){
+    }
+    resetExtPR() {
         this.extPR = [];
-    }    
-    protected calProfit(){
-        if(this.Rate && this.Probability) {
-            if(this.Probability > 0) {
+    }
+    protected calProfit() {
+        if (this.Rate && this.Probability) {
+            if (this.Probability > 0) {
                 let p:number;
-                if(this.extPR.length>0){
-                    let exRes=0;
-                    this.extPR.map(itm=>{
-                        exRes+= itm.Probability * itm.Rate;
+                if (this.extPR.length > 0) {
+                    let exRes = 0;
+                    this.extPR.map((itm) => {
+                        exRes += itm.Probability * itm.Rate;
                     });
-                    p = Math.round((1 - (this.Probability * this.Rate + exRes))*1000000)/10000;
-                    //console.log('CalProfit:',this.BetType,this.SubType,this.Probability ,this.Rate , exRes);
+                    p = Math.round((1 - (this.Probability * this.Rate + exRes)) * 1000000) / 10000;
+                    // console.log('CalProfit:',this.BetType,this.SubType,this.Probability ,this.Rate , exRes);
                 } else {
-                    p = Math.round((1 - this.Probability * this.Rate)*1000000)/10000;
+                    p = Math.round((1 - this.Probability * this.Rate) * 1000000) / 10000;
                     /*
                     if( this.extProbability){
                         //console.log(this.BetType,this.Probability,this.Rate,this.extProbability,this.extRate);
@@ -381,12 +381,14 @@ export class BasePayRate<T>{
                     }
                     */
                 }
-                this.data.Profit=p;
+                this.data.Profit = p;
             }
         }
     }
-    protected checkNum(v:any){
-        if(typeof(v)==='number') v=v+'';
-		return parseFloat(v.replace(/[^0-9.]/g,''));
+    protected checkNum(v:any) {
+        let s = '';
+        if (typeof (v) === 'number') s = String(v);
+        else s = v;
+		return parseFloat(s.replace(/[^0-9.]/g, ''));
     }
 }

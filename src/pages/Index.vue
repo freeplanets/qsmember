@@ -5,52 +5,53 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import {Msg, CommonParams} from '../layouts/data/if';
+// import Vue from 'vue';
+// import Component from 'vue-class-component';
+import { Vue, Component } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
+import { Msg, CommonParams } from '../layouts/data/if';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
 
 @Component
 export default class PageIndex extends Vue {
-  ///*
+  /// *
   store = getModule(LayoutStoreModule);
-  get Personal(){
+  get Personal() {
     return this.store.personal;
   }
-  get isLogin(){
+  get isLogin() {
     return this.store.isLogin;
   }
-  async setUserTP(){
-    const param:CommonParams={
-      UserID:this.store.personal.id,
-      sid:this.store.personal.sid,
-      isTwoPassAsked:1
-    }
-    const msg:Msg=await this.store.ax.getApi('SetUser',param);
-    if(msg.ErrNo!==0){
+  async setUserTP() {
+    const param:CommonParams = {
+      UserID: this.store.personal.id,
+      sid: this.store.personal.sid,
+      isTwoPassAsked: 1,
+    };
+    const msg:Msg = await this.store.ax.getApi('SetUser', param);
+    if (msg.ErrNo !== 0) {
       console.log(msg);
-    }     
+    }
   }
-  async mounted(){
-    if(this.isLogin){ 
-      if(!this.Personal.isTwoPassAsked){
-          this.store.personal.isTwoPassAsked=1;
+  async mounted() {
+    if (this.isLogin) {
+      if (!this.Personal.isTwoPassAsked) {
+          this.store.personal.isTwoPassAsked = 1;
           await this.setUserTP();
           this.$q.dialog({
-              title: this.$t('Table.Password') as string,
-              message: this.$t('Table.Pass2OrNot') + '?',
-              cancel:true,
-              persistent:true
-          }).onOk(()=>{
-              //this.showGA=true;
+              title: `${this.$t('Table.Password')}`,
+              message: `${this.$t('Table.Pass2OrNot')}?`,
+              cancel: true,
+              persistent: true,
+          }).onOk(() => {
+              // this.showGA=true;
               this.store.setShowGA(true);
-              //console.log(this.Personal);
-          })
+              // console.log(this.Personal);
+          });
       }
     }
   }
-  //*/
+  // */
 }
 
 /*

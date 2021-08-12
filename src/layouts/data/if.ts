@@ -1,3 +1,9 @@
+export interface AnyObject {
+    [key:string]:any;
+}
+export interface HasID extends AnyObject {
+    id: number;
+}
 
 export interface KeyVal {
     Key?: string;
@@ -14,7 +20,7 @@ export interface SelectOptions {
     data?: any;
     disable?: boolean;
 }
-export interface Btg { 
+export interface Btg {
 	title: string;
 	shortT?: string;
 	subtitle?: string[];
@@ -41,9 +47,9 @@ export interface BasePayRateItm {
     TopRate?:number;
     Probability?:number;
 	Steps?:number;
-	//TopPay?:number;
-    //OneHand?:number;
-    isParaly?:number;
+	// TopPay?:number;
+    // OneHand?:number;
+    isParlay?:number;
     TotalNums?:number;
     UseAvg?:number;
     SingleNum?:number;
@@ -52,8 +58,8 @@ export interface BasePayRateItm {
     MaxHand?:number;
     BetForChange?:number;
     ChangeStart?:number;
-    PerStep?:number;    
-    StepsGroup?:string | object;
+    PerStep?:number;
+    StepsGroup?: any; // string | object;
     ChaseNum?:number;
 }
 export interface StepG {
@@ -76,9 +82,9 @@ export interface CBetItems {
 }
 export interface Msg {
     ErrNo?: number;
-    data?: object[]|object;
+    data?: any; // object[]|object;
     debug?: string;
-    ErrCon?:string;
+    ErrCon?: string;
     [key: string]: any;
 }
 export interface CMain<T> {
@@ -109,25 +115,25 @@ export interface TableHeader {
 
     // (optional) compare function if you have
     // some custom data or want a specific way to compare two rows
-    sort?:Function;	// (a, b, rowA, rowB) => parseInt(a, 10) - parseInt(b, 10),
+    sort?: any; // Function;	// (a, b, rowA, rowB) => parseInt(a, 10) - parseInt(b, 10),
     // function return value:
     //   * is less than 0 then sort a to an index lower than b, i.e. a comes first
     //   * is 0 then leave a and b unchanged with respect to each other, but sorted with respect to all different elements
     //   * is greater than 0 then sort b to an index lower than a, i.e. b comes first
 
     // (optional) you can format the data with a function
-    format?:Function;	// (val, row) => `${val}%`
+    format?: any; // Function;	// (val, row) => `${val}%`
     // one more format example:
     // format: val => val
     //   ? /* Unicode checkmark checked */ "\u2611"
     //   : /* Unicode checkmark unchecked */ "\u2610",
 
     // body td:
-    style?:string; //'width: 500px',
+    style?:string; // 'width: 500px',
     classes?:string;	// 'my-special-class'
 
     // (v1.3.0+) header th:
-    headerStyle?: string;	//'width: 500px',
+    headerStyle?: string;	// 'width: 500px',
     headerClasses?:string; // 'my-special-class'
   }
 export interface Odds {
@@ -167,7 +173,7 @@ export interface PayClass {
     PayClassName:string;
 }
 
-//單頭
+// 單頭
 export interface BetHeader {
     id: number;
     UserID: number;
@@ -243,7 +249,7 @@ export interface ParamLog {
     adminid:number;
 }
 export interface MyUser {
-    id: number;  
+    id: number;
     Account: string;
     Nickname: string;
     Types?:number;
@@ -262,10 +268,6 @@ export interface MyUser {
     id: number;
     Cond: string;
     AnaData: string;
-}
-
-export interface HasID {
-    id: number;
 }
 export interface WebParams {
     sid: string;
