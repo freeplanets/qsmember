@@ -21,7 +21,8 @@ export interface CryptoItem extends HasID {
   PriceLimitPercentage?:number;
   isActive:number; // 啟用 1 Yes, 0 No
   OneHand?:number;
-  DecimalPlaces?:number;
+  DecimalPlaces?:number; // 金額小數位數
+  QtyDecimalPlaces?:number; // 數量小數位數
   PerStep?:number; // 跳動點（每次價格調整變量）
   Closed?:number; // 0 開放, 1 停多, 2 停空, 3 停收；
   IMG?:string;
@@ -125,7 +126,6 @@ export interface ObjectIdentify {
 
 export interface PartialCryptoItems extends HasID {
 	Closed?:number;
-	OneHand?:number;
 }
 export interface GetMessage {
   Type: MsgType,

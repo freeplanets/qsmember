@@ -1,7 +1,10 @@
 <template>
 	<div>
-		<div class="row">Risk Controller</div>
-		<BCIH :info="LoginInfo" />
+		<div class="q-pa-sm row">
+			<q-btn color="red" icon="dangerous" :label="$t('Button.EmergencyShutdown')" @click="CloseAll" />
+		</div>
+		<q-separator />
+		<BCIH class="q-pt-sm" :info="LoginInfo" />
 		<div
 			v-for="(itm, idx) in list"
 			:key="'bcic'+idx"
@@ -19,6 +22,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
+import { QDialogOptions } from 'quasar';
 import BanCryptoItemControl from '../components/Banner/CryptoItemControl.vue';
 import BanCryptoICHeader from '../components/Banner/CryptoICHeader.vue';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
@@ -27,6 +31,7 @@ import ApiFunc from '../components/class/ApiFunc';
 import { CryptoItem, AskTable, PartialCryptoItems } from '../components/if/dbif';
 import { Msg } from '../layouts/data/if';
 import Mqtt from '../components/WebSock/Mqtt';
+import { ErrCode } from '../components/if/ENum';
 
 @Component({
 	components: {
@@ -79,24 +84,51 @@ export default class CryptoRiskController extends Vue {
 			}
 		});
 	}
-	updateItems(data:PartialCryptoItems) {
+	updateItems(data:PartialCryptoItems | PartialCryptoItems[]) {
 		console.log('CRC setClosed:', data);
 		this.Api.setTableData<PartialCryptoItems>('Items', data).then((msg:Msg) => {
-			if (msg.ErrNo === 0) {
-				const f = this.list.find((itm) => itm.id === data.id);
-				if (f) {
-					// console.log('setClosed:', f.Closed);
-					if (data.Closed) f.setClosed(data.Closed);
-					if (data.OneHand) {
-						f.setOneHand(data.OneHand);
-						this.$q.dialog({
-							title: this.$t('Label.Save') as string,
-							message: 'OK!!',
-            });
-					}
-				}
+			if (msg.ErrNo === ErrCode.PASS) {
+				this.resetDataValue(data);
 			}
 		});
+	}
+	resetDataValue(data:PartialCryptoItems | PartialCryptoItems[]) {
+		if (Array.isArray(data)) {
+			data.forEach((itm) => {
+				this.resetValue(itm);
+			});
+		} else {
+			this.resetValue(data);
+		}
+	}
+	resetValue(data:PartialCryptoItems) {
+		const f = this.list.find((itm) => itm.id === data.id);
+		if (f) {
+			// console.log('setClosed:', f.Closed);
+			if (data.Closed) f.setClosed(data.Closed);
+		}
+	}
+	CloseAll() {
+		const opt: QDialogOptions = {
+			title: `${this.$t('Dialog.Title.EmergencyShutdown')}`,
+			message: `${this.$t('Dialog.Message.EmergencyShutdown')}`,
+			cancel: true,
+		};
+		this.$q.dialog(opt).onOk(() => {
+			this.EmergencyShutdown();
+		});
+	}
+	EmergencyShutdown() {
+		const itms = this.list.map((itm) => {
+			const tmp:PartialCryptoItems = {
+				id: itm.id,
+				Closed: 3,
+			};
+			return tmp;
+		});
+		if (itms.length) {
+			this.updateItems(itms);
+		}
 	}
 	mounted() {
 		this.mqtt.subscribeTick();

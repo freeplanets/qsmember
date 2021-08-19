@@ -16,7 +16,7 @@ export default class ApiFunc {
 		params.Filter = filters;
 		return this.ax.getApi('cc/GetData', params);
 	}
-	setTableData<T extends HasID>(tableName:string, TableData:string | T) {
+	setTableData<T extends HasID>(tableName:string, TableData:string | T | T[]) {
 		const params:WebParams = { ...this.dfParam };
 		params.TableName = tableName;
 		if (typeof TableData === 'string') params.TableData = TableData;

@@ -60,6 +60,12 @@ export default class Items implements GetMessage {
     get Closed() {
         return this.crypto.Closed ? this.crypto.Closed : 0;
     }
+    get DecimalPlaces() {
+        return this.crypto.DecimalPlaces;
+    }
+    get QtyDecimalPlaces() {
+        return this.crypto.QtyDecimalPlaces;
+    }
     getClosed(v:StopType):boolean {
         const closed = this.crypto.Closed ? this.crypto.Closed : 0;
         const bClosed = !!(v & closed);

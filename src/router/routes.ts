@@ -86,17 +86,19 @@ const routes: RouteConfig[] = [
         path: '/cryptoitemreport',
         component: () => import('pages/CryptoItemReport.vue'),
       },
-    ],
+      {
+        path: '/blacklistmanager',
+        component: () => import('pages/BlackListManager.vue'),
+      },
+   ],
   },
 ];
 
 // Always leave this as last one
-/*
 if (process.env.MODE !== 'ssr') {
   routes.push({
     path: '*',
     component: () => import('pages/Error404.vue'),
   });
 }
-*/
 export default routes;

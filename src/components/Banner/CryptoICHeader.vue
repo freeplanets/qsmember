@@ -10,11 +10,10 @@
 					<div class="col-2 banhead">{{ $t('Table.Lever.Qty') }}</div>
 					<div class="col-2 banhead">{{ $t('Table.AskTable.AvgPrice')}}</div>
 					<div class="col-2 banhead">{{ $t('Label.CurGainLose') }}</div>
-					<div class="col-1 banhead">{{ $t('Label.PriceLimitQty') }}</div>
+					<div class="col-2 banhead">{{ $t('Label.PriceLimitAmt') }}</div>
 					<div v-if="ShowFunc" class="col banhead">{{ $t('Label.OpenClose') }}</div>
 				</div>
 			</div>
-			<div v-if="ShowFunc" class="col-2 banhead">{{ $t('Table.Items.OneHand') }}</div>
 		</div>
 	</div>
 </template>

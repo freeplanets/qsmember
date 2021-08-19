@@ -11,6 +11,7 @@ export default class CryptoItemOneSide {
 	private totalPrice = 0;
 	private priceLimit = 0;
 	private priceLimitQty = 0;
+	private priceLimitAmt = 0;
 	private id=0;
 	private type=0;
 	constructor(id:number, type:number) {
@@ -38,14 +39,18 @@ export default class CryptoItemOneSide {
 	get PriceLimitQty() {
 		return this.priceLimitQty;
 	}
+	get PriceLimitAmt() {
+		return this.priceLimitAmt;
+	}
 	add(ask:AskTable)	{
-		if (ask.ItemID !== this.id || ask.ItemType !== this.type) return;
-		// console.log('CIOS add:', this.id,JSON.stringify(ask));		
-		const fIdx = this.list.findIndex((itm) => itm.id === ask.id);
-		if (ask.ProcStatus < 2) {
-			this.addToList(ask, fIdx);
-		} else {
-			this.removeFromList(ask, fIdx);
+		if (ask.ItemID === this.id && ask.ItemType === this.type) {
+			const fIdx = this.list.findIndex((itm) => itm.id === ask.id);
+			// console.log('CIOS add:', this.id, ask.id, fIdx, new Date().getTime());
+			if (ask.ProcStatus < 2) {
+				this.addToList(ask, fIdx);
+			} else {
+				this.removeFromList(ask, fIdx);
+			}
 		}
 		// console.log('CIOS after add:', this.list.length);
 	}
@@ -60,6 +65,7 @@ export default class CryptoItemOneSide {
 			if (ask.AskType) {
 				this.priceLimit += 1;
 				this.priceLimitQty += ask.Qty * ask.Lever;
+				this.priceLimitAmt += ask.Qty * ask.Lever * ask.AskPrice;
 			}
 		}
 	}
@@ -67,16 +73,20 @@ export default class CryptoItemOneSide {
 		this.list = [];
 		this.QtyAfterLever = 0;
 		this.priceAverage = 0;
+		this.priceLimit = 0;
+		this.priceLimitAmt = 0;
+		this.priceLimitQty = 0;
 		// this.curGainLose = 0;
 	}
 	private removeFromList(ask:AskTable, fIdx:number) {
 		if (fIdx !== -1) {
 			this.reCalQtyAndAvgPrice(ask.Qty, ask.AskPrice, ask.Lever, -1);
-			this.list.splice(fIdx, 1);
 			if (ask.AskType) {
 				this.priceLimit -= 1;
 				this.priceLimitQty -= ask.Qty * ask.Lever;
+				this.priceLimitAmt -= ask.Qty * ask.Lever * ask.AskPrice;
 			}
+			this.list.splice(fIdx, 1);
 		}
 	}
 	private reCalQtyAndAvgPrice(Qty:number, Price:number, Lever:number, add:number) {

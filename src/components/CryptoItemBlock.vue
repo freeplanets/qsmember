@@ -37,6 +37,10 @@
       <div class="col-3"><q-input outlined  dense v-model="DecimalPlaces" label="" /></div>
     </div>
     <div class="row">
+      <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.QtyDecimalPlaces")}}</div>
+      <div class="col-3"><q-input outlined  dense v-model="QtyDecimalPlaces" label="" /></div>
+    </div>
+    <div class="row">
       <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.PerStep")}}</div>
       <div class="col-3"><q-input outlined  dense v-model="PerStep" label="" /></div>
     </div>
@@ -50,7 +54,7 @@
     </div>
     <div class="row q-pa-md q-gutter-sm">
       <q-btn color="primary" icon-right="send" :label="$t('Button.Send')" @click="SendData()" />
-      <q-btn color="red" icon-right="undo"  :label="$t('Label.Cancel')" @click="Cancel()" />
+      <q-btn color="red" icon-right="undo"  :label="$t('Label.Cancel')" @click="Cancel(true)" />
     </div>
   </div>
 </template>
@@ -124,6 +128,11 @@ export default class CryptoItemBlock extends Vue implements AnyObject {
   onDecimalPlacesChange() {
     if (this.Item) this.Item.DecimalPlaces = parseInt(this.DecimalPlaces, 10);
   }
+  QtyDecimalPlaces = '';
+  @Watch('QtyDecimalPlaces')
+  onQtyDecimalPlacesChange() {
+    if (this.Item) this.Item.QtyDecimalPlaces = parseInt(this.QtyDecimalPlaces, 10);
+  }
   PerStep = '';
   @Watch('PerStep')
   onPerStepChange() {
@@ -142,8 +151,11 @@ export default class CryptoItemBlock extends Vue implements AnyObject {
       this.$emit('Save');
     }
   }
-  Cancel() {
+  Cancel(isClick = false) {
     this.assignValue(this, this.value);
+    if (isClick) {
+      this.$emit('Cancel');
+    }
     /*
     Object.keys(this.value).forEach((key) => {
       if (this.value[key] !== undefined) {

@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <div class="q-gutter-y-md" style="max-width: 850px">
+    <div class="q-gutter-y-md" style="max-width: 950px">
       <q-card>
         <q-tabs
           v-model="tab"
@@ -31,7 +31,7 @@
           </q-tab-panel>
 
           <q-tab-panel name="addnew">
-            <CIB v-model="UpdateItem" @Save="SendData" :UserLevel="uInfo.Levels"></CIB>
+            <CIB v-model="UpdateItem" @Save="SendData" @Cancel="Cancel" :UserLevel="uInfo.Levels"></CIB>
           </q-tab-panel>
 
         </q-tab-panels>
@@ -82,6 +82,7 @@ export default class ItemsManager extends Vue {
     StopGain: 0,
     StopLose: 0,
     DecimalPlaces: 2,
+    QtyDecimalPlaces: 8,
     PerStep: 1,
     isActive: 0,
     IMG: '',
@@ -98,7 +99,7 @@ export default class ItemsManager extends Vue {
   columns:TableColumn[] = [];
   data:CryptoItem[] = [];
   visibleColumns = ['id', 'Title', 'OpenFee', 'CloseFee', 'isLoan', 'PriceLimitPercentage',
-   'StopGain', 'StopLose', 'DecimalPlaces', 'PerStep', 'isActive'];
+   'StopGain', 'StopLose', 'DecimalPlaces', 'QtyDecimalPlaces', 'PerStep', 'isActive'];
   async GetData() {
     const param:WebParams = {
       sid: this.uInfo.sid,

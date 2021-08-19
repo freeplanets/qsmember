@@ -121,6 +121,9 @@ export default {
       Days: '天前',
     },
     PriceLimitQty: '限',
+    PriceLimitAmt: '限價筆數／金額',
+    BlackTypeSelect: '選擇黑名單級別',
+    BlackListManager: '黑名單管理',
   },
   Tip: {
     UserFind: '請輸入名稱或代號',
@@ -146,6 +149,7 @@ export default {
       StopGain: '停利',
       StopLose: '停損',
       DecimalPlaces: '小數位數',
+      QtyDecimalPlaces: '數量小數位數',
       PerStep: '跳動點',
       IMG: '圖片名稱',
       Type: '多/空',
@@ -277,6 +281,7 @@ export default {
     Add: '新增',
     Lists: '清單',
     Undo: '復原',
+    EmergencyShutdown: '緊急關閉',
   },
   Dialog: {
     MTitle: '主選單',
@@ -292,6 +297,12 @@ export default {
     Attention: '注意',
     DelBCMsg: '是否要刪除分類',
     NoSettle: '彩期未結',
+    Title: {
+      EmergencyShutdown: '緊急關閉',
+    },
+    Message: {
+      EmergencyShutdown: '是否要執行緊急關閉！！',
+    },
   },
   InputSwitch: [
     { title: '一般', isActive: 'false' },

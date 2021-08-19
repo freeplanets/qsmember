@@ -5,14 +5,14 @@
 		<div class="col">
 			<div class="row sublineTop" @click="showlist(item.Title, item.Long.List)">
 				<div class="col suba txtCenter">多</div>
-				<div class="col-2 suba txtRight">{{ item.Long.Total.toFixed(2) }}</div>
-				<div class="col-2 suba txtRight">{{ item.Long.Qty.toFixed(8) }}</div>
-				<div class="col-2 suba txtRight">{{ item.Long.Price.toFixed(2) }}</div>
+				<div class="col-2 suba txtRight">{{ item.Long.Total.toFixed(item.DecimalPlaces) }}</div>
+				<div class="col-2 suba txtRight">{{ item.Long.Qty.toFixed(item.QtyDecimalPlaces) }}</div>
+				<div class="col-2 suba txtRight">{{ item.Long.Price.toFixed(item.DecimalPlaces) }}</div>
 				<div
 					:class="{'col-2 suba txtRight':true, clrRed: item.Long.GainLose<0, clrGreen: item.Long.GainLose > 0}">
 					{{ item.Long.GainLose.toFixed(2) }}
 				</div>
-				<div class="col-1 suba txtRight">{{ `${item.Long.PriceLimit}/${item.Long.PriceLimitQty}` }}</div>
+				<div class="col-2 suba txtRight">{{ `${item.Long.PriceLimit}/${item.Long.PriceLimitAmt ? item.Long.PriceLimitAmt.toFixed(item.DecimalPlaces) : 0}` }}</div>
 				<div v-if="ShowFunc" class="col subb">
 					<q-checkbox left-label v-model="longStop" label="停收" />
 				</div>
@@ -25,16 +25,10 @@
 				<div :class="{'col-2 suba txtRight':true, clrRed: item.Short.GainLose<0, clrGreen: item.Short.GainLose > 0}">
 					{{ item.Short.GainLose.toFixed(2) }}
 				</div>
-				<div class="col-1 suba txtRight">{{ `${item.Short.PriceLimit}/${item.Short.PriceLimitQty}` }}</div>
+				<div class="col-2 suba txtRight">{{ `${item.Short.PriceLimit}/${item.Short.PriceLimitAmt ? item.Short.PriceLimitQty.toFixed(item.DecimalPlaces) : 0}` }}</div>
 				<div v-if="ShowFunc" class="col subb">
 					<q-checkbox left-label v-model="shortStop" label="停收" />
 				</div>
-			</div>
-		</div>
-		<div v-if="ShowFunc" class="col-2 banmainL">
-			<div class="row">
-				<q-input class="col-8" color="grey-3" label-color="orange" dense outlined v-model="OneHand" :label="$t('Table.OneHand')" />
-				<q-btn class="col-3" color="primary" dense :label="$t('Button.Edit')" @click="EditOneHand" />
 			</div>
 		</div>
 		<dialog-ask-list v-model="showDialogAskList" :list="dialogList" :title="dialogTitle"></dialog-ask-list>
@@ -57,6 +51,10 @@ export default class CryptoItemControl extends Vue {
 	@Prop({ type: Object }) readonly item!:Crypto;
 	@Prop({ type: Object }) readonly info!:LoginInfo;
 	// @Prop({ type: Boolean }) readonly inProcess!:boolean;
+	isFromItemChangeLong = false;
+	isFromItemChangeShort = false;
+	longStop = this.item.getClosed(StopType.LONG_STOP);
+	shortStop = this.item.getClosed(StopType.SHORT_STOP);
 	get ShowFunc() {
 		return this.info.Types > 2;
 	}
@@ -64,9 +62,6 @@ export default class CryptoItemControl extends Vue {
 		return this.item.Closed;
 	}
 	stop = StopType;
-	OneHand = this.item.OneHand;
-	longStop = this.item.getClosed(StopType.LONG_STOP);
-	shortStop = this.item.getClosed(StopType.SHORT_STOP);
 	showDialogAskList = false;
 	dialogList:AskTable[]=[];
 	dialogTitle = '';
@@ -77,15 +72,25 @@ export default class CryptoItemControl extends Vue {
 	}
 	@Watch('longStop')
 	onLongStopChange() {
-		this.setClosed(this.longStop, StopType.LONG_STOP);
+		if (!this.isFromItemChangeLong)	this.setClosed(this.longStop, StopType.LONG_STOP);
+		this.isFromItemChangeLong = false;
 	}
 	@Watch('shortStop')
 	onShortStopChange() {
-		this.setClosed(this.shortStop, StopType.SHORT_STOP);
+		if (!this.isFromItemChangeShort) this.setClosed(this.shortStop, StopType.SHORT_STOP);
+		this.isFromItemChangeShort = false;
 	}
 	setStopValue() {
-		this.longStop = this.item.getClosed(StopType.LONG_STOP);
-		this.shortStop = this.item.getClosed(StopType.SHORT_STOP);
+		const fromItemLong = this.item.getClosed(StopType.LONG_STOP);
+		if (fromItemLong !== this.longStop) {
+			this.longStop = fromItemLong;
+			this.isFromItemChangeLong = true;
+		}
+		const fromItemShort = this.item.getClosed(StopType.SHORT_STOP);
+		if (fromItemShort !== this.shortStop) {
+			this.shortStop = fromItemShort;
+			this.isFromItemChangeShort = true;
+		}
 	}
 	setClosed(v:boolean, st:StopType) {
 		let key = -1;
@@ -100,23 +105,12 @@ export default class CryptoItemControl extends Vue {
 	updateItems(data:PartialCryptoItems) {
 		this.$emit('updateItems', data);
 	}
-	EditOneHand() {
-		if (this.OneHand === this.item.OneHand) return;
-		const data:PartialCryptoItems = {
-			id: this.item.id,
-			OneHand: this.OneHand,
-		};
-		this.updateItems(data);
-	}
 	showlist(title:string, list:AskTable[]) {
 		if (list.length === 0) return;
 		this.dialogTitle = title;
 		this.dialogList = list;
 		this.showDialogAskList = true;
 		// console.log(title, JSON.stringify(list));
-	}
-	mounted() {
-		// this.setStopValue();
 	}
 }
 </script>
