@@ -1,7 +1,7 @@
 import LayoutStoreModule from 'src/layouts/data/LayoutStoreModule';
-import { ChatMsg } from '../if/dbif';
+import { ChatMsg } from '../../if/dbif';
 import ServiceChat from './ServiceChat';
-import WSock from '../WebSock/WSock';
+import WSock from '../../WebSock/WSock';
 
 export default class ChatManager {
 	private list:ServiceChat[] = [];

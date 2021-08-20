@@ -42,7 +42,7 @@ import { WebParams, Msg } from '../../layouts/data/if';
 import ErrCode from '../../layouts/data/ErrCode';
 import { OpTypes } from '../if/ENum';
 // import { CryptoOpParams } from '../if/dbif';
-import OpParams from '../class/CryptoOpParams';
+import OpParams from '../class/Params/CryptoOpParams';
 
 @Component
 export default class CryptoOpParamList extends Vue {

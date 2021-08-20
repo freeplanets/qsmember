@@ -1,7 +1,7 @@
-import { ChatMsg, WsMsg } from '../if/dbif';
-import { FuncKey, Channels } from '../if/ENum';
+import { ChatMsg, WsMsg } from '../../if/dbif';
+import { FuncKey, Channels } from '../../if/ENum';
 import ChatManager from './ChatManager';
-import WSock from '../WebSock/WSock';
+import WSock from '../../WebSock/WSock';
 
 export default abstract class AChat {
 	protected list:ChatMsg[]=[];

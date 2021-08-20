@@ -200,3 +200,21 @@ export interface CryptoOpParams extends HasID {
   ModifyID: number; //
   [key:string]:any;
 }
+
+export interface MemberGainLoseData {
+  UserID: number;
+  Nickname: string;
+  CLevel: string;
+  Total: number;
+  LeverTotal: number;
+  GainLose: number;
+}
+
+export interface MemberCLevel {
+  id: number;
+  CLevel: string;
+}
+
+export interface HasSetValue {
+  setValue(v:any):void;
+}

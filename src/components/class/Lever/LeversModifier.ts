@@ -1,7 +1,7 @@
-import { LeverData, WebParams, Msg } from '../../layouts/data/if';
-import ErrCode from '../../layouts/data/ErrCode';
+import { LeverData, WebParams, Msg } from '../../../layouts/data/if';
+import ErrCode from '../../../layouts/data/ErrCode';
 import Lever from './Lever';
-import { AxApi } from '../../layouts/components/AxApi';
+import { AxApi } from '../../../layouts/components/AxApi';
 
 export default class LeversModifier {
   constructor(private list:Lever[], private ax:AxApi, private params:WebParams) {

@@ -20,7 +20,7 @@ import { Vue, Component, Watch } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from '../../layouts/data/LayoutStoreModule';
 
-import ServiceChat from '../class/ServiceChat';
+import ServiceChat from '../class/Chat/ServiceChat';
 import DlgChatBlock from '../Dialog/ChatBlock.vue';
 
 @Component({

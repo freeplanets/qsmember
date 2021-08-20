@@ -124,6 +124,8 @@ export default {
     PriceLimitAmt: '限價筆數／金額',
     BlackTypeSelect: '選擇黑名單級別',
     BlackListManager: '黑名單管理',
+    BlackListLevel: '黑名單級別',
+    BlackCurrent: '目前',
   },
   Tip: {
     UserFind: '請輸入名稱或代號',

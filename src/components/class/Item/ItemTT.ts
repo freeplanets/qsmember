@@ -1,4 +1,4 @@
-import { ItemTypeTotal, LedgerLever } from '../if/dbif';
+import { ItemTypeTotal, LedgerLever } from '../../if/dbif';
 
 export default class ItemTT implements ItemTypeTotal {
 	private list:LedgerLever[] = [];

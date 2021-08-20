@@ -1,7 +1,7 @@
-import LStore from '../../layouts/data/LayoutStoreModule';
-import { ItemTotal, LedgerLever } from '../if/dbif';
-import { ErrCode } from '../if/ENum';
-import { WebParams, Msg, KeyVal } from '../../layouts/data/if';
+import LStore from '../../../layouts/data/LayoutStoreModule';
+import { ItemTotal, LedgerLever } from '../../if/dbif';
+import { ErrCode } from '../../if/ENum';
+import { WebParams, Msg, KeyVal } from '../../../layouts/data/if';
 import ItemT, { titleT } from './ItemT';
 
 export default class ItemTot {

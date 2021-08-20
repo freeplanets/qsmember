@@ -20,7 +20,7 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { ChatMsg } from '../if/dbif';
 import BlkMessageOfChat from './MessageOfChat.vue';
-import AChat from '../class/AChat';
+import AChat from '../class/Chat/AChat';
 import FuncDate from '../Functions/MyDate';
 
 @Component({

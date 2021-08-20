@@ -1,7 +1,7 @@
 import LayoutStoreModule from 'src/layouts/data/LayoutStoreModule';
 import { FuncKey, MsgType, Channels } from '../if/ENum';
 import { AskTable, WsMsg, GetMessage, ChatMsg } from '../if/dbif';
-import ChatManager from '../class/ChatManager';
+import ChatManager from '../class/Chat/ChatManager';
 
 const ClientChannel = Channels.ADMIN;
 

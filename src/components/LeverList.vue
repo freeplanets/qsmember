@@ -25,7 +25,7 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import Lever from './class/Lever';
+import Lever from './class/Lever/Lever';
 
 @Component
 export default class LeverList extends Vue {

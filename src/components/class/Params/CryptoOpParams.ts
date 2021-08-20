@@ -1,5 +1,5 @@
-import { CryptoOpParams } from '../if/dbif';
-import { OpTypes } from '../if/ENum';
+import { CryptoOpParams } from '../../if/dbif';
+import { OpTypes } from '../../if/ENum';
 
 export default class CryptoParams {
 	private data:CryptoOpParams;

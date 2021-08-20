@@ -32,7 +32,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
 import ItemReport from '../components/ItemReport.vue';
 import SEDate from '../layouts/components/SEDate.vue';
-import ItemTot from '../components/class/ItemTot';
+import ItemTot from '../components/class/Item/ItemTot';
 import LStore from '../layouts/data/LayoutStoreModule';
 import FuncDate from '../components/Functions/MyDate';
 import { ItemTotal } from '../components/if/dbif';

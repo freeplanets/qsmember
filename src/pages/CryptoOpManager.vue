@@ -17,7 +17,7 @@ import OpParamList from '../components/List/CryptoOpParamList.vue';
 import BtnBar from '../components/BtnBar.vue';
 import ErrCode from '../layouts/data/ErrCode';
 import LStore from '../layouts/data/LayoutStoreModule';
-import OpParams from '../components/class/CryptoOpParams';
+import OpParams from '../components/class/Params/CryptoOpParams';
 
 @Component({
 	components: {

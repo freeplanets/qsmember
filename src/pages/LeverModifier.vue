@@ -8,10 +8,10 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
-import Lever from '../components/class/Lever';
+import Lever from '../components/class/Lever/Lever';
 import LeverList from '../components/LeverList.vue';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
-import LeversModifier from '../components/class/LeversModifier';
+import LeversModifier from '../components/class/Lever/LeversModifier';
 import { WebParams } from '../layouts/data/if';
 
 @Component({

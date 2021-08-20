@@ -1,4 +1,4 @@
-import { AskTable } from '../if/dbif';
+import { AskTable } from '../../if/dbif';
 
 /**
  * identify => ItemID + '-' + ItemType 

@@ -1,5 +1,5 @@
 import AChat from './AChat';
-import { ChatMsg } from '../if/dbif';
+import { ChatMsg } from '../../if/dbif';
 // import WSock from '../WebSock/WSock';
 
 export default class ServiceChat extends AChat {

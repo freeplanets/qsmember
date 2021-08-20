@@ -1,5 +1,5 @@
-import { CryptoItem, ReceiveData, AskTable, GetMessage } from '../if/dbif';
-import { StopType, MsgType } from '../if/ENum';
+import { CryptoItem, ReceiveData, AskTable, GetMessage } from '../../if/dbif';
+import { StopType, MsgType } from '../../if/ENum';
 import CryptoItemOneSide from './CrpytoItemOneSide';
 
 export default class Items implements GetMessage {

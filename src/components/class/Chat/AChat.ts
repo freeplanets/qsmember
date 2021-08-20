@@ -1,7 +1,7 @@
 import { WebParams, Msg } from 'src/layouts/data/if';
 import LayoutStoreModule from 'src/layouts/data/LayoutStoreModule';
-import { ChatMsg, WsMsg } from '../if/dbif';
-import { FuncKey, Channels, ErrCode } from '../if/ENum';
+import { ChatMsg, WsMsg } from '../../if/dbif';
+import { FuncKey, Channels, ErrCode } from '../../if/ENum';
 import ChatManager from './ChatManager';
 
 export default abstract class AChat {

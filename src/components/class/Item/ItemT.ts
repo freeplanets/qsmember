@@ -1,4 +1,4 @@
-import { ItemTotal, ItemTypeTotal, LedgerLever } from '../if/dbif';
+import { ItemTotal, ItemTypeTotal, LedgerLever } from '../../if/dbif';
 import ItemTT from './ItemTT';
 
 export interface titleT {

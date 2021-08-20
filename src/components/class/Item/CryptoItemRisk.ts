@@ -1,5 +1,5 @@
 import CryptoItemOneSide from './CrpytoItemOneSide';
-import { ObjectIdentify, CryptoItem, ReceiveData } from '../if/dbif';
+import { ObjectIdentify, CryptoItem, ReceiveData } from '../../if/dbif';
 
 export default class CryptoItemRisk {
 	public static indetify:ObjectIdentify = {};

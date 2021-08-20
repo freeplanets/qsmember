@@ -1,7 +1,7 @@
 import { AxApi } from 'src/layouts/components/AxApi';
-import { WebParams, KeyVal, HasID } from '../../layouts/data/if';
+import { WebParams, KeyVal, HasID } from '../../../layouts/data/if';
 // import { ErrCode } from '../if/ENum';
-import LayoutStoreModule from '../../layouts/data/LayoutStoreModule';
+import LayoutStoreModule from '../../../layouts/data/LayoutStoreModule';
 
 export default class ApiFunc {
 	private ax:AxApi;

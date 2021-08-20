@@ -1,4 +1,4 @@
-import { LeverData } from '../../layouts/data/if';
+import { LeverData } from '../../../layouts/data/if';
 
 export default class Lever {
   static fields:string[] = ['Multiples', 'LongT', 'ShortT'];
