@@ -7,7 +7,7 @@
 		<td class="number">{{ mgl.GainLose }}</td>
 		<td class="number">{{ mgl.GainLoseRate }}</td>
 		<td class="number">{{ mgl.CLevel }}</td>
-		<td><q-select outlined dense v-model="model" :options="options" /></td>
+		<td><q-select outlined dense hide-bottom-space v-model="model" :options="options" /></td>
 	</tr>
 </template>
 <script lang="ts">

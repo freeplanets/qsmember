@@ -13,9 +13,17 @@ class MyDate {
     second: '2-digit',
     // timeZone: 'Asia/Taipei', 
   }
-	toLocalString(time?:string | number, lang?:string, opt?:Intl.DateTimeFormatOptions) {
+	public toDbDateString(time?: string | number, lang = 'zh-TW') {
 		const d = this.getDate(time);
-		if (!lang) lang = 'zh-TW';
+		const opt = { ...this.dOpt };
+		delete opt.hour;
+		delete opt.minute;
+		delete opt.second;
+		const tmpD = d.toLocaleDateString(lang, opt).replace(/\//g, '-');
+		return tmpD;
+	}
+	toLocalString(time?:string | number, lang = 'zh-TW', opt?:Intl.DateTimeFormatOptions) {
+		const d = this.getDate(time);
 		if (!opt) opt = this.dOpt;
 		return d.toLocaleString(lang, opt);
 	}
@@ -26,19 +34,20 @@ class MyDate {
 		delete opt.year;
 		return d.toLocaleString(lang, opt);
 	}
-	dayDiff(d:number):string {
+	public dayDiff(d: number): string {
+		const ts = this.dayDiffTS(d);
+		return this.getDate(ts).toLocaleDateString();
+	}
+	public dayDiffTS(d: number): number {
 		const dt = this.getDate();
 		const dts = dt.getTime();
 		const ts = dts - d * 60 * 60 * 24 * 1000;
-		return this.getDate(ts).toLocaleDateString();
+		return ts;
 	}
 	howMinutesAgo(time:string | number) {
 		const curTime = new Date().getTime();
 		const chkTime = this.getDate(time).getTime();
 		return Math.floor((curTime - chkTime) / 1000 / 60);
-	}
-	getTime(time?:string) {
-		return this.getDate(time).getTime();
 	}
 	createDateFilter(v:string, key?:string):KeyVal {
 		const dates = v.split('-');
@@ -51,6 +60,25 @@ class MyDate {
 			Cond: 'between',
 		};
 		return keyV;
+	}
+	createDbDateFilter(v:string, key = 'SDate') {
+		const dates = v.split('-');
+		const d1 = this.toDbDateString(dates[0]);
+		const keyV:KeyVal = {
+			Key: key,
+			Val: d1,
+		};
+		if (dates[1]) {
+			const d2 = this.toDbDateString(dates[1]);
+			if (keyV.Val !== d2) {
+				keyV.Val2 = d2;
+				keyV.Cond = 'between';
+			}
+		}
+		return keyV;
+	}
+	getTime(time?:string) {
+		return this.getDate(time).getTime();
 	}
 	private getDate(time?:string | number) {
 		if (!time) return new Date();

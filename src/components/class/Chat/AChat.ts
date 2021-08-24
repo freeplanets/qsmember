@@ -9,6 +9,7 @@ export default abstract class AChat {
 	protected readed = 0;
 	// protected ws:WSock;
 	protected memid:number;
+	protected SendTo = 0;
 	private UserID:number;
 	constructor(protected CM:ChatManager, protected LS:LayoutStoreModule, protected MKey:string, MemberID:number) {
 		// this.ws = ws;
@@ -18,6 +19,8 @@ export default abstract class AChat {
 	abstract add(fromWho:string, msg:string):void;
 	AcceptChat(msg:ChatMsg) {
 		msg.sent = false;
+		console.log('AChat AcceptChat', msg);
+		if (msg.SenderID && !this.SendTo) this.SendTo = msg.SenderID;
 		this.AddToList(msg);
 		this.CM.refreshCounter();
 	}
@@ -44,6 +47,7 @@ export default abstract class AChat {
 			ChannelName: Channels.ASK,
 			Message: JSON.stringify(cMsg),
 			UserID: this.UserID,
+			SendTo: this.SendTo,
 		};
 		const param:WebParams = { ...this.LS.Param };
 		param.WsMsg = wsmsg;
@@ -94,7 +98,7 @@ export default abstract class AChat {
 			sent: false,
 			receiveTime: new Date().getTime(),
 			SenderID: this.UserID,
-			ReceiverID: 0,
+			ReceiverID: this.SendTo,
 			MKey: this.MKey,
 		};
 	}

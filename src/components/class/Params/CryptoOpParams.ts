@@ -5,6 +5,7 @@ export default class CryptoParams {
 	private data:CryptoOpParams;
 	private ischanged = false;
 	private FeeDenominator = 1000;
+	private isleverChanged = false;
 	constructor(private itemID:number, data?:CryptoOpParams) {
 		if (!data) {
 			this.data = this.createData();
@@ -50,11 +51,12 @@ export default class CryptoParams {
 		this.data.FullStorage = v;
 		this.ischanged = true;
 	}
-	get LeverLimit() {
-		return this.data.LeverLimit;
+	get LeverLimit():string {
+		return String(this.data.LeverLimit);
 	}
-	set LeverLimit(v:number) {
-		this.data.LeverLimit = v;
+	set LeverLimit(v:string) {
+		this.data.LeverLimit = parseInt(v, 10);
+		this.isleverChanged = true;
 		this.ischanged = true;
 	}
 	get ShortTerm1() {
@@ -94,6 +96,12 @@ export default class CryptoParams {
 	}
 	set isChanged(v:boolean) {
 		this.ischanged = v;
+		if (!v) {
+			this.isleverChanged = v;
+		}
+	}
+	get isLeverChanged() {
+		return this.isleverChanged;
 	}
 	private createData() {
 		const data:CryptoOpParams = {

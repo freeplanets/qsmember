@@ -38,11 +38,13 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
 import { QDialogOptions } from 'quasar';
 import LStore from '../../layouts/data/LayoutStoreModule';
-import { WebParams, Msg } from '../../layouts/data/if';
+import { HasID, Msg } from '../../layouts/data/if';
 import ErrCode from '../../layouts/data/ErrCode';
-import { OpTypes } from '../if/ENum';
+import { Channels, FuncKey, OpTypes } from '../if/ENum';
 // import { CryptoOpParams } from '../if/dbif';
 import OpParams from '../class/Params/CryptoOpParams';
+import ApiFunc from '../class/Api/ApiFunc';
+import { WsMsg } from '../if/dbif';
 
 @Component
 export default class CryptoOpParamList extends Vue {
@@ -55,6 +57,7 @@ export default class CryptoOpParamList extends Vue {
 	}
 	*/
 	store = getModule(LStore);
+	ax = new ApiFunc(this.store);
 	options = this.getENum();
 	getENum() {
 		// const a = { ...OpTypes };
@@ -63,6 +66,26 @@ export default class CryptoOpParamList extends Vue {
 	}
 	Save(itm:OpParams, idx:number) {
 		itm.ModifyID = this.store.personal.id;
+		this.ax.setTableData('CryptoOpParams', itm.Data).then((res:Msg) => {
+			const opt:QDialogOptions = {
+				title: `${this.$t('Label.Save')}`,
+				message: 'OK!',
+			};
+			console.log('Save:', res);
+			if (res.ErrNo !== ErrCode.PASS) {
+				opt.message = String(this.$t(`Error.${res.ErrNo}`));
+			} else {
+				if (res.insertId && itm.id === 0) {
+					this.items[idx].setID(res.insertId);
+				}
+				if (itm.isLeverChanged) {
+					this.NotifyLeverChange(itm.OpType, parseInt(itm.LeverLimit, 10), itm.ItemID);
+				}
+				this.items[idx].isChanged = false;
+			}
+			this.$q.dialog(opt);
+		});
+		/*
 		const param:WebParams = { ...this.store.Param };
 		param.TableName = 'CryptoOpParams';
 		param.TableData = itm.Data;
@@ -78,9 +101,28 @@ export default class CryptoOpParamList extends Vue {
 				if (res.insertId && itm.id === 0) {
 					this.items[idx].setID(res.insertId);
 				}
-				this.items[idx].isChanged = true;
+				this.items[idx].isChanged = false;
 			}
 			this.$q.dialog(opt);
+		});
+		*/
+	}
+	NotifyLeverChange(CLevel:string, value:number, itemid:number) {
+		this.ax.getTableData('Member', { CLevel }, 'id').then((res) => {
+			if (res.ErrNo === ErrCode.PASS) {
+				const users = res.data as HasID[];
+				const ids = users.map((user) => user.id);
+				if (ids.length) {
+					const msg:WsMsg = {};
+					msg.Func = FuncKey.MESSAGE;
+					msg.UserID = this.store.personal.id;
+					msg.SendTo = ids;
+					msg.ChannelName = Channels.ASK;
+					msg.Message = JSON.stringify({ Lever: value, id: itemid });
+					this.store.WSock.send(msg);
+				}
+			}
+			console.log('NotifyLeverChange', res, value);
 		});
 	}
 	AddNew() {

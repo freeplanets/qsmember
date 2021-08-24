@@ -117,6 +117,7 @@ export interface WsMsg {
   ChannelName?: string;
   // LedgerTotal?: LedgerTotal[];
   UserID?: number;
+  SendTo?: number | number[]; // message to who's id
   [key:string]: any;
 }
 

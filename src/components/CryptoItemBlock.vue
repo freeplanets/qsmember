@@ -61,7 +61,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { CryptoItem } from './if/dbif';
-import { SelectOptions, AnyObject } from '../layouts/data/if';
+import { AnyObject } from '../layouts/data/if';
 
 @Component
 export default class CryptoItemBlock extends Vue implements AnyObject {
@@ -73,7 +73,7 @@ export default class CryptoItemBlock extends Vue implements AnyObject {
     this.Cancel();
     this.isLoan = !!this.Item.isLoan;
     this.isActive = !!this.Item.isActive;
-    console.log('CryptoItem onValueChange', this.isLoan, this.isActive, true);
+    // console.log('CryptoItem onValueChange', this.isLoan, this.isActive, true);
   }
   /*
   @Watch('UserLevel', {deep:true, immediate:true})
@@ -105,7 +105,10 @@ export default class CryptoItemBlock extends Vue implements AnyObject {
   StopGain='';
   @Watch('StopGain')
   onStopGain() {
-    if (this.Item) this.Item.StopGain = parseFloat(this.StopGain);
+    if (this.Item) {
+      this.Item.StopGain = parseFloat(this.StopGain);
+      // console.log('onStopGain update', this.Item.StopGain, this.StopGain);
+    }
   }
   StopLose='';
   @Watch('StopLose')
@@ -119,10 +122,12 @@ export default class CryptoItemBlock extends Vue implements AnyObject {
   }
   isLoan = false;
   isActive = false;
+  /*
   options:SelectOptions[] = [
     { label: `${this.$t('Select.Crypto.ItemType.0')}`, value: 1 },
     { label: `${this.$t('Select.Crypto.ItemType.1')}`, value: -1 },
   ]
+  */
   DecimalPlaces = '';
   @Watch('DecimalPlaces')
   onDecimalPlacesChange() {

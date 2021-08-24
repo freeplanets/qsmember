@@ -9,7 +9,7 @@
 			<q-btn class="q-ml-sm" dense color="primary" icon-right="search" :label="$t('Button.Search')" @click="Search" />
 		</div>
 		<q-separator />
-		<div>
+		<div class="q-pa-sm">
 			<MGLS :list="list" @setCLevel="setCLevel" />
 		</div>
     <q-dialog v-model="isDateSlt">
@@ -28,7 +28,7 @@ import LStore from '../layouts/data/LayoutStoreModule';
 import { ErrCode, OpTypes } from '../components/if/ENum';
 import SEDate from '../layouts/components/SEDate.vue';
 import DateFunc from '../components/Functions/MyDate';
-import { Msg } from '../layouts/data/if';
+import { KeyVal, Msg } from '../layouts/data/if';
 import ApiFunc from '../components/class/Api/ApiFunc';
 import MemberGainLoseSheet from '../components/List/MemberGainLoseSheet.vue';
 import { MemberCLevel, MemberGainLoseData } from '../components/if/dbif';
@@ -71,7 +71,11 @@ export default class BlackListManager extends Vue {
 		if (!this.SelectDate) return;
 		// const param:WebParams = { ...this.store.Param };
 		const TableName = 'MemberReport';
-		const Filter = DateFunc.createDateFilter(this.SelectDate, 'SellTime');
+		const Filter:KeyVal[] = [];
+		Filter.push(DateFunc.createDbDateFilter(this.SelectDate));
+		if (this.value) {
+			Filter.push({ CLevel: this.BlackType });
+		}
 		this.Api.getTableData(TableName, Filter).then((msg: Msg) => {
 			if (msg.ErrNo === ErrCode.PASS) {
 				console.log('BlackListManager msg', msg.data);

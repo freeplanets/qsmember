@@ -10,10 +10,13 @@ export default class ApiFunc {
 		this.ax = store.ax;
 		this.dfParam = store.Param;
 	}
-	getTableData(tableName:string, filters?:string| KeyVal | KeyVal[]) {
+	getTableData(tableName:string, filters?:string| KeyVal | KeyVal[], fields?:string | string[]) {
 		const params:WebParams = { ...this.dfParam };
 		params.TableName = tableName;
 		params.Filter = filters;
+		if (fields) {
+			params.Fields = fields;
+		}
 		return this.ax.getApi('cc/GetData', params);
 	}
 	setTableData<T extends HasID>(tableName:string, TableData:string | T | T[]) {
