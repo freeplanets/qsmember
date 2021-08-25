@@ -254,8 +254,9 @@
     </div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
+// import Vue from 'vue';
+// import Component from 'vue-class-component';
+import { Vue, Component } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import OddsBlock from './components/OddsBlock.vue';
@@ -264,9 +265,6 @@ import { Odds, SelectOptions, Msg, CommonParams, LoginInfo, AnyObject } from './
 import Layouts, { Layout, contBlock, numBlock, FastSltSub, FastSltSubItem } from './components/layouts';
 import { CGame, Data } from './components/Games';
 
-Vue.component('OB', OddsBlock);
-Vue.component('GS', GameSelector);
-
 interface BTNs {
     title:string;
     BT?:number;
@@ -274,7 +272,12 @@ interface BTNs {
     SubMenu?:string[];
 }
 
-@Component
+@Component({
+    components: {
+        OB: OddsBlock,
+        GS: GameSelector,
+    },
+})
 export default class OddsManager extends Vue {
     store = getModule(LayoutStoreModule);
     sltBtn:BTNs[]=[];

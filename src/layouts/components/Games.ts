@@ -463,6 +463,10 @@ export class CGame implements AnyObject {
 		const otherNums = N - 1;
         const leftNums = T - 1;
         // const len:number=Object.keys(this.member[BT].member).length;
+        if (!this.member[BT]) {
+            console.log('calBigestRiskMT:', BT);
+            return;
+        }
         Object.keys(this.member[BT].member).map((key) => {
             const B = this.member[BT];
             const M = B.member[key];
