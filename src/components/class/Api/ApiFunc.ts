@@ -19,9 +19,12 @@ export default class ApiFunc {
 		}
 		return this.ax.getApi('cc/GetData', params);
 	}
-	setTableData<T extends HasID>(tableName:string, TableData:string | T | T[]) {
+	setTableData<T extends HasID>(tableName:string, TableData:string | T | T[], isEmergencyClose:number=0) {
 		const params:WebParams = { ...this.dfParam };
 		params.TableName = tableName;
+		if(isEmergencyClose) {
+			params.EC = 1;
+		}
 		if (typeof TableData === 'string') params.TableData = TableData;
 		else params.TableData = JSON.stringify(TableData);
 		return this.ax.getApi('cc/SaveData', params);

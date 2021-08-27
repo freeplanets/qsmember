@@ -1,7 +1,9 @@
 <template>
 	<div>
 		<div class="q-pa-sm row">
-			<q-btn color="red" icon="dangerous" :label="$t('Button.EmergencyShutdown')" @click="CloseAll" />
+			<div>{{ $t('Label.EmergencySwitch.Title') }}</div>
+			<q-btn color="red" icon="dangerous" :label="$t('Label.EmergencySwitch.Shutdown')" @click="CloseAll" />
+			<q-btn color="red" icon="dangerous" :label="$t('Label.EmergencySwitch.RaiseUp')" @click="OpenAll" />
 		</div>
 		<q-separator />
 		<BCIH class="q-pt-sm" :info="LoginInfo" />
@@ -84,9 +86,9 @@ export default class CryptoRiskController extends Vue {
 			}
 		});
 	}
-	updateItems(data:PartialCryptoItems | PartialCryptoItems[]) {
+	updateItems(data:PartialCryptoItems | PartialCryptoItems[], isEmergencyClose:number = 0) {
 		console.log('CRC setClosed:', data);
-		this.Api.setTableData<PartialCryptoItems>('Items', data).then((msg:Msg) => {
+		this.Api.setTableData<PartialCryptoItems>('Items', data, isEmergencyClose).then((msg:Msg) => {
 			if (msg.ErrNo === ErrCode.PASS) {
 				this.resetDataValue(data);
 			}
@@ -105,29 +107,38 @@ export default class CryptoRiskController extends Vue {
 		const f = this.list.find((itm) => itm.id === data.id);
 		if (f) {
 			// console.log('setClosed:', f.Closed);
-			if (data.Closed) f.setClosed(data.Closed);
+			f.setClosed(data);
 		}
 	}
+	OpenAll() {
+		this.EmergencySwitch(0);
+	}
 	CloseAll() {
+		this.EmergencySwitch(1);
+	}
+	EmergencySwitch(sw:number) {
 		const opt: QDialogOptions = {
-			title: `${this.$t('Dialog.Title.EmergencyShutdown')}`,
-			message: `${this.$t('Dialog.Message.EmergencyShutdown')}`,
+			title: `${this.$t('Dialog.EmergencyShutdown.Title')}`,
+			message: String(this.$t(`Dialog.EmergencyShutdown.Message.${sw}`)),
 			cancel: true,
 		};
 		this.$q.dialog(opt).onOk(() => {
-			this.EmergencyShutdown();
+			this.EmergencyShutdown(sw);
 		});
 	}
-	EmergencyShutdown() {
+	EmergencyShutdown(sw:number) {
 		const itms = this.list.map((itm) => {
 			const tmp:PartialCryptoItems = {
 				id: itm.id,
-				Closed: 3,
+				EmergencyClosed:sw,
 			};
+			if(sw === 1) {
+				tmp.Closed = 3;
+			}
 			return tmp;
 		});
 		if (itms.length) {
-			this.updateItems(itms);
+			this.updateItems(itms, sw);
 		}
 	}
 	mounted() {

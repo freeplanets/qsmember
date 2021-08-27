@@ -126,6 +126,11 @@ export default {
     BlackListManager: '黑名單管理',
     BlackListLevel: '黑名單級別',
     BlackCurrent: '目前',
+    EmergencySwitch: {
+      Title: '緊急開闗',
+      Shutdown: '關閉',
+      RaiseUp: '打開',
+    },
   },
   Tip: {
     UserFind: '請輸入名稱或代號',
@@ -299,11 +304,9 @@ export default {
     Attention: '注意',
     DelBCMsg: '是否要刪除分類',
     NoSettle: '彩期未結',
-    Title: {
-      EmergencyShutdown: '緊急關閉',
-    },
-    Message: {
-      EmergencyShutdown: '是否要執行緊急關閉！！',
+    EmergencyShutdown: {
+      Title:'緊急關閉',
+      Message: ['是否要取消緊急闗閉?', '是否要執行緊急關閉?'],
     },
   },
   InputSwitch: [

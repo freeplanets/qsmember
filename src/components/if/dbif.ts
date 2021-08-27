@@ -25,6 +25,7 @@ export interface CryptoItem extends HasID {
   QtyDecimalPlaces?:number; // 數量小數位數
   PerStep?:number; // 跳動點（每次價格調整變量）
   Closed?:number; // 0 開放, 1 停多, 2 停空, 3 停收；
+  EmergencyClosed?:number; // 0 開放, 1 關閉
   IMG?:string;
   ModifyID?:number;
 }
@@ -126,7 +127,8 @@ export interface ObjectIdentify {
 }
 
 export interface PartialCryptoItems extends HasID {
-	Closed?:number;
+  Closed?:number;
+	EmergencyClosed?:number;
 }
 export interface GetMessage {
   Type: MsgType,

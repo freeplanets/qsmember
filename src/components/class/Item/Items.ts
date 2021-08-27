@@ -1,4 +1,4 @@
-import { CryptoItem, ReceiveData, AskTable, GetMessage } from '../../if/dbif';
+import { CryptoItem, ReceiveData, AskTable, GetMessage, PartialCryptoItems } from '../../if/dbif';
 import { StopType, MsgType } from '../../if/ENum';
 import CryptoItemOneSide from './CrpytoItemOneSide';
 
@@ -58,7 +58,11 @@ export default class Items implements GetMessage {
         return this.crypto;
     }
     get Closed() {
+        if(this.crypto.EmergencyClosed) return 3;
         return this.crypto.Closed ? this.crypto.Closed : 0;
+    }
+    get EmergencyClosed() {
+        return this.crypto.EmergencyClosed;
     }
     get DecimalPlaces() {
         return this.crypto.DecimalPlaces;
@@ -72,8 +76,13 @@ export default class Items implements GetMessage {
         // console.log('Item getClosed', bClosed, v, this.crypto.Closed);
         return bClosed;
     }
-    setClosed(v:number) {
-        this.crypto.Closed = v;
+    setClosed(v:PartialCryptoItems) {
+        if (typeof(v.EmergencyClosed) === 'number') {
+            this.crypto.EmergencyClosed = v.EmergencyClosed;
+        }
+        if (typeof(v.Closed) === 'number') {
+            this.crypto.Closed = v.Closed;
+        }
     }
     setOneHand(v:number) {
         this.crypto.OneHand = v;
