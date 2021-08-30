@@ -3,42 +3,42 @@
 		<div class="col-2 banmain">{{ item.Title }}</div>
 		<div class="col-2 banmain">{{ item.Price }}</div>
 		<div class="col">
-			<div class="row sublineTop" @click="showlist(item.Title, item.Long.List)">
-				<div class="col suba txtCenter">多</div>
-				<div class="col-2 suba txtRight">{{ item.Long.Total.toFixed(item.DecimalPlaces) }}</div>
+			<div class="row sublineTop">
+				<div class="col suba txtCenter">{{ $t('Select.Crypto.ItemType.1') }}</div>
+				<div class="col-2 suba txtRight" @click="showlist(item.Title, item.Long.List)">{{ item.Long.Total.toFixed(item.DecimalPlaces) }}/{{ item.Long.Count }}</div>
 				<div class="col-2 suba txtRight">{{ item.Long.Qty.toFixed(item.QtyDecimalPlaces) }}</div>
 				<div class="col-2 suba txtRight">{{ item.Long.Price.toFixed(item.DecimalPlaces) }}</div>
 				<div
 					:class="{'col-2 suba txtRight':true, clrRed: item.Long.GainLose<0, clrGreen: item.Long.GainLose > 0}">
 					{{ item.Long.GainLose.toFixed(2) }}
 				</div>
-				<div class="col-2 suba txtRight">{{ `${item.Long.PriceLimit}/${item.Long.PriceLimitAmt ? item.Long.PriceLimitAmt.toFixed(item.DecimalPlaces) : 0}` }}</div>
+				<div class="col-2 suba txtRight" @click="showlist(item.Title, item.Long.InProcess, true)">{{ `${item.Long.PriceLimit}/${item.Long.PriceLimitAmt ? item.Long.PriceLimitAmt.toFixed(item.DecimalPlaces) : 0}` }}</div>
 				<div v-if="ShowFunc" class="col subb">
 					<q-checkbox left-label v-model="longStop" label="停收" />
 				</div>
 			</div>
-			<div class="row sublineBottom" @click="showlist(item.Title, item.Short.List)">
-				<div class="col suba txtCenter">空</div>
-				<div class="col-2 suba txtRight">{{ item.Short.Total.toFixed(2) }}</div>
+			<div class="row sublineBottom">
+				<div class="col suba txtCenter" @click="showlist(item.Title, item.Short.List)">{{ $t('Select.Crypto.ItemType.0') }}</div>
+				<div class="col-2 suba txtRight">{{ item.Short.Total.toFixed(2) }}/{{ item.Short.Count }}</div>
 				<div class="col-2 suba txtRight">{{ item.Short.Qty.toFixed(8) }}</div>
 				<div class="col-2 suba txtRight">{{ item.Short.Price.toFixed(2) }}</div>
 				<div :class="{'col-2 suba txtRight':true, clrRed: item.Short.GainLose<0, clrGreen: item.Short.GainLose > 0}">
 					{{ item.Short.GainLose.toFixed(2) }}
 				</div>
-				<div class="col-2 suba txtRight">{{ `${item.Short.PriceLimit}/${item.Short.PriceLimitAmt ? item.Short.PriceLimitQty.toFixed(item.DecimalPlaces) : 0}` }}</div>
+				<div class="col-2 suba txtRight" @click="showlist(item.Title, item.Short.InProcess, true)">{{ `${item.Short.PriceLimit}/${item.Short.PriceLimitAmt ? item.Short.PriceLimitQty.toFixed(item.DecimalPlaces) : 0}` }}</div>
 				<div v-if="ShowFunc" class="col subb">
 					<q-checkbox left-label v-model="shortStop" label="停收" />
 				</div>
 			</div>
 		</div>
-		<dialog-ask-list v-model="showDialogAskList" :list="dialogList" :title="dialogTitle"></dialog-ask-list>
+		<dialog-ask-list v-model="showDialogAskList" :list="dialogList" :title="dialogTitle" :hasAmount="hasAmount"></dialog-ask-list>
 	</div>
 </template>
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { LoginInfo } from 'src/layouts/data/if';
 import Crypto from '../class/Item/Items';
-import { PartialCryptoItems, AskTable } from '../if/dbif';
+import { PartialCryptoItems, AskWithMemberName } from '../if/dbif';
 import { StopType } from '../if/ENum';
 import DialogAskList from '../Dialog/AskList.vue';
 
@@ -63,8 +63,9 @@ export default class CryptoItemControl extends Vue {
 	}
 	stop = StopType;
 	showDialogAskList = false;
-	dialogList:AskTable[]=[];
+	dialogList:AskWithMemberName[]=[];
 	dialogTitle = '';
+	hasAmount = false;
 	@Watch('Closed')
 	onClosedChange() {
 		this.setStopValue();
@@ -105,10 +106,12 @@ export default class CryptoItemControl extends Vue {
 	updateItems(data:PartialCryptoItems) {
 		this.$emit('updateItems', data);
 	}
-	showlist(title:string, list:AskTable[]) {
+	showlist(title:string, list:AskWithMemberName[], hasAmount = false) {
 		if (list.length === 0) return;
 		this.dialogTitle = title;
 		this.dialogList = list;
+		this.hasAmount = hasAmount;
+		// console.log('showlist', this.dialogList);
 		this.showDialogAskList = true;
 		// console.log(title, JSON.stringify(list));
 	}

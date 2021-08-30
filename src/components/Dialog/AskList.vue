@@ -8,14 +8,14 @@
 			</q-card-section>
 
 			<q-card-section>
-				<list-asks :list="list"></list-asks>
+				<list-asks :list="list" :hasAmount="hasAmount"></list-asks>
 			</q-card-section>
 		</q-card>
 	</q-dialog>
 </template>
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { AskTable } from '../if/dbif';
+import { AskWithMemberName } from '../if/dbif';
 import ListAsks from '../List/Asks.vue';
 
 @Component({
@@ -24,9 +24,10 @@ import ListAsks from '../List/Asks.vue';
 	},
 })
 export default class extends Vue {
-	@Prop({ type: Array }) readonly list!:AskTable[];
+	@Prop({ type: Array }) readonly list!:AskWithMemberName[];
 	@Prop({ type: String }) readonly title!:string;
 	@Prop({ type: Boolean }) readonly value!:boolean;
+	@Prop({ type: Boolean }) readonly hasAmount!:boolean;
 	model = false;
 	@Watch('value')
 	onValueChange() {

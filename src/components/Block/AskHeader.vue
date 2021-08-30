@@ -5,16 +5,16 @@
 		<div class="col-1 txtCenter">{{ $t('Table.AskTable.User') }}</div>
 		<div class="col-1 txtCenter">{{ $t('Table.AskTable.AskType') }}</div>
 		<div class="col-2 txtCenter">{{ $t('Table.AskTable.Lever') }}</div>
-		<div class="col-2 txtCenter">{{ $t('Table.AskTable.Qty') }}</div>
+		<div class="col-2 txtCenter">{{ hasAmount ? $t('Table.AskTable.Amount') : $t('Table.AskTable.Qty') }}</div>
 		<div class="col-2 txtCenter">{{ $t('Table.AskTable.Price') }}</div>
 	</div>
 </template>
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
 export default class AskHeader extends Vue {
-	
+	@Prop({ type: Boolean }) readonly hasAmount!:boolean;
 }
 </script>
 <style lang="scss" scoped>

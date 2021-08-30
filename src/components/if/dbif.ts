@@ -217,7 +217,14 @@ export interface MemberCLevel {
   id: number;
   CLevel: string;
 }
-
+export interface MemberName {
+  id: number;
+  Nickname: string;
+}
 export interface HasSetValue {
   setValue(v:any):void;
+}
+
+export interface AskWithMemberName extends AskTable {
+  Nickname?: string;
 }

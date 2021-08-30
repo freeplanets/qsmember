@@ -305,7 +305,7 @@ export default {
     DelBCMsg: '是否要刪除分類',
     NoSettle: '彩期未結',
     EmergencyShutdown: {
-      Title:'緊急關閉',
+      Title: '緊急關閉',
       Message: ['是否要取消緊急闗閉?', '是否要執行緊急關閉?'],
     },
   },

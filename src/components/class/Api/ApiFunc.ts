@@ -10,6 +10,15 @@ export default class ApiFunc {
 		this.ax = store.ax;
 		this.dfParam = store.Param;
 	}
+	getMemberNameByID(id:number|number[]) {
+		const filter:KeyVal = {
+			Key: 'id',
+			Val: Array.isArray(id) ? id.join(',') : id,
+			Cond: 'in',
+		};
+		const fields = ['id', 'Nickname'];
+		return this.getTableData('Member', filter, fields);
+	}
 	getTableData(tableName:string, filters?:string| KeyVal | KeyVal[], fields?:string | string[]) {
 		const params:WebParams = { ...this.dfParam };
 		params.TableName = tableName;
@@ -19,10 +28,10 @@ export default class ApiFunc {
 		}
 		return this.ax.getApi('cc/GetData', params);
 	}
-	setTableData<T extends HasID>(tableName:string, TableData:string | T | T[], isEmergencyClose:number=0) {
+	setTableData<T extends HasID>(tableName:string, TableData:string | T | T[], isEmergencyClose = 0) {
 		const params:WebParams = { ...this.dfParam };
 		params.TableName = tableName;
-		if(isEmergencyClose) {
+		if (isEmergencyClose) {
 			params.EC = 1;
 		}
 		if (typeof TableData === 'string') params.TableData = TableData;

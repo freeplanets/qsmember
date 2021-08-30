@@ -1,6 +1,9 @@
-import { CryptoItem, ReceiveData, AskTable, GetMessage, PartialCryptoItems } from '../../if/dbif';
-import { StopType, MsgType } from '../../if/ENum';
+import { CryptoItem, ReceiveData, AskTable, GetMessage, PartialCryptoItems, MemberName } from '../../if/dbif';
+import { StopType, MsgType, ErrCode } from '../../if/ENum';
 import CryptoItemOneSide from './CrpytoItemOneSide';
+import LayoutStoreModule from '../../../layouts/data/LayoutStoreModule';
+import ApiFunc from '../Api/ApiFunc';
+import { Msg } from '../../../layouts/data/if';
 
 export default class Items implements GetMessage {
     private price = '';
@@ -14,10 +17,14 @@ export default class Items implements GetMessage {
     public Long:CryptoItemOneSide;
 	public Short:CryptoItemOneSide;
     public Type = MsgType.ACCEPT_ASK;
-    constructor(crypto:CryptoItem) {
+    private api:ApiFunc | null = null;
+    private MberName:MemberName[] = [];
+    private findUserID:number[] = [];
+    constructor(crypto:CryptoItem, LStore?:LayoutStoreModule) {
         this.crypto = crypto;
         this.Long = new CryptoItemOneSide(crypto.id, 1);
 		this.Short = new CryptoItemOneSide(crypto.id, -1);
+        if (LStore) this.api = new ApiFunc(LStore);
     }
     get id() {
         return this.crypto.id;
@@ -58,7 +65,7 @@ export default class Items implements GetMessage {
         return this.crypto;
     }
     get Closed() {
-        if(this.crypto.EmergencyClosed) return 3;
+        if (this.crypto.EmergencyClosed) return 3;
         return this.crypto.Closed ? this.crypto.Closed : 0;
     }
     get EmergencyClosed() {
@@ -70,6 +77,9 @@ export default class Items implements GetMessage {
     get QtyDecimalPlaces() {
         return this.crypto.QtyDecimalPlaces;
     }
+    get Count() {
+        return this.Long.Count + this.Short.Count;
+    }
     getClosed(v:StopType):boolean {
         const closed = this.crypto.Closed ? this.crypto.Closed : 0;
         const bClosed = !!(v & closed);
@@ -77,26 +87,30 @@ export default class Items implements GetMessage {
         return bClosed;
     }
     setClosed(v:PartialCryptoItems) {
-        if (typeof(v.EmergencyClosed) === 'number') {
+        if (typeof v.EmergencyClosed === 'number') {
             this.crypto.EmergencyClosed = v.EmergencyClosed;
         }
-        if (typeof(v.Closed) === 'number') {
+        if (typeof v.Closed === 'number') {
             this.crypto.Closed = v.Closed;
         }
     }
     setOneHand(v:number) {
         this.crypto.OneHand = v;
     }
+    /*
     addAsk(ask:AskTable) {
         this.Short.add(ask);
         this.Long.add(ask);
     }
+    */
     addAsks(asks:AskTable[]) {
         this.Short.cleanList();
         this.Long.cleanList();
         asks.forEach((ask) => {
-            this.addAsk(ask);
+            // this.addAsk(ask);
+            this.getMessage(ask, false);
         });
+        this.getMemberName();
     }
     setPrice(r:ReceiveData) {
         if (r.symbol === this.Code) {
@@ -109,8 +123,37 @@ export default class Items implements GetMessage {
             this.qty = parseFloat(r.closeQuantity);
         }
     }
-    getMessage(ask:AskTable) {
+    getMessage(ask:AskTable, doUserName = true) {
         this.Long.add(ask);
         this.Short.add(ask);
+        if (this.Count > 0) this.setUserNotInList(ask.UserID);
+        if (doUserName) {
+            // console.log('getMessage', ask);
+            this.getMemberName();
+        }
+    }
+    private setUserNotInList(UserID:number) {
+        const fIdx = this.MberName.findIndex((mbr) => mbr.id === UserID);
+        if (fIdx === -1) {
+            this.findUserID.push(UserID);
+        }
+    }
+    private getMemberName():void {
+        // console.log('getMemberName', this.findUserID, typeof this.api);
+        if (this.findUserID.length > 0 && this.api) {
+            this.api.getMemberNameByID(this.findUserID).then((msg:Msg) => {
+                // console.log('getMemberName msg', msg);
+                if (msg.ErrNo === ErrCode.PASS) {
+                    const ans = msg.data as MemberName[];
+                    this.MberName = this.MberName.concat(ans);
+                    this.setMeberName();
+                    this.findUserID = [];
+                }
+            });
+        }
+    }
+    private setMeberName() {
+        this.Long.MbrName = this.MberName;
+        this.Short.MbrName = this.MberName;
     }
 }

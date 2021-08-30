@@ -2,10 +2,10 @@
 	<div v-if="ask" class="row block_ask">
 		<div class="col-1 txtRight">{{ ask.id }}</div>
 		<div class="col-3 txtCenter">{{ CreateTime }}</div>
-		<div class="col-1 txtCenter">{{ ask.UserID }}</div>
+		<div class="col-1 txtCenter">{{ ask.Nickname ? ask.Nickname : ask.UserID }}</div>
 		<div :class="{ 'col-1 txtCenter':true, clrGreen:isGreen, clrRed:isRed }">{{ ItemType }}</div>
 		<div class="col-2 txtRight">{{ ask.Lever }}</div>
-		<div class="col-2 txtRight">{{ ask.Qty }}</div>
+		<div class="col-2 txtRight">{{ ask.Amount ? ask.Amount : ask.Qty }}</div>
 		<div class="col-2 txtRight">{{ ask.AskPrice }}</div>
 	</div>
 </template>
@@ -13,11 +13,11 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import DateFunc from '../Functions/MyDate';
 import NumsFunc from '../Functions/Nums';
-import { AskTable } from '../if/dbif';
+import { AskWithMemberName } from '../if/dbif';
 
 @Component
 export default class Ask extends Vue {
-	@Prop({ type: Object }) readonly ask!:AskTable;
+	@Prop({ type: Object }) readonly ask!:AskWithMemberName;
 	get CreateTime() {
 		return DateFunc.toLocalString(this.ask.CreateTime);
 	}

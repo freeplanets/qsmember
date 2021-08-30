@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<div class="q-pa-sm row">
-			<div>{{ $t('Label.EmergencySwitch.Title') }}</div>
-			<q-btn color="red" icon="dangerous" :label="$t('Label.EmergencySwitch.Shutdown')" @click="CloseAll" />
-			<q-btn color="red" icon="dangerous" :label="$t('Label.EmergencySwitch.RaiseUp')" @click="OpenAll" />
+		<div class="q-pa-sm row esblock">
+			<div class="title">{{ $t('Label.EmergencySwitch.Title') }}</div>
+			<q-btn color="red" icon="dangerous" :disable="isEmergencyClose" :label="$t('Label.EmergencySwitch.Shutdown')" @click="CloseAll" />
+			<q-btn color="green" icon="check_circle" :disable="!isEmergencyClose" :label="$t('Label.EmergencySwitch.RaiseUp')" @click="OpenAll" />
 		</div>
 		<q-separator />
 		<BCIH class="q-pt-sm" :info="LoginInfo" />
@@ -47,6 +47,7 @@ export default class CryptoRiskController extends Vue {
 	list:Items[]=[];
 	mqtt:Mqtt=this.store.Mqtt;
 	interval:NodeJS.Timeout | null = null;
+	isEmergencyClose = false;
 	get LoginInfo() {
 		return this.store.personal;
 	}
@@ -58,11 +59,12 @@ export default class CryptoRiskController extends Vue {
 				data.forEach((itm) => {
 					// console.log('getdata', itm.id, itm.Closed);
 					if (itm.isLoan) {
-						this.list.push(new Items(itm));
+						this.list.push(new Items(itm, this.store));
 					}
 				});
 				if (this.list.length > 0) {
 					this.list.forEach((itm) => {
+						this.isEmergencyClose = !!itm.EmergencyClosed;
 						this.store.WSock.Add(itm);
 					});
 				}
@@ -72,7 +74,7 @@ export default class CryptoRiskController extends Vue {
 		this.mqtt.setItems(this.list);
 	}
 	getAsks() {
-		let filter = 'ProcStatus<2 and (USetID > 0 or SetID > 0)';
+		let filter = 'ProcStatus<2';
 		if (this.LoginInfo.Types < 3) {
 			filter = `${filter} and UpId = ${this.LoginInfo.id}`;
 		}
@@ -86,10 +88,11 @@ export default class CryptoRiskController extends Vue {
 			}
 		});
 	}
-	updateItems(data:PartialCryptoItems | PartialCryptoItems[], isEmergencyClose:number = 0) {
+	updateItems(data:PartialCryptoItems | PartialCryptoItems[], isEmergencyClose = 0) {
 		console.log('CRC setClosed:', data);
 		this.Api.setTableData<PartialCryptoItems>('Items', data, isEmergencyClose).then((msg:Msg) => {
 			if (msg.ErrNo === ErrCode.PASS) {
+				console.log(msg);
 				this.resetDataValue(data);
 			}
 		});
@@ -104,9 +107,13 @@ export default class CryptoRiskController extends Vue {
 		}
 	}
 	resetValue(data:PartialCryptoItems) {
+		console.log('resetValue', data);
 		const f = this.list.find((itm) => itm.id === data.id);
 		if (f) {
-			// console.log('setClosed:', f.Closed);
+			if (typeof data.EmergencyClosed !== 'undefined') {
+				this.isEmergencyClose = !!data.EmergencyClosed;
+				console.log('setClosed:', this.isEmergencyClose, f.Closed);
+			}
 			f.setClosed(data);
 		}
 	}
@@ -130,9 +137,9 @@ export default class CryptoRiskController extends Vue {
 		const itms = this.list.map((itm) => {
 			const tmp:PartialCryptoItems = {
 				id: itm.id,
-				EmergencyClosed:sw,
+				EmergencyClosed: sw,
 			};
-			if(sw === 1) {
+			if (sw === 1) {
 				tmp.Closed = 3;
 			}
 			return tmp;
@@ -149,3 +156,12 @@ export default class CryptoRiskController extends Vue {
 	}
 }
 </script>
+<style lang="scss" scoped>
+.esblock .title {
+	border: 1px solid $red-14;
+	padding: 8px 4px 0px 4px;
+}
+.esblock .q-btn {
+	margin-left: 8px;
+}
+</style>
