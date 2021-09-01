@@ -1,6 +1,6 @@
-import { MemberGainLoseData } from 'src/components/if/dbif';
+import { MemberGainLoseData, DataObject } from 'src/components/if/dbif';
 
-export default class Member {
+export default class Member implements DataObject {
 	private data:MemberGainLoseData;
 	constructor(data:MemberGainLoseData) {
 		this.data = data;

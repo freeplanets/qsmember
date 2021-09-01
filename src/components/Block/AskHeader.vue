@@ -7,6 +7,11 @@
 		<div class="col-2 txtCenter">{{ $t('Table.AskTable.Lever') }}</div>
 		<div class="col-2 txtCenter">{{ hasAmount ? $t('Table.AskTable.Amount') : $t('Table.AskTable.Qty') }}</div>
 		<div class="col-2 txtCenter">{{ $t('Table.AskTable.Price') }}</div>
+		<template v-if="isEmergencyClosed">
+			<div class="col txtCenter">{{ $t('Label.MarkTS') }}</div>
+			<div class="col txtCenter">{{ $t('Table.AskTable.Price') }}</div>
+			<div class="col txtCenter">{{ $t('Label.Settle') }}</div>
+		</template>
 	</div>
 </template>
 <script lang="ts">
@@ -15,6 +20,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 @Component
 export default class AskHeader extends Vue {
 	@Prop({ type: Boolean }) readonly hasAmount!:boolean;
+	@Prop({ type: Boolean }) readonly isEmergencyClosed!:boolean;
 }
 </script>
 <style lang="scss" scoped>

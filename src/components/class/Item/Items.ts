@@ -1,8 +1,8 @@
-import { CryptoItem, ReceiveData, AskTable, GetMessage, PartialCryptoItems, MemberName } from '../../if/dbif';
+import { CryptoItem, ReceiveData, AskTable, GetMessage, PartialCryptoItems, MemberName, AskWithMemberName } from '../../if/dbif';
 import { StopType, MsgType, ErrCode } from '../../if/ENum';
 import CryptoItemOneSide from './CrpytoItemOneSide';
 import LayoutStoreModule from '../../../layouts/data/LayoutStoreModule';
-import ApiFunc from '../Api/ApiFunc';
+import Api from '../Api/Func';
 import { Msg } from '../../../layouts/data/if';
 
 export default class Items implements GetMessage {
@@ -17,14 +17,14 @@ export default class Items implements GetMessage {
     public Long:CryptoItemOneSide;
 	public Short:CryptoItemOneSide;
     public Type = MsgType.ACCEPT_ASK;
-    private api:ApiFunc | null = null;
+    private api:Api | null = null;
     private MberName:MemberName[] = [];
     private findUserID:number[] = [];
     constructor(crypto:CryptoItem, LStore?:LayoutStoreModule) {
         this.crypto = crypto;
         this.Long = new CryptoItemOneSide(crypto.id, 1);
 		this.Short = new CryptoItemOneSide(crypto.id, -1);
-        if (LStore) this.api = new ApiFunc(LStore);
+        if (LStore) this.api = new Api(LStore);
     }
     get id() {
         return this.crypto.id;
@@ -79,6 +79,16 @@ export default class Items implements GetMessage {
     }
     get Count() {
         return this.Long.Count + this.Short.Count;
+    }
+    get Asks() {
+        const tmp:AskWithMemberName[] = [];
+        if (this.Long.List.length > 0) {
+            tmp.concat(tmp, this.Long.List);
+        }
+        if (this.Short.List.length > 0) {
+            tmp.concat(tmp, this.Short.List);
+        }
+        return tmp;
     }
     getClosed(v:StopType):boolean {
         const closed = this.crypto.Closed ? this.crypto.Closed : 0;

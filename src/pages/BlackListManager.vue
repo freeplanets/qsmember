@@ -29,7 +29,7 @@ import { ErrCode, OpTypes } from '../components/if/ENum';
 import SEDate from '../layouts/components/SEDate.vue';
 import DateFunc from '../components/Functions/MyDate';
 import { KeyVal, Msg } from '../layouts/data/if';
-import ApiFunc from '../components/class/Api/ApiFunc';
+import ApiFunc from '../components/class/Api/Func';
 import MemberGainLoseSheet from '../components/List/MemberGainLoseSheet.vue';
 import { MemberCLevel, MemberGainLoseData } from '../components/if/dbif';
 import MemberGainLose from '../components/class/GainLose/Member';
@@ -56,7 +56,7 @@ export default class BlackListManager extends Vue {
 		console.log('BlackListManager setCLevel', v);
 		if (this.inProcess) return;
 		this.inProcess = true;
-		this.Api.setTableData('Member', v).then((msg:Msg) => {
+		this.Api.setMemberCLevel(v).then((msg:Msg) => {
 			if (msg.ErrNo === ErrCode.PASS) {
 				const f = this.list.find((itm) => itm.id === v.id);
 				if (f) {
@@ -70,13 +70,12 @@ export default class BlackListManager extends Vue {
 	Search() {
 		if (!this.SelectDate) return;
 		// const param:WebParams = { ...this.store.Param };
-		const TableName = 'MemberReport';
 		const Filter:KeyVal[] = [];
 		Filter.push(DateFunc.createDbDateFilter(this.SelectDate));
 		if (this.value) {
 			Filter.push({ CLevel: this.BlackType });
 		}
-		this.Api.getTableData(TableName, Filter).then((msg: Msg) => {
+		this.Api.getMemberReport(Filter).then((msg: Msg) => {
 			if (msg.ErrNo === ErrCode.PASS) {
 				console.log('BlackListManager msg', msg.data);
 				const datas = msg.data as MemberGainLoseData[];

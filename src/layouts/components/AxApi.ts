@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { ErrCode } from 'src/components/if/ENum';
 import { SelectOptions, CBetItems, Msg, CommonParams, IbtCls, ParamLog, WebParams, HasID } from '../data/if';
 import { Terms, Game, User } from '../data/schema';
 
@@ -304,7 +305,7 @@ export class AxApi {
         });
         return msg;
     }
-    async getApi(appName:string, param:CommonParams|Terms|WebParams, method?:string):Promise<Msg> {
+    async getApi(appName:string, param:CommonParams|Terms|WebParams, method = 'get'):Promise<Msg> {
         const url = `${this.ApiUrl}/api/${appName}`;
         let func:Promise<Msg>;
         if (method === 'post') {
@@ -354,7 +355,7 @@ export class AxApi {
                 msg = res.data;
                 resolve(msg);
             }).catch((err) => {
-                msg.ErrNo = 9;
+                msg.ErrNo = ErrCode.APISERVER_GONE_AWAY;
                 msg.error = err;
                 reject(msg);
             });
@@ -369,7 +370,7 @@ export class AxApi {
                 msg = res.data;
                 resolve(msg);
             }).catch((err) => {
-                msg.ErrNo = 9;
+                msg.ErrNo = ErrCode.APISERVER_GONE_AWAY;
                 msg.error = err;
                 reject(msg);
             });

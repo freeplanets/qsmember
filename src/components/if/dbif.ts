@@ -7,7 +7,7 @@ export interface TableData {
   fields?: KeyVal[];
 }
 export interface DataObject {
-  [key:string]:number|string|boolean;
+  [key:string]: any;
 }
 export interface CryptoItem extends HasID {
   Title?:string;
@@ -224,7 +224,12 @@ export interface MemberName {
 export interface HasSetValue {
   setValue(v:any):void;
 }
-
 export interface AskWithMemberName extends AskTable {
   Nickname?: string;
+  MarkTS?: string;
+  SettlePrice?: string;
+}
+export interface AskIdPrice {
+  id:number;
+  price:number;
 }

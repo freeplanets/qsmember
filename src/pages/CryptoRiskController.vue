@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<div class="q-pa-sm row esblock">
-			<div class="title">{{ $t('Label.EmergencySwitch.Title') }}</div>
-			<q-btn color="red" icon="dangerous" :disable="isEmergencyClose" :label="$t('Label.EmergencySwitch.Shutdown')" @click="CloseAll" />
-			<q-btn color="green" icon="check_circle" :disable="!isEmergencyClose" :label="$t('Label.EmergencySwitch.RaiseUp')" @click="OpenAll" />
+			<div :class="{title:true,closed:isEmergencyClose,opend:!isEmergencyClose}">{{ $t('Label.EmergencySwitch.Title') }}</div>
+			<q-btn color="red" icon="dangerous" v-if="!isEmergencyClose" :label="$t('Label.EmergencySwitch.Shutdown')" @click="CloseAll" />
+			<q-btn color="green" icon="check_circle" v-if="isEmergencyClose" :label="$t('Label.EmergencySwitch.RaiseUp')" @click="OpenAll" />
 		</div>
 		<q-separator />
 		<BCIH class="q-pt-sm" :info="LoginInfo" />
@@ -17,6 +17,7 @@
 				:item="itm"
 				:info="LoginInfo"
 				@updateItems="updateItems"
+				@doSettle="doSettle"
 			/>
 		</div>
 	</div>
@@ -29,11 +30,11 @@ import BanCryptoItemControl from '../components/Banner/CryptoItemControl.vue';
 import BanCryptoICHeader from '../components/Banner/CryptoICHeader.vue';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
 import Items from '../components/class/Item/Items';
-import ApiFunc from '../components/class/Api/ApiFunc';
-import { CryptoItem, AskTable, PartialCryptoItems } from '../components/if/dbif';
+import ApiFunc from '../components/class/Api/Func';
+import { CryptoItem, AskTable, PartialCryptoItems, WsMsg } from '../components/if/dbif';
 import { Msg } from '../layouts/data/if';
 import Mqtt from '../components/WebSock/Mqtt';
-import { ErrCode } from '../components/if/ENum';
+import { Channels, ErrCode } from '../components/if/ENum';
 
 @Component({
 	components: {
@@ -52,7 +53,7 @@ export default class CryptoRiskController extends Vue {
 		return this.store.personal;
 	}
 	getData() {
-		this.Api.getTableData('Items', { isLoan: 1 }).then((msg:Msg) => {
+		this.Api.getLoanItem().then((msg:Msg) => {
 			if (msg.ErrNo === 0) {
 				const data:CryptoItem[] = msg.data as CryptoItem[];
 				// console.log('CryptoRiskController getData', data);
@@ -74,11 +75,11 @@ export default class CryptoRiskController extends Vue {
 		this.mqtt.setItems(this.list);
 	}
 	getAsks() {
-		let filter = 'ProcStatus<2';
+		let UpId = 0;
 		if (this.LoginInfo.Types < 3) {
-			filter = `${filter} and UpId = ${this.LoginInfo.id}`;
+			UpId = this.LoginInfo.id;
 		}
-		this.Api.getTableData('AskTable', filter).then((msg:Msg) => {
+		this.Api.getInProcessAsks(UpId).then((msg:Msg) => {
 			// console.log('getData AskTable', msg);
 			if (msg.ErrNo === 0) {
 				const asks:AskTable[] = msg.data as AskTable[];
@@ -90,7 +91,7 @@ export default class CryptoRiskController extends Vue {
 	}
 	updateItems(data:PartialCryptoItems | PartialCryptoItems[], isEmergencyClose = 0) {
 		console.log('CRC setClosed:', data);
-		this.Api.setTableData<PartialCryptoItems>('Items', data, isEmergencyClose).then((msg:Msg) => {
+		this.Api.setEmergencyClose(data, isEmergencyClose).then((msg:Msg) => {
 			if (msg.ErrNo === ErrCode.PASS) {
 				console.log(msg);
 				this.resetDataValue(data);
@@ -148,6 +149,16 @@ export default class CryptoRiskController extends Vue {
 			this.updateItems(itms, sw);
 		}
 	}
+	getMemberSettleMark() {
+
+	}
+	doSettle(ask:AskTable) {
+		const msg:WsMsg = {
+			ChannelName: Channels.API_SERVER,
+			Ask: ask,
+		};
+		this.store.WSock.send(JSON.stringify(msg));
+	}
 	mounted() {
 		this.mqtt.subscribeTick();
 		this.getData();
@@ -163,5 +174,13 @@ export default class CryptoRiskController extends Vue {
 }
 .esblock .q-btn {
 	margin-left: 8px;
+}
+.opened {
+	background-color: $red-1;
+	color: black;
+}
+.closed {
+	background-color: $red-10;
+	color: white;
 }
 </style>

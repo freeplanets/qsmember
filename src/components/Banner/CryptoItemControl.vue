@@ -1,6 +1,9 @@
 <template>
 	<div class="row banblock">
-		<div class="col-2 banmain">{{ item.Title }}</div>
+		<div class="col-2 banmain">
+			{{ item.Title }}
+			<q-btn color="primary" v-if="item.EmergencyClosed" icon="description" :label="$t('Button.MemberSettleMark')" @click="getMemberSettleMark" />
+		</div>
 		<div class="col-2 banmain">{{ item.Price }}</div>
 		<div class="col">
 			<div class="row sublineTop">
@@ -31,14 +34,21 @@
 				</div>
 			</div>
 		</div>
-		<dialog-ask-list v-model="showDialogAskList" :list="dialogList" :title="dialogTitle" :hasAmount="hasAmount"></dialog-ask-list>
+		<dialog-ask-list
+			v-model="showDialogAskList"
+			:list="dialogList"
+			:title="dialogTitle"
+			:hasAmount="hasAmount"
+			:isEmergencyClosed="item.EmergendyClosed"
+			@doSettle="doSettle"
+		></dialog-ask-list>
 	</div>
 </template>
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { LoginInfo } from 'src/layouts/data/if';
 import Crypto from '../class/Item/Items';
-import { PartialCryptoItems, AskWithMemberName } from '../if/dbif';
+import { PartialCryptoItems, AskWithMemberName, AskIdPrice } from '../if/dbif';
 import { StopType } from '../if/ENum';
 import DialogAskList from '../Dialog/AskList.vue';
 
@@ -114,6 +124,20 @@ export default class CryptoItemControl extends Vue {
 		// console.log('showlist', this.dialogList);
 		this.showDialogAskList = true;
 		// console.log(title, JSON.stringify(list));
+	}
+	doSettle(ask:AskIdPrice) {
+		console.log('CryptoItemControl doSettle', ask);
+		const f = this.item.Asks.find((itm) => itm.id === ask.id);
+		if (f) {
+			const newAsk = { ...f };
+			if (newAsk.Nickname) delete newAsk.Nickname;
+			if (newAsk.MarkTS) delete newAsk.MarkTS;
+			if (newAsk.SettlePrice) delete newAsk.SettlePrice;
+			newAsk.Price = ask.price;
+			newAsk.ProcStatus = 2;
+			newAsk.DealTime = new Date().getTime();
+			this.$emit('doSettle', newAsk);
+		}
 	}
 }
 </script>

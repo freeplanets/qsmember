@@ -43,7 +43,7 @@ import ErrCode from '../../layouts/data/ErrCode';
 import { Channels, FuncKey, OpTypes } from '../if/ENum';
 // import { CryptoOpParams } from '../if/dbif';
 import OpParams from '../class/Params/CryptoOpParams';
-import ApiFunc from '../class/Api/ApiFunc';
+import Api from '../class/Api/Func';
 import { WsMsg } from '../if/dbif';
 
 @Component
@@ -57,7 +57,7 @@ export default class CryptoOpParamList extends Vue {
 	}
 	*/
 	store = getModule(LStore);
-	ax = new ApiFunc(this.store);
+	ax = new Api(this.store);
 	options = this.getENum();
 	getENum() {
 		// const a = { ...OpTypes };
@@ -66,7 +66,7 @@ export default class CryptoOpParamList extends Vue {
 	}
 	Save(itm:OpParams, idx:number) {
 		itm.ModifyID = this.store.personal.id;
-		this.ax.setTableData('CryptoOpParams', itm.Data).then((res:Msg) => {
+		this.ax.setCryptoOpParams(itm.Data).then((res:Msg) => {
 			const opt:QDialogOptions = {
 				title: `${this.$t('Label.Save')}`,
 				message: 'OK!',
@@ -108,7 +108,7 @@ export default class CryptoOpParamList extends Vue {
 		*/
 	}
 	NotifyLeverChange(CLevel:string, value:number, itemid:number) {
-		this.ax.getTableData('Member', { CLevel }, 'id').then((res) => {
+		this.ax.getMemberCLevel(CLevel).then((res) => {
 			if (res.ErrNo === ErrCode.PASS) {
 				const users = res.data as HasID[];
 				const ids = users.map((user) => user.id);

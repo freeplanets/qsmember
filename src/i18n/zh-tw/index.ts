@@ -16,6 +16,12 @@ export default {
     '查詢錯誤', // 13,
     '錯誤', // 14,
     '查無資料', // 15,
+    '超過單手上限', // 16
+    '目前已滿艙，請稍後再下單', // 17
+    '短線時間內不可平倉', // 18
+    '有未成交單處理中', // 19
+    '網路系統異常，平倉改採人工平倉，工作人員會依據你提出平倉的時間點，依當時市價平倉', // 20
+    '系統已斷線，請重新登入', // 21
   ],
   Label: {
     GameName: '彩局名稱',
@@ -127,10 +133,13 @@ export default {
     BlackListLevel: '黑名單級別',
     BlackCurrent: '目前',
     EmergencySwitch: {
-      Title: '緊急開闗',
+      Title: '緊急闗閉',
       Shutdown: '關閉',
       RaiseUp: '打開',
     },
+    MarkTS: '提示時間',
+    Settle: '平倉',
+    SettlePricePlease: '請輸入平倉價格',
   },
   Tip: {
     UserFind: '請輸入名稱或代號',
@@ -289,6 +298,7 @@ export default {
     Lists: '清單',
     Undo: '復原',
     EmergencyShutdown: '緊急關閉',
+    MemberSettleMark: '會員平倉提示',
   },
   Dialog: {
     MTitle: '主選單',
@@ -307,6 +317,10 @@ export default {
     EmergencyShutdown: {
       Title: '緊急關閉',
       Message: ['是否要取消緊急闗閉?', '是否要執行緊急關閉?'],
+    },
+    DoSettle: {
+      Title: '手動平倉',
+      Message: '輸入的價格有誤',
     },
   },
   InputSwitch: [
@@ -361,7 +375,7 @@ export default {
     OdrType: '下注項目',
     OdrAmt: '下單金額',
     LeverAmt: '槓桿金額',
-    AvgLever: '均槓桿比',
+    AvgLever: '均槓桿',
     Total: '合計',
     GeneralLedger: '總帳',
     Ledger: '分類帳',

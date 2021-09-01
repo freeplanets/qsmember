@@ -8,7 +8,7 @@
 			</q-card-section>
 
 			<q-card-section>
-				<list-asks :list="list" :hasAmount="hasAmount"></list-asks>
+				<list-asks :list="list" :hasAmount="hasAmount" :doSettle="doSettle"></list-asks>
 			</q-card-section>
 		</q-card>
 	</q-dialog>
@@ -28,6 +28,7 @@ export default class extends Vue {
 	@Prop({ type: String }) readonly title!:string;
 	@Prop({ type: Boolean }) readonly value!:boolean;
 	@Prop({ type: Boolean }) readonly hasAmount!:boolean;
+	@Prop({ type: Boolean }) readonly isEmergencyClosed!:boolean
 	model = false;
 	@Watch('value')
 	onValueChange() {
@@ -38,6 +39,10 @@ export default class extends Vue {
 		if (!this.model) {
 			this.$emit('input', false);
 		}
+	}
+	doSettle(ask:any) {
+		console.log('AskList doSettle', ask);
+		this.$emit('doSettle', ask);
 	}
 	get width() {
 		return Math.round(window.screen.width * 0.4);

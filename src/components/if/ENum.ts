@@ -15,6 +15,12 @@ export enum ErrCode {
   DB_QUERY_ERROR = 13,
   TRY_CATCH_ERROR = 14,
   NO_DATA_FOUND = 15,
+  OVER_ONE_HAND = 16,
+  OVER_FULL_STORAGE = 17,
+  IN_SHORT_TERM = 18,
+  HAS_ASK_IN_PROCESS = 19,
+  EMERGENCY_STOPED = 20,
+  APISERVER_GONE_AWAY = 21,
 }
 
 export enum FuncKey {
@@ -49,6 +55,7 @@ export enum MsgType {
 
 export enum Channels {
   ASK = 'AskChannel',
+  API_SERVER = 'AskCreator',
   ADMIN = 'AdminChannel',
   PUB = 'PublicChannel',
 }
