@@ -7,8 +7,8 @@
 					round
 					color="primary"
 					size="xs"
-					:icon="titleSortIcon"
-					@click="sort('title')"
+					:icon="icons.Nickname"
+					@click="sort('Nickname')"
 				/>
 			</th>
 			<th colspan="3">{{ $t('Report.OdrAmt') }}</th>
@@ -16,12 +16,66 @@
 			<th colspan="2">{{ $t('Label.BlackListLevel')}}</th>
 		</tr>
 		<tr>
-			<th>{{ $t('Table.AskTable.Amount') }}</th>
-			<th>{{ $t('Report.LeverAmt') }}</th>
-			<th>{{ $t('Report.AvgLever') }}(%)</th>
-			<th>{{ $t('Table.AskTable.Amount') }}</th>
-			<th>%</th>
-			<th>{{ $t('Label.BlackCurrent') }}</th>
+			<th>
+				{{ $t('Table.AskTable.Amount') }}
+				<q-btn
+					round
+					color="primary"
+					size="xs"
+					:icon="icons.Total"
+					@click="sort('Total')"
+				/>
+			</th>
+			<th>
+				{{ $t('Report.LeverAmt') }}
+				<q-btn
+					round
+					color="primary"
+					size="xs"
+					:icon="icons.LeverTotal"
+					@click="sort('LeverTotal')"
+				/>
+			</th>
+			<th>
+				{{ $t('Report.AvgLever') }}(%)
+				<q-btn
+					round
+					color="primary"
+					size="xs"
+					:icon="icons.LeverAvgRate"
+					@click="sort('LeverAvgRate')"
+				/>
+			</th>
+			<th>
+				{{ $t('Table.AskTable.Amount') }}
+				<q-btn
+					round
+					color="primary"
+					size="xs"
+					:icon="icons.GainLose"
+					@click="sort('GainLose')"
+				/>
+			</th>
+			<th>
+				%
+				<q-btn
+					round
+					color="primary"
+					size="xs"
+					:icon="icons.GainLoseRate"
+					@click="sort('GainLoseRate')"
+				/>
+			</th>
+			<th>
+				{{ $t('Label.BlackCurrent') }}
+				<q-btn
+					round
+					color="primary"
+					size="xs"
+					:icon="icons.CLevel"
+					@click="sort('CLevel')"
+				/>
+			</th>
 			<th>{{ $t('Button.Edit') }}</th>
 		</tr>
 		<member-gain-lose-line
@@ -38,6 +92,16 @@ import MemberGainLose from '../class/GainLose/Member';
 import MemberGainLoseLine from './MemberGainLoseLine.vue';
 import { DataObject, MemberCLevel } from '../if/dbif';
 
+interface SortIcon extends DataObject {
+		Nickname: string;
+		Total: string;
+		LeverTotal: string;
+		LeverAvgRate: string;
+		GainLose: string;
+		GainLoseRate: string;
+		CLevel: string;
+}
+
 @Component({
 	components: {
 		MemberGainLoseLine,
@@ -52,39 +116,40 @@ export default class MemberGainLoseSheet extends Vue {
 	iconUp = 'expand_less';
 	iconDown = 'expand_more';
 	iconDefault = 'unfold_more';
-	titleSortIcon = '';
-	amtSortIcon = '';
-	leverAmtSortIcon = '';
-	leverRateSortIcon = '';
-	glAmtSortIcon = '';
-	glRateSortIcon = '';
-	icons:DataObject = {
+	icons:SortIcon = {
 		Nickname: '',
 		Total: '',
 		LeverTotal: '',
 		LeverAvgRate: '',
 		GainLose: '',
 		GainLoseRate: '',
-		CLevel:'',
+		CLevel: '',
 	}
-	sort(key:string) {	
+	sort(key:string) {
+		// console.log('sort:', key);
+		let sortD = 1;
+		if (this.icons[key] === this.iconDown) {
+			sortD = -1;
+		}
+		this.resetIcon();
+		this.icons[key] = sortD === 1 ? this.iconDown : this.iconUp;
 		this.list.sort((a:MemberGainLose, b:MemberGainLose) => {
 			let ans = 0;
-			let a1 = a as DataObject;
-			let b1 = a as DataObject;
-			if(a1[key] && b1[key]) {
-				ans = 1;
+			const a1 = a as DataObject;
+			const b1 = b as DataObject;
+			if (a1[key] > b1[key]) {
+				ans = 1 * sortD;
+			} else {
+				ans = -1 * sortD;
 			}
 			return ans;
-		})
+		});
+		// console.log(this.list);
 	}
 	resetIcon() {
-		this.titleSortIcon = this.iconDefault;
-		this.amtSortIcon = this.iconDefault;
-		this.leverAmtSortIcon = this.iconDefault;
-		this.leverRateSortIcon = this.iconDefault;
-		this.glAmtSortIcon = this.iconDefault;
-		this.glRateSortIcon = this.iconDefault;
+		Object.keys(this.icons).map((key) => {
+			this.icons[key] = this.iconDefault;
+		});
 	}
 	mounted() {
 		this.resetIcon();

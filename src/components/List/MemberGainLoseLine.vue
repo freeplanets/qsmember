@@ -1,11 +1,11 @@
 <template>
 	<tr class="list" v-if="mgl && mgl.Nickname">
 		<td>{{ mgl.Nickname }}</td>
-		<td class="number">{{ mgl.Total }}</td>
-		<td class="number">{{ mgl.LeverTotal }}</td>
-		<td class="number">{{ mgl.LeverAvgRate }}</td>
-		<td class="number">{{ mgl.GainLose }}</td>
-		<td class="number">{{ mgl.GainLoseRate }}</td>
+		<td class="number">{{ mgl.Total.toFixed(2) }}</td>
+		<td class="number">{{ mgl.LeverTotal.toFixed(2) }}</td>
+		<td class="number">{{ mgl.LeverAvgRate.toFixed(2) }}</td>
+		<td class="number">{{ mgl.GainLose.toFixed(2) }}</td>
+		<td class="number">{{ mgl.GainLoseRate.toFixed(2) }}</td>
 		<td class="number">{{ mgl.CLevel }}</td>
 		<td><q-select outlined dense hide-bottom-space v-model="model" :options="options" /></td>
 	</tr>
@@ -21,7 +21,7 @@ export default class MemberGainLoseLine extends Vue {
 	@Prop({ type: Object })	readonly mgl!: MemberGainLose;
 	@Watch('mgl', { deep: true, immediate: true })
 	onMglChange() {
-		console.log('onMglChang');
+		// console.log('onMglChang');
 		// this.mgl.setObjectHasSetValue(this);
 		this.model = this.mgl.CLevel;
 	}
@@ -31,7 +31,7 @@ export default class MemberGainLoseLine extends Vue {
 		if (this.model !== this.mgl.CLevel) {
 			this.setValue({ id: this.mgl.id, CLevel: this.model });
 		}
-		console.log('onModelChange:', this.model);
+		// console.log('onModelChange:', this.model);
 	}
 	get options() {
 		return Object.values(OpTypes);
