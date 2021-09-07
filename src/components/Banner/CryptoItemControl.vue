@@ -2,7 +2,7 @@
 	<div class="row banblock">
 		<div class="col-2 banmain">
 			{{ item.Title }}
-			<q-btn color="primary" v-if="item.EmergencyClosed" icon="description" :label="$t('Button.MemberSettleMark')" @click="getMemberSettleMark" />
+			<q-btn color="primary" v-if="false" icon="description" :label="$t('Button.MemberSettleMark')" @click="getMemberSettleMark" />
 		</div>
 		<div class="col-2 banmain">{{ item.Price }}</div>
 		<div class="col">
@@ -39,7 +39,7 @@
 			:list="dialogList"
 			:title="dialogTitle"
 			:hasAmount="hasAmount"
-			:isEmergencyClosed="item.EmergendyClosed"
+			:isEmergencyClosed="!!item.EmergencyClosed"
 			@doSettle="doSettle"
 		></dialog-ask-list>
 	</div>
@@ -61,6 +61,16 @@ export default class CryptoItemControl extends Vue {
 	@Prop({ type: Object }) readonly item!:Crypto;
 	@Prop({ type: Object }) readonly info!:LoginInfo;
 	// @Prop({ type: Boolean }) readonly inProcess!:boolean;
+	@Watch('item')
+	onItemChange() {
+		console.log('CryptoItemControl onItemChange', this.item);
+		if (this.showDialogAskList) {
+			if (!this.hasAmount && this.item) {
+				this.showDialogAskList = false;
+				this.showlist(`${this.item.Title}`, this.item.Asks);
+			}
+		}
+	}
 	isFromItemChangeLong = false;
 	isFromItemChangeShort = false;
 	longStop = this.item.getClosed(StopType.LONG_STOP);
@@ -133,11 +143,16 @@ export default class CryptoItemControl extends Vue {
 			if (newAsk.Nickname) delete newAsk.Nickname;
 			if (newAsk.MarkTS) delete newAsk.MarkTS;
 			if (newAsk.SettlePrice) delete newAsk.SettlePrice;
-			newAsk.Price = ask.price;
+			newAsk.Price = ask.Price;
 			newAsk.ProcStatus = 2;
 			newAsk.DealTime = new Date().getTime();
 			this.$emit('doSettle', newAsk);
 		}
+	}
+	getMemberSettleMark() {
+		this.$emit('getMemberSettleMark', this.item.id);
+		this.dialogList = this.item.Asks;
+		this.showDialogAskList = true;
 	}
 }
 </script>

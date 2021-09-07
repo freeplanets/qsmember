@@ -4,6 +4,7 @@
 			<div :class="{title:true,closed:isEmergencyClose,opend:!isEmergencyClose}">{{ $t('Label.EmergencySwitch.Title') }}</div>
 			<q-btn color="red" icon="dangerous" v-if="!isEmergencyClose" :label="$t('Label.EmergencySwitch.Shutdown')" @click="CloseAll" />
 			<q-btn color="green" icon="check_circle" v-if="isEmergencyClose" :label="$t('Label.EmergencySwitch.RaiseUp')" @click="OpenAll" />
+			<div v-if="isEmergencyClose" class="info">{{ $t('Label.EmergencySwitch.info') }}</div>
 		</div>
 		<q-separator />
 		<BCIH class="q-pt-sm" :info="LoginInfo" />
@@ -18,6 +19,7 @@
 				:info="LoginInfo"
 				@updateItems="updateItems"
 				@doSettle="doSettle"
+				@getMemberSettleMark="getMemberSettleMark"
 			/>
 		</div>
 	</div>
@@ -31,7 +33,7 @@ import BanCryptoICHeader from '../components/Banner/CryptoICHeader.vue';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
 import Items from '../components/class/Item/Items';
 import ApiFunc from '../components/class/Api/Func';
-import { CryptoItem, AskTable, PartialCryptoItems, WsMsg } from '../components/if/dbif';
+import { CryptoItem, AskTable, PartialCryptoItems, WsMsg, MemberSettleMark } from '../components/if/dbif';
 import { Msg } from '../layouts/data/if';
 import Mqtt from '../components/WebSock/Mqtt';
 import { Channels, ErrCode } from '../components/if/ENum';
@@ -56,7 +58,7 @@ export default class CryptoRiskController extends Vue {
 		this.Api.getLoanItem().then((msg:Msg) => {
 			if (msg.ErrNo === 0) {
 				const data:CryptoItem[] = msg.data as CryptoItem[];
-				// console.log('CryptoRiskController getData', data);
+				console.log('CryptoRiskController getData', data);
 				data.forEach((itm) => {
 					// console.log('getdata', itm.id, itm.Closed);
 					if (itm.isLoan) {
@@ -80,12 +82,15 @@ export default class CryptoRiskController extends Vue {
 			UpId = this.LoginInfo.id;
 		}
 		this.Api.getInProcessAsks(UpId).then((msg:Msg) => {
-			// console.log('getData AskTable', msg);
+			console.log('getData AskTable', msg);
 			if (msg.ErrNo === 0) {
 				const asks:AskTable[] = msg.data as AskTable[];
 				this.list.forEach((itm) => {
 					itm.addAsks(asks);
 				});
+				if (this.list.length > 0) {
+					this.getMemberSettleMark();
+				}
 			}
 		});
 	}
@@ -150,14 +155,25 @@ export default class CryptoRiskController extends Vue {
 		}
 	}
 	getMemberSettleMark() {
-
+		this.Api.getSettleMark().then((msg:Msg) => {
+			if (msg.ErrNo === ErrCode.PASS) {
+				console.log('getMemberSettleMark', this.isEmergencyClose, msg);
+				const msm = msg.data as MemberSettleMark[];
+				this.list.map((itm) => {
+					itm.setSettleMark(msm);
+				});
+			}
+		});
 	}
 	doSettle(ask:AskTable) {
 		const msg:WsMsg = {
 			ChannelName: Channels.API_SERVER,
 			Ask: ask,
 		};
-		this.store.WSock.send(JSON.stringify(msg));
+		msg.SettleService = true;
+		msg.UserID = this.LoginInfo.id;
+		console.log('CryptoRiskController doSettle:', msg);
+		this.store.WSock.send(msg);
 	}
 	mounted() {
 		this.mqtt.subscribeTick();
@@ -182,5 +198,11 @@ export default class CryptoRiskController extends Vue {
 .closed {
 	background-color: $red-10;
 	color: white;
+}
+.info {
+	margin: 4px 0 0 16px;
+	padding: 4px 0 0 0;
+	background-color: $warning;
+	border-radius: 10px;
 }
 </style>

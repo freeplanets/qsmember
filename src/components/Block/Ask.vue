@@ -10,7 +10,7 @@
 		<template v-if='isEmergencyClosed'>
 			<div class="col txtRight">{{ ask.MarkTS }}</div>
 			<div class="col txtCenter">
-				<q-input v-if="ask.MarkTS" outlined v-model="ask.SettlePrice" :label="$t('Label.SettlePricePlease')" />
+				<q-input v-if="ask.MarkTS" outlined dense v-model="ask.SettlePrice" :label="$t('Label.SettlePricePlease')" />
 			</div>
 			<div class="col txtCenter">
 				<q-btn v-if="ask.SettlePrice" round color="primary" icon="send" @click="doSettle" />
@@ -19,7 +19,6 @@
 	</div>
 </template>
 <script lang="ts">
-import { QDialogOptions } from 'quasar';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import DateFunc from '../Functions/MyDate';
 import NumsFunc from '../Functions/Nums';
@@ -45,6 +44,7 @@ export default class Ask extends Vue {
 	doSettle() {
 		if (this.ask.SettlePrice) {
 			const price = parseFloat(this.ask.SettlePrice);
+			/*
 			const chkGain = (price - this.ask.StopGain) * this.ask.ItemType;
 			const chkLose = (price - this.ask.StopLose) * this.ask.ItemType;
 			if (chkGain > 0 || chkLose < 0) {
@@ -55,9 +55,10 @@ export default class Ask extends Vue {
 				this.$q.dialog(opt);
 				return;
 			}
+			*/
 			const pAsk:AskIdPrice = {
 				id: this.ask.id,
-				price,
+				Price: price,
 			};
 			this.$emit('doSettle', pAsk);
 		}

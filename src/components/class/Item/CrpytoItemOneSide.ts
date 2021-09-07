@@ -4,8 +4,8 @@ import { AskTable, MemberName, AskWithMemberName } from '../../if/dbif';
  * identify => ItemID + '-' + ItemType 
  */
 export default class CryptoItemOneSide {
-	private list:AskTable[] = [];
-	private inProcess:AskTable[] = [];	// 只看限價單
+	private list:AskWithMemberName[] = [];
+	private inProcess:AskWithMemberName[] = [];	// 只看限價單
 	private QtyAfterLever = 0;
 	private priceAverage = 0;
 	private curGainLose = 0;
@@ -118,6 +118,14 @@ export default class CryptoItemOneSide {
 		// this.priceLimit = 0;
 		this.priceLimitAmt = 0;
 		// this.curGainLose = 0;
+	}
+	setSettleMark(AskID:number, MarkTS:string) {
+		console.log('setSettleMark:', AskID, MarkTS);
+		const fIdx = this.list.findIndex((ask) => ask.id === AskID);
+		if (fIdx > -1) {
+			console.log('found:', fIdx);
+			this.list[fIdx].MarkTS = MarkTS;
+		}
 	}
 	private removeFromList(ask:AskTable, fIdx:number) {
 		if (fIdx !== -1) {

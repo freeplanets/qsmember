@@ -1,5 +1,5 @@
 <template>
-	<tr v-if="ask" class="row block_ask">
+	<tr v-if="ask" class="block_ask">
 		<td class="txtRight">{{ ask.id }}</td>
 		<td class="txtCenter">{{ CreateTime }}</td>
 		<td class="txtCenter">{{ ask.Nickname ? ask.Nickname : ask.UserID }}</td>
@@ -19,7 +19,6 @@
 	</tr>
 </template>
 <script lang="ts">
-import { QDialogOptions } from 'quasar';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import DateFunc from '../Functions/MyDate';
 import NumsFunc from '../Functions/Nums';
@@ -45,6 +44,7 @@ export default class AskTR extends Vue {
 	doSettle() {
 		if (this.ask.SettlePrice) {
 			const price = parseFloat(this.ask.SettlePrice);
+			/*
 			const chkGain = (price - this.ask.StopGain) * this.ask.ItemType;
 			const chkLose = (price - this.ask.StopLose) * this.ask.ItemType;
 			if (chkGain > 0 || chkLose < 0) {
@@ -55,22 +55,21 @@ export default class AskTR extends Vue {
 				this.$q.dialog(opt);
 				return;
 			}
+			*/
 			const pAsk:AskIdPrice = {
 				id: this.ask.id,
-				price,
+				Price: price,
 			};
+			console.log('AskTR doSettle:', pAsk);
 			this.$emit('doSettle', pAsk);
 		}
 	}
 }
 </script>
 <style lang="scss" scoped>
-.block_ask {
-	border-right: 1px $green-10 solid;
-	border-bottom: 1px $green-10 solid;
-}
 .block_ask td {
 	border-left: 1px $green-10 solid;
+	border-bottom: 1px $green-10 solid;
 }
 .txtRight {
 	padding-right: 8px;

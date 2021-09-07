@@ -109,14 +109,17 @@ export interface MqttData {
   lastTradeId: number;
   trades: number;
 }
+
 export interface WsMsg {
   Func?: FuncKey;
-  Asks?: AskTable |AskTable[];
+  Asks?: AskTable | AskTable[];
   Ask?: AskTable;
   Balance?: number;
   Message?: string;
   ChannelName?: string;
   // LedgerTotal?: LedgerTotal[];
+  SettleMark?: MemberSettleMark;
+  SettleService?: boolean;
   UserID?: number;
   SendTo?: number | number[]; // message to who's id
   [key:string]: any;
@@ -230,6 +233,12 @@ export interface AskWithMemberName extends AskTable {
   SettlePrice?: string;
 }
 export interface AskIdPrice {
-  id:number;
-  price:number;
+  id: number;
+  Price: number;
+}
+export interface MemberSettleMark {
+  id: number;
+  AskID: number;
+  ItemID: number;
+  MarkTS: string;
 }

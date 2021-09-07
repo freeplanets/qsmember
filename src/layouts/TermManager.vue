@@ -29,7 +29,7 @@
                 <div class='col-1 mytable-field'>{{itm.StopTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTimeS}}</div>
                 <div class='col-2 mytable-field'><div style='word-break: normal;'>{{itm.Result ? itm.Result.replace(/\,/g,', ') : ''}} {{ itm.SpNo ? `+${itm.SpNo}`:'' }}</div></div>
-                <div class='col-1 mytable-field'>{{$t(`Label.Settled.${itm.isSettled}`)}}</div>
+                <div class='col-1 mytable-field'>{{ itm.isCanceled ? $t('Label.Settled.4') : $t(`Label.Settled.${itm.isSettled}`)}}</div>
                 <div class='col mytable-field'>
                     <div class="row">
                         <div class='col' v-if="itm.isSettled===0 && itm.isCanceled===0"><q-btn color="blue" dense :label="$t('Button.Edit')" @click="Edit(itm)" /></div>

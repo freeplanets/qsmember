@@ -3,9 +3,10 @@ import { KeyVal, WebParams } from '../../../layouts/data/if';
 import AForAll from './AForAll';
 
 export default class Func extends AForAll {
-	getSettleMark() {
-		const Fields = ['id', 'AskID', 'MarkTS'];
-		const Filter = { ModifyID: 0 };
+	getSettleMark(ItemID?:number) {
+		const Fields = ['id', 'AskID', 'ItemID', 'MarkTS'];
+		const Filter:KeyVal = { ModifyID: 0 };
+		if (ItemID) Filter.ItemID = ItemID;
 		return this.getTableData('MemberSettleMark', Filter, Fields);
 	}
 	getMemberNameByID(id:number|number[]) {

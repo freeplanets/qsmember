@@ -1,4 +1,4 @@
-import { CryptoItem, ReceiveData, AskTable, GetMessage, PartialCryptoItems, MemberName, AskWithMemberName } from '../../if/dbif';
+import { CryptoItem, ReceiveData, AskTable, GetMessage, PartialCryptoItems, MemberName, AskWithMemberName, MemberSettleMark } from '../../if/dbif';
 import { StopType, MsgType, ErrCode } from '../../if/ENum';
 import CryptoItemOneSide from './CrpytoItemOneSide';
 import LayoutStoreModule from '../../../layouts/data/LayoutStoreModule';
@@ -69,6 +69,7 @@ export default class Items implements GetMessage {
         return this.crypto.Closed ? this.crypto.Closed : 0;
     }
     get EmergencyClosed() {
+        // console.log('Items get EmergencyClosed', this.crypto.EmergencyClosed);
         return this.crypto.EmergencyClosed;
     }
     get DecimalPlaces() {
@@ -81,14 +82,31 @@ export default class Items implements GetMessage {
         return this.Long.Count + this.Short.Count;
     }
     get Asks() {
-        const tmp:AskWithMemberName[] = [];
+        let tmp:AskWithMemberName[] = [];
         if (this.Long.List.length > 0) {
-            tmp.concat(tmp, this.Long.List);
+            // console.log('Items Long Asks:', this.Long.List);
+            tmp = tmp.concat(this.Long.List);
         }
         if (this.Short.List.length > 0) {
-            tmp.concat(tmp, this.Short.List);
+            // console.log('Items Short Asks:', this.Short.List);
+            tmp = tmp.concat(this.Short.List);
         }
         return tmp;
+    }
+    setSettleMark(msms:MemberSettleMark | MemberSettleMark[]) {
+        if (Array.isArray(msms)) {
+            msms.forEach((msm) => {
+                this.doSettleMark(msm);
+            });
+        } else {
+            this.doSettleMark(msms);
+        }
+    }
+    private doSettleMark(msm: MemberSettleMark) {
+        if (msm.ItemID === this.id) {
+            this.Long.setSettleMark(msm.AskID, msm.MarkTS);
+            this.Short.setSettleMark(msm.AskID, msm.MarkTS);
+        }
     }
     getClosed(v:StopType):boolean {
         const closed = this.crypto.Closed ? this.crypto.Closed : 0;

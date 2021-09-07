@@ -52,7 +52,7 @@ export default class WSock {
         return this.chatM;
     }
     send(message:string | WsMsg) {
-        // console.log('Try send:', message);
+        console.log('Try send:', message);
         if (!this.receivedWelcome) {
             console.log('Wait for connect.......');
             return;
@@ -89,6 +89,11 @@ export default class WSock {
                 } else {
                     this.doAsk(msg.Asks);
                 }
+            } else if (msg.SettleMark) {
+                const SettleMark = msg.SettleMark;
+                this.LSM.Mqtt.Items.forEach((itm) => {
+                    itm.setSettleMark(SettleMark);
+                });
             } else if (msg.text) {
                 console.log('WSock doMsg text:', msg.text);
                 this.chatM.accept(msg as ChatMsg);
