@@ -170,8 +170,7 @@ export default class CryptoRiskController extends Vue {
 			ChannelName: Channels.API_SERVER,
 			Ask: ask,
 		};
-		msg.SettleService = true;
-		msg.UserID = this.LoginInfo.id;
+		msg.SettleServiceID = this.LoginInfo.id;
 		console.log('CryptoRiskController doSettle:', msg);
 		this.store.WSock.send(msg);
 	}

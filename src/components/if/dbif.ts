@@ -119,7 +119,7 @@ export interface WsMsg {
   ChannelName?: string;
   // LedgerTotal?: LedgerTotal[];
   SettleMark?: MemberSettleMark;
-  SettleService?: boolean;
+  SettleServiceID?: number;
   UserID?: number;
   SendTo?: number | number[]; // message to who's id
   [key:string]: any;

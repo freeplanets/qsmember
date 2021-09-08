@@ -8,7 +8,7 @@
 		<td class="txtRight">{{ ask.Amount ? ask.Amount : ask.Qty }}</td>
 		<td class="txtRight">{{ ask.AskPrice }}</td>
 		<template v-if='isEmergencyClosed'>
-			<td class="txtRight">{{ ask.MarkTS }}</td>
+			<td class="txtRight">{{ MarkTS }}</td>
 			<td class="txtCenter">
 				<q-input v-if="ask.MarkTS" outlined v-model="ask.SettlePrice" :label="$t('Label.SettlePricePlease')" />
 			</td>
@@ -30,6 +30,9 @@ export default class AskTR extends Vue {
 	@Prop({ type: Boolean }) readonly isEmergencyClosed!:boolean;
 	get CreateTime() {
 		return DateFunc.toLocalString(this.ask.CreateTime);
+	}
+	get MarkTS() {
+		return DateFunc.toLocalString(this.ask.MarkTS);
 	}
 	get ItemType() {
 		const itemType = this.ask.ItemType < 0 ? 0 : 1;

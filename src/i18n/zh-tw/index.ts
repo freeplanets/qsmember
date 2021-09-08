@@ -322,6 +322,7 @@ export default {
     DoSettle: {
       Title: '手動平倉',
       Message: '輸入的價格有誤',
+      Send: '平倉資料已送出！',
     },
   },
   InputSwitch: [

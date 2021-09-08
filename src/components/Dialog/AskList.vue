@@ -48,7 +48,7 @@ export default class AskList extends Vue {
 	*/
 	@Watch('value')
 	onValueChange() {
-		if (this.value) this.model = true;
+		this.model = this.value;
 	}
 	@Watch('model')
 	onModelChange() {

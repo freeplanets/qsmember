@@ -21,14 +21,14 @@
 				</div>
 			</div>
 			<div class="row sublineBottom">
-				<div class="col suba txtCenter" @click="showlist(item.Title, item.Short.List)">{{ $t('Select.Crypto.ItemType.0') }}</div>
-				<div class="col-2 suba txtRight">{{ item.Short.Total.toFixed(2) }}/{{ item.Short.Count }}</div>
+				<div class="col suba txtCenter">{{ $t('Select.Crypto.ItemType.0') }}</div>
+				<div class="col-2 suba txtRight" @click="showlist(item.Title, item.Short.List)">{{ item.Short.Total.toFixed(2) }}/{{ item.Short.Count }}</div>
 				<div class="col-2 suba txtRight">{{ item.Short.Qty.toFixed(8) }}</div>
 				<div class="col-2 suba txtRight">{{ item.Short.Price.toFixed(2) }}</div>
 				<div :class="{'col-2 suba txtRight':true, clrRed: item.Short.GainLose<0, clrGreen: item.Short.GainLose > 0}">
 					{{ item.Short.GainLose.toFixed(2) }}
 				</div>
-				<div class="col-2 suba txtRight" @click="showlist(item.Title, item.Short.InProcess, true)">{{ `${item.Short.PriceLimit}/${item.Short.PriceLimitAmt ? item.Short.PriceLimitQty.toFixed(item.DecimalPlaces) : 0}` }}</div>
+				<div class="col-2 suba txtRight" @click="showlist(item.Title, item.Short.InProcess, true)">{{ `${item.Short.PriceLimit}/${item.Short.PriceLimitAmt ? item.Short.PriceLimitAmt.toFixed(item.DecimalPlaces) : 0}` }}</div>
 				<div v-if="ShowFunc" class="col subb">
 					<q-checkbox left-label v-model="shortStop" label="停收" />
 				</div>
@@ -61,9 +61,11 @@ export default class CryptoItemControl extends Vue {
 	@Prop({ type: Object }) readonly item!:Crypto;
 	@Prop({ type: Object }) readonly info!:LoginInfo;
 	// @Prop({ type: Boolean }) readonly inProcess!:boolean;
-	@Watch('item')
-	onItemChange() {
-		console.log('CryptoItemControl onItemChange', this.item);
+	/*
+	askcount = this.item.Count;
+	@Watch('askcount', { deep: true, immediate: true })
+	onAskCountChange() {
+		console.log('askcount change', this.askcount);
 		if (this.showDialogAskList) {
 			if (!this.hasAmount && this.item) {
 				this.showDialogAskList = false;
@@ -71,6 +73,7 @@ export default class CryptoItemControl extends Vue {
 			}
 		}
 	}
+	*/
 	isFromItemChangeLong = false;
 	isFromItemChangeShort = false;
 	longStop = this.item.getClosed(StopType.LONG_STOP);
@@ -136,7 +139,13 @@ export default class CryptoItemControl extends Vue {
 		// console.log(title, JSON.stringify(list));
 	}
 	doSettle(ask:AskIdPrice) {
-		console.log('CryptoItemControl doSettle', ask);
+		console.log('CryptoItemControl doSettle', ask, this.showDialogAskList);
+		if (this.showDialogAskList) {
+			this.showDialogAskList = false;
+			const title = `${this.$t('Dialog.DoSettle.Title')}`;
+			const message = `${this.$t('Dialog.DoSettle.Send')}`;
+			this.$q.dialog({ title, message });
+		}
 		const f = this.item.Asks.find((itm) => itm.id === ask.id);
 		if (f) {
 			const newAsk = { ...f };
