@@ -23,13 +23,14 @@
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
-import { KeyVal, Msg, SelectOptions, WebParams } from 'src/layouts/data/if';
+import { Msg, SelectOptions, WebParams } from 'src/layouts/data/if';
 import { AskTable, AskReport, CryptoItem } from '../components/if/dbif';
 import LStore from '../layouts/data/LayoutStoreModule';
 import Selector from '../components/Selector.vue';
 import ErrCode from '../layouts/data/ErrCode';
 import SEDate from '../layouts/components/SEDate.vue';
 import AskList from '../components/AskList.vue';
+import ApiFunc from '../components/class/Api/Func';
 
 interface UserName {
   id: number;
@@ -45,6 +46,7 @@ interface UserName {
 })
 export default class CrytoReport extends Vue {
   store = getModule(LStore);
+  api = new ApiFunc(this.store);
   options:SelectOptions[] = [];
   itemid = 0;
   isDateSlt = false;
@@ -66,28 +68,7 @@ export default class CrytoReport extends Vue {
     if (!this.SelectDate) return;
     this.store.setShowProgress(true);
     this.askReports = [];
-    const param:WebParams = { ...this.store.Param };
-    const tmp = this.SelectDate.split('-');
-    const sdate = tmp[0];
-    const edate = tmp[1] ? tmp[1] : tmp[0];
-    param.TableName = 'AskTable';
-    param.Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'Qty', 'Price', 'Amount',
-        'Fee', 'AskFee', 'AskPrice', 'LeverCredit', 'ExtCredit', 'Lever',
-        'UNIX_TIMESTAMP(CreateTime) CreateTime'];
-    param.Filter = [];
-    if (this.itemid) {
-      param.Filter.push({
-        Key: 'ItemID',
-        Val: this.itemid,
-      });
-    }
-    param.Filter.push({
-      Key: 'CreateTime',
-      Val: `${sdate} 00:00:00`,
-      Val2: `${edate} 23:59:59`,
-      Cond: 'between',
-    });
-    const msg:Msg = await this.store.ax.getApi('cc/GetData', param);
+    const msg:Msg = await this.api.getAskList(this.SelectDate, this.itemid);
     if (msg.ErrNo === ErrCode.PASS) {
       if (msg.data) {
         const asks:AskTable[] = msg.data as AskTable[];
@@ -116,6 +97,7 @@ export default class CrytoReport extends Vue {
       let ItemName = '';
       if (fi) ItemName = fi.label;
       const tmp:AskReport = {
+        id: ask.id,
         User: UsrName,
         Item: ItemName,
         AskType: this.$t(`Select.Crypto.AskType.${ask.AskType}`).toString(),
@@ -137,16 +119,7 @@ export default class CrytoReport extends Vue {
     });
   }
   async getUsers(users:number[]):Promise<UserName[]> {
-    const param:WebParams = { ...this.store.Param };
-    const filter:KeyVal = {
-      Key: 'id',
-      Val: `(${users.join(',')})`,
-      Cond: 'in',
-    };
-    param.TableName = 'Member';
-    param.Fields = ['id', 'Nickname'];
-    param.Filter = filter;
-    const msg:Msg = await this.store.ax.getApi('cc/GetData', param);
+    const msg:Msg = await this.api.getMemberNameByID(users);
     if (msg.ErrNo === ErrCode.PASS) {
       return msg.data as UserName[];
     }

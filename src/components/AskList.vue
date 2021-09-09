@@ -2,6 +2,7 @@
   <div class="row">
     <table cellspacing="0" cellpadding="0">
       <tr class='title'>
+        <th> {{ $t('Table.Items.id') }} </th>
         <th> {{ $t('Table.AskTable.User') }} </th>
         <th> {{ $t('Table.AskTable.Item') }} </th>
         <th> {{ $t('Table.AskTable.AskType') }} </th>
@@ -22,6 +23,7 @@
         :key="'askreport'+idx"
         class="list"
       >
+        <td>{{ itm.id }}</td>
         <td>{{ itm.User }}</td>
         <td>{{ itm.Item }}</td>
         <td align='center' :class="{ priceLimit: itm.AT }">{{ itm.AskType }}</td>

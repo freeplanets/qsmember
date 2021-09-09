@@ -34,7 +34,6 @@ import ItemReport from '../components/ItemReport.vue';
 import SEDate from '../layouts/components/SEDate.vue';
 import ItemTot from '../components/class/Item/ItemTot';
 import LStore from '../layouts/data/LayoutStoreModule';
-import FuncDate from '../components/Functions/MyDate';
 import { ItemTotal } from '../components/if/dbif';
 
 @Component({
@@ -56,9 +55,8 @@ export default class CryptoItemReport extends Vue {
 			this.list = [];
 			this.store.setShowProgress(true);
 			this.isLedger = this.isLedgerT;
-			const filter = FuncDate.createDateFilter(this.SelectDate, 'SellTime');
 			// console.log('SeachData filter', filter);
-			this.itemTot.getItemReport(filter, this.isLedger).then((res) => {
+			this.itemTot.getItemReport(this.SelectDate, this.isLedger).then((res) => {
 				this.list = res;
 				console.log('SearchData list', this.list);
 				this.store.setShowProgress(false);

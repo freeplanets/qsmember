@@ -49,19 +49,25 @@ class MyDate {
 		const chkTime = this.getDate(time).getTime();
 		return Math.floor((curTime - chkTime) / 1000 / 60);
 	}
-	createDateFilter(v:string, key?:string):KeyVal {
+	createDateFilter(v:string, key?:string, inMiniSec = false):KeyVal {
 		const dates = v.split('-');
 		const d1 = dates[0];
 		const d2 = `${dates[1] ? dates[1] : dates[0]} 23:59:59.999`;
+		let Val = this.getTime(d1);
+		let Val2 = this.getTime(d2);
+		if (inMiniSec) {
+			Val = Math.floor(Val / 1000);
+			Val2 = Math.ceil(Val2 / 1000);
+		}
 		const keyV:KeyVal = {
 			Key: `${key || 'ModifyTime'}`,
-			Val: this.getTime(d1),
-			Val2: this.getTime(d2),
+			Val,
+			Val2,
 			Cond: 'between',
 		};
 		return keyV;
 	}
-	createDbDateFilter(v:string, key = 'SDate') {
+	createDbDateFilter(v:string, key = 'SDate', withTime = false) {
 		const dates = v.split('-');
 		const d1 = this.toDbDateString(dates[0]);
 		const keyV:KeyVal = {
@@ -71,7 +77,7 @@ class MyDate {
 		if (dates[1]) {
 			const d2 = this.toDbDateString(dates[1]);
 			if (keyV.Val !== d2) {
-				keyV.Val2 = d2;
+				keyV.Val2 = `${d2}${withTime ? ' 23:59:59' : ''}`;
 				keyV.Cond = 'between';
 			}
 		}

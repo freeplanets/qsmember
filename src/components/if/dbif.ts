@@ -58,6 +58,7 @@ export interface AskTable {
   USetID: number; // 平倉對象ID -> User下單
 }
 export interface AskReport {
+  id: number;
   User: string;
   Item: string;
   AskType: string; // 0 市價, 1 限價

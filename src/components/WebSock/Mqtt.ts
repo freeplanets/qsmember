@@ -22,6 +22,7 @@ export default class Mqtt {
             region: AWS.config.region,
             credentials: AWS.config.credentials,
             endpoint: config.aws.iot.endpoint,
+            expires: 60,
             clientId,
             will: {
                 topic: config.topics.room + clientId, // 離線時 發佈 leave 至私人頻道
@@ -34,7 +35,7 @@ export default class Mqtt {
         this.client = new AWSMqttClient(options);
         console.log('do connect');
         this.client.on('connect', () => {
-            this.addLogEntry('Successfully connected to AWS MQTT Broker!:-)');
+            this.addLogEntry(`Successfully connected to AWS MQTT Broker!:-) ${new Date().toLocaleTimeString()}`);
             // this.subscribe(config.topics.announcement); // 訂閱 公告頻道
             // this.subscribe(config.topics.tick); // 訂閱 報價頻道
             // this.subscribe(config.topics.room + clientId); // 訂閱 私人頻道 可發佈訊息

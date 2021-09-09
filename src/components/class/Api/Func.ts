@@ -1,6 +1,7 @@
 import { CryptoOpParams, MemberCLevel, PartialCryptoItems } from '../../../components/if/dbif';
 import { KeyVal, WebParams } from '../../../layouts/data/if';
 import AForAll from './AForAll';
+import DateFunc from '../../Functions/MyDate';
 
 export default class Func extends AForAll {
 	getSettleMark(ItemID?:number) {
@@ -49,5 +50,42 @@ export default class Func extends AForAll {
 			params.EC = 1;
 		}
 		return this.setTableData<PartialCryptoItems>(params, data);
+	}
+	getAskList(sdate:string, itemid?:number) {
+    const TableName = 'AskTable';
+    const Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'Qty', 'Price', 'Amount',
+        'Fee', 'AskFee', 'AskPrice', 'LeverCredit', 'ExtCredit', 'Lever',
+        'CreateTime'];
+		const Filter:KeyVal[] = [];
+		Filter.push(DateFunc.createDbDateFilter(sdate, 'CreateTime', true));
+		if (itemid) {
+			Filter.push({ Key: 'ItemID', Val: itemid });
+		}
+		if (this.User.Types === 1 || this.User.Types === 2) {
+				Filter.push({ Key: 'UpId', Val: this.User.id });
+		}
+		return this.getTableData(TableName, Filter, Fields);
+	}
+	getLedgerLever(sdate:string) {
+		const TableName = 'LedgerLever';
+		const Filter:KeyVal[] = [];
+		Filter.push(DateFunc.createDateFilter(sdate, 'SellTime'));
+		if (this.User.Types === 1 || this.User.Types === 2) {
+			Filter.push({ Key: 'UpId', Val: this.User.id });
+		}
+		return this.getTableData(TableName, Filter);
+	}
+	getTitle(tableName:string, ids:number[], fieldAsTitle:string) {
+		if (fieldAsTitle !== 'Title') fieldAsTitle = `${fieldAsTitle} Title`;
+		const fields = [
+			'id',
+			fieldAsTitle,
+		];
+		const filter:KeyVal = {
+			Key: 'id',
+			Val: `${ids.join(',')}`,
+			Cond: 'in',
+		};
+		return this.getTableData(tableName, filter, fields);
 	}
 }

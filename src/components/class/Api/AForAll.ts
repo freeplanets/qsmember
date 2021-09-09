@@ -5,9 +5,11 @@ import { HasID, KeyVal, WebParams } from '../../../layouts/data/if';
 export default abstract class AForAll {
 	private ax:AxApi;
 	protected dfParam;
+	protected User;
 	constructor(store:LayoutStoreModule) {
 		this.ax = store.ax;
 		this.dfParam = store.Param;
+		this.User = store.UserInfo;
 	}
 	protected getTableData(tableName:string, filters?:string| KeyVal | KeyVal[], fields?:string | string[]) {
 		const params:WebParams = { ...this.dfParam };

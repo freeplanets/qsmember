@@ -1,25 +1,24 @@
 import LStore from '../../../layouts/data/LayoutStoreModule';
 import { ItemTotal, LedgerLever } from '../../if/dbif';
 import { ErrCode } from '../../if/ENum';
-import { WebParams, Msg, KeyVal } from '../../../layouts/data/if';
+import { Msg } from '../../../layouts/data/if';
 import ItemT, { titleT } from './ItemT';
+import ApiFunc from '../Api/Func';
 
 export default class ItemTot {
 	private list:ItemTotal[]=[];
 	private isLedger=false;
 	private titles:titleT[] = [];
-	private LS:LStore;
+	// private LS:LStore;
+	private api:ApiFunc;
 	constructor(ls:LStore) {
-		this.LS = ls;
+		// this.LS = ls;
+		this.api = new ApiFunc(ls);
 	}
-	async getItemReport(filter: KeyVal | KeyVal[], isLedger:boolean):Promise<ItemTotal[]> {
+	async getItemReport(sdate:string, isLedger:boolean):Promise<ItemTotal[]> {
 		this.isLedger = isLedger;
-		const params:WebParams = { ...this.LS.Param };
-		params.TableName = 'LedgerLever';
-		params.Filter = filter;
-		// console.log('getItemReport params:', params);
 		this.list = [];
-		const msg:Msg = await this.LS.ax.getApi('cc/GetData', params);
+		const msg:Msg = await this.api.getLedgerLever(sdate);
 		if (msg.ErrNo === ErrCode.PASS) {
 			// console.log('getItemReport data', msg.data);
 			if (msg.data) {
@@ -34,7 +33,6 @@ export default class ItemTot {
 				});
 				if (keys.length > 0) {
 					const tt = await this.getTitle(keys);
-					// console.log('getTitle', tt);
 					if (tt.ErrNo === ErrCode.PASS) {
 						this.list.forEach((itm) => {
 							itm.setTitle(tt.data as titleT[]);
@@ -66,24 +64,19 @@ export default class ItemTot {
 		return f ? f.Title : 'none';
 	}
 	private getTitle(keys:number[]) {
-		const params = this.getParams(keys);
-		return this.LS.ax.getApi('cc/GetData', params);
-	}
-	private getParams(keys:number[]) {
-		const params:WebParams = { ...this.LS.Param };
+		let TableName = 'User';
+		let Field = 'Account';
 		if (this.isLedger) {
-			params.TableName = 'Items';
-			params.Fields = ['id', 'Title'];
-		} else {
-			params.TableName = 'User';
-			params.Fields = ['id', 'Account Title'];
+			TableName = 'Items';
+			Field = 'Title';
 		}
-		const filter:KeyVal = {
-			Key: 'id',
-			Val: `(${keys.join(',')})`,
-			Cond: 'in',
-		};
-		params.Filter = filter;
-		return params;
+		return this.api.getTitle(TableName, keys, Field);
+		// const params = this.getParams(keys);
+		// return this.LS.ax.getApi('cc/GetData', params);
 	}
+	/*
+	private getParams(keys:number[]) {
+
+	}
+	*/
 }
