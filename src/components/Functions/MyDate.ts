@@ -74,12 +74,14 @@ class MyDate {
 			Key: key,
 			Val: d1,
 		};
-		if (dates[1]) {
-			const d2 = this.toDbDateString(dates[1]);
-			if (keyV.Val !== d2) {
+		if (dates[1] || withTime) {
+			let d2 = '';
+			if (dates[1]) d2 = this.toDbDateString(dates[1]);
+			else d2 = d1;
+			// if (keyV.Val !== d2) {
 				keyV.Val2 = `${d2}${withTime ? ' 23:59:59' : ''}`;
 				keyV.Cond = 'between';
-			}
+			// }
 		}
 		return keyV;
 	}

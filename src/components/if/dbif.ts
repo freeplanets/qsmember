@@ -64,6 +64,7 @@ export interface AskReport {
   AskType: string; // 0 市價, 1 限價
   AT?: number;
   BuyType: string; // 0 買單, 1 賣單
+  ItemType: number; // 0 空  , 1 多  AskTable.ItemType 轉
   BT?: number;
   Qty: number;
   Price: number; // 建倉價格
@@ -74,6 +75,7 @@ export interface AskReport {
   LeverCredit: number; // 下單時暫扣的信用額度
   ExtCredit: number; // 下單後變動的信用額度,只能增加
   Lever: number;
+  ProcStatus: number;
   CreateTime: number;
 }
 export interface ReceiveData {

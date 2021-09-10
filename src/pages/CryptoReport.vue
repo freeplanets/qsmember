@@ -4,6 +4,13 @@
       <div class="col-2"><selector :Title="$t('Title.Item')" :defaultModel="itemid" :options="options" @SetItem="setItem" /></div>
       <div class="col-2"><q-input class="" outlined dense v-model="SelectDate" /></div>
       <div class="pbtn2"><q-btn color="primary" dense icon="date_range" @click="isDateSlt=true"/></div>
+      <div class="col row">
+        <q-chip square>
+          <q-avatar icon="account_circle" color="red" text-color="white" />
+          {{ $t('Label.MemberName') }}
+        </q-chip>
+        <q-input class="" outlined dense v-model="Nickname" />
+      </div>
       <div class='row col pbtn2'>
         <q-btn dense color="green" icon-right="search" :label="$t('Button.Search')"  @click="SearchData"/>
         <q-btn dense color="blue" icon-right="clear" :label="$t('Button.Clear')"  @click="ClearSearch"/>
@@ -51,6 +58,7 @@ export default class CrytoReport extends Vue {
   itemid = 0;
   isDateSlt = false;
   SelectDate = '';
+  Nickname = '';
   askReports:AskReport[]=[];
   @Watch('SelectDate')
   onSDChange() {
@@ -68,7 +76,7 @@ export default class CrytoReport extends Vue {
     if (!this.SelectDate) return;
     this.store.setShowProgress(true);
     this.askReports = [];
-    const msg:Msg = await this.api.getAskList(this.SelectDate, this.itemid);
+    const msg:Msg = await this.api.getAskList(this.SelectDate, this.itemid, this.Nickname);
     if (msg.ErrNo === ErrCode.PASS) {
       if (msg.data) {
         const asks:AskTable[] = msg.data as AskTable[];
@@ -104,6 +112,7 @@ export default class CrytoReport extends Vue {
         AT: ask.AskType,
         BuyType: this.$t(`Select.Crypto.BuyType.${ask.BuyType}`).toString(),
         BT: ask.BuyType,
+        ItemType: ask.ItemType > 0 ? 1 : 0,
         Qty: ask.Qty,
         Price: ask.Price,
         Amount: ask.Amount,
@@ -113,6 +122,7 @@ export default class CrytoReport extends Vue {
         LeverCredit: ask.LeverCredit,
         ExtCredit: ask.ExtCredit,
         Lever: ask.Lever,
+        ProcStatus: ask.ProcStatus,
         CreateTime: ask.CreateTime,
       };
       return tmp;

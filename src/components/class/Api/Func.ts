@@ -1,5 +1,6 @@
+import { ErrCode } from 'src/components/if/ENum';
 import { CryptoOpParams, MemberCLevel, PartialCryptoItems } from '../../../components/if/dbif';
-import { KeyVal, WebParams } from '../../../layouts/data/if';
+import { HasID, KeyVal, WebParams } from '../../../layouts/data/if';
 import AForAll from './AForAll';
 import DateFunc from '../../Functions/MyDate';
 
@@ -9,6 +10,16 @@ export default class Func extends AForAll {
 		const Filter:KeyVal = { ModifyID: 0 };
 		if (ItemID) Filter.ItemID = ItemID;
 		return this.getTableData('MemberSettleMark', Filter, Fields);
+	}
+	getMemberIdByNickname(Nickname:string) {
+		const Tablename = 'Member';
+		const Filter:KeyVal = {
+			Key: 'Nickname',
+			Val: Nickname,
+			Cond: 'like',
+		};
+		const Fields = 'id,Nickname';
+		return this.getTableData(Tablename, Filter, Fields);
 	}
 	getMemberNameByID(id:number|number[]) {
 		const filter:KeyVal = {
@@ -51,10 +62,10 @@ export default class Func extends AForAll {
 		}
 		return this.setTableData<PartialCryptoItems>(params, data);
 	}
-	getAskList(sdate:string, itemid?:number) {
+	async getAskList(sdate:string, itemid?:number, Nickname?:string) {
     const TableName = 'AskTable';
-    const Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'Qty', 'Price', 'Amount',
-        'Fee', 'AskFee', 'AskPrice', 'LeverCredit', 'ExtCredit', 'Lever',
+    const Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'ItemType', 'Qty', 'Price', 'Amount',
+        'Fee', 'AskFee', 'AskPrice', 'LeverCredit', 'ExtCredit', 'Lever', 'ProcStatus',
         'CreateTime'];
 		const Filter:KeyVal[] = [];
 		Filter.push(DateFunc.createDbDateFilter(sdate, 'CreateTime', true));
@@ -63,6 +74,20 @@ export default class Func extends AForAll {
 		}
 		if (this.User.Types === 1 || this.User.Types === 2) {
 				Filter.push({ Key: 'UpId', Val: this.User.id });
+		}
+		if (Nickname) {
+			const msg = await this.getMemberIdByNickname(Nickname);
+			if (msg.ErrNo === ErrCode.PASS) {
+				if (msg.data && msg.data.length > 0) {
+					const dta = msg.data as HasID[];
+					const ids = dta.map((usr) => usr.id);
+					Filter.push({
+						Key: 'UserID',
+						Val: ids.join(','),
+						Cond: 'in',
+					});
+				}
+			}
 		}
 		return this.getTableData(TableName, Filter, Fields);
 	}

@@ -7,6 +7,7 @@
         <th> {{ $t('Table.AskTable.Item') }} </th>
         <th> {{ $t('Table.AskTable.AskType') }} </th>
         <th> {{ $t('Table.AskTable.BuyType') }} </th>
+        <th> {{ $t('Table.AskTable.ItemType') }} </th>
         <th> {{ $t('Table.AskTable.Qty') }} </th>
         <th> {{ $t('Table.AskTable.Price') }} </th>
         <th> {{ $t('Table.AskTable.Amount') }} </th>
@@ -14,9 +15,9 @@
         <th> {{ $t('Table.AskTable.AskFee') }} </th>
         <th> {{ $t('Table.AskTable.AskPrice') }} </th>
         <th> {{ $t('Table.AskTable.LeverCredit') }} </th>
-        <th> {{ $t('Table.AskTable.ExtCredit') }} </th>
         <th> {{ $t('Table.AskTable.Lever') }} </th>
         <th> {{ $t('Table.AskTable.CreateTime') }} </th>
+        <th> {{ $t('Label.Status') }} </th>
       </tr>
       <tr
         v-for="(itm,idx) in list"
@@ -28,6 +29,9 @@
         <td>{{ itm.Item }}</td>
         <td align='center' :class="{ priceLimit: itm.AT }">{{ itm.AskType }}</td>
         <td align='center' :class="{ colorSell: itm.BT, colorBuy: !itm.BT }"> {{ itm.BuyType }} </td>
+        <td align='center' :class="{ colorSell: !itm.ItemType, colorBuy: itm.ItemType }">
+           {{ $t(`Select.Crypto.ItemType.${itm.ItemType}`) }}
+        </td>
         <td align='right'> {{ itm.Qty.toFixed(8) }} </td>
         <td align='right'> {{ itm.Price.toFixed(2) }} </td>
         <td align='right'> {{ itm.Amount.toFixed(2) }} </td>
@@ -35,9 +39,9 @@
         <td align='right'> {{ itm.AskFee }} </td>
         <td align='right'> {{ itm.AskPrice.toFixed(2) }} </td>
         <td align='right'> {{ itm.LeverCredit }} </td>
-        <td align='right'> {{ itm.ExtCredit }} </td>
         <td align='right'> {{ itm.Lever }} </td>
         <td> {{ new Date(itm.CreateTime).toLocaleString(lang,dOpt) }} </td>
+        <td align='center' :class="`StatusColor${itm.ProcStatus}`"> {{ $t(`Label.ProcStatus.${itm.ProcStatus}`) }} </td>
       </tr>
     </table>
   </div>
@@ -85,13 +89,13 @@ table {
   padding-left: 4px;
   padding-right: 4px;
 }
-.colorBuy {
+.colorBuy, .StatusColor3, .StatusColor4 {
   color: #c23437;
 }
-.priceLimit {
+.priceLimit, .StatusColor0, .StatusColor1 {
   color: #1c76b3;
 }
-.colorSell {
+.colorSell, .StatusColor2 {
   color: #369c57;
 }
 </style>

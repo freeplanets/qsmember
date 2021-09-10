@@ -51,6 +51,7 @@ export default class CryptoRiskController extends Vue {
 	mqtt:Mqtt=this.store.Mqtt;
 	interval:NodeJS.Timeout | null = null;
 	isEmergencyClose = false;
+	losefocustimer = 0;
 	get LoginInfo() {
 		return this.store.personal;
 	}
@@ -77,6 +78,7 @@ export default class CryptoRiskController extends Vue {
 		this.mqtt.setItems(this.list);
 	}
 	getAsks() {
+		console.log('do getAsks');
 		let UpId = 0;
 		if (this.LoginInfo.Types < 3) {
 			UpId = this.LoginInfo.id;
@@ -174,10 +176,24 @@ export default class CryptoRiskController extends Vue {
 		console.log('CryptoRiskController doSettle:', msg);
 		this.store.WSock.send(msg);
 	}
+	focusMsg(msg:string) {
+		let timer = 0;
+		if (msg === 'Active' && this.losefocustimer > 0) {
+			timer = new Date().getTime() - this.losefocustimer;
+		} else {
+			this.losefocustimer = new Date().getTime();
+		}
+		console.log(`Tab lose focus before ${msg}: ${timer}`);
+		if (timer > 300000) {
+			this.getAsks();
+		}
+	}
 	mounted() {
 		this.mqtt.subscribeTick();
 		this.getData();
-		this.getAsks();
+		// this.getAsks();
+		window.onfocus = () => { this.focusMsg('Active'); };
+		window.onblur = () => { this.focusMsg('Inactive'); };
 		// this.interval = setInterval(this.getAsks,500000);
 	}
 }
