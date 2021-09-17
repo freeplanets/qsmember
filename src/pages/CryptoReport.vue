@@ -79,17 +79,21 @@ export default class CrytoReport extends Vue {
     const msg:Msg = await this.api.getAskList(this.SelectDate, this.itemid, this.Nickname);
     if (msg.ErrNo === ErrCode.PASS) {
       if (msg.data) {
-        const asks:AskTable[] = msg.data as AskTable[];
+        // const asks:AskTable[] = msg.data as AskTable[];
         const users:number[] = [];
-        asks.forEach((itm) => {
-          if (users.indexOf(itm.UserID) === -1) users.push(itm.UserID);
+        const asks:AskTable[] = [];
+        (msg.data as AskTable[]).map((itm) => {
+          if (!((itm.USetID || itm.SetID) && itm.ProcStatus < 2)) {
+            if (users.indexOf(itm.UserID) === -1) users.push(itm.UserID);
+            asks.push(itm);
+          }
         });
         if (users.length > 0) {
           const Usrs = await this.getUsers(users);
           console.log('after getUsers', Usrs);
           if (Usrs.length > 0) {
             this.askReports = this.getAskReports(asks, Usrs, this.options);
-            console.log('after getAskReports', this.askReports);
+            // console.log('after getAskReports', this.askReports);
           }
         }
       }
@@ -124,6 +128,8 @@ export default class CrytoReport extends Vue {
         Lever: ask.Lever,
         ProcStatus: ask.ProcStatus,
         CreateTime: ask.CreateTime,
+        DealTime: ask.DealTime || 0,
+        isSettle: !!ask.BuyType,
       };
       return tmp;
     });

@@ -65,8 +65,8 @@ export default class Func extends AForAll {
 	async getAskList(sdate:string, itemid?:number, Nickname?:string) {
     const TableName = 'AskTable';
     const Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'ItemType', 'Qty', 'Price', 'Amount',
-        'Fee', 'AskFee', 'AskPrice', 'LeverCredit', 'ExtCredit', 'Lever', 'ProcStatus',
-        'CreateTime'];
+        'Fee', 'AskFee', 'AskPrice', 'LeverCredit', 'ExtCredit', 'Lever', 'SetID', 'USetID', 'ProcStatus',
+        'CreateTime', 'DealTime'];
 		const Filter:KeyVal[] = [];
 		Filter.push(DateFunc.createDbDateFilter(sdate, 'CreateTime', true));
 		if (itemid) {

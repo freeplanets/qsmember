@@ -75,8 +75,10 @@ export interface AskReport {
   LeverCredit: number; // 下單時暫扣的信用額度
   ExtCredit: number; // 下單後變動的信用額度,只能增加
   Lever: number;
+  isSettle: boolean;
   ProcStatus: number;
   CreateTime: number;
+  DealTime: number;
 }
 export interface ReceiveData {
   eventTime: number;
