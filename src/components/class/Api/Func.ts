@@ -1,5 +1,5 @@
 import { ErrCode } from 'src/components/if/ENum';
-import { CryptoOpParams, MemberCLevel, PartialCryptoItems } from '../../../components/if/dbif';
+import { CryptoOpParams, MemberCLevel, PartialCryptoItems, EmergencyCloseData } from '../../../components/if/dbif';
 import { HasID, KeyVal, WebParams } from '../../../layouts/data/if';
 import AForAll from './AForAll';
 import DateFunc from '../../Functions/MyDate';
@@ -54,13 +54,23 @@ export default class Func extends AForAll {
 		}
 		return this.getTableData('AskTable', filter);
 	}
-	setEmergencyClose(data:PartialCryptoItems | PartialCryptoItems[], isEmergencyClose = 0) {
+	async setEmergencyClose(data:PartialCryptoItems | PartialCryptoItems[], isEmergencyClose = 0) {
 		const params:WebParams = { ...this.dfParam };
 		params.TableName = 'Items';
 		if (isEmergencyClose) {
 			params.EC = 1;
 		}
-		return this.setTableData<PartialCryptoItems>(params, data);
+		const msg = await this.setTableData<PartialCryptoItems>(params, data);
+		if (msg.ErrNo === ErrCode.PASS) {
+			params.TableName = 'EmergencyClose';
+			const mdata:EmergencyCloseData = {
+				id: 0,
+				sw: isEmergencyClose,
+				ModifyID: this.dfParam.UserID,
+			};
+			return this.setTableData<EmergencyCloseData>(params, mdata);
+		}
+		return msg;
 	}
 	getPriceTick(code:string, DealTime: number) {
 		const gapMS = 3000;

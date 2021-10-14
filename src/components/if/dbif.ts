@@ -254,3 +254,7 @@ export interface PriceTick {
   lastVol: number;
   ticktime: number;
 }
+export interface EmergencyCloseData extends HasID {
+  sw:number;
+  ModifyID:number;
+}
