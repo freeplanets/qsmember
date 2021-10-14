@@ -71,7 +71,7 @@ export default class Mqtt {
                 closeQuantity: md.closeQuantity,
                 open: md.open,
             };
-            // this.addLogEntry(JSON.stringify(rd));
+            // this.addLogEntry(JSON.stringify(md));
             this.items.forEach((itm:Items) => {
                 itm.setPrice(rd);
             });

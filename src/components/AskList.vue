@@ -42,23 +42,56 @@
         <td align='right'> {{ itm.Lever }} </td>
         <td v-if="!itm.isSettle"> {{ new Date(itm.CreateTime).toLocaleString(lang,dOpt) }} </td>
         <td v-if="itm.isSettle" style="color:green"> {{ new Date(itm.DealTime).toLocaleString(lang,dOpt) }}</td>
-        <td align='center' :class="`StatusColor${itm.ProcStatus}`"> {{ $t(`Label.ProcStatus.${itm.ProcStatus}`) }} </td>
+        <td align='center' :class="`StatusColor${itm.ProcStatus}`" @click="getPriceTick(itm)"> {{ $t(`Label.ProcStatus.${itm.ProcStatus}`) }} </td>
       </tr>
     </table>
+    <q-dialog v-model="showPT" persistent>
+      <q-card>
+        <q-bar>
+          <div>{{ curItemTitle }}</div>
+
+          <q-space />
+
+          <q-btn dense flat icon="close" v-close-popup>
+            <q-tooltip>{{ $t('Label.Close') }}</q-tooltip>
+          </q-btn>
+        </q-bar>
+
+        <q-card-section>
+          <list-price-tick :list="ptList" />
+        </q-card-section>
+
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { AskReport } from './if/dbif';
+import { getModule } from 'vuex-module-decorators';
+import { AskReport, PriceTick } from './if/dbif';
+import LStore from '../layouts/data/LayoutStoreModule';
+import Func from '../components/class/Api/Func';
+import { ErrCode } from './if/ENum';
+import ListPriceTick from './List/PriceTick.vue';
 
-@Component
+@Component({
+  components: {
+    ListPriceTick,
+  },
+})
 export default class AskList extends Vue {
   @Prop({ type: Array }) readonly list!:AskReport[];
   @Watch('list')
   onListChange() {
     console.log('OnListChange:', this.list);
   }
-  lang='zh-TW';
+  store = getModule(LStore);
+  func = new Func(this.store);
+  lang = 'zh-TW';
+  showPT = false;
+  ptList:PriceTick[] = [];
+  curImg = '';
+  curItemTitle = '';
   dOpt = {
     hour12: false,
     month: '2-digit',
@@ -70,6 +103,24 @@ export default class AskList extends Vue {
     weekday: 'short',
   }
   d = new Date();
+  getPriceTick(item:AskReport) {
+    if (item.ProcStatus !== 2) return;
+    this.ptList = [];
+    this.curItemTitle = item.Code;
+    this.curImg = '';
+    const code = item.Code.replace('USDT', '/USDT');
+    console.log('code:', code);
+    this.func.getPriceTick(code, item.DealTime).then((msg) => {
+      console.log('getPriceTick:', msg);
+      if (msg.ErrNo === ErrCode.PASS) {
+        if (msg.data) {
+          const tmp = msg.data as PriceTick[];
+          this.ptList = tmp.sort((a, b) => a.ticktime - b.ticktime);
+          this.showPT = true;
+        }
+      }
+    });
+  }
 }
 </script>
 <style scoped>
@@ -98,5 +149,8 @@ table {
 }
 .colorSell, .StatusColor2 {
   color: #369c57;
+}
+.StatusColor2 {
+  cursor: pointer;
 }
 </style>

@@ -92,7 +92,7 @@ export default class CrytoReport extends Vue {
           const Usrs = await this.getUsers(users);
           console.log('after getUsers', Usrs);
           if (Usrs.length > 0) {
-            this.askReports = this.getAskReports(asks, Usrs, this.options);
+            this.askReports = this.getAskReports(asks, Usrs, this.options).sort((a, b) => a.DealTime - b.DealTime);
             // console.log('after getAskReports', this.askReports);
           }
         }
@@ -112,6 +112,7 @@ export default class CrytoReport extends Vue {
         id: ask.id,
         User: UsrName,
         Item: ItemName,
+        Code: ask.Code,
         AskType: this.$t(`Select.Crypto.AskType.${ask.AskType}`).toString(),
         AT: ask.AskType,
         BuyType: this.$t(`Select.Crypto.BuyType.${ask.BuyType}`).toString(),

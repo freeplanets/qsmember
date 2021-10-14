@@ -25,14 +25,13 @@ class MyDate {
 	toLocalString(time?:string | number, lang = 'zh-TW', opt?:Intl.DateTimeFormatOptions) {
 		const d = this.getDate(time);
 		if (!opt) opt = this.dOpt;
-		return d.toLocaleString(lang, opt);
+		return this.replaceTimeHour24(d.toLocaleString(lang, opt));
 	}
-	toLocalStringNoYear(time?:string | number, lang?:string, opt?:Intl.DateTimeFormatOptions) {
+	toLocalStringNoYear(time?:string | number, lang = 'zh-TW', opt?:Intl.DateTimeFormatOptions) {
 		const d = this.getDate(time);
-		if (!lang) lang = 'zh-TW';
 		if (!opt) opt = this.dOpt;
 		delete opt.year;
-		return d.toLocaleString(lang, opt);
+		return this.replaceTimeHour24(d.toLocaleString(lang, opt));
 	}
 	public dayDiff(d: number): string {
 		const ts = this.dayDiffTS(d);
@@ -94,6 +93,9 @@ class MyDate {
 			time = Date.parse(time);
 		}
 		return new Date(time);
+	}
+	private replaceTimeHour24(str:string) {
+		return str.replace(' 24:', ' 00:');
 	}
 }
 export default new MyDate();

@@ -62,9 +62,17 @@ export default class Func extends AForAll {
 		}
 		return this.setTableData<PartialCryptoItems>(params, data);
 	}
+	getPriceTick(code:string, DealTime: number) {
+		const gapMS = 3000;
+		const filter: KeyVal[] = [];
+		filter.push({ Key: 'code', Val: code });
+		filter.push({ Key: 'ticktime', Val: DealTime - gapMS, Val2: DealTime + gapMS, Cond: 'BETWEEN' });
+		// console.log('filter', filter);
+		return this.getTableData('PriceTick', filter);
+	}
 	async getAskList(sdate:string, itemid?:number, Nickname?:string) {
     const TableName = 'AskTable';
-    const Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'ItemType', 'Qty', 'Price', 'Amount',
+    const Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'ItemType', 'Code', 'Qty', 'Price', 'Amount',
         'Fee', 'AskFee', 'AskPrice', 'LeverCredit', 'ExtCredit', 'Lever', 'SetID', 'USetID', 'ProcStatus',
         'CreateTime', 'DealTime'];
 		const Filter:KeyVal[] = [];

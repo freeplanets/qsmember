@@ -61,6 +61,7 @@ export interface AskReport {
   id: number;
   User: string;
   Item: string;
+  Code: string;
   AskType: string; // 0 市價, 1 限價
   AT?: number;
   BuyType: string; // 0 買單, 1 賣單
@@ -246,4 +247,10 @@ export interface MemberSettleMark {
   AskID: number;
   ItemID: number;
   MarkTS: string;
+}
+export interface PriceTick {
+  code: string;
+  lastPrice: number;
+  lastVol: number;
+  ticktime: number;
 }
