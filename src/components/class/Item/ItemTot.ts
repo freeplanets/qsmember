@@ -9,6 +9,7 @@ export default class ItemTot {
 	private list:ItemTotal[]=[];
 	private isLedger=false;
 	private titles:titleT[] = [];
+	private total!:ItemTotal;
 	// private LS:LStore;
 	private api:ApiFunc;
 	constructor(ls:LStore) {
@@ -18,6 +19,7 @@ export default class ItemTot {
 	async getItemReport(sdate:string, isLedger:boolean):Promise<ItemTotal[]> {
 		this.isLedger = isLedger;
 		this.list = [];
+		this.total = new ItemT(0);
 		const msg:Msg = await this.api.getLedgerLever(sdate);
 		if (msg.ErrNo === ErrCode.PASS) {
 			// console.log('getItemReport data', msg.data);
@@ -44,6 +46,7 @@ export default class ItemTot {
 		return this.list;
 	}
 	add(itm:LedgerLever) {
+		this.total.add(itm, 0); // for total line calculate
 		let key = itm.UpId;
 		if (this.isLedger) {
 			key = itm.ItemID;
@@ -58,6 +61,9 @@ export default class ItemTot {
 	}
 	get List() {
 		return this.list;
+	}
+	get Total() {
+		return this.total;
 	}
 	getItemTitle(id:number) {
 		const f = this.titles.find((itm) => itm.id === id);

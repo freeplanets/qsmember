@@ -48,6 +48,7 @@
             v-for="(itm,idx) in data"
             :key="'u'+idx"
         >
+            <div class='col-1 test lnh'>{{ itm.SiteName }}</div>
             <div class='col-1 test lnh'>{{ itm.Account }}</div>
             <div class='col-1 test lnh'>{{ itm.Nickname }}</div>
             <div class='col-1 test lnh'>{{ itm.TypeName }}</div>
@@ -59,6 +60,10 @@
     <div class='UserModify'
       v-show="showEdit"
     >
+      <div class="row">
+          <div class="gamefield col-12 col-md-1">{{$t('Table.SiteName')}}</div>
+          <div class="gamefield col-12 col-md-3"><q-input outlined dense v-model="NewUser.SiteName"/></div>
+      </div>
       <div class="row">
           <div class="gamefield col-12 col-md-1">{{$t('Table.Account')}}</div>
           <div class="gamefield col-12 col-md-3"><q-input outlined dense v-model="NewUser.Account"/></div>
@@ -189,6 +194,11 @@ export default class UserManager extends Vue {
     SetUid=0;
     WhosName='';
     cols:TableHeader[]=[
+      {
+        name: 'SiteName',
+        label: 'SiteName',
+        field: 'SiteName',
+      },
       {
         name: 'Account',
         label: 'Account',

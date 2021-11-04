@@ -22,6 +22,7 @@ import LayoutStoreModule from '../../layouts/data/LayoutStoreModule';
 
 import ServiceChat from '../class/Chat/ServiceChat';
 import DlgChatBlock from '../Dialog/ChatBlock.vue';
+import ChatClient from '../WebSock/ChatClient';
 
 @Component({
 	components: {
@@ -30,14 +31,14 @@ import DlgChatBlock from '../Dialog/ChatBlock.vue';
 })
 export default class MsgControl extends Vue {
 	store = getModule(LayoutStoreModule);
-	get WSock() {
-		return this.store.WSock;
+	get CSock() {
+		return this.store.CSock as ChatClient;
 	}
 	get Chater() {
-		return this.WSock.Chater;
+		return this.CSock.Chater;
 	}
 	get list() {
-		return this.WSock.Chater.List;
+		return this.CSock.Chater.List;
 	}
 	unread = 0;
 	show=true;

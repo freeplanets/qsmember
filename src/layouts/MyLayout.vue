@@ -173,9 +173,6 @@ export default class MyLayout extends Vue {
   get chgPW() {
     return this.store.chgPW;
   }
-  get WSock() {
-    return this.store.WSock;
-  }
   @Watch('chgPW', { immediate: true, deep: true })
   onChgPW() {
     this.showCp = this.store.chgPW;

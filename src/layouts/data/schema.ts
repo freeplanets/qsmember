@@ -2,6 +2,7 @@ import { HasID } from './if';
 
 export interface User extends HasID {
     TableName:'User';
+    SiteName?:string;
     Account?: string;
     Password?: string;
     Nickname?: string;

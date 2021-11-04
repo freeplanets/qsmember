@@ -42,6 +42,17 @@ import ApiFunc from '../components/class/Api/Func';
 interface UserName {
   id: number;
   Nickname: string;
+  UpId: number;
+  SiteName: string;
+}
+interface SiteName {
+  id:number;
+  SiteName:string;
+}
+interface AskMark {
+  AskID: number,
+  ItemID: number,
+  MarkTS: number,
 }
 
 @Component({
@@ -82,17 +93,26 @@ export default class CrytoReport extends Vue {
         // const asks:AskTable[] = msg.data as AskTable[];
         const users:number[] = [];
         const asks:AskTable[] = [];
+        const askids:number[] = [];
         (msg.data as AskTable[]).map((itm) => {
           if (!((itm.USetID || itm.SetID) && itm.ProcStatus < 2)) {
             if (users.indexOf(itm.UserID) === -1) users.push(itm.UserID);
+            askids.push(itm.id);
             asks.push(itm);
           }
         });
+        let askmark:AskMark[] = [];
+        if (askids.length > 0) {
+          const mark = await this.api.getSettleMarkByAskID(askids);
+          if (mark.ErrNo === ErrCode.PASS) {
+            askmark = mark.data;
+          }
+        }
         if (users.length > 0) {
           const Usrs = await this.getUsers(users);
           console.log('after getUsers', Usrs);
           if (Usrs.length > 0) {
-            this.askReports = this.getAskReports(asks, Usrs, this.options).sort((a, b) => a.DealTime - b.DealTime);
+            this.askReports = this.getAskReports(asks, Usrs, this.options, askmark).sort((a, b) => a.DealTime - b.DealTime);
             // console.log('after getAskReports', this.askReports);
           }
         }
@@ -100,16 +120,24 @@ export default class CrytoReport extends Vue {
     }
     this.store.setShowProgress(false);
   }
-  getAskReports(asks:AskTable[], users:UserName[], items:SelectOptions[]):AskReport[] {
+  getAskReports(asks:AskTable[], users:UserName[], items:SelectOptions[], askmark:AskMark[]):AskReport[] {
     return asks.map((ask) => {
       const fu = users.find((usr) => usr.id === ask.UserID);
       let UsrName = '';
-      if (fu) UsrName = fu.Nickname;
+      let SiteName = '';
+      if (fu) {
+        UsrName = fu.Nickname;
+        SiteName = fu.SiteName;
+      }
       const fi = items.find((itm) => itm.value === ask.ItemID);
       let ItemName = '';
       if (fi) ItemName = fi.label;
+      let SettleType = 0;
+      const fmark = askmark.find((itm) => itm.AskID === ask.id);
+      if (fmark) SettleType = 1;
       const tmp:AskReport = {
         id: ask.id,
+        SiteName,
         User: UsrName,
         Item: ItemName,
         Code: ask.Code,
@@ -131,14 +159,30 @@ export default class CrytoReport extends Vue {
         CreateTime: ask.CreateTime,
         DealTime: ask.DealTime || 0,
         isSettle: !!ask.BuyType,
+        SettleType,
       };
       return tmp;
     });
   }
-  async getUsers(users:number[]):Promise<UserName[]> {
-    const msg:Msg = await this.api.getMemberNameByID(users);
+  async getUsers(userid:number[]):Promise<UserName[]> {
+    let msg:Msg = await this.api.getMemberNameByID(userid);
     if (msg.ErrNo === ErrCode.PASS) {
-      return msg.data as UserName[];
+      const users = msg.data as UserName[];
+      const upid:number[] = [];
+      users.map((user) => {
+        const f = upid.findIndex((itm) => itm === user.UpId);
+        if (f === -1) upid.push(user.UpId);
+      });
+      msg = await this.api.getMemberSiteNameByUpId(upid);
+      if (msg.ErrNo === ErrCode.PASS) {
+        const site = msg.data as SiteName[];
+        users.forEach((user) => {
+            const f = site.find((st) => st.id === user.UpId);
+            if (f) user.SiteName = f.SiteName;
+        });
+      }
+      console.log('getUsers after site', users);
+      return users;
     }
     return [];
   }

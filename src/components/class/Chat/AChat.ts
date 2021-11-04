@@ -1,13 +1,12 @@
-import { WebParams, Msg } from 'src/layouts/data/if';
+// import { WebParams, Msg } from 'src/layouts/data/if';
 import LayoutStoreModule from 'src/layouts/data/LayoutStoreModule';
 import { ChatMsg, WsMsg } from '../../if/dbif';
-import { FuncKey, Channels, ErrCode } from '../../if/ENum';
+import { Channels } from '../../if/ENum';
 import ChatManager from './ChatManager';
 
 export default abstract class AChat {
 	protected list:ChatMsg[]=[];
 	protected readed = 0;
-	// protected ws:WSock;
 	protected memid:number;
 	protected SendTo = 0;
 	private UserID:number;
@@ -15,6 +14,7 @@ export default abstract class AChat {
 		// this.ws = ws;
 		this.memid = MemberID;
 		this.UserID = this.LS.UserInfo.id;
+		console.log('AChat constructor:', this.memid, this.UserID, MKey);
 	}
 	abstract add(fromWho:string, msg:string):void;
 	AcceptChat(msg:ChatMsg) {
@@ -39,16 +39,21 @@ export default abstract class AChat {
 	Send(msg:string) {
 		// console.log('AChat Send:', msg);
 		const cMsg = this.CreateMsg(msg);
+		console.log('AChat Sent:', cMsg);
 		// this.list.push(cMsg);
-		// this.AddToList(cMsg);
+		this.AddToList(cMsg);
 		// console.log('AChat Sent:', this.list.length);
 		const wsmsg:WsMsg = {
-			Func: FuncKey.MESSAGE,
-			ChannelName: Channels.ASK,
+			// Func: FuncKey.MESSAGE,
+			// ChannelName: Channels.ASK,
+			toChannels: Channels.MEMBER,
 			Message: JSON.stringify(cMsg),
+			toWho: `${this.SendTo}`,
 			UserID: this.UserID,
-			SendTo: this.SendTo,
+			// SendTo: this.SendTo,
 		};
+		this.CM.Send(wsmsg);
+		/*
 		const param:WebParams = { ...this.LS.Param };
 		param.WsMsg = wsmsg;
 		this.LS.ax.getApi('cc/PostMessage', param, 'post').then((ans:Msg) => {
@@ -59,6 +64,7 @@ export default abstract class AChat {
 		}).catch((err) => {
 			console.log('AChat Send Error:', err);
 		});
+		*/
 		this.Readed();
 	}
 	AddToList(msg:ChatMsg) {

@@ -1,14 +1,14 @@
 import LayoutStoreModule from 'src/layouts/data/LayoutStoreModule';
-import { ChatMsg } from '../../if/dbif';
+import { ChatMsg, WsMsg } from '../../if/dbif';
 import ServiceChat from './ServiceChat';
-import WSock from '../../WebSock/WSock';
+import ASock from '../../WebSock/ASock';
 
 export default class ChatManager {
 	private list:ServiceChat[] = [];
 	private own:any = null;
-	private ws:WSock;
+	private ws:ASock;
 	private LS:LayoutStoreModule;
-	constructor(ws:WSock, LS:LayoutStoreModule) {
+	constructor(ws:ASock, LS:LayoutStoreModule) {
 		this.ws = ws;
 		this.LS = LS;
 	}
@@ -21,6 +21,9 @@ export default class ChatManager {
 			cnt += itm.unReadedLength;
 		});
 		return cnt;
+	}
+	Send(message: string | WsMsg) {
+		this.ws.send(message);
 	}
 	refreshCounter() {
 		if (this.own) this.own.unread = this.TotalUnread;

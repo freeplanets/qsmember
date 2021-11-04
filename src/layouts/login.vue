@@ -38,11 +38,12 @@ import Vue from 'vue';
 import Components from 'vue-class-component';
 // import axios, { AxiosRequestConfig,AxiosResponse} from 'axios';
 import { getModule } from 'vuex-module-decorators';
-import LayoutStoreModule from './data/LayoutStoreModule';
 // import {User} from './data/schema';
-import { Msg, CommonParams, LoginInfo } from './data/if';
 import WSock from '../components/WebSock/WSock';
 import Mqtt from '../components/WebSock/Mqtt';
+import ChatClient from '../components/WebSock/ChatClient';
+import LayoutStoreModule from './data/LayoutStoreModule';
+import { Msg, CommonParams, LoginInfo } from './data/if';
 
 @Components
 export default class Login extends Vue {
@@ -83,6 +84,7 @@ export default class Login extends Vue {
     };
     // const url:string=this.store.ax.Host+'/login';
     const msg:Msg = await this.store.ax.getApi('/login', params);
+    console.log('after login:', msg);
     if (msg.ErrNo === 0) {
         this.Account = '';
         this.Password = '';
@@ -93,6 +95,10 @@ export default class Login extends Vue {
         if (msg.wsServer) {
           const ws:WSock = new WSock(this.store, msg.wsServer);
           this.store.setWSock(ws);
+        }
+        if (msg.chatServer) {
+          const chat:ChatClient = new ChatClient(this.store, msg.chatServer, msg.chatSite);
+          this.store.setChater(chat);
         }
         this.store.setMqtt(new Mqtt(this.Personal));
         if (this.Personal.forcePWChange) {

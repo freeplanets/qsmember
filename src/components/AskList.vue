@@ -3,6 +3,7 @@
     <table cellspacing="0" cellpadding="0">
       <tr class='title'>
         <th> {{ $t('Table.Items.id') }} </th>
+        <th> {{ $t('Table.SiteName') }} </th>
         <th> {{ $t('Table.AskTable.User') }} </th>
         <th> {{ $t('Table.AskTable.Item') }} </th>
         <th> {{ $t('Table.AskTable.AskType') }} </th>
@@ -18,6 +19,7 @@
         <th> {{ $t('Table.AskTable.Lever') }} </th>
         <th> {{ `${$t('Label.Settle')} / ${$t('Table.AskTable.CreateTime')}` }} </th>
         <th> {{ $t('Label.Status') }} </th>
+        <th> {{ $t('Report.SettleType') }} </th>
       </tr>
       <tr
         v-for="(itm,idx) in list"
@@ -25,6 +27,7 @@
         class="list"
       >
         <td>{{ itm.id }}</td>
+        <td>{{ itm.SiteName }}</td>
         <td>{{ itm.User }}</td>
         <td>{{ itm.Item }}</td>
         <td align='center' :class="{ priceLimit: itm.AT }">{{ itm.AskType }}</td>
@@ -43,6 +46,7 @@
         <td v-if="!itm.isSettle"> {{ new Date(itm.CreateTime).toLocaleString(lang,dOpt) }} </td>
         <td v-if="itm.isSettle" style="color:green"> {{ new Date(itm.DealTime).toLocaleString(lang,dOpt) }}</td>
         <td align='center' :class="`StatusColor${itm.ProcStatus}`" @click="getPriceTick(itm)"> {{ $t(`Label.ProcStatus.${itm.ProcStatus}`) }} </td>
+        <td align='center'> {{ itm.SettleType ? $t('Report.HandSettle') : '' }} </td>
       </tr>
     </table>
     <q-dialog v-model="showPT" persistent>

@@ -11,6 +11,21 @@ export default class Func extends AForAll {
 		if (ItemID) Filter.ItemID = ItemID;
 		return this.getTableData('MemberSettleMark', Filter, Fields);
 	}
+	getSettleMarkByAskID(askids:number[]) {
+		const Fields = ['AskID', 'ItemID', 'MarkTS'];
+		const Filter:KeyVal[] = [{
+				Key: 'ModifyID',
+				Val: 0,
+				Cond: '>',
+			},
+			{
+				Key: 'id',
+				Val: `${askids.join(',')}`,
+				Cond: 'in',
+			},
+		];
+		return this.getTableData('MemberSettleMark', Filter, Fields);
+	}
 	getMemberIdByNickname(Nickname:string) {
 		const Tablename = 'Member';
 		const Filter:KeyVal = {
@@ -27,8 +42,17 @@ export default class Func extends AForAll {
 			Val: Array.isArray(id) ? id.join(',') : id,
 			Cond: 'in',
 		};
-		const fields = ['id', 'Nickname'];
+		const fields = ['id', 'Nickname', 'UpId'];
 		return this.getTableData('Member', filter, fields);
+	}
+	getMemberSiteNameByUpId(upid:number|number[]) {
+		const filter:KeyVal = {
+			Key: 'id',
+			Val: Array.isArray(upid) ? upid.join(',') : upid,
+			Cond: 'in',
+		};
+		const fields = ['id', 'SiteName'];
+		return this.getTableData('User', filter, fields);
 	}
 	getMemberCLevel(CLevel:string) {
 		const filter = { CLevel };
@@ -84,7 +108,7 @@ export default class Func extends AForAll {
     const TableName = 'AskTable';
     const Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'ItemType', 'Code', 'Qty', 'Price', 'Amount',
         'Fee', 'AskFee', 'AskPrice', 'LeverCredit', 'ExtCredit', 'Lever', 'SetID', 'USetID', 'ProcStatus',
-        'CreateTime', 'DealTime'];
+        'CreateTime', 'DealTime', 'isUserSettle'];
 		const Filter:KeyVal[] = [];
 		Filter.push(DateFunc.createDbDateFilter(sdate, 'CreateTime', true));
 		if (itemid) {
@@ -116,6 +140,7 @@ export default class Func extends AForAll {
 		if (this.User.Types === 1 || this.User.Types === 2) {
 			Filter.push({ Key: 'UpId', Val: this.User.id });
 		}
+		Filter.push({ Key: 'SellID', Val: 0, Cond: '>' });
 		return this.getTableData(TableName, Filter);
 	}
 	getTitle(tableName:string, ids:number[], fieldAsTitle:string) {

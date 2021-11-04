@@ -1,14 +1,14 @@
 import { ChatMsg, WsMsg } from '../../if/dbif';
 import { FuncKey, Channels } from '../../if/ENum';
 import ChatManager from './ChatManager';
-import WSock from '../../WebSock/WSock';
+import ASock from '../../WebSock/ASock';
 
 export default abstract class AChat {
 	protected list:ChatMsg[]=[];
 	protected readed = 0;
-	protected ws:WSock;
+	protected ws:ASock;
 	protected memid:number;
-	constructor(protected CM:ChatManager, ws:WSock, MemberID:number) {
+	constructor(protected CM:ChatManager, ws:ASock, MemberID:number) {
 		this.ws = ws;
 		this.memid = MemberID;
 	}

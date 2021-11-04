@@ -1,7 +1,8 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 import Store from '../../store/index';
 import AxApi from '../components/AxApi';
-import WSock from '../../components/WebSock/WSock';
+// import WSock from '../../components/WebSock/WSock';
+import ASock from '../../components/WebSock/ASock';
 import Mqtt from '../../components/WebSock/Mqtt';
 import { LoginInfo } from './if';
 
@@ -26,7 +27,8 @@ export default class LayoutStoreModule extends VuexModule {
         Progs: [],
     };
     private showGA = false;
-    private ws!:WSock;
+    private ws!:ASock;
+    private chater!:ASock;
     private mqtt!:Mqtt;
     // public ApiUrl:string=myApiUrl;
     public ax=AxApi;
@@ -48,6 +50,9 @@ export default class LayoutStoreModule extends VuexModule {
     }
     get WSock() {
         return this.ws;
+    }
+    get CSock() {
+        return this.chater;
     }
     get Mqtt() {
         return this.mqtt;
@@ -147,12 +152,20 @@ export default class LayoutStoreModule extends VuexModule {
         this.SET_LOGOUT(value);
     }
     @Mutation
-    private SET_WSOCK(ws:WSock) {
+    private SET_WSOCK(ws:ASock) {
         this.ws = ws;
     }
     @Action
-    public setWSock(ws:WSock) {
+    public setWSock(ws:ASock) {
         this.SET_WSOCK(ws);
+    }
+    @Mutation
+    private SET_CHATER(ch:ASock) {
+        this.chater = ch;
+    }
+    @Action
+    public setChater(ch:ASock) {
+        this.SET_CHATER(ch);
     }
     @Mutation
     private SET_MQTT(mqtt:Mqtt) {

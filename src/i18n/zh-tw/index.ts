@@ -263,6 +263,7 @@ export default {
     OpenNums: '開出獎號',
     ChaseNum: '追號',
     isParlay: '連碼',
+    SiteName: '網站',
   },
   Title: {
     Dashboard: '大廳',
@@ -387,6 +388,8 @@ export default {
     DayReport: '日報表',
     TotalGainLose: '合計盈虧',
     GainLose: '盈虧',
+    SettleType: '方式',
+    HandSettle: '手動',
   },
   Common: {
     AccHistory: '帳戶歷史',

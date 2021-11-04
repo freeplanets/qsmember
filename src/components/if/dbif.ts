@@ -1,6 +1,9 @@
 import { HasID, KeyVal } from '../../layouts/data/if';
 import { FuncKey, MsgType, OpTypes } from './ENum';
 
+export interface AnyObject {
+	[key: string]: any;
+}
 export interface TableData {
   TableName: string;
   keys?: string[];
@@ -80,6 +83,8 @@ export interface AskReport {
   ProcStatus: number;
   CreateTime: number;
   DealTime: number;
+  SiteName?: string;
+  SettleType?: number; // 手動平倉
 }
 export interface ReceiveData {
   eventTime: number;
@@ -117,6 +122,25 @@ export interface MqttData {
 }
 
 export interface WsMsg {
+	Func?: FuncKey;
+	Message?: string;
+	ChannelName?: string;
+	ReceiverID?: string;
+	toSite?:string;
+	toChannels?:string;
+	toWho?:string;
+	data?:any;
+  // for old
+	Ask?:AnyObject;
+	Asks?:AnyObject | AnyObject[];
+  SettleMark?: MemberSettleMark;
+  SettleServiceID?: number;
+  UserID?: number;
+  SendTo?: number | number[]; // message to who's id
+}
+
+/*
+export interface WsMsg {
   Func?: FuncKey;
   Asks?: AskTable | AskTable[];
   Ask?: AskTable;
@@ -130,6 +154,7 @@ export interface WsMsg {
   SendTo?: number | number[]; // message to who's id
   [key:string]: any;
 }
+*/
 
 export interface ObjectIdentify {
   [key:string]:boolean;
@@ -178,7 +203,7 @@ export interface ItemTotal {
   GainLose:number;
   add(ll:LedgerLever, key:number):void;
   reCal():void;
-  setTitle(t:HasID[]):void;
+  setTitle(t:HasID[]|string):void;
 }
 export interface LedgerLever {
   id:number;

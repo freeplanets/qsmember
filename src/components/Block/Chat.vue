@@ -86,6 +86,7 @@ export default class Chat extends Vue {
 		return stamp;
 	}
 	Send() {
+		console.log('Chat.vue Send:', this.messages.length, this.chat.List.length);
 		if (this.message) {
 			this.chat.Send(this.message);
 			this.message = '';

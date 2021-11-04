@@ -24,6 +24,10 @@
       v-show="showEdit"
     >
       <div class="row">
+          <div class="gamefield col-12 col-md-1">{{$t('Table.SiteName')}}</div>
+          <div class="gamefield col-12 col-md-3"><q-input outlined dense v-model="NewUser.SiteName"/></div>
+      </div>
+      <div class="row">
           <div class="gamefield col-12 col-md-1">{{$t('Table.Account')}}</div>
           <div class="gamefield col-12 col-md-3"><q-input outlined dense v-model="NewUser.Account"/></div>
       </div>
@@ -71,6 +75,11 @@ export default class AddUser extends Vue {
     showEdit=false;
     data:User[]=[]
     cols:TableHeader[]=[
+      {
+        name: 'SiteName',
+        label: 'SiteName',
+        field: 'SiteName',
+      },
       {
         name: 'Account',
         label: 'Account',

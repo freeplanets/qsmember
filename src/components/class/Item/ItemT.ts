@@ -46,16 +46,21 @@ export default class ItemT implements ItemTotal {
 	get Items() {
 		return this.items;
 	}
-	setTitle(t:titleT[]) {
-		const f = t.find((itm) => itm.id === this.key);
-		this.title = f ? f.Title : 'none';
-		// console.log('itemT:', this.key, f, this.title);
+	setTitle(t:titleT[]|string) {
+		if (typeof t === 'string') {
+			this.title = t;
+		} else {
+			const f = t.find((itm) => itm.id === this.key);
+			this.title = f ? f.Title : 'none';
+			// console.log('itemT:', this.key, f, this.title);	
+		}
 	}
 	add(ll:LedgerLever, key:number) {
 		if (key !== this.Key) return;
 		const itemType = ll.ItemType > 0 ? 1 : 0;
 		this.items[itemType].add(ll);
-		this.fee += (ll.BuyFee + ll.SellFee);
+		const fee = ll.BuyFee + ll.SellFee;
+		this.fee += fee;
 	}
 	reCal() {
 		this.amount = 0;

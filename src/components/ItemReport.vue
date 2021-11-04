@@ -7,6 +7,7 @@
 			:key="`item:${idx}`"
 			:itemT="item"
 		/>
+		<blk-item-type v-if="list && list.length>1" :itemT="total" />
 	</table>
 </template>
 <script lang="ts">
@@ -26,6 +27,7 @@ import { ItemTotal } from './if/dbif';
 export default class ItemReport extends Vue {
 	@Prop({ type: Array }) readonly list!:ItemTotal[];
 	@Prop({ type: Boolean }) readonly isLedger!:boolean;
+	@Prop({ type: Object }) readonly total!:ItemTotal;
 	items:ItemTotal[] = [];
 	@Watch('list', { deep: true, immediate: true })
 	onListChange() {

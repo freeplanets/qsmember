@@ -17,7 +17,7 @@
       </div>
 		</div>
 		<q-separator />
-		<ITRPT :list="list" :isLedger="isLedger" />
+		<ITRPT :list="list" :isLedger="isLedger" :total="total" />
     <q-dialog v-model="isDateSlt">
       <q-card class='diaDate'>
         <q-card-section class="q-pt-none">
@@ -50,6 +50,7 @@ export default class CryptoItemReport extends Vue {
 	isDateSlt = false;
 	list:ItemTotal[]=[];
 	itemTot = new ItemTot(this.store);
+	total!:ItemTotal;
 	SearchData() {
 		if (this.SelectDate) {
 			this.list = [];
@@ -59,6 +60,9 @@ export default class CryptoItemReport extends Vue {
 			this.itemTot.getItemReport(this.SelectDate, this.isLedger).then((res) => {
 				this.list = res;
 				console.log('SearchData list', this.list);
+				this.total = this.itemTot.Total;
+				this.total.reCal();
+				this.total.setTitle(String(this.$t('Report.Total')));
 				this.store.setShowProgress(false);
 			});
 		}

@@ -54,10 +54,13 @@ export enum MsgType {
 }
 
 export enum Channels {
-  ASK = 'AskChannel',
+  ASK = 'Ask',
   API_SERVER = 'AskCreator',
-  ADMIN = 'AdminChannel',
-  PUB = 'PublicChannel',
+  SETTLE_SERVER = 'SettleServer',
+  ADMIN = 'Admin',
+  PUB = 'Public',
+  MEMBER = 'Member',
+  SERVICE = 'Service',
 }
 
 export enum OpTypes {

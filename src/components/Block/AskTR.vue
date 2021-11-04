@@ -32,7 +32,10 @@ export default class AskTR extends Vue {
 		return DateFunc.toLocalString(this.ask.CreateTime);
 	}
 	get MarkTS() {
-		return DateFunc.toLocalString(this.ask.MarkTS);
+		if (this.ask.MarkTS) {
+			return DateFunc.toLocalString(this.ask.MarkTS);
+		}
+		return '';
 	}
 	get ItemType() {
 		const itemType = this.ask.ItemType < 0 ? 0 : 1;
