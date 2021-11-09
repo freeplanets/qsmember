@@ -282,4 +282,12 @@ export interface PriceTick {
 export interface EmergencyCloseData extends HasID {
   sw:number;
   ModifyID:number;
+  ItemID:number;
+  Closed:number;
+}
+
+export interface EmergencyCloseLog extends EmergencyCloseData {
+  Item: string;
+  Modifier: string;
+  ModifyTime: string;
 }

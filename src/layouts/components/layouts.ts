@@ -418,12 +418,13 @@ const MarkSixLayout:Layout = [
         cont: [
             {
                 colorWave: true,
-                aBT: [1, 28],
-                sltedItem: 0,
-                start: 1,
-                end: 49,
+                // aBT: [1, 28],
+                BT: 1,
+                // sltedItem: 0,
+                // start: 1,
+                // end: 49,
                 Sortable: true,
-                curBT: 1,
+                // curBT: 1,
                 item: getblocks(1, 49),
             },
         ],

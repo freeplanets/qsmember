@@ -34,6 +34,7 @@
       <table>
         <tr>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OrderNo')}}</td>
+          <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.WebOwner')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.Member')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OrderTime')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.GameName')}}</td>
@@ -41,13 +42,14 @@
           <td class="col mytable-head mytable-field-txt">{{$t('Report.OdrType')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OdrAmt')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.Result')}}</td>
-          <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.WebOwner')}}</td>
+          <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.Status')}}</td>
         </tr>
       <tr
         v-for="(itm,idx) in list"
         :key="'bh'+idx"
         >
         <td class="col-1 mytable-field-txt">{{itm.id}}</td>
+        <td class="col-1 mytable-field-txt">{{itm.UPName}}</td>
         <td class="col-1 mytable-field-txt">{{itm.UName}}</td>
         <td class="col-1 mytable-field-txt">{{DTString(itm.CreateTime)}}</td>
         <td class="col-1 mytable-field-txt">{{itm.GameName}}</td>
@@ -55,10 +57,10 @@
         <td class="col mytable-field-txt wdbr" v-html="itm.BetContent"></td>
         <td class="col-1 mytable-field-num">{{itm.Total}}</td>
         <td :class="{'col-1 mytable-field-num':true,RedColor:itm.WinLose ? itm.WinLose<0 : false}">{{itm.WinLose? itm.WinLose.toFixed(2):0}}</td>
-        <td class="col-1 mytable-field-txt">{{itm.UPName}}</td>
+        <td class="col-1 mytable-field-txt">{{ $t(`Label.TicketStatus.${itm.isCancled}`)}}</td>
       </tr>
       <tr class="linetotal">
-          <td class="col-1 mytable-field-txt" colspan="5">{{$t('Report.Total')}}</td>
+          <td class="col-1 mytable-field-txt" colspan="6">{{$t('Report.Total')}}</td>
           <td class="col-1 mytable-field-txt-right">{{`${$t('Label.TotalN')}`.replace('{N}', list.length+'')}}</td>
           <td class="col-1 mytable-field-num">{{total}}</td>
           <td :class="{'col-1 mytable-field-num':true,RedColor:winlose<0}">{{winlose.toFixed(2)}}</td>
@@ -177,14 +179,14 @@ export default class BetLists extends Vue {
     if (this.WinLoseE) param.WinLoseE = this.WinLoseE;
     if (this.sltedTS) param.isCanceled = this.sltedTS.value;
     const msg:Msg = await this.store.ax.getApi('getBetHeaders', param);
-    // console.log('SearchData',msg);
+    console.log('SearchData', msg);
     if (msg.ErrNo === 0) {
       const bhs:BetHeader[] = msg.data as BetHeader[];
       // console.log('GameList:',this.GameList);
       bhs.map((bh) => {
         let f:MyUser|undefined = msg.users.find((itm:any) => itm.id === bh.UserID);
         if (f) {
-          bh.UName = f.Account;
+          bh.UName = f.Nickname ? f.Nickname : f.Account;
         }
         f = msg.UpUser.find((itm:any) => itm.id === bh.UpId);
         if (f) {

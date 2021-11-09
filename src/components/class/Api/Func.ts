@@ -1,6 +1,6 @@
 import { ErrCode } from 'src/components/if/ENum';
 import { CryptoOpParams, MemberCLevel, PartialCryptoItems, EmergencyCloseData } from '../../../components/if/dbif';
-import { HasID, KeyVal, WebParams } from '../../../layouts/data/if';
+import { HasID, KeyVal, WebParams, HasModifyID } from '../../../layouts/data/if';
 import AForAll from './AForAll';
 import DateFunc from '../../Functions/MyDate';
 
@@ -45,6 +45,15 @@ export default class Func extends AForAll {
 		const fields = ['id', 'Nickname', 'UpId'];
 		return this.getTableData('Member', filter, fields);
 	}
+	getUserNameById(id:number|number[]) {
+		const filter:KeyVal = {
+			Key: 'id',
+			Val: Array.isArray(id) ? id.join(',') : id,
+			Cond: 'in',
+		};
+		const fields = ['id', 'Account'];
+		return this.getTableData('User', filter, fields);
+	}
 	getMemberSiteNameByUpId(upid:number|number[]) {
 		const filter:KeyVal = {
 			Key: 'id',
@@ -71,12 +80,71 @@ export default class Func extends AForAll {
 	getLoanItem() {
 		return this.getTableData('Items', { isLoan: 1 });
 	}
+	getItemNameById(ids: number | number[]) {
+		const filter:KeyVal = {
+			Key: 'id',
+			Val: Array.isArray(ids) ? ids.join(',') : ids,
+			Cond: 'in',
+		};
+		const fields = ['id', 'Title'];
+		return this.getTableData('Items', filter, fields);
+	}
 	getInProcessAsks(UpId?:number) {
 		let filter = 'ProcStatus<2';
 		if (UpId) {
 			filter = `${filter} and UpId = ${UpId}`;
 		}
 		return this.getTableData('AskTable', filter);
+	}
+	async getEmergencyLog() {
+		const msg = await this.getTableData('EmergencyClose', { ItemID: 0 });
+		if (msg.ErrNo === ErrCode.PASS) {
+			let data = msg.data as HasModifyID[];
+			const uids:number[] = [];
+			data.map((itm) => {
+				const f = uids.find((u) => u === itm.ModifyID);
+				if (!f) uids.push(itm.ModifyID);
+			});
+			// console.log('uids length', uids);
+			if (uids.length > 0) {
+				const msguser = await this.getUserNameById(uids);
+				if (msguser.ErrNo === ErrCode.PASS) {
+					const users = msguser.data as HasID[];
+					data = data.map((itm) => {
+						const f = users.find((u) => u.id === itm.ModifyID);
+						if (f) {
+							// console.log('find', f);
+							itm.Modifier = f.Account;
+						}
+						return itm;
+					});
+					// console.log('after find user', data);
+					msg.data = data;
+				}
+			}
+			/*
+			const itmids:number[] = [];
+			data.map((itm) => {
+				const f = itmids.find((id) => id === itm.ItemID);
+				if (!f) itmids.push(itm.ItemID);
+			});
+			if (itmids.length > 0) {
+				const itmmsg = await this.getLoanItem();
+				if (itmmsg.ErrNo === ErrCode.PASS) {
+					const itmdta = itmmsg.data as HasID[];
+					data = data.map((itm) => {
+						const f = itmdta.find((u) => u.id === itm.ModifyID);
+						if (f) {
+							console.log('find', f);
+							itm.Item = f.Title;
+						}
+						return itm;
+					});
+				}
+			}
+			*/
+		}
+		return msg;
 	}
 	async setEmergencyClose(data:PartialCryptoItems | PartialCryptoItems[], isEmergencyClose = 0) {
 		const params:WebParams = { ...this.dfParam };
@@ -87,10 +155,18 @@ export default class Func extends AForAll {
 		const msg = await this.setTableData<PartialCryptoItems>(params, data);
 		if (msg.ErrNo === ErrCode.PASS) {
 			params.TableName = 'EmergencyClose';
+			let ItemID = 0;
+			let Closed = 0;
+			if (!Array.isArray(data)) {
+				ItemID = data.id;
+				Closed = data.Closed ? data.Closed : 0;
+			}
 			const mdata:EmergencyCloseData = {
 				id: 0,
 				sw: isEmergencyClose,
 				ModifyID: this.dfParam.UserID,
+				ItemID,
+				Closed,
 			};
 			return this.setTableData<EmergencyCloseData>(params, mdata);
 		}

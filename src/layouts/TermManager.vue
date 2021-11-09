@@ -269,7 +269,7 @@ export default class TermManager extends Vue {
     hasSPNO=false;
     NoSettleDate='';
     GTypes:GameType[]=[];
-    curGType:GameType|undefined;
+    curGType:GameType | null = null;
     get showProgress() {
         return this.store.showProgress;
     }
@@ -302,8 +302,9 @@ export default class TermManager extends Vue {
         this.getTerms();
     }
     setCurGType(GType:string) {
-        this.curGType = this.GTypes.find((itm) => itm.GType === GType);
-        if (this.curGType) {
+        const f = this.GTypes.find((itm) => itm.GType === GType);
+        if (f) {
+            this.curGType = f;
             this.nums = new Array(this.curGType.OpenNums);
         }
     }
@@ -350,6 +351,7 @@ export default class TermManager extends Vue {
                     this.term.StopTime = lsTerm.StopTime;
                     this.term.StopTimeS = lsTerm.StopTimeS;
                     this.term.TermID = this.TermIDAdd(lsTerm.TermID);
+                    // if (this.term.StopTimeS) this.hasSPNO = true;
                 }
             }
         }
@@ -401,11 +403,13 @@ export default class TermManager extends Vue {
     async getTerms() {
         if (this.InProcess) return;
         if (!this.term.GameID) return;
+        console.log('do getTerms');
         this.InProcess = true;
         this.showProgress = true;
         const GameID:number = this.term.GameID;
         this.data = [];
         const ans = await this.ax.getTerms(this.store.personal.id, this.store.personal.sid, GameID, this.sdate.split('/').join('-'));
+        console.log('getTerms', ans);
         if (ans.ErrNo === 0) {
             this.data = ans.data as Terms[];
             if (ans.Game) {
@@ -433,6 +437,8 @@ export default class TermManager extends Vue {
         this.oldTerm = { ...v };
         this.term = Object.assign(this.term, v);
         console.log('Edit', this.oldTerm);
+        // if (this.term.StopTimeS) this.hasSPNO = true;
+        // else this.hasSPNO = false;
         /*
         Object.keys(v).map(key=>{
             this.term[key]=v[key];

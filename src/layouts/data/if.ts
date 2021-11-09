@@ -4,7 +4,10 @@ export interface AnyObject {
 export interface HasID extends AnyObject {
     id: number;
 }
-
+export interface HasModifyID extends AnyObject {
+    ModifyID: number;
+    ItemID: number;
+}
 export interface KeyVal {
     Key?: string;
     Val?: string | number;
@@ -185,6 +188,7 @@ export interface BetHeader {
     Total: number;
     Payout?: number;
     WinLose?: number;
+    isCancled?:number;
     ExRate?: number;
     CancelLimit?: number;
     CreateTime?: string;

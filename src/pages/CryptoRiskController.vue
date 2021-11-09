@@ -5,6 +5,7 @@
 			<q-btn color="red" icon="dangerous" v-if="!isEmergencyClose" :label="$t('Label.EmergencySwitch.Shutdown')" @click="CloseAll" />
 			<q-btn color="green" icon="check_circle" v-if="isEmergencyClose" :label="$t('Label.EmergencySwitch.RaiseUp')" @click="OpenAll" />
 			<div v-if="isEmergencyClose" class="info">{{ $t('Label.EmergencySwitch.info') }}</div>
+			<q-btn color="info" icon="article" :label="$t('Label.EmergencySwitch.log')" @click="EmergencyLog" />
 		</div>
 		<q-separator />
 		<BCIH class="q-pt-sm" :info="LoginInfo" />
@@ -22,6 +23,19 @@
 				@getMemberSettleMark="getMemberSettleMark"
 			/>
 		</div>
+    <q-dialog v-model="showECLog">
+      <q-card>
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">{{ $t('Label.EmergencySwitch.log') }}</div>
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section>
+          <LEC :list="ECLogList" />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
 	</div>
 </template>
 <script lang="ts">
@@ -33,15 +47,17 @@ import BanCryptoICHeader from '../components/Banner/CryptoICHeader.vue';
 import LayoutStoreModule from '../layouts/data/LayoutStoreModule';
 import Items from '../components/class/Item/Items';
 import ApiFunc from '../components/class/Api/Func';
-import { CryptoItem, AskTable, PartialCryptoItems, WsMsg, MemberSettleMark } from '../components/if/dbif';
+import { CryptoItem, AskTable, PartialCryptoItems, WsMsg, MemberSettleMark, EmergencyCloseLog } from '../components/if/dbif';
 import { Msg } from '../layouts/data/if';
 import Mqtt from '../components/WebSock/Mqtt';
 import { Channels, ErrCode } from '../components/if/ENum';
+import ListEmergencyClose from '../components/List/EmergencyClose.vue';
 
 @Component({
 	components: {
 		BCIC: BanCryptoItemControl,
 		BCIH: BanCryptoICHeader,
+		LEC: ListEmergencyClose,
 	},
 })
 export default class CryptoRiskController extends Vue {
@@ -52,6 +68,8 @@ export default class CryptoRiskController extends Vue {
 	interval:NodeJS.Timeout | null = null;
 	isEmergencyClose = false;
 	losefocustimer = 0;
+	ECLogList:EmergencyCloseLog[] = [];
+	showECLog = false;
 	get LoginInfo() {
 		return this.store.personal;
 	}
@@ -75,7 +93,11 @@ export default class CryptoRiskController extends Vue {
 			}
 		});
 		this.getAsks();
-		this.mqtt.setItems(this.list);
+		if (this.mqtt) {
+			this.mqtt.setItems(this.list);
+		} else {
+			console.log('getData mqtt not ready');
+		}
 	}
 	getAsks() {
 		console.log('do getAsks');
@@ -167,6 +189,23 @@ export default class CryptoRiskController extends Vue {
 			}
 		});
 	}
+	EmergencyLog() {
+		this.ECLogList = [];
+		this.Api.getEmergencyLog().then((msg:Msg) => {
+			if (msg.ErrNo === ErrCode.PASS) {
+				const ec = msg.data as EmergencyCloseLog[];
+				this.ECLogList = ec.map((itm) => {
+					const f = this.mqtt.getItem(itm.ItemID);
+					if (f) {
+						itm.Item = String(f.Title);
+					}
+					return itm;
+				});
+				this.showECLog = true;
+				// console.log('getEmergencyLosg 111:', ec);
+			}
+		});
+	}
 	doSettle(ask:AskTable) {
 		const msg:WsMsg = {
 			ChannelName: Channels.API_SERVER,
@@ -189,7 +228,11 @@ export default class CryptoRiskController extends Vue {
 		}
 	}
 	mounted() {
-		this.mqtt.subscribeTick();
+		if (this.mqtt) {
+			this.mqtt.subscribeTick();
+		} else {
+			console.log('mqtt not ready!!');
+		}
 		this.getData();
 		// this.getAsks();
 		window.onfocus = () => { this.focusMsg('Active'); };
