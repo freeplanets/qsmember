@@ -1,6 +1,6 @@
 import { ErrCode } from 'src/components/if/ENum';
 import { CryptoOpParams, MemberCLevel, PartialCryptoItems, EmergencyCloseData } from '../../../components/if/dbif';
-import { HasID, KeyVal, WebParams, HasModifyID } from '../../../layouts/data/if';
+import { HasID, KeyVal, WebParams, HasModifyID, Msg } from '../../../layouts/data/if';
 import AForAll from './AForAll';
 import DateFunc from '../../Functions/MyDate';
 
@@ -180,13 +180,25 @@ export default class Func extends AForAll {
 		// console.log('filter', filter);
 		return this.getTableData('PriceTick', filter);
 	}
+	private async getAskChkBuy(sdate:string, filter:KeyVal[], TableName:string, Fields:string[]) {
+		const Filter = filter.map((itm) => itm);
+		Filter.push(DateFunc.createDbDateFilter(sdate, 'CreateTime'));
+		console.log('getAskChkBuy', Filter);
+		return this.getTableData(TableName, Filter, Fields);
+	}
+	private async getAskChkSell(sdate:string, filter:KeyVal[], TableName:string, Fields:string[]) {
+		const Filter = filter.map((itm) => itm);
+		Filter.push(DateFunc.createTSDateFilter(sdate, 'DealTime'));
+		console.log('getAskChkSell', Filter);
+		return this.getTableData(TableName, Filter, Fields);
+	}
 	async getAskList(sdate:string, itemid?:number, Nickname?:string) {
+		let msg:Msg = {};
     const TableName = 'AskTable';
     const Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'ItemType', 'Code', 'Qty', 'Price', 'Amount',
         'Fee', 'AskFee', 'AskPrice', 'LeverCredit', 'ExtCredit', 'Lever', 'SetID', 'USetID', 'ProcStatus',
         'CreateTime', 'DealTime', 'isUserSettle'];
 		const Filter:KeyVal[] = [];
-		Filter.push(DateFunc.createDbDateFilter(sdate, 'CreateTime', true));
 		if (itemid) {
 			Filter.push({ Key: 'ItemID', Val: itemid });
 		}
@@ -194,7 +206,7 @@ export default class Func extends AForAll {
 				Filter.push({ Key: 'UpId', Val: this.User.id });
 		}
 		if (Nickname) {
-			const msg = await this.getMemberIdByNickname(Nickname);
+			msg = await this.getMemberIdByNickname(Nickname);
 			if (msg.ErrNo === ErrCode.PASS) {
 				if (msg.data && msg.data.length > 0) {
 					const dta = msg.data as HasID[];
@@ -207,7 +219,20 @@ export default class Func extends AForAll {
 				}
 			}
 		}
-		return this.getTableData(TableName, Filter, Fields);
+		msg = await this.getAskChkBuy(sdate, Filter, TableName, Fields);
+		if (msg.ErrNo === ErrCode.PASS) {
+			const msgSell = await this.getAskChkSell(sdate, Filter, TableName, Fields);
+			if (msgSell.ErrNo === ErrCode.PASS) {
+				if (msgSell.data) {
+					if (Array.isArray(msg.data)) {
+						msg.data = msg.data.concat(msgSell.data);
+					} else {
+						msg.data = msgSell.data;
+					}
+				}
+			}
+		}
+		return msg;
 	}
 	getLedgerLever(sdate:string) {
 		const TableName = 'LedgerLever';

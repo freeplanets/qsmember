@@ -15,12 +15,14 @@ class MyDate {
   }
 	public toDbDateString(time?: string | number, lang = 'zh-TW') {
 		const d = this.getDate(time);
+		const ds = typeof time === 'string' ? time.split(' ') : [];
 		const opt = { ...this.dOpt };
 		delete opt.hour;
 		delete opt.minute;
 		delete opt.second;
 		const tmpD = d.toLocaleDateString(lang, opt).replace(/\//g, '-');
-		return tmpD;
+		console.log('this.toDbDateString:', tmpD);
+		return ds[1] ? `${tmpD} ${ds[1]}` : tmpD;
 	}
 	toLocalString(time?:string | number, lang = 'zh-TW', opt?:Intl.DateTimeFormatOptions) {
 		const d = this.getDate(time);
@@ -66,22 +68,32 @@ class MyDate {
 		};
 		return keyV;
 	}
-	createDbDateFilter(v:string, key = 'SDate', withTime = false) {
+	createDbDateFilter(v:string, key = 'SDate') {
+		const keyV = this.getDateFilter(v, key);
+		keyV.Val = this.toDbDateString(keyV.Val);
+		keyV.Val2 = this.toDbDateString(keyV.Val2);
+		return keyV;
+	}
+	private getDateFilter(v:string, key = 'SDate') {
 		const dates = v.split('-');
-		const d1 = this.toDbDateString(dates[0]);
 		const keyV:KeyVal = {
 			Key: key,
-			Val: d1,
+			Val: dates[0],
 		};
-		if (dates[1] || withTime) {
-			let d2 = '';
-			if (dates[1]) d2 = this.toDbDateString(dates[1]);
-			else d2 = d1;
-			// if (keyV.Val !== d2) {
-				keyV.Val2 = `${d2}${withTime ? ' 23:59:59' : ''}`;
-				keyV.Cond = 'between';
-			// }
+		if (dates[1]) {
+			keyV.Val2 = dates[1];
+		} else {
+			keyV.Val2 = dates[0];
 		}
+		const fIdx = keyV.Val2.indexOf(':');
+		keyV.Val2 = fIdx > -1 ? keyV.Val2 : `${keyV.Val2} 24:00:00`;
+		keyV.Cond = 'between';
+		return keyV;
+	}
+	createTSDateFilter(v:string, key = 'SDate') {
+		const keyV = this.getDateFilter(v, key);
+		keyV.Val = this.getDate(keyV.Val).getTime();
+		keyV.Val2 = this.getDate(keyV.Val2).getTime();
 		return keyV;
 	}
 	getTime(time?:string) {

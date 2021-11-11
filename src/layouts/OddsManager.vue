@@ -30,7 +30,7 @@
                     </q-btn-dropdown>
                 </div>
             </div>
-            <div class='col talign1'
+            <div class='col-3 talign1'
                  v-if="oddshow"
             >
                 <q-btn-group outline class='mtop'>
@@ -38,25 +38,51 @@
                     <q-btn outline color="brown" :label="$t('Button.TotalOpen')" @click="setStop(0)" />
                     <q-btn outline color="brown" :label="$t('Button.PageStop')"  @click="setStop(1,cont)" />
                     <q-btn outline color="brown" :label="$t('Button.PageOpen')"  @click="setStop(0,cont)" />
+                    <q-btn outline color="brown" :label="BtnSubTotal"  @click="showSubTotal = !showSubTotal" />
                 </q-btn-group>
+            </div>
+            <div class='col-1 Total'>
+                <div>合計： {{ Total }}</div>
             </div>
         </div>
         <div class="q-gutter-sm"
             v-if="oddshow"
         >
-            <q-chip
-                v-for="(itm,idx) in dfLayout"
-                :key="'layout'+idx"
-                square
-                size="sm"
-                :color="dfColor[idx]"
-                text-color="white"
-                clickable
-                @click="changePage(itm.cont,idx)"
+            <table>
+                <tr>
+                    <td
+                        v-for="(itm,idx) in dfLayout"
+                        :key="'layout'+idx"
+                    >
+                    <q-chip
+                        square
+                        size="sm"
+                        :color="dfColor[idx]"
+                        text-color="white"
+                        clickable
+                        @click="changePage(itm.cont,idx)"
+                        >
+                        <q-avatar icon="play_arrow" color="primary" text-color="white" />
+                        {{$t(itm.name)}}
+                    </q-chip>
+                    </td>
+                </tr>
+                <tr
+                    v-if="showSubTotal"
                 >
-                <q-avatar icon="play_arrow" color="primary" text-color="white" />
-                {{$t(itm.name)}}
-            </q-chip>
+                    <td
+                        v-for="(itm,idx) in dfLayout"
+                        :key="'subtotal'+idx"
+                    >
+                    <q-chip
+                        square
+                        size="sm"
+                        >
+                        {{ getSubTotal(itm.cont) }}
+                    </q-chip>
+                    </td>
+                </tr>
+            </table>
             <div class='q-pa-md'
                 v-for="(BItm,bidx) in cont"
                 :key="'cont'+bidx"
@@ -308,8 +334,16 @@ export default class OddsManager extends Vue {
     SortID=0;
     SortName='';
     SortItems:string[]=[];
+    showSubTotal = false;
+    get BtnSubTotal() {
+        const titlekey = `Label.SubTotal.${this.showSubTotal ? 'Close' : 'Open'}`;
+        return this.$t(titlekey);
+    }
     get PInfo():LoginInfo {
         return this.store.personal;
+    }
+    get Total() {
+        return this.Game.Total;
     }
     async setCurGames(v:SelectOptions) {
         console.log('setGames:', v);
@@ -321,6 +355,7 @@ export default class OddsManager extends Vue {
         }
         if (v.GType) {
             this.oddshow = false;
+            this.showSubTotal = false;
             /*
             console.log(this.$t(`Game.${v.GType}.Menu.Group`))
             const tmp:any=this.$t(`Game.${v.GType}.Menu.Group`);
@@ -361,7 +396,7 @@ export default class OddsManager extends Vue {
                         Steps=ans.Steps;
                     }
                     */
-                    this.Game.inidata(ans.data as Data, this);
+                    this.Game.inidata(ans.data as Data); // , this);
                     // console.log('Game:',this.Game.Items)
                     Object.keys(this.dfLayout).map((key) => {
                         // const me = this;
@@ -418,12 +453,41 @@ export default class OddsManager extends Vue {
         };
         const ans:Msg = await this.store.ax.getApi('CurOddsInfo', param);
         if (ans.data) {
-            this.Game.updateData(ans.data as Data, this);
+            this.Game.updateData(ans.data as Data); // , this);
             this.curTid = ans.tid;
             // this.$forceUpdate();
             // console.log('do changePage');
             this.changePage(this.cont, this.curIdx);
         }
+    }
+    getSubTotal(v:contBlock[]) {
+        let bts:number[] = [];
+        v.map((itm) => {
+            if (itm.BT) {
+                // this.curSubTotal = this.Game.getBtTotal(itm.BT);
+                bts.push(itm.BT);
+            } else if (itm.aBT) {
+                // this.curSubTotal = this.Game.getBtTotal(itm.aBT);
+                bts = bts.concat(itm.aBT);
+            } else if (itm.item) {
+                (itm.item as numBlock[][]).map((nba) => {
+                    nba.map((nb) => {
+                        const f = bts.find((bt) => bt === nb.BT);
+                        if (!f) bts.push(nb.BT);
+                    });
+                });
+            } else if (itm.items) {
+                itm.items.map((nbaa) => {
+                    nbaa.map((nba) => {
+                        nba.map((nb) => {
+                            const f = bts.find((bt) => bt === nb.BT);
+                            if (!f) bts.push(nb.BT);
+                        });
+                    });
+                });
+            }
+        });
+        return this.Game.getBtTotal(bts);
     }
     changePage(v:contBlock[], key:number|string) {
         if (typeof (key) === 'string') key = parseInt(key, 10);
@@ -535,5 +599,8 @@ export default class OddsManager extends Vue {
 }
 .FastSlt {
     padding-bottom: 5px;
+}
+.Total {
+    margin-top: 4px;
 }
 </style>

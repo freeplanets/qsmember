@@ -75,11 +75,12 @@ function execFunctionByName(g:AnyObject, funcName:string, arg1:number|string, ar
 // const FOUR_DIGITAL = 'Game.BTCHash.Menu.Group.5.title';
 // const FIVE_DIGITAL = 'Game.BTCHash.Menu.Group.6.title';
 export class CGame implements AnyObject {
-    private member:BetTypes;
-    private OID=0;
-    public isUpdated=true;
-    public GType='';
-    private SortType:SortFunc[]=[SortByNum, SortByTols, SortByRisk];
+    private member: BetTypes;
+    private OID = 0;
+    private total = 0;
+    public isUpdated = true;
+    public GType = '';
+    private SortType: SortFunc[] = [SortByNum, SortByTols, SortByRisk];
     private RiskGroup:RGS=
         {
             MarkSix: [
@@ -152,8 +153,26 @@ export class CGame implements AnyObject {
     get MaxOddsID() {
         return this.OID;
     }
-    inidata(dta:Data, OM?:any) {
-        if (OM) console.log('OM', OM);
+    get Total() {
+        this.total = 0;
+        Object.keys(this.member).map((bt) => {
+            this.total += this.member[bt].Total;
+        });
+        return this.total;
+    }
+    getBtTotal(bts:number | number[]) {
+        let total = 0;
+        if (Array.isArray(bts)) {
+            bts.map((bt) => {
+                if (bt > 0) total += this.member[`${bt}`].Total;
+            });
+        } else if (bts > 0) {
+            total = this.member[`${bts}`].Total;
+        }
+        return Math.round(total);
+    }
+    inidata(dta:Data) {
+        // if (OM) console.log('OM', OM);
         this.member = {};
         Object.keys(dta).map((bt) => {
             const BTItm:Num = dta[bt];
@@ -225,8 +244,8 @@ export class CGame implements AnyObject {
             this.calRisk(bt);
         });
     }
-    updateData(dta:Data, OM?:any) {
-        if (OM) console.log('OM', OM);
+    updateData(dta:Data) {
+        // if (OM) console.log('OM', OM);
         Object.keys(dta).map((bt) => {
             const BTItm:Num = dta[bt];
             let chk45 = false;

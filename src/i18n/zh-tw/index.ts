@@ -145,6 +145,10 @@ export default {
     Settle: '平倉',
     SettlePricePlease: '請輸入平倉價格',
     StopType: ['開放', '停多', '停空', '關閉'],
+    SubTotal: {
+      Open: '顯示小計',
+      Close: '隱藏小計',
+    },
   },
   Tip: {
     UserFind: '請輸入名稱或代號',

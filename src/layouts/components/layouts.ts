@@ -53,6 +53,7 @@ export interface contBlock {
     curBT?:number;
     Sortable?:boolean;
     DefaultSortID?:number;
+    Total?:number;
 }
 export interface layoutBlock {
     name:string;
