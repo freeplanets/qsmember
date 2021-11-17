@@ -61,12 +61,14 @@ Vue.component('GS', GameSelector);
 Vue.component('BTC', BetTypeClass);
 Vue.component('RCO', RateChangeOption);
 
+/*
 interface PostData {
     GameID:number;
     PayClassName:string;
     ModifyID:string;
     id?:number;
 }
+*/
 @Component
 export default class BetClass extends Vue {
 	private store = getModule(LayoutStoreModule);

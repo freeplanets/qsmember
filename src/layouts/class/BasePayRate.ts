@@ -329,6 +329,7 @@ export class BasePayRate<T> {
                 // if(typeof v ==='string') v=parseFloat(v);
                 const ba = fixlen(this.data.PerStep);
                 const a = (Math.round(v / this.data.PerStep) * this.data.PerStep).toFixed(ba);
+                // console.log(`${this.BetType}, ${this.Title}, ${v}, ${a}`);
                 // console.log('fetchValueToSteps',a,v,this.data.Steps,typeof v,typeof this.data.Steps,Math.floor(v/this.data.Steps)*this.data.Steps);
                 return parseFloat(a);
             }

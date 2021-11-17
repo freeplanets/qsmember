@@ -67,7 +67,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
-import { Odds } from './Games';
+import { Odds } from './Odds/Games';
 import { chkColor, itemName } from './func';
 import { CommonParams } from '../data/if';
 import LayoutStoreModule from '../data/LayoutStoreModule';

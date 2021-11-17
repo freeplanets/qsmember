@@ -48,7 +48,7 @@
         <div class="q-gutter-sm"
             v-if="oddshow"
         >
-            <table>
+            <table class="btnSlt">
                 <tr>
                     <td
                         v-for="(itm,idx) in dfLayout"
@@ -282,14 +282,14 @@
 <script lang="ts">
 // import Vue from 'vue';
 // import Component from 'vue-class-component';
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import OddsBlock from './components/OddsBlock.vue';
 import GameSelector from './components/GameSelector.vue';
 import { Odds, SelectOptions, Msg, CommonParams, LoginInfo, AnyObject } from './data/if';
-import Layouts, { Layout, contBlock, numBlock, FastSltSub, FastSltSubItem } from './components/layouts';
-import { CGame, Data } from './components/Games';
+import Layouts, { Layout, contBlock, numBlock, FastSltSub, FastSltSubItem } from './components/Odds/layouts';
+import { CGame, Data } from './components/Odds/Games';
 
 interface BTNs {
     title:string;
@@ -344,6 +344,10 @@ export default class OddsManager extends Vue {
     }
     get Total() {
         return this.Game.Total;
+    }
+    @Watch('Total', { deep: true, immediate: true })
+    onTotalChange(newV:number, oldV:number) {
+        console.log('onTotalChange:', newV, oldV);
     }
     async setCurGames(v:SelectOptions) {
         console.log('setGames:', v);
@@ -601,6 +605,12 @@ export default class OddsManager extends Vue {
     padding-bottom: 5px;
 }
 .Total {
-    margin-top: 4px;
+    margin-top: 12px;
+}
+.btnSlt {
+    border: 0px;
+}
+.btn tr {
+    margin-top: 0px;
 }
 </style>
