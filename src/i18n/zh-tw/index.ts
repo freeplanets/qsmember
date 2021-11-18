@@ -403,6 +403,10 @@ export default {
     GainLose: '盈虧',
     SettleType: '方式',
     HandSettle: '手動',
+    RptType: {
+      Head: '單頭',
+      Detail: '明細',
+    },
   },
   Common: {
     AccHistory: '帳戶歷史',
@@ -582,7 +586,7 @@ export default {
         },
       },
       Item: {
-        1: { title: '特碼A' },
+        1: { title: '特碼' },
         2: { title: '特碼單雙', shortT: '', subtitle: ['單', '雙'] },
         3: { title: '特碼大小', shortT: '', subtitle: ['大', '小'] },
         4: { title: '正碼' },
@@ -676,7 +680,6 @@ export default {
           shortT: '合',
           subtitle: ['單', '雙'],
         },
-        28: { title: '特碼B' },
         29: {
           title: '半波',
           shortT: '',

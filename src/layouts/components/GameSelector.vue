@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="talign" >{{ $t('Label.GameName')}}</div>
-        <q-select square filled dense v-model="model" :options="options" style="width:200px"/>
+        <q-select class="col" square filled dense v-model="model" :options="options" style="width:200px"/>
     </div>
 </template>
 <script lang="ts">

@@ -254,6 +254,14 @@ export default {
     GeneralLedger: '总账',
     Ledger: '分类账',
     DayReport: '日报表',
+    TotalGainLose: '合计盈亏',
+    GainLose: '盈亏',
+    SettleType: '方式',
+    HandSettle: '手动',
+    RptType: {
+      Head: '单头',
+      Detail: '明细',
+    },
   },
   Common: {
     AccHistory: '账户历史',
@@ -431,7 +439,7 @@ export default {
         },
       },
       Item: {
-        1: { title: '特码A' },
+        1: { title: '特码' },
         2: { title: '特码单双', shortT: '', subtitle: ['单', '双'] },
         3: { title: '特码大小', shortT: '', subtitle: ['大', '小'] },
         4: { title: '正码' },

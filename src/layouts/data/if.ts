@@ -197,6 +197,10 @@ export interface BetHeader {
     TermID?:string;
     UName?:string;
     UPName?:string;
+    Num?:string;
+    Amt?:number;
+    BetType?:number;
+    Odds?:number;
 }
 
 export interface NumData {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-2 gsltor"><GS :store="store" :AddAllItem='true' :GameID='curGameID' :ReturnList='true' @setLists='setGameLists' @setGames="setCurGames"></GS></div>
+      <div class="col-2 gsltor"><GS :store="store" :AddAllItem='false' :GameID='curGameID' :ReturnList='true' @setLists='setGameLists' @setGames="setCurGames"></GS></div>
       <div class="col-1 tsltor" v-if="curGameID>0"><TIDS :store="store" :GameID='curGameID' @setTermID='setTermID'></TIDS></div>
       <div class="col-1 tsltor" v-if="curGameID>0"><BTS :GType='curGType' @setBetType='setBetType'></BTS></div>
       <div class="pbtn2"><q-input outlined dense v-model="NameOrNick" :label="$t('Label.NameOrNick')" /></div>
@@ -26,6 +26,7 @@
       <div class='pbtn2'>
         <q-select outlined dense v-model="sltedTS" :options="TStatus"  />
       </div>
+      <div>{{ $t('Report.RptType.Head') }}<q-toggle v-model="isDetail" />{{ $t('Report.RptType.Detail') }}</div>
       <div class='pbtn'><q-btn dense color="green" icon-right="search" :label="$t('Button.Search')"  @click="SearchData()"/></div>
       <div class='pbtn'><q-btn dense color="blue" icon-right="clear" :label="$t('Button.Clear')"  @click="ClearSearch()"/></div>
     </div>
@@ -78,9 +79,7 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import { Watch } from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import { SelectOptions, CommonParams, Msg, BetHeader, LoginInfo, MyUser } from './data/if';
@@ -90,12 +89,14 @@ import TermIDSelector from './components/TermIDSelector.vue';
 import BetTypeSelector from './components/BetTypeSelector.vue';
 import SEDate from './components/SEDate.vue';
 
-Vue.component('GS', GameSelector);
-Vue.component('SED', SEDate);
-Vue.component('TIDS', TermIDSelector);
-Vue.component('BTS', BetTypeSelector);
-
-@Component
+@Component({
+  components: {
+    GS: GameSelector,
+    SED: SEDate,
+    TIDS: TermIDSelector,
+    BTS: BetTypeSelector,
+  },
+})
 export default class BetLists extends Vue {
   store=getModule(LayoutStoreModule);
   NameOrNick='';
@@ -120,6 +121,7 @@ export default class BetLists extends Vue {
   dateSet='';
   TStatus:SelectOptions[]=[];
   sltedTS:SelectOptions={ value: 0, label: '' };
+  isDetail = false;
   @Watch('dateSet', { immediate: true, deep: true })
   onDateSetChange() {
     // console.log('onDateSetChange',this.DateSlt);
@@ -178,6 +180,7 @@ export default class BetLists extends Vue {
     if (this.WinLoseS) param.WinLoseS = this.WinLoseS;
     if (this.WinLoseE) param.WinLoseE = this.WinLoseE;
     if (this.sltedTS) param.isCanceled = this.sltedTS.value;
+    param.isDetail = this.isDetail ? 1 : 0;
     const msg:Msg = await this.store.ax.getApi('getBetHeaders', param);
     console.log('SearchData', msg);
     if (msg.ErrNo === 0) {
@@ -192,7 +195,6 @@ export default class BetLists extends Vue {
         if (f) {
           bh.UPName = f.Account;
         }
-        bh.BetContent = JSON.parse(bh.BetContent);
         bh = BHRemaster(bh, this.GameList, this);
       });
       // console.log('SearchData ok!!',bhs);
