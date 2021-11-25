@@ -309,7 +309,10 @@ export class CGame implements AnyObject {
             if (blk.Pos !== undefined) {
                 const sBT:string = BT.toString();
                 const nsd:NumSortData = this.member[sBT].getPos(blk.Pos);
-                console.log('Games.ts getOdds nsd', nsd);
+                if (!nsd) {
+                    console.log('Games.ts getOdds nsd', nsd, BT, blk);
+                    return {};
+                }
                 const tmp:Odds = this.member[sBT].member[nsd.num];
                 // const ba = BaNum(tmp.PerStep ? tmp.PerStep : 1);
                 if (tmp.PerStep > 0) {

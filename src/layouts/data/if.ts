@@ -255,6 +255,7 @@ export interface ParamLog {
     ovalue:string;
     nvalue:string;
     adminid:number;
+    UserName?:number;
 }
 export interface MyUser {
     id: number;
@@ -291,4 +292,12 @@ export interface LeverData extends HasID {
     LongT: number;
     ShortT: number;
     ModifyID: number;
+}
+export interface GameType {
+    GType:string;
+    OpenNums:number;
+    OpenSP:number;
+    StartNum:number;
+    EndNum:number;
+    SameNum:number;
 }

@@ -12,24 +12,26 @@
 		</div>
         <div v-if="data.length>0" class='mytable'>
             <div class="row">
-                <div class='col-2 mytable-head mytable-field'>{{$t('Label.TermID')}}</div>
-                <div class='col-2 mytable-head mytable-fielab'>{{`${$t('Label.OpenDate')} ${$t('Label.Time')}`}}</div>
+                <div class='col-1 mytable-head mytable-field'>{{$t('Label.TermID')}}</div>
+                <div class='col-2 mytable-head mytable-field'>{{`${$t('Label.OpenDate')} ${$t('Label.Time')}`}}</div>
                 <div class='col-1 mytable-head mytable-field'>{{$t('Label.BetEndTime')}}</div>
                 <div class='col-1 mytable-head mytable-field'>{{$t('Label.SPEndTime')}}</div>
                 <div class='col-2 mytable-head mytable-field'>{{$t('Dialog.OpenResult')}}</div>
                 <div class='col-1 mytable-head mytable-field'>{{$t('Label.Status')}}</div>
+                <div class='col-1 mytable-head mytable-field'>{{$t('Title.EditMan')}}</div>
                 <div class='col mytable-head mytable-field'></div>
             </div>
             <div class="row"
                 v-for="(itm,idx) in data"
                 :key="idx"
             >
-                <div class='col-2 mytable-field'>{{itm.TermID}}</div>
+                <div class='col-1 mytable-field'>{{itm.TermID}}</div>
                 <div class='col-2 mytable-field'>{{itm.PDate + ' ' + itm.PTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTimeS}}</div>
                 <div class='col-2 mytable-field'><div style='word-break: normal;'>{{itm.Result ? itm.Result.replace(/\,/g,', ') : ''}} {{ itm.SpNo ? `+${itm.SpNo}`:'' }}</div></div>
                 <div class='col-1 mytable-field'>{{ itm.isCanceled ? $t('Label.Settled.4') : $t(`Label.Settled.${itm.isSettled}`)}}</div>
+                <div class='col-1 mytable-field'>{{ itm.isSettled ? itm.UserName : '' }}</div>
                 <div class='col mytable-field'>
                     <div class="row">
                         <div class='col' v-if="itm.isSettled===0 && itm.isCanceled===0"><q-btn color="blue" dense :label="$t('Button.Edit')" @click="Edit(itm)" /></div>
@@ -131,9 +133,9 @@
             </q-card-section>
 
             <q-card-actions align="right" class="text-primary">
-                <q-btn flat label="Gens" @click="RandNums()" />
-                <q-btn flat label="Send" @click="SendNums()" />
-                <q-btn flat label="Cancel" v-close-popup />
+                <q-btn flat :label="$t('Button.GenNums')" @click="RandNums()" />
+                <q-btn flat :label="$t('Button.Send')" @click="SendNums()" />
+                <q-btn flat :label="$t('Label.Cancel')" v-close-popup />
             </q-card-actions>
         </q-card>
         </q-dialog>
@@ -203,7 +205,7 @@
                 <td>{{$t(`Table.${itm.mykey}`)}}</td>
                 <td>{{itm.ovalue}}</td>
                 <td>{{itm.nvalue}}</td>
-                <td>{{itm.adminid}}</td>
+                <td>{{itm.UserName}}</td>
             </tr>
           </table>
         </q-card-section>
@@ -216,22 +218,14 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
-import { SelectOptions, CommonParams, Msg, ParamLog, LoginInfo } from './data/if';
+import { SelectOptions, CommonParams, Msg, ParamLog, LoginInfo, GameType } from './data/if';
 import { Game, Terms } from './data/schema';
 import JDate from './components/Date/JDate';
 import { dateAddZero } from './components/func';
 import GameSelector from './components/GameSelector.vue';
+import NumFunc from '../components/Functions/Nums';
 
 Vue.component('GS', GameSelector);
-
-interface GameType {
-    GType:string;
-    OpenNums:number;
-    OpenSP:number;
-    StartNum:number;
-    EndNum:number;
-    SameNum:number;
-}
 
 @Component
 export default class TermManager extends Vue {
@@ -449,6 +443,7 @@ export default class TermManager extends Vue {
         this.isAddTerm = true;
     }
     InputNum(v:Terms, rlt?:string, spno?:string) {
+        this.oldTerm = { ...v };
         if (rlt) {
             this.nums = rlt.split(',');
             if (spno) {
@@ -503,6 +498,11 @@ export default class TermManager extends Vue {
         return true;
     }
     RandNums() {
+        console.log('RandNums', this.nums.length, this.curGType);
+        if (this.curGType) {
+            this.nums = NumFunc.GenNums(this.curGType);
+        }
+        /*
         const RN = () => {
             let num = Math.round(Math.random() * 10000);
             if (num > 9999) num = 9999;
@@ -517,6 +517,7 @@ export default class TermManager extends Vue {
             tmp.push(RN());
         }
         this.nums = tmp;
+        */
     }
     async SendNums() {
         if (!this.chkNums(this.nums)) {

@@ -49,7 +49,7 @@
         v-for="(itm,idx) in list"
         :key="'bh'+idx"
         >
-        <td class="col-1 mytable-field-txt">{{itm.id}}</td>
+        <td class="col-1 mytable-field-txt">{{`${itm.betid ? itm.betid+':' : '' }${itm.id}`}}</td>
         <td class="col-1 mytable-field-txt">{{itm.UPName}}</td>
         <td class="col-1 mytable-field-txt">{{itm.UName}}</td>
         <td class="col-1 mytable-field-txt">{{DTString(itm.CreateTime)}}</td>
@@ -183,6 +183,7 @@ export default class BetLists extends Vue {
     param.isDetail = this.isDetail ? 1 : 0;
     const msg:Msg = await this.store.ax.getApi('getBetHeaders', param);
     console.log('SearchData', msg);
+    this.list = [];
     if (msg.ErrNo === 0) {
       const bhs:BetHeader[] = msg.data as BetHeader[];
       // console.log('GameList:',this.GameList);

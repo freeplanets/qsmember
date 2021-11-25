@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { BetHeader, SelectOptions, BetContent } from '../data/if';
+import { BetHeader, SelectOptions, BetContent, NumData, AnyObject } from '../data/if';
 
 const chkColorOther = (v:number, GType:string) => {
     const Blue = 'blue_ball';
@@ -101,8 +101,19 @@ const NumPass = (GType:string, num:number, V:any, sct:boolean, bt:number) => {
     */
     let tmp = V.$t(`Game.${GType}.Item.${t}.subtitle.${n}`);
     if (sct) {
-        const k = Math.floor((num % 100) / 10);
-        tmp = `${V.$t(`Game.${GType}.Item.${bt}.sctitle.${k}`)} ${tmp}`;
+        // const k = Math.floor((num % 100) / 10);
+        // tmp = `${V.$t(`Game.${GType}.Item.${bt}.sctitle.${k}`)} ${tmp}`;
+        const chk:AnyObject = V.$t(`Game.${GType}.Item.${bt}`);
+        const k = Math.floor((num > 1000 || num < 100 ? num % 100 : num) / 10);
+        let lbl = '';
+        if (chk.sctitle) {
+            lbl = `Game.${GType}.Item.${bt}.sctitle.${k}`;
+            // tmp = V.$t('Game.' + GType + '.Item.' + bt + '.sctitle.' + k) + ' ' + tmp;
+        } else {
+            lbl = `Game.${GType}.Item.${k}.shortT1`;
+            // tmp = V.$t('Game.' + GType + '.Item.' + k + '.shortT1') + ' ' + tmp;
+        }
+        tmp = `${V.$t(lbl)} ${tmp}`;
     }
     return tmp;
 };
@@ -247,7 +258,7 @@ function fixP(v?:number|string):string|undefined {
     return `${n}`;
 }
 export function itemNameNew(GType:string, bt:number, num:number, V:Vue, dgt = 1, showScTitle = false) {
-    // console.log('itemName:', bt, num, GType);
+    if (GType === 'Always' && bt === 1) console.log('itemName:', bt, num, GType);
     if (!bt) return num;
     let n = GType === 'Happy' && bt === 1 ? num % 100 : num % 10;
     let h;
@@ -256,6 +267,7 @@ export function itemNameNew(GType:string, bt:number, num:number, V:Vue, dgt = 1,
     } else {
         h = Math.floor(num / 10);
     }
+    if (GType === 'Always') return num % 10;
     if (GType === 'Cars') {
         if (bt === 1) {
             if (n === 0) {
@@ -321,41 +333,33 @@ export function itemNameNew(GType:string, bt:number, num:number, V:Vue, dgt = 1,
     if (num < 10 && (GType === 'MarkSix' || GType === 'HashSix' || GType === 'Happy8' || dgt === 2)) return `0${num}`;
     return num;
 }
-function subRematerNum(GType:string, BetType:number, nm:number, btc:BtN) {
-    let Num = '';
-    if (btc.sctitle && btc.subtitle) {
-        const tail = nm % 10;
-        const head = (nm - tail) / 10;
-        Num = `${btc.sctitle[head]}:${btc.subtitle[tail]}`;
-    } else if (btc.sctitle) {
-        Num = btc.sctitle[nm];
-    } else if (btc.subtitle) {
-        Num = btc.subtitle[nm];
-    } else {
-        Num = String(nm);
-    }
-    return Num;
-}
 function RemasterNum(GType:string, Num:string, vue:Vue, BetType = 0, Odds = 0) {
     if (!BetType) return Num;
     const tmp:any = vue.$t(`Game.${GType}.Item.${BetType}`);
     const btc = tmp as BtN;
     if (Num.indexOf('x') !== -1) {
         const nums = Num.replace(/x/g, '').split(' ');
-        const ans = nums.map((nm) => subRematerNum(GType, BetType, parseInt(nm, 10), btc));
+        let ans:string[];
+        if ((GType === 'HashSix' || GType === 'MarkSix') && BetType === 15) {
+            ans = nums.map((nm) => NumPass(GType, parseInt(nm, 10), vue, true, BetType));
+        } else {
+            // ans = nums.map((nm) => subRematerNum(GType, BetType, parseInt(nm, 10), btc));
+            ans = nums.map((nm) => itemNameNew(GType, BetType, parseInt(nm, 10), vue, 0, true));
+        }
         Num = ans.join(',');
     } else {
-        Num = subRematerNum(GType, BetType, parseInt(Num, 10), btc);
+        // Num = subRematerNum(GType, BetType, parseInt(Num, 10), btc);
+        Num = itemNameNew(GType, BetType, parseInt(Num, 10), vue, 0, true);
     }
     return `<font color='blue'>${btc.title}:</font> ${Num} (<font color='red'>${parseFloat(Odds.toFixed(4))}</font>)`;
 }
 function RemasterCon(BC:any, GType:string, vue:Vue):string {
-    // console.log('RemasterCon:', BC);
+    console.log('RemasterCon:', BC);
     const btc:BetContent = BC as BetContent;
     if (GType) {
         let tItm:BtN|undefined;
         if (btc.BetType) {
-            console.log('btc.BetType:', btc.BetType, btc);
+            // console.log('btc.BetType:', btc.BetType, btc);
             const tmp:any = vue.$t(`Game.${GType}.Item.${btc.BetType}`);
             tItm = tmp as BtN;
         }
@@ -363,9 +367,9 @@ function RemasterCon(BC:any, GType:string, vue:Vue):string {
         if (btc.Content) {
             let stmp:BtN|undefined;
             let subBt = '';
-            btc.Content.map((itm) => {
+            btc.Content.map((itm:NumData) => {
                 if (itm.BetType) {
-                    console.log('btc.BetType:', itm.BetType, itm);
+                    // console.log('btc.BetType:', itm.BetType, itm);
                     const tt:any = vue.$t(`Game.${GType}.Item.${itm.BetType}`);
                     stmp = tt as BtN;
                     // subBt = tItm ? '' : (stmp ? `<span class= "BetType">${stmp.title}</span>:` : '');
@@ -375,10 +379,13 @@ function RemasterCon(BC:any, GType:string, vue:Vue):string {
                 }
                 // let tmp:string;
                 let numtitle = '';
-                let bt = 0;
+                let bt = itm.BetType ? itm.BetType : 0;
+                if (!bt) bt = btc.BetType ? btc.BetType : 0;
+                /*
                 if (btc.BetType && itm.BetType) {
                     bt = itm.BetType;
                 }
+                */
                 if (typeof (itm.Num) === 'number') {
                     numtitle = itemNameNew(GType, bt, itm.Num, vue, 1, true);
                 } else {
@@ -395,7 +402,7 @@ function RemasterCon(BC:any, GType:string, vue:Vue):string {
     return BC;
 }
 export function BHRemaster(bh:BetHeader, glist:SelectOptions[], vue:Vue):BetHeader {
-    console.log('BHRemaster', bh);
+    // console.log('BHRemaster', bh);
     const gameid = parseInt(String(bh.GameID), 10);
     const f = glist.find((itm) => itm.value === gameid);
     if (f) {

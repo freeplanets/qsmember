@@ -1685,55 +1685,55 @@ const BTCHash:Layout = [
         name: 'Game.BTCHash.Menu.Group.0.title',
         cont: [
             {
-                title: 'Game.BTCHash.Item.1.sctitle.0',
+                title: 'Game.BTCHash.Item.1.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 1, Num: 0 }, { Pos: 0, PosFix: true, BT: 1, Num: 1 }, { Pos: 0, PosFix: true, BT: 6, Num: 0 }, { Pos: 0, PosFix: true, BT: 6, Num: 1 }, { Pos: 0, PosFix: true, BT: 11, Num: 0 }, { Pos: 0, PosFix: true, BT: 11, Num: 1 }],
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.2.sctitle.0',
+                title: 'Game.BTCHash.Item.2.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 2, Num: 0 }, { Pos: 0, PosFix: true, BT: 2, Num: 1 }, { Pos: 0, PosFix: true, BT: 7, Num: 0 }, { Pos: 0, PosFix: true, BT: 7, Num: 1 }, { Pos: 0, PosFix: true, BT: 12, Num: 0 }, { Pos: 0, PosFix: true, BT: 12, Num: 1 }],
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.3.sctitle.0',
+                title: 'Game.BTCHash.Item.3.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 3, Num: 0 }, { Pos: 0, PosFix: true, BT: 3, Num: 1 }, { Pos: 0, PosFix: true, BT: 8, Num: 0 }, { Pos: 0, PosFix: true, BT: 8, Num: 1 }, { Pos: 0, PosFix: true, BT: 13, Num: 0 }, { Pos: 0, PosFix: true, BT: 13, Num: 1 }],
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.4.sctitle.0',
+                title: 'Game.BTCHash.Item.4.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 4, Num: 0 }, { Pos: 0, PosFix: true, BT: 4, Num: 1 }, { Pos: 0, PosFix: true, BT: 9, Num: 0 }, { Pos: 0, PosFix: true, BT: 9, Num: 1 }, { Pos: 0, PosFix: true, BT: 14, Num: 0 }, { Pos: 0, PosFix: true, BT: 14, Num: 1 }],
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.5.sctitle.0',
+                title: 'Game.BTCHash.Item.5.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 5, Num: 0 }, { Pos: 0, PosFix: true, BT: 5, Num: 1 }, { Pos: 0, PosFix: true, BT: 10, Num: 0 }, { Pos: 0, PosFix: true, BT: 10, Num: 1 }, { Pos: 0, PosFix: true, BT: 15, Num: 0 }, { Pos: 0, PosFix: true, BT: 15, Num: 1 }],
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.16.sctitle.0',
+                title: 'Game.BTCHash.Item.16.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 16, Num: 0 }, { Pos: 0, PosFix: true, BT: 16, Num: 1 }, { Pos: 0, PosFix: true, BT: 17, Num: 0 }, { BT: 17, Num: 1 }],
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.18.sctitle.0',
+                title: 'Game.BTCHash.Item.18.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 18, Num: 0 }, { Pos: 0, PosFix: true, BT: 18, Num: 1 }, { Pos: 0, PosFix: true, BT: 19, Num: 0 }, { Pos: 0, PosFix: true, BT: 19, Num: 1 }],
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.20.sctitle.0',
+                title: 'Game.BTCHash.Item.20.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 20, Num: 0 }, { Pos: 0, PosFix: true, BT: 20, Num: 1 }, { Pos: 0, PosFix: true, BT: 21, Num: 0 }, { Pos: 0, PosFix: true, BT: 21, Num: 1 }],
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.22.sctitle.0',
+                title: 'Game.BTCHash.Item.22.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 22, Num: 0 }, { Pos: 0, PosFix: true, BT: 22, Num: 1 }, { Pos: 0, PosFix: true, BT: 23, Num: 0 }, { Pos: 0, PosFix: true, BT: 23, Num: 1 }],
                 ],
@@ -1859,19 +1859,19 @@ const BTCHash:Layout = [
         name: 'Game.BTCHash.Menu.Group.7.title',
         cont: [
             {
-                title: 'Game.BTCHash.Item.43.sctitle.0',
+                title: 'Game.BTCHash.Item.43.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 43, Num: 0 }, { Pos: 0, PosFix: true, BT: 43, Num: 1 }, { Pos: 0, PosFix: true, BT: 43, Num: 2 }, { Pos: 0, PosFix: true, BT: 43, Num: 3 }, { Pos: 0, PosFix: true, BT: 43, Num: 4 }],
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.44.sctitle.0',
+                title: 'Game.BTCHash.Item.44.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 44, Num: 0 }, { Pos: 0, PosFix: true, BT: 44, Num: 1 }, { Pos: 0, PosFix: true, BT: 44, Num: 2 }, { Pos: 0, PosFix: true, BT: 44, Num: 3 }, { Pos: 0, PosFix: true, BT: 44, Num: 4 }],
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.45.sctitle.0',
+                title: 'Game.BTCHash.Item.45.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 45, Num: 0 }, { Pos: 0, PosFix: true, BT: 45, Num: 1 }, { Pos: 0, PosFix: true, BT: 45, Num: 2 }, { Pos: 0, PosFix: true, BT: 45, Num: 3 }, { Pos: 0, PosFix: true, BT: 45, Num: 4 }],
                 ],
@@ -1888,7 +1888,7 @@ const BTCHash:Layout = [
         name: 'Game.BTCHash.Menu.Group.8.title',
         cont: [
             {
-                title: 'Game.BTCHash.Item.1.sctitle.0',
+                title: 'Game.BTCHash.Item.1.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 47, Num: 10 },
                         { Pos: 0, PosFix: true, BT: 47, Num: 11 },
@@ -1899,7 +1899,7 @@ const BTCHash:Layout = [
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.2.sctitle.0',
+                title: 'Game.BTCHash.Item.2.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 47, Num: 20 },
                         { Pos: 0, PosFix: true, BT: 47, Num: 21 },
@@ -1910,7 +1910,7 @@ const BTCHash:Layout = [
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.3.sctitle.0',
+                title: 'Game.BTCHash.Item.3.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 47, Num: 30 },
                         { Pos: 0, PosFix: true, BT: 47, Num: 31 },
@@ -1921,7 +1921,7 @@ const BTCHash:Layout = [
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.4.sctitle.0',
+                title: 'Game.BTCHash.Item.4.shortT1',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 47, Num: 40 },
                     { Pos: 0, PosFix: true, BT: 47, Num: 41 },
@@ -1932,7 +1932,7 @@ const BTCHash:Layout = [
                 ],
             },
             {
-                title: 'Game.BTCHash.Item.5.sctitle.0',
+                title: 'Game.BTCHash.Item.5.shortT1',
                 item: [
                     [
                         { Pos: 0, PosFix: true, BT: 47, Num: 50 },

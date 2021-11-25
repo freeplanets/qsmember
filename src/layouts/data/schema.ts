@@ -59,6 +59,7 @@ export interface Terms extends HasID {
     isSettled?:number;
     isCanceled?: number;
     ModifyID:number;
+    UserName?:string;
 }
 
 export interface Game extends HasID {
