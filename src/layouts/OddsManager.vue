@@ -163,7 +163,7 @@
                                 :key="'BItm'+idx"
                                 :name="'tab'+BT"
                                 :label="$t(`Game.${curGType}.Item.${BT}.title`)"
-                                @click="BItm.curBT=BT;BItm.twOdds ? BItm.isTwOdd=BItm.twOdds[idx] : 0"
+                                @click="BItm.curBT=BT;BItm.twOdds ? BItm.isTwOdd=BItm.twOdds[idx] : 0; BItm.NoOddsAdjust ? BItm.NoAdjust=BItm.NoOddsAdjust[idx]:0"
                                 />
                         </q-tabs>
 
@@ -222,6 +222,7 @@
                                             :GameID="curGameID"
                                             :dgt="BItm.dgt"
                                             :Odds="getOdds(nItm,BT)"
+                                            :NoOddsAdjust="!!BItm.NoAdjust"
                                             :ExtOdds="Game.getOdds(nItm,BT,(BItm.isTwOdd ? BItm.isTwOdd : 0 ))"
                                             :rightLine="nidx==(LItm.length-1)"
                                             :bottomLine="parseInt(Lidx,10)==BItm.item.length-1 || (nidx==(BItm.item[Lidx].length-1) && (BItm.item[Lidx+1] && BItm.item[Lidx+1].length<BItm.item[Lidx].length)) || (BItm.item[Lidx+1] && (!BItm.item[Lidx+1][nidx] || BItm.item[Lidx+1][nidx].BT<0))"

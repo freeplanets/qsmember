@@ -10,7 +10,7 @@
                 <q-btn  round size="sm" :color="getColor()" :label="title" @click="showOdds" />
             </td>
             <td class='col data'>
-                <div class='row' v-if="!EditMode" @dblclick="SwitchMode(Odds.Odds)">
+                <div class='row' v-if="!EditMode && !NoOddsAdjust" @dblclick="SwitchMode(Odds.Odds)">
                     <div class='col btnpos'>
                         <q-btn dense style="font-szie:6px" icon="add" @click="setOdds(Odds.BT,Odds.Num,1,Odds.Steps)" />
                     </div>
@@ -19,7 +19,7 @@
                         <q-btn dense style="font-szie:6px" icon="remove" @click="setOdds(Odds.BT,Odds.Num,-1,Odds.Steps)" />
                     </div>
                 </div>
-                <div class='row' v-if="EditMode" @dblclick="SwitchMode">
+                <div class='row' v-if="EditMode && !NoOddsAdjust" @dblclick="SwitchMode">
                     <div class='col btnpos'>
                         <q-btn dense icon="clear" @click="EditMode=false" />
                     </div>
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class='row'
-                    v-if="ExtOdds && !EditMode1"
+                    v-if="ExtOdds && !EditMode1 && !NoOddsAdjust"
                      @dblclick="SwitchMode1(ExtOdds.Odds)"
                 >
                     <div class='col btnpos'>
@@ -42,7 +42,7 @@
                         <q-btn dense style="font-szie:6px" icon="remove" @click="setOdds(ExtOdds.BT,ExtOdds.Num,-1,ExtOdds.Steps)" />
                     </div>
                 </div>
-                <div class='row' v-if="ExtOdds && EditMode1" @dblclick="SwitchMode1">
+                <div class='row' v-if="ExtOdds && EditMode1 && !NoOddsAdjust" @dblclick="SwitchMode1">
                     <div class='col btnpos'>
                         <q-btn dense icon="clear" @click="EditMode1=false" />
                     </div>
@@ -85,6 +85,7 @@ export default class OddsBlock extends Vue {
     @Prop() readonly colorWave?:boolean;
     @Prop() readonly colorExt?:number;
     @Prop() readonly dgt?:number;
+    @Prop() readonly NoOddsAdjust?:boolean;
     NewOdds=0;
     EditMode=false;
     NewOdds1=0;

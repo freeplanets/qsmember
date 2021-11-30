@@ -198,14 +198,18 @@ export default class AddUser extends Vue {
       if (ans.ErrNo === 0) {
         this.data = ans.data as User[];
 
-        this.data.map((u) => {
+        this.data = this.data.map((u) => {
+          if (u.Account && u.Account.length > 20) {
+            u.Account = u.Nickname;
+          }
           const tmp = this.typesOption.find((itm) => itm.value === u.Types);
           if (tmp) {
             u.TypeName = tmp.label;
           }
+          return u;
         });
+        console.log('getUsers check:', this.data);
       }
-      console.log('getUsers', this.data);
     }
 
     mounted() {

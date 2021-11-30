@@ -229,8 +229,8 @@ function rgM3Pos(nums:string) {
 function fixP(v?:number|string):string|undefined {
     let n:number | undefined;
     if (typeof (v) === 'string') {
-        if (v.indexOf(', ') >= 0) {
-            const arr = v.split(', ');
+        if (v.indexOf(',') >= 0) {
+            const arr = v.split(',');
             const nn:string[] = [];
             arr.map((vv) => {
                 const tmp:string|undefined = fixP(vv);

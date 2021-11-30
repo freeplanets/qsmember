@@ -39,6 +39,7 @@ export interface contBlock {
     start?:number;
     end?:number;
     twOdds?:number[];
+    NoOddsAdjust?:number[];
     isTwOdd?:number;
     colorExt?:number;
     dgt?:number;
@@ -2023,7 +2024,8 @@ const HashSix:Layout = [
             {
                 colorWave: true,
                 aBT: [9, 7, 8, 79, 80, 81],
-                twOdds: [0, 0, 1, 1, 1, 1],
+                // twOdds: [0, 0, 1, 1, 1, 1],
+                NoOddsAdjust: [0, 0, 1, 1, 1, 1],
                 sltedItem: 0,
                 start: 0,
                 end: 49,

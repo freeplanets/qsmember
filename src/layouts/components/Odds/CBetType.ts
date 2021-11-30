@@ -93,7 +93,7 @@ export default class CBetType implements BetType {
 		return this.num;
 	}
 	getPos(pos:number) {
-		console.log('getPos', pos, this.pos);
+		// console.log('getPos', pos, this.pos);
 		return this.pos[pos];
 	}
 	get MaxWin() {

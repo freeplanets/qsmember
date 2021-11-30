@@ -40,7 +40,7 @@ export default class PageIndex extends Vue {
           await this.setUserTP();
           this.$q.dialog({
               title: `${this.$t('Table.Password')}`,
-              message: `${this.$t('Table.Pass2OrNot')}?`,
+              message: `${this.$t('Table.Pass2Lvl')}?`,
               cancel: true,
               persistent: true,
           }).onOk(() => {
