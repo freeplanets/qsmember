@@ -82,12 +82,12 @@ export function fixlen(n: number): number {
     const p: number = s.length - (s.indexOf('.') + 1);
     return p;
 }
-const Num7 = (bt:number, num:number, V:any) => {
+const Num7 = (bt:number, num:number, GType:string, V:Vue) => {
     let base = 8;
-    if (V.GType === 'HashSix') base = 7;
+    if (GType === 'HashSix') base = 7;
     const t = Math.floor(num / base);
     const n = num % base;
-    return String(V.$t(`Game.MarkSix.Item.${bt}.subtitle.${t}`)) + String(n);
+    return String(V.$t(`Game.${GType}.Item.${bt}.subtitle.${t}`)) + String(n);
 };
 const NumPass = (GType:string, num:number, V:any, sct:boolean, bt:number) => {
     let base = 10;
@@ -138,7 +138,7 @@ export const itemName = (bt:number, num:number, V:any, dgt = 1, showScTitle = fa
         // if(bt== 1) return V.$t('Game.Cars.Item.' + bt +'.sctitle[' + h +']') + ' ' + n 
         // return V.$t('Game.Cars.Item.' + bt +'.sctitle[' + h +']') + V.$t('Game.Cars.Item.' + bt +'.subTitle[' + n +']')
     }
-    if ((V.GType === 'MarkSix' || V.GType === 'HashSix') && bt === 53) return Num7(bt, num, V);
+    if ((V.GType === 'MarkSix' || V.GType === 'HashSix') && bt === 53) return Num7(bt, num, V.GType, V);
     if (((V.GType === 'MarkSix' || V.GType === 'HashSix') && bt === 15) || (V.GType === 'BTCHash' && bt === 47)) return NumPass(V.GType, num, V, showScTitle, bt);
     if ((V.GType === 'MarkSix' || V.GType === 'HashSix') && bt === 68) return DragonTiger(bt, num, V); /* 龍虎 */
     // let subtt = V.$t('Game.'+V.GType+'.Item.' + bt +'.subTitle')
@@ -258,7 +258,7 @@ function fixP(v?:number|string):string|undefined {
     return `${n}`;
 }
 export function itemNameNew(GType:string, bt:number, num:number, V:Vue, dgt = 1, showScTitle = false) {
-    if (GType === 'Always' && bt === 1) console.log('itemName:', bt, num, GType);
+    // if (GType === 'Always' && bt === 1) console.log('itemName:', bt, num, GType);
     if (!bt) return num;
     let n = GType === 'Happy' && bt === 1 ? num % 100 : num % 10;
     let h;
@@ -282,15 +282,18 @@ export function itemNameNew(GType:string, bt:number, num:number, V:Vue, dgt = 1,
             return tmp1 + tmp2;
         }
     }
-    if ((GType === 'MarkSix' || GType === 'HashSix') && bt === 53) return Num7(bt, num, V);
+    if (GType === 'HashSix' && bt === 83) console.log('chk0');
+    if ((GType === 'MarkSix' || GType === 'HashSix') && bt === 53) return Num7(bt, num, GType, V);
     if (((GType === 'MarkSix' || GType === 'HashSix') && bt === 15) || (GType === 'BTCHash' && bt === 47)) return NumPass(GType, num, V, showScTitle, bt);
     if ((GType === 'MarkSix' || GType === 'HashSix') && bt === 68) return DragonTiger(bt, num, V); /* 龍虎 */
+    if (GType === 'HashSix' && bt === 83) console.log('chk1');
     // let subtt = V.$t('Game.'+GType+'.Item.' + bt +'.subTitle')
     const tmpT:any = V.$t(`Game.${GType}.Item.${bt}`);
     const btitem:BtN = tmpT as BtN;
     if (showScTitle) {
         if (btitem.sctitle) {
             if (btitem.subtitle) {
+                if (GType === 'HashSix' && (bt >= 82 && bt <= 88)) n = num % 100;
                 return btitem.sctitle[h] + btitem.subtitle[n];
             }
                 return `${btitem.sctitle[h]} ${n}`;
@@ -319,6 +322,9 @@ export function itemNameNew(GType:string, bt:number, num:number, V:Vue, dgt = 1,
       }
       */
       exTitle = btitem.subtitle[ext];
+      if (GType === 'HashSix' && bt === 83) {
+          console.log(GType, bt, num, exTitle);
+      }
       // exTitle = V.$t('Game.' + GType + '.Item.'+bt+'.shortT') + V.$t('Game.' + GType + '.Item.'+bt+'.subtitle.' + ext)
       return exTitle;
     }
@@ -386,8 +392,10 @@ function RemasterCon(BC:any, GType:string, vue:Vue):string {
                     bt = itm.BetType;
                 }
                 */
-                if (typeof (itm.Num) === 'number') {
+                // if (bt === 83) console.log(GType, bt, itm.Num, typeof itm.Num);
+                if (typeof itm.Num === 'number') {
                     numtitle = itemNameNew(GType, bt, itm.Num, vue, 1, true);
+                    // if (bt === 83) console.log(GType, bt, itm.Num, numtitle);
                 } else {
                     numtitle = rgM3Pos(itm.Num);
                 }
