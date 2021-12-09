@@ -22,6 +22,9 @@ export default {
     '有未成交單處理中', // 19
     '網路系統異常，平倉改採人工平倉，工作人員會依據你提出平倉的時間點，依當時市價平倉', // 20
     '系統已斷線，請重新登入', // 21
+    '號碼不可相同', // 22
+    '號碼超出範圍', // 23
+    '注單已成交', // 24
   ],
   Label: {
     GameName: '彩局名稱',
@@ -88,7 +91,7 @@ export default {
       '會員取消',
       '系統註銷',
     ],
-    ProcStatus: ['處理中', '處理中', '成交', '取消', '取消'],
+    ProcStatus: ['處理中', '處理中', '成交', '取消', '取消', '系統平倉'],
     GAMsg: '請用手機APP-Google Authenticator 掃瞄後存檔.',
     InputGA: '請輸入Google 認証碼(6位數).',
     GAError: '認証碼錯誤!!',
@@ -1072,10 +1075,10 @@ export default {
           sctitle: ['', '1球', '2球', '3球', '4球', '5球'],
           subtitle: ['單', '雙'],
         },
-        5: { title: '總和', subtitle: ['大', '小'] },
-        6: { title: '總和', subtitle: ['單', '雙'] },
+        5: { title: '總和', sctitle: ['和'], subtitle: ['大', '小'] },
+        6: { title: '總和', sctitle: ['和'], subtitle: ['單', '雙'] },
         7: { title: '龍虎', subtitle: ['龍', '虎'] },
-        8: { title: '龍虎', subtitle: ['和', ''] },
+        8: { title: '龍虎', sctitle: ['龍虎'], subtitle: ['和', ''] },
         12: { title: '前三', subtitle: ['', '豹子', '順子', '對子', '半順', '雜六'] },
         13: { title: '中三', subtitle: ['', '豹子', '順子', '對子', '半順', '雜六'] },
         14: { title: '後三', subtitle: ['', '豹子', '順子', '對子', '半順', '雜六'] },

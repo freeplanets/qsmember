@@ -1,18 +1,23 @@
 <template>
   <div class="q-pa-md">
     <div class="q-gutter-y-md column" style="max-width: 300px">
-      <q-input square outlined v-model="Account">
-        <template v-slot:prepend>
-          <q-icon name="account_circle" />
-        </template>
-      </q-input>
+      <q-form
+        @submit="login"
+        class="q-gutter-md"
+      >
+        <q-input square outlined v-model="Account">
+          <template v-slot:prepend>
+            <q-icon name="account_circle" />
+          </template>
+        </q-input>
 
-      <q-input square outlined v-model="Password" type="password">
-        <template v-slot:prepend>
-          <q-icon name="vpn_key" />
-        </template>
-      </q-input>
-      <q-btn color="red" icon-right="send" label="Login" @click="login()" />
+        <q-input square outlined v-model="Password" type="password" autocomplete="on">
+          <template v-slot:prepend>
+            <q-icon name="vpn_key" />
+          </template>
+        </q-input>
+        <q-btn color="red" icon-right="send" label="Login" type="submit" />
+      </q-form>
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">

@@ -16,7 +16,7 @@
                 <div class='col-2 mytable-head mytable-field'>{{`${$t('Label.OpenDate')} ${$t('Label.Time')}`}}</div>
                 <div class='col-1 mytable-head mytable-field'>{{$t('Label.BetEndTime')}}</div>
                 <div class='col-1 mytable-head mytable-field'>{{$t('Label.SPEndTime')}}</div>
-                <div class='col-2 mytable-head mytable-field'>{{$t('Dialog.OpenResult')}}</div>
+                <div class='col-3 mytable-head mytable-field'>{{$t('Dialog.OpenResult')}}</div>
                 <div class='col-1 mytable-head mytable-field'>{{$t('Label.Status')}}</div>
                 <div class='col-1 mytable-head mytable-field'>{{$t('Title.EditMan')}}</div>
                 <div class='col mytable-head mytable-field'></div>
@@ -29,7 +29,14 @@
                 <div class='col-2 mytable-field'>{{itm.PDate + ' ' + itm.PTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTimeS}}</div>
-                <div class='col-2 mytable-field'><div style='word-break: normal;'>{{itm.Result ? itm.Result.replace(/\,/g,', ') : ''}} {{ itm.SpNo ? `+${itm.SpNo}`:'' }}</div></div>
+                <div class='col-3 mytable-field'>
+                    <RL
+                        :game="curGType"
+                        :Result="(curGType.GType ==='MarkSix' || curGType.GType ==='HashSix') && itm.ResultFmt ? itm.ResultFmt.RGNums : undefined"
+                        :SpNo="(curGType.GType ==='MarkSix' || curGType.GType ==='HashSix') && itm.ResultFmt ? itm.ResultFmt.SPNum : undefined"
+                        :Nums="!( curGType.GType ==='MarkSix' || curGType.GType ==='HashSix') ? itm.Result : undefined"
+                    ></RL>
+                </div>
                 <div class='col-1 mytable-field'>{{ itm.isCanceled ? $t('Label.Settled.4') : $t(`Label.Settled.${itm.isSettled}`)}}</div>
                 <div class='col-1 mytable-field'>{{ itm.isSettled ? itm.UserName : '' }}</div>
                 <div class='col mytable-field'>
@@ -224,10 +231,15 @@ import JDate from './components/Date/JDate';
 import { dateAddZero } from './components/func';
 import GameSelector from './components/GameSelector.vue';
 import NumFunc from '../components/Functions/Nums';
+import ResultList from './components/OpenResults/ForTermList.vue';
+import { ErrCode } from '../components/if/ENum';
 
-Vue.component('GS', GameSelector);
-
-@Component
+@Component({
+    components: {
+        GS: GameSelector,
+        RL: ResultList,
+    },
+})
 export default class TermManager extends Vue {
     private store = getModule(LayoutStoreModule);
     private models:SelectOptions | null = null;
@@ -397,14 +409,13 @@ export default class TermManager extends Vue {
     async getTerms() {
         if (this.InProcess) return;
         if (!this.term.GameID) return;
-        console.log('do getTerms');
         this.InProcess = true;
         this.showProgress = true;
         const GameID:number = this.term.GameID;
         this.data = [];
         const ans = await this.ax.getTerms(this.store.personal.id, this.store.personal.sid, GameID, this.sdate.split('/').join('-'));
         console.log('getTerms', ans);
-        if (ans.ErrNo === 0) {
+        if (ans.ErrNo === 0 && ans.data) {
             this.data = ans.data as Terms[];
             if (ans.Game) {
                 this.curGame = ans.Game as Game;
@@ -416,13 +427,14 @@ export default class TermManager extends Vue {
                 this.NoSettleDate = '';
             }
             this.PLog = undefined;
-            /*
-            this.data.map(itm=>{
-                if(itm.ResultFmt){
-                    console.log('getTerms',JSON.parse(itm.ResultFmt));
+            this.data.forEach((itm) => {
+                if (itm.ResultFmt) {
+                    // console.log('getTerms parse', JSON.parse(itm.ResultFmt));
+                    itm.ResultFmt = JSON.parse(itm.ResultFmt);
                 }
-            })
-            */
+                return itm;
+            });
+            console.log('after getTerms', this.data);
         }
         this.InProcess = false;
         this.showProgress = false;
@@ -545,15 +557,17 @@ export default class TermManager extends Vue {
         const ax = this.store.ax;
         const ans = await ax.saveNums(this.store.personal.id, this.store.personal.sid, this.curTid, this.term.GameID, this.nums.join(','), this.curTermSettleStatus, this.PLog);
         // console.log('SendNums',ans);
-        if (ans.ErrNo === 0) {
+        // if (ans.ErrNo === 0) {
             this.showProgress = false;
             this.$q.dialog({
                 title: this.$t('Label.Save') as string,
-                message: 'OK!!',
+                message: this.$t(`Error.${ans.ErrNo}`) as string,
             }).onOk(async () => {
-                await this.getTerms();
+                if (ans.ErrNo === ErrCode.PASS) {
+                    await this.getTerms();
+                }
             });
-        }
+        // }
     }
     async DelTerm(tid:number) {
         const param:CommonParams = {

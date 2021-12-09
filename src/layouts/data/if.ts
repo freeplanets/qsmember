@@ -301,3 +301,9 @@ export interface GameType {
     EndNum:number;
     SameNum:number;
 }
+export interface NumInfo {
+	Num:number;
+	ColorWave: number;
+	Zodiac: number;
+	[key:string]:number;
+}

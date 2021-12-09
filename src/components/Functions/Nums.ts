@@ -1,8 +1,17 @@
 import { GameType } from '../../layouts/data/if';
 
 class Nums {
+	Number(v:number|string) {
+		if (typeof v === 'string') v = parseInt(v, 10);
+		return v;
+	}
+	String(v:number|string) {
+		if (typeof v === 'number') v = v.toString();
+		return v;
+	}
 	isMaxTwoDigitlAfterPoint(v:number|string):boolean {
-		if (typeof v !== 'string') v = String(v);
+		// if (typeof v !== 'string') v = String(v);
+		v = this.String(v);
 		const reg = /^[0-9]+(.[0-9]{0,2})?$/;
 		return reg.test(v);
 	}
