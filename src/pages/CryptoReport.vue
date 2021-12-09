@@ -121,6 +121,7 @@ export default class CrytoReport extends Vue {
     this.store.setShowProgress(false);
   }
   getAskReports(asks:AskTable[], users:UserName[], items:SelectOptions[], askmark:AskMark[]):AskReport[] {
+    console.log('getAskReports', items);
     return asks.map((ask) => {
       const fu = users.find((usr) => usr.id === ask.UserID);
       let UsrName = '';
@@ -194,6 +195,7 @@ export default class CrytoReport extends Vue {
     if (msg.ErrNo === ErrCode.PASS) {
       if (msg.data) {
         const list = msg.data as CryptoItem[];
+        console.log('getData:', list);
         this.options = list.map((itm) => {
           const tmp:SelectOptions = {
             label: `${itm.Title}`,

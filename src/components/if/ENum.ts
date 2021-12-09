@@ -23,7 +23,7 @@ export enum ErrCode {
   APISERVER_GONE_AWAY = 21,
   NO_SAME_NUMBER = 22,
   UNEXPECT_NUMBER = 23,
-  DEAL_IS_CLOSED = 24,  
+  DEAL_IS_CLOSED = 24,
 }
 
 export enum FuncKey {

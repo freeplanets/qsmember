@@ -17,7 +17,8 @@
         <th> {{ $t('Table.AskTable.AskPrice') }} </th>
         <th> {{ $t('Table.AskTable.LeverCredit') }} </th>
         <th> {{ $t('Table.AskTable.Lever') }} </th>
-        <th> {{ `${$t('Label.Settle')} / ${$t('Table.AskTable.CreateTime')}` }} </th>
+        <th> {{ $t('Table.AskTable.CreateTime') }} </th>
+        <th> {{ $t('Table.AskTable.DealTime') }} </th>
         <th> {{ $t('Label.Status') }} </th>
         <th> {{ $t('Report.SettleType') }} </th>
       </tr>
@@ -43,8 +44,8 @@
         <td align='right'> {{ itm.AskPrice.toFixed(2) }} </td>
         <td align='right'> {{ itm.LeverCredit }} </td>
         <td align='right'> {{ itm.Lever }} </td>
-        <td v-if="!itm.isSettle"> {{ new Date(itm.CreateTime).toLocaleString(lang,dOpt) }} </td>
-        <td v-if="itm.isSettle" style="color:green"> {{ new Date(itm.DealTime).toLocaleString(lang,dOpt) }}</td>
+        <td > {{ new Date(itm.CreateTime).toLocaleString(lang,dOpt) }} </td>
+        <td :style="itm.isSettle ? 'color:green' : ''"> {{ new Date(itm.DealTime).toLocaleString(lang,dOpt) }}</td>
         <td align='center' :class="`StatusColor${itm.ProcStatus}`" @click="getPriceTick(itm)"> {{ $t(`Label.ProcStatus.${itm.ProcStatus}`) }} </td>
         <td align='center'> {{ itm.SettleType ? $t('Report.HandSettle') : '' }} </td>
       </tr>

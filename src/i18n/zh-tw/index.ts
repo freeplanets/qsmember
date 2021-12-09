@@ -201,11 +201,12 @@ export default {
       Amount: '金額',
       Fee: '手續費',
       AskFee: '手續費率',
-      AskPrice: '下單價格',
+      AskPrice: '提示價格',
       LeverCredit: '信用額度',
       ExtCredit: '補充額度',
       Lever: '槓桿倍數',
       CreateTime: '下單時間',
+      DealTime: '成交時間',
       AvgPrice: '均價',
     },
     CryptoOpParams: {
