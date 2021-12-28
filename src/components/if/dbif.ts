@@ -1,5 +1,6 @@
-import { HasID, KeyVal } from '../../layouts/data/if';
+import { HasID, KeyVal, Msg } from '../../layouts/data/if';
 import { FuncKey, MsgType, OpTypes } from './ENum';
+import AItemReport from '../class/Item/AItemReport';
 
 export interface AnyObject {
 	[key: string]: any;
@@ -200,7 +201,9 @@ export interface ItemTotal {
   AvgLever:number;
   Items:ItemTypeTotal[];
   Fee:number;
+  FeeShort:number;
   GainLose:number;
+  NetGainLose:number;
   add(ll:LedgerLever, key:number):void;
   reCal():void;
   setTitle(t:HasID[]|string):void;
@@ -218,6 +221,7 @@ export interface LedgerLever {
   SellPrice: number;
   BuyFee:number;
   SellFee:number;
+  TFee:number;
   Lever: number; // 槓桿
   GainLose: number; // 輸贏
   BuyTime?: number; // 買進時間
@@ -290,4 +294,10 @@ export interface EmergencyCloseLog extends EmergencyCloseData {
   Item: string;
   Modifier: string;
   ModifyTime: string;
+}
+
+export interface ReportTotal {
+  getItemReport(sdate:string):Promise<void>;
+  getTitle(key:number[], isLedger:boolean):Promise<Msg>;
+  getReport(ItmRpt:AItemReport):Promise<void>
 }

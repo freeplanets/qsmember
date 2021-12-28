@@ -1,29 +1,33 @@
 import LStore from '../../../layouts/data/LayoutStoreModule';
-import { ItemTotal, LedgerLever } from '../../if/dbif';
+import { LedgerLever, ReportTotal } from '../../if/dbif';
 import { ErrCode } from '../../if/ENum';
 import { Msg } from '../../../layouts/data/if';
-import ItemT, { titleT } from './ItemT';
 import ApiFunc from '../Api/Func';
+import AItemReport from './AItemReport';
 
-export default class ItemTot {
-	private list:ItemTotal[]=[];
-	private isLedger=false;
-	private titles:titleT[] = [];
-	private total!:ItemTotal;
+export default class ItemTot implements ReportTotal {
+	// private list:ItemTotal[]=[];
+	// private isLedger=false;
+	// private titles:titleT[] = [];
+	// private total!:ItemTotal;
 	// private LS:LStore;
+	private data:LedgerLever[]=[];
 	private api:ApiFunc;
 	constructor(ls:LStore) {
 		// this.LS = ls;
 		this.api = new ApiFunc(ls);
 	}
-	async getItemReport(sdate:string, isLedger:boolean):Promise<ItemTotal[]> {
-		this.isLedger = isLedger;
-		this.list = [];
-		this.total = new ItemT(0);
+	async getItemReport(sdate:string):Promise<void> {
+		// this.isLedger = isLedger;
+		// this.list = [];
+		// this.total = new ItemT(0);
+		this.data = [];
 		const msg:Msg = await this.api.getLedgerLever(sdate);
 		if (msg.ErrNo === ErrCode.PASS) {
 			// console.log('getItemReport data', msg.data);
 			if (msg.data) {
+				this.data = msg.data;
+				/*
 				const lt = msg.data as LedgerLever[];
 				lt.forEach((itm) => {
 					this.add(itm);
@@ -41,10 +45,17 @@ export default class ItemTot {
 						});
 					}
 				}
+				*/
 			}
 		}
-		return this.list;
+		// return this.list;
 	}
+	async getReport(ItmRpt:AItemReport) {
+		if (this.data.length > 0) {
+			await ItmRpt.Add(this.data);
+		}
+	}
+	/*
 	add(itm:LedgerLever) {
 		this.total.add(itm, 0); // for total line calculate
 		let key = itm.UpId;
@@ -65,14 +76,17 @@ export default class ItemTot {
 	get Total() {
 		return this.total;
 	}
+	*/
+	/*
 	getItemTitle(id:number) {
 		const f = this.titles.find((itm) => itm.id === id);
 		return f ? f.Title : 'none';
 	}
-	private getTitle(keys:number[]) {
+	*/
+	getTitle(keys:number[], isLedger = false) {
 		let TableName = 'User';
 		let Field = 'Account';
-		if (this.isLedger) {
+		if (isLedger) {
 			TableName = 'Items';
 			Field = 'Title';
 		}

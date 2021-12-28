@@ -19,6 +19,7 @@
 import { Vue, Component, Watch } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from '../../layouts/data/LayoutStoreModule';
+import ChatManager from '../class/Chat/ChatManager';
 
 import ServiceChat from '../class/Chat/ServiceChat';
 import DlgChatBlock from '../Dialog/ChatBlock.vue';
@@ -35,10 +36,14 @@ export default class MsgControl extends Vue {
 		return this.store.CSock as ChatClient;
 	}
 	get Chater() {
-		return this.CSock.Chater;
+		let ans:ChatManager|undefined;
+		if (this.CSock) {
+			ans = this.CSock.Chater ? this.CSock.Chater : undefined;
+		}
+		return ans;
 	}
 	get list() {
-		return this.CSock.Chater.List;
+		return this.Chater ? this.Chater.List : [];
 	}
 	unread = 0;
 	show=true;
@@ -53,7 +58,9 @@ export default class MsgControl extends Vue {
 		console.log('Unread', this.unread);
 	}
 	mounted() {
-		this.Chater.setOwner(this);
+		if (this.Chater) {
+			this.Chater.setOwner(this);
+		}
 	}
 }
 </script>

@@ -13,6 +13,7 @@ export default class ItemT implements ItemTotal {
 	private leverAmount = 0;
 	private avgLever = 0;
 	private fee = 0;
+	private feeShort = 0;
 	private gainlose = 0;
 	private title = '';
 	constructor(private key:number) {
@@ -40,8 +41,14 @@ export default class ItemT implements ItemTotal {
 	get Fee() {
 		return this.fee;
 	}
+	get FeeShort() {
+		return this.feeShort;
+	}
 	get GainLose() {
 		return this.gainlose;
+	}
+	get NetGainLose() {
+		return this.gainlose - this.fee - this.feeShort;
 	}
 	get Items() {
 		return this.items;
@@ -61,6 +68,7 @@ export default class ItemT implements ItemTotal {
 		this.items[itemType].add(ll);
 		const fee = ll.BuyFee + ll.SellFee;
 		this.fee += fee;
+		this.feeShort = ll.TFee;
 	}
 	reCal() {
 		this.amount = 0;

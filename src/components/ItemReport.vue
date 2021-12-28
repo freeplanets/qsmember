@@ -6,6 +6,8 @@
 			v-for = "(item,idx) in items"
 			:key="`item:${idx}`"
 			:itemT="item"
+			:isDialog="isDialog"
+			@showItem="showItem"
 		/>
 		<blk-item-type v-if="list && list.length>1" :itemT="total" />
 	</table>
@@ -28,11 +30,16 @@ export default class ItemReport extends Vue {
 	@Prop({ type: Array }) readonly list!:ItemTotal[];
 	@Prop({ type: Boolean }) readonly isLedger!:boolean;
 	@Prop({ type: Object }) readonly total!:ItemTotal;
+	@Prop({ type: Boolean }) readonly isDialog!:boolean;
 	items:ItemTotal[] = [];
 	@Watch('list', { deep: true, immediate: true })
 	onListChange() {
 		// console.log('ItemReport onListChange', this.list);
 		this.items = this.list;
+	}
+	showItem(key:number, title:string) {
+		// console.log('showItem:', this.isLedger, key);
+		this.$emit('showItem', this.isLedger, key, title);
 	}
 }
 </script>

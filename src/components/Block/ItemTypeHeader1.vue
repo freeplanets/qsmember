@@ -7,7 +7,9 @@
 		<th rowspan="2">{{ $t('Report.AvgLever') }}</th>
 		<th colspan="5">{{ $t('Select.Crypto.ItemTypeLong.1') }}</th>
 		<th colspan="5">{{ $t('Select.Crypto.ItemTypeLong.0') }}</th>
+		<th rowspan="2" class="last">{{ $t('Report.PreGainLose') }}</th>
 		<th rowspan="2">{{ $t('Table.AskTable.Fee') }}</th>
+		<th rowspan="2" class="last">{{ $t('Report.ShortTermFee') }}</th>
 		<th rowspan="2" class="last">{{ $t('Report.TotalGainLose') }}</th>
 	</tr>
 </template>

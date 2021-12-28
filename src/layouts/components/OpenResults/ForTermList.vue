@@ -11,7 +11,7 @@
 								v-for="(num,fi) in Result"
 								:key="`f${num.Num}x${fi}`"
 								:class="`DW_ball_m6 ${Color(num.ColorWave)}`">
-								<div>{{num.Num ? num.Num : num}}</div>
+								<div>{{num.Num !== undefined ? num.Num : num}}</div>
 								<span v-if="num.Zadic" >{{$t(`Game.MarkSix.Item.18.subtitle.${num.Zadic}`)}}</span>
 							</div>
 							<!--sp number-->

@@ -404,6 +404,8 @@ export default {
     GeneralLedger: '總帳',
     Ledger: '分類帳',
     DayReport: '日報表',
+    ShortTermFee: '短線費',
+    PreGainLose: '多空盈虧',
     TotalGainLose: '合計盈虧',
     GainLose: '盈虧',
     SettleType: '方式',
