@@ -1718,7 +1718,7 @@ const BTCHash:Layout = [
             {
                 title: 'Game.BTCHash.Item.16.shortT1',
                 item: [
-                    [{ Pos: 0, PosFix: true, BT: 16, Num: 0 }, { Pos: 0, PosFix: true, BT: 16, Num: 1 }, { Pos: 0, PosFix: true, BT: 17, Num: 0 }, { BT: 17, Num: 1 }],
+                    [{ Pos: 0, PosFix: true, BT: 16, Num: 0 }, { Pos: 0, PosFix: true, BT: 16, Num: 1 }, { Pos: 0, PosFix: true, BT: 17, Num: 0 }, { Pos: 0, PosFix: true, BT: 17, Num: 1 }],
                 ],
             },
             {

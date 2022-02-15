@@ -87,9 +87,9 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import { Watch } from 'vue-property-decorator';
+// import Vue from 'vue';
+// import Component from 'vue-class-component';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import { CommonParams, Msg, SelectOptions, HashAna } from './data/if';

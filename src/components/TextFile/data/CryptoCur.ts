@@ -136,7 +136,6 @@ export default {
     BlackTypeSelect: '選擇黑名單級別',
     BlackListManager: '黑名單管理',
     BlackListLevel: '黑名單級別',
-    ModifyTextFile: '英文文字/標題修改',
     BlackCurrent: '目前',
     EmergencySwitch: {
       Title: '緊急闗閉',

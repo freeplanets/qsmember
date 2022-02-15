@@ -90,6 +90,10 @@ const routes: RouteConfig[] = [
         path: '/blacklistmanager',
         component: () => import('pages/BlackListManager.vue'),
       },
+      {
+        path: '/modifytextfile',
+        component: () => import('pages/ModifyTextFile.vue'),
+      },
    ],
   },
 ];

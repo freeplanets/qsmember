@@ -17,7 +17,7 @@ export default class ChatClient extends ASock {
 		this.send(msg);
 	}
 	OnMessage(data:string) {
-		console.log(data);
+		console.log('ChatClient OnMessage:', data);
 		const msg = this.toJSON(data);
 		if (msg) {
 			console.log('ChatClient OnMessage text:', msg.text);
