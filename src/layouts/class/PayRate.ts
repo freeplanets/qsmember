@@ -27,6 +27,7 @@ export class PayRate extends BasePayRate<PayRateItm> {
              r = this.data.Rate as number;
          }
          const fvt = this.fetchValueToSteps(r + dfR);
+         // console.log('PayRate Rate:', fvt, r, dfR);
          // if ((r + dfR) !== fvt) this.Rate = fvt;
         return fvt;
     }

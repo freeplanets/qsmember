@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import jwt from 'jsonwebtoken';
 import { ErrCode } from 'src/components/if/ENum';
 import { SelectOptions, CBetItems, Msg, CommonParams, IbtCls, ParamLog, WebParams, HasID } from '../data/if';
 import { Terms, Game, User } from '../data/schema';
@@ -10,10 +11,11 @@ if (window.location.hostname === 'localhost') {
 }
 /*
 const config:AxiosRequestConfig = {
-    //withCredentials: true,
-    //headers: { 'Access-Control-Allow-Origin': '*' }
-}
+    // withCredentials: true,
+    // headers: { 'Access-Control-Allow-Origin': '*' }
+};
 */
+
 export class AxApi {
     private router: any;
     constructor(private ApiUrl:string) {
@@ -291,6 +293,7 @@ export class AxApi {
                 data,
             },
         };
+        // config.params = { data };
         await axios.post(url, config).then((res:AxiosResponse) => {
             // ans=res;
             if (res.data.ErrNo === 0) {
@@ -343,15 +346,21 @@ export class AxApi {
        const config:AxiosRequestConfig = {
            params: param,
        };
+      // config.params = param;
        /*
         if(param){
             config.params=param
         }
         */
+       console.log('doit config', config);
         let msg:Msg = { ErrNo: 0 };
         return new Promise((resolve, reject) => {
             axios.get(url, config).then((res:AxiosResponse) => {
-                // console.log('AxApi doit res:',res);
+                if (res.headers.authorization) {
+                    const auth = jwt.decode(res.headers.authorization);
+                    console.log('AxApi doit auth:', auth);
+                }
+                console.log('AxApi doit res:', res);
                 msg = res.data;
                 resolve(msg);
             }).catch((err) => {
@@ -367,6 +376,7 @@ export class AxApi {
         let msg:Msg = { ErrNo: 0 };
         return new Promise((resolve, reject) => {
             axios.post(url, param).then((res:AxiosResponse) => {
+                console.log('AxApi doPost res:', res);
                 msg = res.data;
                 resolve(msg);
             }).catch((err) => {

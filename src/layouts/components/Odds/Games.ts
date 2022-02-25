@@ -157,6 +157,25 @@ export class CGame implements AnyObject {
             SGPools: [
 
             ],
+            VNNorth: [
+                {
+                    member: [
+                    1, 24, 25, 26, 27, 28],
+                    func: RickF.OpenOne,
+                },
+                {
+                    member: [2, 29],
+                    TotalNum: 100,
+                    OpenNum: 27,
+                    func: RickF.OpenMulti,
+                },
+                {
+                    member: [20],
+                    TotalNum: 100,
+                    OpenNum: 4,
+                    func: RickF.OpenMulti,
+                },
+            ],
         }
     constructor() {
         this.member = {};

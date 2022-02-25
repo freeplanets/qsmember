@@ -73,70 +73,19 @@
             </q-card-section>
 
             <q-card-section
-                v-if="curGType && curGType.GType !== 'SGPools' "
+                v-if="curGType && curGType.GType !== 'SGPools' && curGType.GType !== 'VNNorth'"
                 class="q-pt-none">
-                <div class="row">
-                <q-input class="numbox"
-                    v-for="(num,idx) in nums"
-                    :key="idx"
-                    outlined dense v-model="nums[idx]" />
-                </div>
+                <OPD :value="nums" />
             </q-card-section>
             <q-card-section
                 v-if="curGType && curGType.GType === 'SGPools' "
                 class="q-pt-none">
-                <div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-5"><q-chip dense size="xl" icon="bookmark">{{$t('Game.SGPools.OpenTitle.First')}}</q-chip></div>
-                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[0]" /></div>
-                    <div class="col-3"></div>
-                </div>
-                <div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-5"><q-chip dense size="xl" icon="bookmark">{{$t('Game.SGPools.OpenTitle.Secondary')}}</q-chip></div>
-                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[1]" /></div>
-                    <div class="col-3"></div>
-                </div>
-                <div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-5"><q-chip dense size="xl" icon="bookmark">{{$t('Game.SGPools.OpenTitle.Third')}}</q-chip></div>
-                    <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[2]" /></div>
-                    <div class="col-3"></div>
-                </div>
-                <div class="row">
-                   <div class="col-6"><q-chip dense size="xl" icon="bookmark">{{$t('Game.SGPools.OpenTitle.Shortlisted')}}</q-chip></div>
-                   <div class="col-6"><q-chip dense size="xl" icon="bookmark">{{$t('Game.SGPools.OpenTitle.ConsolationPrize')}}</q-chip></div>
-                </div>
-                <div class="row">
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[3]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[8]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[13]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[18]" /></div>
-                </div>
-                <div class="row">
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[4]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[9]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[14]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[19]" /></div>
-                </div>
-                <div class="row">
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[5]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[10]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[15]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[20]" /></div>
-                </div>
-                <div class="row">
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[6]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[11]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[16]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[21]" /></div>
-                </div>
-                <div class="row">
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[7]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[12]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[17]" /></div>
-                   <div class="col-3"><q-input class="numboxL" outlined dense v-model="nums[22]" /></div>
-                </div>
+                <OPS v-model="nums" />
+            </q-card-section>
+            <q-card-section
+                v-if="curGType && curGType.GType === 'VNNorth' "
+                class="q-pt-none">
+                <OPV v-model="nums" />
             </q-card-section>
 
             <q-card-actions align="right" class="text-primary">
@@ -233,11 +182,17 @@ import GameSelector from './components/GameSelector.vue';
 import NumFunc from '../components/Functions/Nums';
 import ResultList from './components/OpenResults/ForTermList.vue';
 import { ErrCode } from '../components/if/ENum';
+import OPDefaults from './components/OpenResults/Defaults.vue';
+import OPSGPools from './components/OpenResults/SGPools.vue';
+import OPVNNorth from './components/OpenResults/VNNorth.vue';
 
 @Component({
     components: {
         GS: GameSelector,
         RL: ResultList,
+        OPD: OPDefaults,
+        OPS: OPSGPools,
+        OPV: OPVNNorth,
     },
 })
 export default class TermManager extends Vue {

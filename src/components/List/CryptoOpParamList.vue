@@ -112,7 +112,7 @@ export default class CryptoOpParamList extends Vue {
 			if (res.ErrNo === ErrCode.PASS) {
 				const users = res.data as HasID[];
 				const ids = users.map((user) => user.id);
-				if (ids.length) {
+				if (ids.length && this.store.WSock) {
 					const msg:WsMsg = {};
 					msg.Func = FuncKey.MESSAGE;
 					msg.UserID = this.store.personal.id;

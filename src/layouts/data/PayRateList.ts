@@ -616,5 +616,41 @@ const PayRateData:BetTypeParam = {
                   29: [{ Title: '合數大小' }],
             },
       },
+      VNNorth: {
+            order: ['1', '2', '3', '4', '5', '8', '9', '10', '11', '13', '15', '16', '17', '18', '19', '20', '21',
+                  '22', '23', '24', '25', '26', '27', '28', '29'],
+            data: {
+                  1: [{ Title: '特別號' }],
+                  2: [{ Title: '27碼' }],
+                  3: [{ Title: '2星' }],
+                  4: [{ Title: '3星' }],
+                  5: [{ Title: '4星' }],
+                  // 6: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 特別號10不出
+                  // 7: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 27 碼走地
+                  8: [{ Title: '50組' }],
+                  9: [{ Title: '25組' }],
+                  10: [{ Title: '合數尾' }],
+                  11: [{ Title: '生肖', SubTitle: '鼠,牛,虎,貓' },
+                        { Title: '生肖' }],
+                  // 12: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 生肖
+                  13: [{ Title: '除三餘數', SubTitle: '餘0' }, { Title: '除三餘數' }],
+                  // 14: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 除三餘數
+                  15: [{ Title: '27碼-4不出' }],
+                  16: [{ Title: '27碼-5不出' }],
+                  17: [{ Title: '27碼-6不出' }],
+                  18: [{ Title: '27碼-7不出' }],
+                  19: [{ Title: '27碼-8不出' }],
+                  20: [{ Title: '2D-頭' }],
+                  21: [{ Title: '3D-頭' }],
+                  22: [{ Title: '3D-尾' }],
+                  23: [{ Title: '3D-23組' }],
+                  24: [{ Title: '頭獎尾' }],
+                  25: [{ Title: '頭獎頭' }],
+                  26: [{ Title: '財神尾' }],
+                  27: [{ Title: '財神頭' }],
+                  28: [{ Title: '特碼頭' }],
+                  29: [{ Title: '27碼頭' }],
+            },
+      },
 };
 export default PayRateData;

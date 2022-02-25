@@ -2471,6 +2471,128 @@ const SGPools:Layout = [
         ],
     }, // title: '不中', SubMenu: []
 ];
+const VNNorth:Layout = [
+    {
+        name: 'Game.VNNorth.Menu.Group.3.title', // 主盤式
+        cont: [
+            {
+                title: 'Game.VNNorth.Item.8.title',
+                item: [
+                    [{ Pos: 0, PosFix: true, BT: 8, Num: 0 }, { Pos: 0, PosFix: true, BT: 8, Num: 2 }, { Pos: 0, PosFix: true, BT: 8, Num: 4 }, { Pos: 0, PosFix: true, BT: 8, Num: 6 }, { Pos: 0, PosFix: true, BT: 8, Num: 8 }, { Pos: 0, PosFix: true, BT: 8, Num: 10 }],
+                    [{ Pos: 0, PosFix: true, BT: 8, Num: 1 }, { Pos: 0, PosFix: true, BT: 8, Num: 3 }, { Pos: 0, PosFix: true, BT: 8, Num: 5 }, { Pos: 0, PosFix: true, BT: 8, Num: 7 }, { Pos: 0, PosFix: true, BT: 8, Num: 9 }, { Pos: 0, PosFix: true, BT: 8, Num: 11 }],
+                ],
+            },
+            {
+                title: 'Game.VNNorth.Item.9.title',
+                item: [
+                    [{ Pos: 0, PosFix: true, BT: 9, Num: 0 }, { Pos: 0, PosFix: true, BT: 9, Num: 4 }, { Pos: 0, PosFix: true, BT: 9, Num: 8 }, { Pos: 0, PosFix: true, BT: 9, Num: 12 }, { Pos: 0, PosFix: true, BT: 9, Num: 16 }, { Pos: 0, PosFix: true, BT: 9, Num: 20 }],
+                    [{ Pos: 0, PosFix: true, BT: 9, Num: 1 }, { Pos: 0, PosFix: true, BT: 9, Num: 5 }, { Pos: 0, PosFix: true, BT: 9, Num: 9 }, { Pos: 0, PosFix: true, BT: 9, Num: 13 }, { Pos: 0, PosFix: true, BT: 9, Num: 17 }, { Pos: 0, PosFix: true, BT: 9, Num: 21 }],
+                    [{ Pos: 0, PosFix: true, BT: 9, Num: 2 }, { Pos: 0, PosFix: true, BT: 9, Num: 6 }, { Pos: 0, PosFix: true, BT: 9, Num: 10 }, { Pos: 0, PosFix: true, BT: 9, Num: 14 }, { Pos: 0, PosFix: true, BT: 9, Num: 18 }, { Pos: 0, PosFix: true, BT: 9, Num: 22 }],
+                    [{ Pos: 0, PosFix: true, BT: 9, Num: 3 }, { Pos: 0, PosFix: true, BT: 9, Num: 7 }, { Pos: 0, PosFix: true, BT: 9, Num: 11 }, { Pos: 0, PosFix: true, BT: 9, Num: 15 }, { Pos: 0, PosFix: true, BT: 9, Num: 19 }, { Pos: 0, PosFix: true, BT: 9, Num: 23 }],
+                ],
+            },
+            {
+                title: 'Game.VNNorth.Item.10.title',
+                item: [
+                    [{ Pos: 0, PosFix: true, BT: 10, Num: 0 }, { Pos: 0, PosFix: true, BT: 10, Num: 2 }, { Pos: 0, PosFix: true, BT: 10, Num: 4 }, { Pos: 0, PosFix: true, BT: 10, Num: 6 }, { Pos: 0, PosFix: true, BT: 10, Num: 8 }],
+                    [{ Pos: 0, PosFix: true, BT: 10, Num: 1 }, { Pos: 0, PosFix: true, BT: 10, Num: 3 }, { Pos: 0, PosFix: true, BT: 10, Num: 5 }, { Pos: 0, PosFix: true, BT: 10, Num: 7 }, { Pos: 0, PosFix: true, BT: 10, Num: 9 }],
+                ],
+            },
+            {
+                title: 'Game.VNNorth.Item.11.title',
+                item: [
+                    [{ Pos: 0, PosFix: true, BT: 11, Num: 0 }, { Pos: 0, PosFix: true, BT: 11, Num: 2 }, { Pos: 0, PosFix: true, BT: 11, Num: 4 }, { Pos: 0, PosFix: true, BT: 11, Num: 6 }, { Pos: 0, PosFix: true, BT: 11, Num: 8 }, { Pos: 0, PosFix: true, BT: 11, Num: 10 }],
+                    [{ Pos: 0, PosFix: true, BT: 11, Num: 1 }, { Pos: 0, PosFix: true, BT: 11, Num: 3 }, { Pos: 0, PosFix: true, BT: 11, Num: 5 }, { Pos: 0, PosFix: true, BT: 11, Num: 7 }, { Pos: 0, PosFix: true, BT: 11, Num: 9 }, { Pos: 0, PosFix: true, BT: 11, Num: 11 }],
+                ],
+            },
+            {
+                title: 'Game.VNNorth.Item.13.title',
+                item: [
+                    [{ Pos: 0, PosFix: true, BT: 13, Num: 0 }, { Pos: 0, PosFix: true, BT: 13, Num: 1 }, { Pos: 0, PosFix: true, BT: 13, Num: 2 }],
+                ],
+            },
+        ],
+    },
+    {
+        name: 'Game.VNNorth.Menu.Group.0.title', // 2D
+        cont: [
+            {
+                aBT: [1, 28, 20, 24, 25, 26, 27],
+                sltedItem: 0,
+                start: 0,
+                end: 99,
+                dgt: 2,
+                Sortable: true,
+                curBT: 1,
+                item: getblocks(0, 99),
+                // item: getNums
+            },
+        ],
+    },
+    {
+        name: 'Game.VNNorth.Menu.Group.1.title', // 27碼
+        cont: [
+            {
+                aBT: [2, 29],
+                sltedItem: 0,
+                start: 0,
+                end: 99,
+                dgt: 2,
+                Sortable: true,
+                curBT: 2,
+                item: getblocks(0, 99),
+                // item: getNums
+            },
+        ],
+    },
+    {
+        name: 'Game.VNNorth.Menu.Group.2.title', // 連碼
+        cont: [
+            {
+                aBT: [3, 4, 5],
+                sltedItem: 0,
+                start: 0,
+                end: 99,
+                Sortable: true,
+                curBT: 3,
+                item: getblocks(0, 99),
+                // item: getNums
+            },
+        ],
+    },
+    {
+        name: 'Game.VNNorth.Menu.Group.4.title', // 3D
+        cont: [
+            {
+                aBT: [21, 22, 23],
+                sltedItem: 0,
+                dgt: 3, // 位數
+                // NumDuplicate:true,     //數字可以重複
+                noSameNum: false, // 數字不可重複
+                Sortable: true,
+                DefaultSortID: 1,
+                item: getblocks(0, 99),
+                // item: getNums
+            },
+        ],
+    },
+    {
+        name: 'Game.VNNorth.Menu.Group.5.title', // 不出
+        cont: [
+            {
+                aBT: [15, 16, 17, 18, 19],
+                sltedItem: 0,
+                start: 0,
+                end: 99,
+                dgt: 2,
+                Sortable: true,
+                curBT: 15,
+                item: getblocks(0, 99),
+                // item: getNums
+            },
+        ],
+    },
+];
 const Layouts:ILayouts = {};
 Layouts.MarkSix = MarkSixLayout;
 Layouts['3D'] = D3;
@@ -2482,4 +2604,5 @@ Layouts.Happy8 = Happy8;
 Layouts.BTCHash = BTCHash;
 Layouts.HashSix = HashSix;
 Layouts.SGPools = SGPools;
+Layouts.VNNorth = VNNorth;
 export default Layouts;

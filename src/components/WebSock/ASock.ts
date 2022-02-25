@@ -30,7 +30,7 @@ export default abstract class ASock {
 	protected abstract chkurl():string;
 	private createConnection() {
 		const wsurl = this.chkurl();
-		// console.log(`connect to ${wsurl}`);
+		console.log(`connect to ${wsurl}`);
 		this.sock = new window.WebSocket(wsurl);
 		this.sock.onerror = (event:Event) => {
 				console.log('Error from server:', wsurl, event);

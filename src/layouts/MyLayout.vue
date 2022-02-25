@@ -287,6 +287,9 @@ export default class MyLayout extends Vue {
     const msg:Msg = await this.store.ax.getApi('logout', param);
     console.log(msg);
     this.store.clearPInfo();
+    this.store.setWSock(null);
+    this.store.setMqtt(null);
+    this.store.setChater(null);
     this.$router.push({ path: '/login' }).catch((err) => {
       console.log('router error', err);
     });

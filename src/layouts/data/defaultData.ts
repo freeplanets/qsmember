@@ -96,6 +96,37 @@ const BaseOddsItem:AllOfGame = {
         28: { Min: 0, Max: 1, SameAsDigitalOrder: false, Digital: 2, Position: [1, 2, 3] }, // [{ Title: '合數單雙'}],
         29: { Min: 0, Max: 1, SameAsDigitalOrder: false, Digital: 2, Position: [1, 2, 3] }, // [{ Title: '合數大小'}]        
     },
+    VNNorth: {
+        1: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 特別號
+        2: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 27 碼
+        3: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 2 星
+        4: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 3 星
+        5: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 4 星
+        // 6: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 特別號10不出
+        // 7: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 27 碼走地
+        8: { Min: 0, Max: 11, SameAsDigitalOrder: false, Digital: 2 }, // 50組 共12種組合
+        9: { Min: 0, Max: 23, SameAsDigitalOrder: false, Digital: 2 }, // 25組 共24種組合
+        10: { Min: 0, Max: 9, SameAsDigitalOrder: false, Digital: 1 }, // 合數尾
+        11: { Min: 0, Max: 11, SameAsDigitalOrder: false, Digital: 2 }, // 生肖
+        // 12: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 生肖
+        13: { Min: 0, Max: 2, SameAsDigitalOrder: false, Digital: 2 }, // 除三餘數
+        // 14: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 除三餘數
+        15: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 27 碼-4不出
+        16: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 27 碼-5不出
+        17: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 27 碼-6不出
+        18: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 27 碼-7不出
+        19: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 27 碼-8不出
+        20: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 2D-頭
+        21: { Min: 0, Max: 999, SameAsDigitalOrder: false, Digital: 3 }, // 3D-頭
+        22: { Min: 0, Max: 999, SameAsDigitalOrder: false, Digital: 3 }, // 3D-尾
+        23: { Min: 0, Max: 999, SameAsDigitalOrder: false, Digital: 3 }, // 3D-23組
+        24: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 頭獎尾
+        25: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 頭獎頭
+        26: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 財神尾
+        27: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 財神頭
+        28: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 特碼頭
+        29: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 27碼頭
+    },
 };
 export default BaseOddsItem;
 /*

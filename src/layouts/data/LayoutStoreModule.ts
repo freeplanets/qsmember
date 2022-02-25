@@ -27,9 +27,9 @@ export default class LayoutStoreModule extends VuexModule {
         Progs: [],
     };
     private showGA = false;
-    private ws!:ASock;
-    private chater!:ASock;
-    private mqtt!:Mqtt;
+    private ws:ASock | null = null;
+    private chater:ASock | null = null;
+    private mqtt:Mqtt | null = null;
     // public ApiUrl:string=myApiUrl;
     public ax=AxApi;
     private sInfo='';
@@ -152,27 +152,27 @@ export default class LayoutStoreModule extends VuexModule {
         this.SET_LOGOUT(value);
     }
     @Mutation
-    private SET_WSOCK(ws:ASock) {
+    private SET_WSOCK(ws:ASock | null) {
         this.ws = ws;
     }
     @Action
-    public setWSock(ws:ASock) {
+    public setWSock(ws:ASock | null) {
         this.SET_WSOCK(ws);
     }
     @Mutation
-    private SET_CHATER(ch:ASock) {
+    private SET_CHATER(ch:ASock | null) {
         this.chater = ch;
     }
     @Action
-    public setChater(ch:ASock) {
+    public setChater(ch:ASock | null) {
         this.SET_CHATER(ch);
     }
     @Mutation
-    private SET_MQTT(mqtt:Mqtt) {
+    private SET_MQTT(mqtt:Mqtt | null) {
         this.mqtt = mqtt;
     }
     @Action
-    public setMqtt(mqtt:Mqtt) {
+    public setMqtt(mqtt:Mqtt | null) {
         this.SET_MQTT(mqtt);
     }
 }

@@ -1,6 +1,19 @@
 import { GameType } from '../../layouts/data/if';
 
 class Nums {
+	private VNType = [
+		{ EndNum: 9999, StartNum: 0 },
+		{ EndNum: 99999, StartNum: 0 },
+		{ EndNum: 99999, StartNum: 0 },
+		{ EndNum: 99999, StartNum: 0 }, { EndNum: 99999, StartNum: 0 },
+		{ EndNum: 99999, StartNum: 0 },	{ EndNum: 99999, StartNum: 0 }, { EndNum: 99999, StartNum: 0 }, { EndNum: 99999, StartNum: 0 },
+		{ EndNum: 99999, StartNum: 0 },	{ EndNum: 99999, StartNum: 0 },
+		{ EndNum: 9999, StartNum: 0 }, { EndNum: 9999, StartNum: 0 }, { EndNum: 9999, StartNum: 0 }, { EndNum: 9999, StartNum: 0 },
+		{ EndNum: 9999, StartNum: 0 }, { EndNum: 9999, StartNum: 0 }, { EndNum: 9999, StartNum: 0 }, { EndNum: 9999, StartNum: 0 },
+		{ EndNum: 9999, StartNum: 0 }, { EndNum: 9999, StartNum: 0 },
+		{ EndNum: 999, StartNum: 0 },	{ EndNum: 999, StartNum: 0 }, { EndNum: 999, StartNum: 0 },
+		{ EndNum: 99, StartNum: 0 }, { EndNum: 99, StartNum: 0 }, { EndNum: 99, StartNum: 0 }, { EndNum: 99, StartNum: 0 },
+	]
 	Number(v:number|string) {
 		if (typeof v === 'string') v = parseInt(v, 10);
 		return v;
@@ -23,6 +36,7 @@ class Nums {
 	}
 	GenNums(GType:GameType):string[] {
 		// console.log('GenNums', JSON.stringify(GType));
+		if (GType.GType === 'VNNorth') return this.GenVNNums();
 		const nums:string[] = [];
 		while (nums.length < GType.OpenNums) {
 			const tmp = this.RandNum(GType.EndNum, GType.StartNum);
@@ -35,6 +49,9 @@ class Nums {
 			}
 		}
 		return nums;
+	}
+	GenVNNums():string[] {
+		return this.VNType.map((itm) => this.RandNum(itm.EndNum, itm.StartNum));
 	}
 	private RandNum(Max:number, Min = 0) {
 		const base = Max + Min + 1;

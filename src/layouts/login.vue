@@ -16,6 +16,15 @@
             <q-icon name="vpn_key" />
           </template>
         </q-input>
+
+        <div class="q-pa-lg">
+          <q-option-group
+            v-model="curlang"
+            :options="Lang"
+            color="primary"
+            inline
+          />
+        </div>
         <q-btn color="red" icon-right="send" label="Login" type="submit" />
       </q-form>
     </div>
@@ -39,8 +48,7 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
-import Components from 'vue-class-component';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 // import axios, { AxiosRequestConfig,AxiosResponse} from 'axios';
 import { getModule } from 'vuex-module-decorators';
 // import {User} from './data/schema';
@@ -50,7 +58,12 @@ import ChatClient from '../components/WebSock/ChatClient';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import { Msg, CommonParams, LoginInfo } from './data/if';
 
-@Components
+interface selOptions {
+  label: string;
+  value: string;
+}
+
+@Component
 export default class Login extends Vue {
   store = getModule(LayoutStoreModule);
   Account='';
@@ -58,6 +71,17 @@ export default class Login extends Vue {
   Pin='';
   prompt=false;
   GAError=false;
+  Lang:selOptions[] = [
+    { label: '正體', value: 'zh-tw' },
+    { label: '簡體', value: 'zh-cn' },
+    { label: 'English', value: 'en-us' },
+  ]
+  curlang = '';
+  @Watch('curlang')
+  onLangChange() {
+    console.log('onLangChange', this.$i18n.locale, this.curlang);
+    this.$i18n.locale = this.curlang;
+  }
   set Personal(value:LoginInfo) {
     this.store.setPersonal(value);
   }
@@ -155,8 +179,21 @@ export default class Login extends Vue {
     }
     this.store.setShowProgress(false);
   }
+  getDefaultLanguage() {
+    let lang = navigator.language.toLowerCase();
+    if (lang) {
+      const f = this.Lang.find((itm) => itm.value);
+      if (f) this.curlang = f.value;
+    } else {
+      lang = this.Lang[0].value;
+    }
+    console.log('getDefaultLanguage', lang);
+    // if (this.$i18n.locale !== lang) this.$i18n.locale = lang;
+    return lang;
+  }
   mounted() {
     this.store.setIsLogin(false);
+    this.getDefaultLanguage();
     // console.log('login SysInfo:',this.store.SysInfo);
     // console.log('login locale:',this.$i18n);
     // this.$i18n.locale='zh-cn';

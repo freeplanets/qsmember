@@ -277,7 +277,7 @@ export default class BetReport extends Vue {
 }
 .diaDate {
   padding-top: 20px;
-  width: 710px;
+  width: 750px;
   max-width: 1000px;
 }
 .tbox-w {

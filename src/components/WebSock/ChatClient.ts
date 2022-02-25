@@ -6,7 +6,7 @@ import { WsMsg, ChatMsg } from '../if/dbif';
 export default class ChatClient extends ASock {
 	chkurl():string {
 		const ws = this.url === 'localhost:4002' ? 'ws' : 'wss';
-		return `${ws}://${this.url}/${this.site}/${Channels.ADMIN}/${this.UserID}_${this.UserName}`;
+		return `${ws}://${this.url}/${this.site}/${Channels.ADMIN}/${this.UserID}_${this.UserName}?token1=1`;
 	}
 	OnOpen() {
 		const msg:WsMsg = {

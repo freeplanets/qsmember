@@ -22,8 +22,8 @@
                 <div class='col-1 alignR'><input type="text" size='8' v-model="itm.Probability" /></div>
                 <div class='col-1 test'><input type="checkbox" v-model="itm.isParlay" /></div>
             </div>
-            <div v-if="PInfo.Levels==9"><q-btn color="red" icon-right="save" label="Save Odds Item" @click="saveDfOddsItems(GType);" /></div>
         </div>
+        <div v-if="PInfo.Levels==9"><q-btn color="red" icon-right="save" label="Save Odds Item" @click="saveDfOddsItems(GType);" /></div>
   </div>
 </template>
 <script lang="ts">

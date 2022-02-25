@@ -9,7 +9,7 @@ export default class WSock extends ASock {
     // private ledger: LedgerTotal[]=[];
     chkurl():string {
 		const ws = this.url === 'localhost:4001' ? 'ws' : 'wss';
-		return `${ws}://${this.url}`;
+		return `${ws}://${this.url}?token0=0`;
     }
     OnOpen() {
         this.registerChannel(ClientChannel);
@@ -29,7 +29,7 @@ export default class WSock extends ASock {
                 } else {
                     this.doAsk(msg.Asks as AskTable);
                 }
-            } else if (msg.SettleMark) {
+            } else if (msg.SettleMark && this.LSM.Mqtt) {
                 const SettleMark = msg.SettleMark;
                 this.LSM.Mqtt.Items.forEach((itm) => {
                     itm.setSettleMark(SettleMark);

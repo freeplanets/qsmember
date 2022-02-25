@@ -64,7 +64,7 @@ export default class CryptoRiskController extends Vue {
 	store = getModule(LayoutStoreModule);
 	Api = new ApiFunc(this.store);
 	list:Items[]=[];
-	mqtt:Mqtt=this.store.Mqtt;
+	mqtt:Mqtt | null = this.store.Mqtt;
 	interval:NodeJS.Timeout | null = null;
 	isEmergencyClose = false;
 	losefocustimer = 0;
@@ -87,7 +87,9 @@ export default class CryptoRiskController extends Vue {
 				if (this.list.length > 0) {
 					this.list.forEach((itm) => {
 						this.isEmergencyClose = !!itm.EmergencyClosed;
-						this.store.WSock.Add(itm);
+						if (this.store.WSock) {
+							this.store.WSock.Add(itm);
+						}
 					});
 				}
 			}
@@ -195,9 +197,11 @@ export default class CryptoRiskController extends Vue {
 			if (msg.ErrNo === ErrCode.PASS) {
 				const ec = msg.data as EmergencyCloseLog[];
 				this.ECLogList = ec.map((itm) => {
-					const f = this.mqtt.getItem(itm.ItemID);
-					if (f) {
-						itm.Item = String(f.Title);
+					if (this.mqtt) {
+						const f = this.mqtt.getItem(itm.ItemID);
+						if (f) {
+							itm.Item = String(f.Title);
+						}
 					}
 					return itm;
 				});
@@ -213,7 +217,9 @@ export default class CryptoRiskController extends Vue {
 		};
 		msg.SettleServiceID = this.LoginInfo.id;
 		console.log('CryptoRiskController doSettle:', msg);
-		this.store.WSock.send(msg);
+		if (this.store.WSock) {
+			this.store.WSock.send(msg);
+		}
 	}
 	focusMsg(msg:string) {
 		let timer = 0;
