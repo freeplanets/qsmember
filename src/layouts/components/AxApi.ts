@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import jwt from 'jsonwebtoken';
 import { ErrCode } from 'src/components/if/ENum';
-import { SelectOptions, CBetItems, Msg, CommonParams, IbtCls, ParamLog, WebParams, HasID } from '../data/if';
+import { SelectOptions, CBetItems, Msg, CommonParams, IbtCls, ParamLog, WebParams, HasID, AnyObject } from '../data/if';
 import { Terms, Game, User } from '../data/schema';
 
 let myApiUrl = 'https://testu.uuss.net:3000';
@@ -15,9 +15,18 @@ const config:AxiosRequestConfig = {
     // headers: { 'Access-Control-Allow-Origin': '*' }
 };
 */
+interface authinfo extends AnyObject {
+    iat: number;
+    exp: number;
+}
 
 export class AxApi {
     private router: any;
+    private auth = '';
+    private authkey = '';
+    private authlimit = 0;
+    private authgap = 600; // before auth expire. (sec)
+    private info: authinfo = { iat: 0, exp: 0 };
     constructor(private ApiUrl:string) {
         console.log('AxApi created!!', ApiUrl);
     }
@@ -26,6 +35,12 @@ export class AxApi {
     }
     set Router(v:any) {
         this.router = v;
+    }
+    get Info() {
+        return this.info;
+    }
+    get Auth() {
+        return this.auth;
     }
     gotoLoginPage() {
         // console.log('gotoLoginPage',typeof(this.router));
@@ -286,7 +301,10 @@ export class AxApi {
     }
     */
     async SaveData(TableName:string, data:string) {
-        let msg:Msg = { ErrNo: 0 };
+        // let msg:Msg = { ErrNo: 0 };
+        const url = `save/${TableName}`;
+        return this.getApi(url, { data }, 'post');
+        /*
         const url = `${this.ApiUrl}/api/save/${TableName}`;
         const config:AxiosRequestConfig = {
             params: {
@@ -307,19 +325,46 @@ export class AxApi {
             console.log('error', err);
         });
         return msg;
+        */
     }
-    async getApi(appName:string, param:CommonParams|Terms|WebParams, method = 'get'):Promise<Msg> {
+    async getApi(appName:string, param:CommonParams|Terms|WebParams|AnyObject, method = 'get'):Promise<Msg> {
         const url = `${this.ApiUrl}/api/${appName}`;
-        let func:Promise<Msg>;
+        const config:AxiosRequestConfig = {
+            params: param,
+        };
+        if (this.auth) {
+            config.headers = {
+                Authorization: this.auth,
+            };
+            const { iat, exp } = this.Info;
+            if ((exp - iat) <= (this.authlimit - this.authgap)) {
+                config.headers.AuthKey = this.authkey;
+            }
+            // config.headers['Access-Control-Expose-Headers'] = 'Authorization';
+        }
+        let func:Promise<AnyObject>;
+        console.log('getApi param:', config);
         if (method === 'post') {
-            func = this.doPost(url, param);
+            func = this.doPost(url, config);
         } else {
-            func = this.doit(url, param);
+            func = this.doit(url, config);
         }
         return new Promise((resolve, reject) => {
-            func.then((msg:Msg) => {
+            func.then((res:AnyObject) => {
+                let msg:Msg = { ErrNo: 0 };
+                if (res.data) msg = res.data;
                 if (msg.ErrNo === 7) {
                     this.gotoLoginPage();
+                }
+                if (res.headers.authorization) {
+                    // console.log('show headers:', res.headers);
+                    this.auth = res.headers.authorization;
+                    if (res.headers.authkey) {
+                        this.authkey = res.headers.authkey;
+                        this.authlimit = res.headers.authlimit;
+                    }
+                    const ans = jwt.decode(this.auth);
+                    if (ans && typeof ans === 'object') this.info = ans as authinfo;
                 }
                 resolve(msg);
             }).catch((err) => {
@@ -342,26 +387,12 @@ export class AxApi {
         const url = `${this.ApiUrl}/api/${appName}`;
         return this.doit(url, param);
     }
-    doit(url:string, param:CommonParams|Terms|WebParams):Promise<Msg> {
-       const config:AxiosRequestConfig = {
-           params: param,
-       };
-      // config.params = param;
-       /*
-        if(param){
-            config.params=param
-        }
-        */
+    doit(url:string, config: AxiosRequestConfig):Promise<Msg> {
        console.log('doit config', config);
         let msg:Msg = { ErrNo: 0 };
         return new Promise((resolve, reject) => {
             axios.get(url, config).then((res:AxiosResponse) => {
-                if (res.headers.authorization) {
-                    const auth = jwt.decode(res.headers.authorization);
-                    console.log('AxApi doit auth:', auth);
-                }
-                console.log('AxApi doit res:', res);
-                msg = res.data;
+                msg = res;
                 resolve(msg);
             }).catch((err) => {
                 msg.ErrNo = ErrCode.APISERVER_GONE_AWAY;
@@ -370,14 +401,14 @@ export class AxApi {
             });
         });
     }
-    doPost(url:string, param:CommonParams|Terms|WebParams):Promise<Msg> {
+    doPost(url:string, config:AxiosRequestConfig):Promise<Msg> {
         // const config:AxiosRequestConfig = {}
         // console.log('doPost',url,param);
         let msg:Msg = { ErrNo: 0 };
         return new Promise((resolve, reject) => {
-            axios.post(url, param).then((res:AxiosResponse) => {
-                console.log('AxApi doPost res:', res);
-                msg = res.data;
+            axios.post(url, config.params, { headers: config.headers }).then((res:AxiosResponse) => {
+                // console.log('AxApi doPost res:', res);
+                msg = res;
                 resolve(msg);
             }).catch((err) => {
                 msg.ErrNo = ErrCode.APISERVER_GONE_AWAY;

@@ -1159,7 +1159,6 @@ const Happy:Layout = [
         name: 'Game.Happy.Menu.Group.1.title',
         cont: [
             {
-                BT: 1,
                 Selects: [
                     'Game.Happy.Ball.1',
                     'Game.Happy.Ball.2',
@@ -1643,6 +1642,115 @@ const Happy8:Layout = [
         name: 'Game.Happy8.Menu.Group.0.title',
         cont: [
             {
+                // item:getNums(1,80,1)
+                BT: 9,
+                Sortable: true,
+                item: getblocks(1, 80),
+            },
+        ],
+    },
+    {
+        name: 'Game.Happy8.Menu.Group.1.title',
+        cont: [
+            {
+                // item:getNums(1,80,1)
+                BT: 1,
+                Sortable: true,
+                item: getblocks(1, 80),
+            },
+        ],
+    },
+    {
+        name: 'Game.Happy8.Menu.Group.2.title',
+        cont: [
+            {
+                aBT: [10, 11, 12],
+                twOdds: [1, 1, 1],
+                sltedItem: 0,
+                Sortable: true,
+                curBT: 10,
+                item: getblocks(1, 80),
+            },
+        ],
+    },
+    {
+        name: 'Game.Happy8.Menu.Group.3.title',
+        cont: [
+            {
+                Selects: [
+                   'Game.Happy8.Group.1',
+                   'Game.Happy8.Group.2',
+                   'Game.Happy8.Group.3',
+                   'Game.Happy8.Group.4',
+                ],
+                items: [
+                    [
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 10 }, { Pos: 0, PosFix: true, BT: 13, Num: 11 }, { Pos: 0, PosFix: true, BT: 14, Num: 10 }, { Pos: 0, PosFix: true, BT: 14, Num: 11 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 10 }, { Pos: 0, PosFix: true, BT: 15, Num: 11 }, { Pos: 0, PosFix: true, BT: 16, Num: 10 }, { Pos: 0, PosFix: true, BT: 16, Num: 11 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 20 }, { Pos: 0, PosFix: true, BT: 13, Num: 21 }, { Pos: 0, PosFix: true, BT: 14, Num: 20 }, { Pos: 0, PosFix: true, BT: 14, Num: 21 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 20 }, { Pos: 0, PosFix: true, BT: 15, Num: 21 }, { Pos: 0, PosFix: true, BT: 16, Num: 20 }, { Pos: 0, PosFix: true, BT: 16, Num: 21 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 30 }, { Pos: 0, PosFix: true, BT: 13, Num: 31 }, { Pos: 0, PosFix: true, BT: 14, Num: 30 }, { Pos: 0, PosFix: true, BT: 14, Num: 31 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 30 }, { Pos: 0, PosFix: true, BT: 15, Num: 31 }, { Pos: 0, PosFix: true, BT: 16, Num: 30 }, { Pos: 0, PosFix: true, BT: 16, Num: 31 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 40 }, { Pos: 0, PosFix: true, BT: 13, Num: 41 }, { Pos: 0, PosFix: true, BT: 14, Num: 40 }, { Pos: 0, PosFix: true, BT: 14, Num: 41 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 40 }, { Pos: 0, PosFix: true, BT: 15, Num: 41 }, { Pos: 0, PosFix: true, BT: 16, Num: 40 }, { Pos: 0, PosFix: true, BT: 16, Num: 41 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 50 }, { Pos: 0, PosFix: true, BT: 13, Num: 51 }, { Pos: 0, PosFix: true, BT: 14, Num: 50 }, { Pos: 0, PosFix: true, BT: 14, Num: 51 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 50 }, { Pos: 0, PosFix: true, BT: 15, Num: 51 }, { Pos: 0, PosFix: true, BT: 16, Num: 50 }, { Pos: 0, PosFix: true, BT: 16, Num: 51 }],
+                    ],
+                    [
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 60 }, { Pos: 0, PosFix: true, BT: 13, Num: 61 }, { Pos: 0, PosFix: true, BT: 14, Num: 60 }, { Pos: 0, PosFix: true, BT: 14, Num: 61 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 60 }, { Pos: 0, PosFix: true, BT: 15, Num: 61 }, { Pos: 0, PosFix: true, BT: 16, Num: 60 }, { Pos: 0, PosFix: true, BT: 16, Num: 61 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 70 }, { Pos: 0, PosFix: true, BT: 13, Num: 71 }, { Pos: 0, PosFix: true, BT: 14, Num: 70 }, { Pos: 0, PosFix: true, BT: 14, Num: 71 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 70 }, { Pos: 0, PosFix: true, BT: 15, Num: 71 }, { Pos: 0, PosFix: true, BT: 16, Num: 70 }, { Pos: 0, PosFix: true, BT: 16, Num: 71 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 80 }, { Pos: 0, PosFix: true, BT: 13, Num: 81 }, { Pos: 0, PosFix: true, BT: 14, Num: 80 }, { Pos: 0, PosFix: true, BT: 14, Num: 81 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 80 }, { Pos: 0, PosFix: true, BT: 15, Num: 81 }, { Pos: 0, PosFix: true, BT: 16, Num: 80 }, { Pos: 0, PosFix: true, BT: 16, Num: 81 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 90 }, { Pos: 0, PosFix: true, BT: 13, Num: 91 }, { Pos: 0, PosFix: true, BT: 14, Num: 90 }, { Pos: 0, PosFix: true, BT: 14, Num: 91 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 90 }, { Pos: 0, PosFix: true, BT: 15, Num: 91 }, { Pos: 0, PosFix: true, BT: 16, Num: 90 }, { Pos: 0, PosFix: true, BT: 16, Num: 91 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 100 }, { Pos: 0, PosFix: true, BT: 13, Num: 101 }, { Pos: 0, PosFix: true, BT: 14, Num: 100 }, { Pos: 0, PosFix: true, BT: 14, Num: 101 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 100 }, { Pos: 0, PosFix: true, BT: 15, Num: 101 }, { Pos: 0, PosFix: true, BT: 16, Num: 100 }, { Pos: 0, PosFix: true, BT: 16, Num: 101 }],
+                    ],
+                    [
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 110 }, { Pos: 0, PosFix: true, BT: 13, Num: 111 }, { Pos: 0, PosFix: true, BT: 14, Num: 110 }, { Pos: 0, PosFix: true, BT: 14, Num: 111 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 110 }, { Pos: 0, PosFix: true, BT: 15, Num: 111 }, { Pos: 0, PosFix: true, BT: 16, Num: 110 }, { Pos: 0, PosFix: true, BT: 16, Num: 111 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 120 }, { Pos: 0, PosFix: true, BT: 13, Num: 121 }, { Pos: 0, PosFix: true, BT: 14, Num: 120 }, { Pos: 0, PosFix: true, BT: 14, Num: 121 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 120 }, { Pos: 0, PosFix: true, BT: 15, Num: 121 }, { Pos: 0, PosFix: true, BT: 16, Num: 120 }, { Pos: 0, PosFix: true, BT: 16, Num: 121 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 130 }, { Pos: 0, PosFix: true, BT: 13, Num: 131 }, { Pos: 0, PosFix: true, BT: 14, Num: 130 }, { Pos: 0, PosFix: true, BT: 14, Num: 131 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 130 }, { Pos: 0, PosFix: true, BT: 15, Num: 131 }, { Pos: 0, PosFix: true, BT: 16, Num: 130 }, { Pos: 0, PosFix: true, BT: 16, Num: 131 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 140 }, { Pos: 0, PosFix: true, BT: 13, Num: 141 }, { Pos: 0, PosFix: true, BT: 14, Num: 140 }, { Pos: 0, PosFix: true, BT: 14, Num: 141 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 140 }, { Pos: 0, PosFix: true, BT: 15, Num: 141 }, { Pos: 0, PosFix: true, BT: 16, Num: 140 }, { Pos: 0, PosFix: true, BT: 16, Num: 141 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 150 }, { Pos: 0, PosFix: true, BT: 13, Num: 151 }, { Pos: 0, PosFix: true, BT: 14, Num: 150 }, { Pos: 0, PosFix: true, BT: 14, Num: 151 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 150 }, { Pos: 0, PosFix: true, BT: 15, Num: 151 }, { Pos: 0, PosFix: true, BT: 16, Num: 150 }, { Pos: 0, PosFix: true, BT: 16, Num: 151 }],
+                    ],
+                    [
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 160 }, { Pos: 0, PosFix: true, BT: 13, Num: 161 }, { Pos: 0, PosFix: true, BT: 14, Num: 160 }, { Pos: 0, PosFix: true, BT: 14, Num: 161 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 160 }, { Pos: 0, PosFix: true, BT: 15, Num: 161 }, { Pos: 0, PosFix: true, BT: 16, Num: 160 }, { Pos: 0, PosFix: true, BT: 16, Num: 161 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 170 }, { Pos: 0, PosFix: true, BT: 13, Num: 171 }, { Pos: 0, PosFix: true, BT: 14, Num: 170 }, { Pos: 0, PosFix: true, BT: 14, Num: 171 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 170 }, { Pos: 0, PosFix: true, BT: 15, Num: 171 }, { Pos: 0, PosFix: true, BT: 16, Num: 170 }, { Pos: 0, PosFix: true, BT: 16, Num: 171 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 180 }, { Pos: 0, PosFix: true, BT: 13, Num: 181 }, { Pos: 0, PosFix: true, BT: 14, Num: 180 }, { Pos: 0, PosFix: true, BT: 14, Num: 181 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 180 }, { Pos: 0, PosFix: true, BT: 15, Num: 181 }, { Pos: 0, PosFix: true, BT: 16, Num: 180 }, { Pos: 0, PosFix: true, BT: 16, Num: 181 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 190 }, { Pos: 0, PosFix: true, BT: 13, Num: 191 }, { Pos: 0, PosFix: true, BT: 14, Num: 190 }, { Pos: 0, PosFix: true, BT: 14, Num: 191 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 190 }, { Pos: 0, PosFix: true, BT: 15, Num: 191 }, { Pos: 0, PosFix: true, BT: 16, Num: 190 }, { Pos: 0, PosFix: true, BT: 16, Num: 191 }],
+                        [{ Pos: 0, PosFix: true, BT: 13, Num: 200 }, { Pos: 0, PosFix: true, BT: 13, Num: 201 }, { Pos: 0, PosFix: true, BT: 14, Num: 200 }, { Pos: 0, PosFix: true, BT: 14, Num: 201 },
+                         { Pos: 0, PosFix: true, BT: 15, Num: 200 }, { Pos: 0, PosFix: true, BT: 15, Num: 201 }, { Pos: 0, PosFix: true, BT: 16, Num: 200 }, { Pos: 0, PosFix: true, BT: 16, Num: 201 }],
+                    ],
+                ],
+            },
+        ],
+    },
+    {
+        name: 'Game.Happy8.Menu.Group.4.title',
+        cont: [
+            {
+                aBT: [17, 18, 19, 20, 21],
+                sltedItem: 0,
+                curBT: 17,
+                item: getblocks(0, 9),
+            },
+        ],
+    },
+    {
+        name: 'Game.Happy8.Menu.Group.5.title',
+        cont: [
+            {
                 title: 'Game.Happy8.Item.2.shortT',
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 2, Num: 0 }, { Pos: 0, PosFix: true, BT: 2, Num: 1 }, { Pos: 0, PosFix: true, BT: 3, Num: 0 }, { Pos: 0, PosFix: true, BT: 3, Num: 1 }, { Pos: 0, PosFix: true, BT: 4, Num: 0 }],
@@ -1666,17 +1774,6 @@ const Happy8:Layout = [
                 item: [
                     [{ Pos: 0, PosFix: true, BT: 8, Num: 0 }, { Pos: 0, PosFix: true, BT: 8, Num: 1 }, { Pos: 0, PosFix: true, BT: 8, Num: 2 }, { Pos: 0, PosFix: true, BT: 8, Num: 3 }, { Pos: 0, PosFix: true, BT: 8, Num: 4 }],
                 ],
-            },
-        ],
-    },
-    {
-        name: 'Game.Happy8.Menu.Group.1.title',
-        cont: [
-            {
-                // item:getNums(1,80,1)
-                BT: 1,
-                Sortable: true,
-                item: getblocks(1, 80),
             },
         ],
     },

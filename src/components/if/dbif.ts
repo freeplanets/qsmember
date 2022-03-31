@@ -138,6 +138,15 @@ export interface WsMsg {
   SettleServiceID?: number;
   UserID?: number;
   SendTo?: number | number[]; // message to who's id
+  action?: string;
+}
+export interface MsgCont {
+	action: string,
+	text?: string;
+	Receiver?: string;
+	Sender?: string;
+	SenderNick?: string;
+	roomId?: string;
 }
 
 /*

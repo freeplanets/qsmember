@@ -1,31 +1,35 @@
 // import { WebParams, Msg } from 'src/layouts/data/if';
+import { AnyObject } from 'src/layouts/data/if';
 import LayoutStoreModule from 'src/layouts/data/LayoutStoreModule';
-import { ChatMsg, WsMsg } from '../../if/dbif';
-import { Channels } from '../../if/ENum';
+import { ChatMsg, MsgCont } from '../../if/dbif';
+import { FuncKey } from '../../if/ENum';
 import ChatManager from './ChatManager';
 
 export default abstract class AChat {
 	protected list:ChatMsg[]=[];
 	protected readed = 0;
-	protected memid:number;
-	protected SendTo = 0;
+	protected messageFrom = '';
+	protected SendTo = '';
 	private UserID:number;
-	constructor(protected CM:ChatManager, protected LS:LayoutStoreModule, protected MKey:string, MemberID:number) {
+	constructor(protected CM:ChatManager, protected LS:LayoutStoreModule, protected roomId?:string, sender?:string) {
 		// this.ws = ws;
-		this.memid = MemberID;
+		this.messageFrom = sender || '';
 		this.UserID = this.LS.UserInfo.id;
-		console.log('AChat constructor:', this.memid, this.UserID, MKey);
+		console.log('AChat constructor:', this.messageFrom, this.UserID, roomId);
 	}
 	abstract add(fromWho:string, msg:string):void;
-	AcceptChat(msg:ChatMsg) {
-		msg.sent = false;
+	
+	AcceptChat(msg:AnyObject) {
+		const cMsg:ChatMsg = this.CreateMsg(msg.text || '');
+		cMsg.sent = false;
+		cMsg.name = msg.SenderNick || '';
 		console.log('AChat AcceptChat', msg);
-		if (msg.SenderID && !this.SendTo) this.SendTo = msg.SenderID;
-		this.AddToList(msg);
+		if (!this.SendTo) this.SendTo = msg.Sender || '';
+		this.AddToList(cMsg);
 		this.CM.refreshCounter();
 	}
-	get MemberID() {
-		return this.memid;
+	get MsgFrom() {
+		return this.messageFrom;
 	}
 	get List() {
 		return this.list;
@@ -38,11 +42,19 @@ export default abstract class AChat {
 	}
 	Send(msg:string) {
 		// console.log('AChat Send:', msg);
-		const cMsg = this.CreateMsg(msg);
-		console.log('AChat Sent:', cMsg);
+		const cMsg:ChatMsg = this.CreateMsg(msg);
+		console.log('AChat Create:', cMsg);
 		// this.list.push(cMsg);
 		this.AddToList(cMsg);
 		// console.log('AChat Sent:', this.list.length);
+		const msgS:MsgCont = {
+			action: FuncKey.MESSAGE,
+			text: msg,
+			// roomId: this.SendTo,
+			Receiver: this.MsgFrom,
+		};
+		console.log('AChat Sent:', msgS);
+		/*
 		const wsmsg:WsMsg = {
 			// Func: FuncKey.MESSAGE,
 			// ChannelName: Channels.ASK,
@@ -52,7 +64,8 @@ export default abstract class AChat {
 			UserID: this.UserID,
 			// SendTo: this.SendTo,
 		};
-		this.CM.Send(wsmsg);
+		*/
+		this.CM.Send(msgS);
 		/*
 		const param:WebParams = { ...this.LS.Param };
 		param.WsMsg = wsmsg;
@@ -104,8 +117,8 @@ export default abstract class AChat {
 			sent: false,
 			receiveTime: new Date().getTime(),
 			SenderID: this.UserID,
-			ReceiverID: this.SendTo,
-			MKey: this.MKey,
+			ReceiverID: 0, // this.SendTo,
+			MKey: this.roomId || '',
 		};
 	}
 }

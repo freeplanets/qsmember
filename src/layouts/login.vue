@@ -54,7 +54,7 @@ import { getModule } from 'vuex-module-decorators';
 // import {User} from './data/schema';
 import WSock from '../components/WebSock/WSock';
 import Mqtt from '../components/WebSock/Mqtt';
-import ChatClient from '../components/WebSock/ChatClient';
+// import ChatClient from '../components/WebSock/ChatClient';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import { Msg, CommonParams, LoginInfo } from './data/if';
 
@@ -125,10 +125,12 @@ export default class Login extends Vue {
           const ws:WSock = new WSock(this.store, msg.wsServer);
           this.store.setWSock(ws);
         }
+        /*
         if (msg.chatServer) {
           const chat:ChatClient = new ChatClient(this.store, msg.chatServer, msg.chatSite);
           this.store.setChater(chat);
         }
+        */
         this.store.setMqtt(new Mqtt(this.Personal));
         if (this.Personal.forcePWChange) {
           this.store.setCghPW(true);
@@ -137,6 +139,7 @@ export default class Login extends Vue {
         } else {
           this.$router.push({ path: '/' });
         }
+        console.log('header chk info:', this.store.ax.Info);
     } else {
       this.$q.dialog({
           title: this.$t('Title.PersonalInfo') as string,

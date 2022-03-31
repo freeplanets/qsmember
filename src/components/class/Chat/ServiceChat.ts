@@ -10,7 +10,7 @@ export default class ServiceChat extends AChat {
 			receiveTime: new Date().getTime(),
 			SenderID: 0,
 			ReceiverID: ReceiverID || 0,
-			MKey: this.MKey,
+			MKey: this.roomId || '',
 		};
 		this.list.push(chat);
 	}

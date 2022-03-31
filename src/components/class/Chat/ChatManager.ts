@@ -1,5 +1,5 @@
 import LayoutStoreModule from 'src/layouts/data/LayoutStoreModule';
-import { ChatMsg, WsMsg } from '../../if/dbif';
+import { AnyObject, MsgCont } from '../../if/dbif';
 import ServiceChat from './ServiceChat';
 import ASock from '../../WebSock/ASock';
 
@@ -22,17 +22,17 @@ export default class ChatManager {
 		});
 		return cnt;
 	}
-	Send(message: string | WsMsg) {
+	Send(message: string | MsgCont) {
 		this.ws.send(message);
 	}
 	refreshCounter() {
 		if (this.own) this.own.unread = this.TotalUnread;
 	}
-	accept(msg:ChatMsg):void {
-		const fIdx = this.list.findIndex((itm) => itm.MemberID === msg.SenderID);
+	accept(msg:MsgCont):void {
+		const fIdx = this.list.findIndex((itm) => itm.MsgFrom === msg.Sender);
 		if (fIdx === -1) {
 			// console.log('accpet msg', msg);
-			const newChat = new ServiceChat(this, this.LS, msg.MKey, msg.SenderID);
+			const newChat = new ServiceChat(this, this.LS, msg.roomId, msg.Sender);
 			// newChat.AcceptChat(msg);
 			this.list.push(newChat);
 		}
@@ -42,7 +42,7 @@ export default class ChatManager {
 	setOwner(own:any) {
 		this.own = own;
 	}
-	private acceptMsg(msg:ChatMsg) {
+	private acceptMsg(msg:AnyObject) {
 		this.list.forEach((chat) => {
 			chat.AcceptChat(msg);
 		});

@@ -167,6 +167,10 @@ export const itemName = (bt:number, num:number, V:any, dgt = 1, showScTitle = fa
       }
       if (typeof (btitem.shortT) !== 'undefined') {
           exTitle = String(btitem.shortT) + String(btitem.subtitle[ext]);
+      } else if (btitem.Position) {
+          const p = Math.floor(num / 10);
+          const sub = `Game.${V.GType}.Ball.${p}`;
+          exTitle = `${V.$t(sub)} ${btitem.subtitle[ext]}`;
       } else {
         exTitle = btitem.subtitle[ext];
       }

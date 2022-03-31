@@ -278,14 +278,13 @@ export interface MyUser {
     Cond: string;
     AnaData: string;
 }
-export interface WebParams {
+export interface WebParams extends AnyObject {
     sid: string;
     UserID: number;
     TableName?: string;
     TableData?: HasID | HasID[] | string;
     Fields?: string | string[];
     Filter?: string | KeyVal | KeyVal[];
-    [key: string]: any;
 }
 export interface LeverData extends HasID {
     Multiples: number;

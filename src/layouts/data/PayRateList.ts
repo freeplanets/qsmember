@@ -345,7 +345,7 @@ const PayRateData:BetTypeParam = {
             },
       },
       Happy8: {
-            order: ['1', '2', '3', '4', '5', '6', '7', '8'],
+            order: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21'],
             data: {
             1: [{ Title: '正碼' }],
             2: [{ Title: '總和大小' }],
@@ -361,6 +361,19 @@ const PayRateData:BetTypeParam = {
                   { Title: '五行', SubTitle: '水' },
                   { Title: '五行', SubTitle: '火' },
                   { Title: '五行', SubTitle: '土' }],
+            9: [{ Title: '特碼' }],
+            10: [{ Title: '2星', SubTitle: '中一' }, { Title: '2星', SubTitle: '全中', Filter: '>100' }],
+            11: [{ Title: '3星', SubTitle: '中二' }, { Title: '3星', SubTitle: '全中', Filter: '>100' }],
+            12: [{ Title: '4星', SubTitle: '中三' }, { Title: '4星', SubTitle: '全中', Filter: '>100' }],
+            13: [{ Title: '單雙' }],
+            14: [{ Title: '大小' }],
+            15: [{ Title: '尾數單雙' }],
+            16: [{ Title: '尾數大小' }],
+            17: [{ Title: '特碼尾數' }],
+            18: [{ Title: '1-5球尾數' }],
+            19: [{ Title: '6-10球尾數' }],
+            20: [{ Title: '11-15球尾數' }],
+            21: [{ Title: '16-20球尾數' }],
             },
       },
       BTCHash: {

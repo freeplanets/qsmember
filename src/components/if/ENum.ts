@@ -29,7 +29,7 @@ export enum ErrCode {
 export enum FuncKey {
 	SET_CHANNEL = 'SetChannel',
 	CLIENT_INFO = 'ClientInfo',
-  MESSAGE = 'sendMessage',
+  MESSAGE = 'Message',
 }
 
 export enum CreditType {
@@ -63,7 +63,7 @@ export enum Channels {
   ADMIN = 'Admin',
   PUB = 'Public',
   MEMBER = 'Member',
-  SERVICE = 'Service',
+  SERVICE = 'CustomerSerice',
 }
 
 export enum OpTypes {

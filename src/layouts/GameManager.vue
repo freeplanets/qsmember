@@ -47,7 +47,7 @@
         </div>
         <div class="row my-line-high">
             <div><q-btn color="green" icon-right="save" label="Save" @click="saveGame();" /></div>
-            <div v-if="false"><q-btn color="red" icon-right="save" label="SaveDfOddsItem" @click="SaveDfOddsItem();" /></div>
+            <div v-if="PInfo.Levels==9"><q-btn color="red" icon-right="save" label="SaveDfOddsItem" @click="SaveDfOddsItem();" /></div>
             <div v-if="PInfo.Levels==9"><q-btn color="red" icon-right="save" label="SaveGameCaption" @click="saveGameCaption();" /></div>
         </div>
     </div>
@@ -60,7 +60,7 @@ import { Game } from './data/schema';
 import LayoutStoreModule from './data/LayoutStoreModule';
 import { SelectOptions, Msg, LoginInfo, CommonParams, AnyObject } from './data/if';
 import { itemNameNew } from './components/func';
-// import getBetItems from './class/BetItems';
+import getBetItems from './class/BetItems';
 import { GameM } from './class/GameM';
 import GameSelector from './components/GameSelector.vue';
 
@@ -272,7 +272,7 @@ export default class GameManager extends Vue {
         console.log(tmp);
         return tmp;
     }
-    /*
+    // /*
     async SaveDfOddsItem() {
         if (this.MyGame) {
             const GameID = this.MyGame.Datas.id;
@@ -285,6 +285,7 @@ export default class GameManager extends Vue {
                 UserID: this.PInfo.id,
                 sid: this.PInfo.sid,
                 GameID,
+                GType: this.MyGame.GType,
                 ModifyID: this.PInfo.id,
                 data: JSON.stringify(BetItems),
             };
@@ -299,7 +300,7 @@ export default class GameManager extends Vue {
             }
         }
     }
-    */
+    // */
     mounted() {
         if (!this.store.isLogin) {
             this.$router.push({ path: '/login' });

@@ -8,21 +8,23 @@ import Speed3 from './data/Speed3';
 import Happy8 from './data/Happy8';
 // const js = JSON.parse(MarkSixData);
 const jObj:any[] = [];
-jObj[1] = JSON.parse(MarkSixData);
-jObj[2] = JSON.parse(D3);
-jObj[3] = JSON.parse(D3);
-jObj[12] = JSON.parse(Happy);
-jObj[19] = JSON.parse(Always);
-jObj[20] = JSON.parse(Cars);
-jObj[21] = JSON.parse(Speed3);
-jObj[22] = JSON.parse(Happy8);
+jObj[1] = MarkSixData;
+jObj[2] = D3;
+jObj[3] = D3;
+jObj[12] = Happy;
+jObj[19] = Always;
+jObj[20] = Cars;
+jObj[21] = Speed3;
+jObj[22] = Happy8;
+jObj[30] = Happy8;
 function getBetItems(id:number):BetItem[]|boolean {
     if (!jObj[id]) return false;
     const js = jObj[id];
-    const odds = js.odds;
+    console.log('getBetItems', id, js);
+    // const odds = js.odds;
     const BetItems:BetItem[] = [];
-    Object.keys(odds).forEach((key) => {
-        Object.keys(odds[key]).forEach((num) => {
+    Object.keys(js).forEach((key) => {
+        Object.keys(js[key]).forEach((num) => {
             const tmp:BetItem = {
                 BetType: key,
                 Num: num,

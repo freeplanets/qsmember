@@ -329,6 +329,7 @@ export default class BetClass extends Vue {
         if (msg.ErrNo === 0) {
             dta = msg.data as BasePayRateItm[];
         }
+        console.log('getBasePayRate', msg);
         return dta;
     }
   mounted() {

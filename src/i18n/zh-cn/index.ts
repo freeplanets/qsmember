@@ -1282,8 +1282,30 @@ export default {
     Happy8: {
       Menu: {
         Group: [
-          { title: '总和五行', SubItem: [] },
-          { title: '正码', SubItem: [] },
+          {
+            title: '特码',
+            SubItem: [],
+          },
+          {
+            title: '正码',
+            SubItem: [],
+          },
+          {
+            title: '连码',
+            SubItem: [],
+          },
+          {
+            title: '两面',
+            SubItem: [],
+          },
+          {
+            title: '尾数',
+            SubItem: [],
+          },
+          {
+            title: '总和/比数/五行',
+            SubItem: [],
+          },
         ],
       },
       Item: {

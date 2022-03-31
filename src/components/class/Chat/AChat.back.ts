@@ -1,5 +1,4 @@
-import { ChatMsg, WsMsg } from '../../if/dbif';
-import { FuncKey, Channels } from '../../if/ENum';
+import { ChatMsg } from '../../if/dbif';
 import ChatManager from './ChatManager';
 import ASock from '../../WebSock/ASock';
 
@@ -38,13 +37,15 @@ export default abstract class AChat {
 		// this.list.push(cMsg);
 		this.AddToList(cMsg);
 		// console.log('AChat Sent:', this.list.length);
+		/*
 		const wsmsg:WsMsg = {
 			Func: FuncKey.MESSAGE,
 			ChannelName: Channels.ASK,
 			Message: JSON.stringify(cMsg),
 			UserID: this.ws.UserID,
 		};
-		this.ws.send(wsmsg);
+		*/
+		this.ws.send(msg);
 	}
 	AddToList(msg:ChatMsg) {
 		if (this.list.length === 0) this.list.push(msg);

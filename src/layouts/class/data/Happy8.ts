@@ -1,2 +1,6 @@
-const Happy8 = '';
-export default Happy8;
+import StrFunc from '../../../components/Functions/MyStr';
+
+const data = '';
+const jsd = StrFunc.toJSON(data);
+const pdata = jsd ? jsd.arrO || {} : {};
+export default pdata;

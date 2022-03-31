@@ -1,7 +1,8 @@
 import LayoutStoreModule from 'src/layouts/data/LayoutStoreModule';
 import ChatManager from '../class/Chat/ChatManager';
-import { WsMsg, GetMessage } from '../if/dbif';
+import { WsMsg, GetMessage, MsgCont } from '../if/dbif';
 import StrFunc from '../Functions/MyStr';
+import { FuncKey } from '../if/ENum';
 
 export default abstract class ASock {
 	protected sock!:WebSocket;
@@ -12,6 +13,10 @@ export default abstract class ASock {
 	constructor(protected LSM:LayoutStoreModule, protected url:string, protected site = '') {
 		this.createConnection();
 		this.chatM = new ChatManager(this, LSM);
+	}
+	protected addPrefix(url:string):string {
+		const ws = url === 'localhost:4001' || url === 'localhost:4002' ? 'ws' : 'wss';
+		return `${ws}://${url}`;
 	}
 	get UserID() {
 		return this.LSM.UserInfo.id;
@@ -38,8 +43,9 @@ export default abstract class ASock {
 		this.sock.onmessage = (event:MessageEvent) => {
 				this.OnMessage(event.data.toString());
 		};
-		this.sock.onopen = () => {
+		this.sock.onopen = (ev:Event) => {
 				// this.registerChannel(ClientChannel);
+				console.log('Chat onopen', ev);
 				this.isConnected = true;
 				this.OnOpen();
 		};
@@ -50,17 +56,18 @@ export default abstract class ASock {
 				}, 5000);
 		};
 	}
-	send(message:string | WsMsg) {
+	send(message:string | MsgCont | WsMsg) {
 		console.log('Try send:', message);
 		if (!this.isConnected) {
 				console.log('Wait for connect.......');
 				return;
 		}
 		if (this.sock.readyState === WebSocket.OPEN) {
-				let msg:WsMsg;
+				let msg:MsgCont | WsMsg;
 				if (typeof message === 'string') {
 						msg = {
-								Message: message,
+								action: FuncKey.MESSAGE,
+								text: message,
 						};
 				} else {
 						msg = message;
