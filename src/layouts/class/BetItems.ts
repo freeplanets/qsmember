@@ -6,6 +6,7 @@ import Always from './data/Always';
 import Cars from './data/Cars';
 import Speed3 from './data/Speed3';
 import Happy8 from './data/Happy8';
+import KENO from './data/kenoData';
 // const js = JSON.parse(MarkSixData);
 const jObj:any[] = [];
 jObj[1] = MarkSixData;
@@ -17,6 +18,7 @@ jObj[20] = Cars;
 jObj[21] = Speed3;
 jObj[22] = Happy8;
 jObj[30] = Happy8;
+jObj[36] = KENO;
 function getBetItems(id:number):BetItem[]|boolean {
     if (!jObj[id]) return false;
     const js = jObj[id];

@@ -179,7 +179,7 @@ export default class BetClass extends Vue {
         }
         if (this.BPR.length === 0) {
             this.BPR = await this.getBasePayRate(this.curGameID);
-            // console.log('SavePayClass',this.BPR);
+            console.log('SavePayClass', this.BPR);
         }
         const inp:number = parseFloat(this.Funcs[this.tab].value) / 100;
         switch (this.tab) {

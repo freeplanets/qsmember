@@ -162,17 +162,23 @@ export default class BetLists extends Vue {
       sid: this.PInfo.sid,
       Types: this.PInfo.Types,
     };
+    if (this.dateSet) {
+      const tmp:string[] = this.dateSet.split('-');
+      if (tmp[0]) param.SDate = tmp[0];
+      if (tmp[1]) param.EDate = tmp[1];
+    } else if (!this.termid) {
+      this.$q.dialog({
+        title: `${this.$t('Label.BetLists')}`,
+        message: `${this.$t('Error.10')}`, // 參數不足
+      });
+      return;
+    }
     param.findString = this.NameOrNick;
     param.GameID = this.curGameID;
     if (this.BetID) param.BetID = this.BetID;
     param.UpName = this.UpName;
     if (this.termid) param.tid = this.termid;
     if (this.bettype) param.BetType = this.bettype;
-    if (this.dateSet) {
-      const tmp:string[] = this.dateSet.split('-');
-      if (tmp[0]) param.SDate = tmp[0];
-      if (tmp[1]) param.EDate = tmp[1];
-    }
     if (this.STime) param.STime = this.STime;
     if (this.ETime) param.ETime = this.ETime;
     if (this.OrdAmtS) param.OrdAmtS = this.OrdAmtS;

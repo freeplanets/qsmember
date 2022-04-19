@@ -36,6 +36,21 @@ export default class Func extends AForAll {
 		const Fields = 'id,Nickname';
 		return this.getTableData(Tablename, Filter, Fields);
 	}
+	async getMemberIDFilter(Nickname:string):Promise<KeyVal | undefined> {
+		const msg = await this.getMemberIdByNickname(Nickname);
+		if (msg.ErrNo === ErrCode.PASS) {
+			if (msg.data && msg.data.length > 0) {
+				const dta = msg.data as HasID[];
+				const ids = dta.map((usr) => usr.id);
+				return {
+					Key: 'UserID',
+					Val: ids.join(','),
+					Cond: 'in',
+				};
+			}
+		}
+		return undefined;
+	}
 	getMemberNameByID(id:number|number[]) {
 		const filter:KeyVal = {
 			Key: 'id',
@@ -206,6 +221,11 @@ export default class Func extends AForAll {
 				Filter.push({ Key: 'UpId', Val: this.User.id });
 		}
 		if (Nickname) {
+			const filter = await this.getMemberIDFilter(Nickname);
+			if (filter) {
+				Filter.push(filter);
+			}
+			/*
 			msg = await this.getMemberIdByNickname(Nickname);
 			if (msg.ErrNo === ErrCode.PASS) {
 				if (msg.data && msg.data.length > 0) {
@@ -218,6 +238,7 @@ export default class Func extends AForAll {
 					});
 				}
 			}
+			*/
 		}
 		msg = await this.getAskChkBuy(sdate, Filter, TableName, Fields);
 		if (msg.ErrNo === ErrCode.PASS) {
@@ -234,7 +255,7 @@ export default class Func extends AForAll {
 		}
 		return msg;
 	}
-	getLedgerLever(sdate:string) {
+	async getLedgerLever(sdate:string, itemid?:number, Nickname?:string) {
 		const TableName = 'LedgerLever';
 		const Filter:KeyVal[] = [];
 		Filter.push(DateFunc.createDateFilter(sdate, 'SellTime'));
@@ -242,6 +263,15 @@ export default class Func extends AForAll {
 			Filter.push({ Key: 'UpId', Val: this.User.id });
 		}
 		Filter.push({ Key: 'SellID', Val: 0, Cond: '>' });
+		if (itemid) {
+			Filter.push({ Key: 'ItemID', Val: itemid });
+		}
+		if (Nickname) {
+			const filter = await this.getMemberIDFilter(Nickname);
+			if (filter) {
+				Filter.push(filter);
+			}
+		}
 		return this.getTableData(TableName, Filter);
 	}
 	getTitle(tableName:string, ids:number[], fieldAsTitle:string) {

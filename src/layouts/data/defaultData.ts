@@ -127,6 +127,17 @@ const BaseOddsItem:AllOfGame = {
         28: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 特碼頭
         29: { Min: 0, Max: 99, SameAsDigitalOrder: false, Digital: 2 }, // 27碼頭
     },
+    KENO: {
+        1: { Min: 1, Max: 80, SameAsDigitalOrder: false, Digital: 2 }, // KENO 2
+        2: { Min: 1, Max: 80, SameAsDigitalOrder: false, Digital: 2 }, // KENO 3
+        3: { Min: 1, Max: 80, SameAsDigitalOrder: false, Digital: 2 }, // KENO 4
+        4: { Min: 1, Max: 80, SameAsDigitalOrder: false, Digital: 2 }, // KENO 5
+        5: { Min: 1, Max: 80, SameAsDigitalOrder: false, Digital: 2 }, // KENO 6
+        6: { Min: 1, Max: 80, SameAsDigitalOrder: false, Digital: 2 }, // KENO 7
+        7: { Min: 1, Max: 80, SameAsDigitalOrder: false, Digital: 2 }, // KENO 8
+        8: { Min: 1, Max: 80, SameAsDigitalOrder: false, Digital: 2 }, // KENO 9
+        9: { Min: 1, Max: 80, SameAsDigitalOrder: false, Digital: 2 }, // KENO 10
+    },
 };
 export default BaseOddsItem;
 /*

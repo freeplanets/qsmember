@@ -7,7 +7,8 @@ interface BetItemData {
       addZero?:boolean;
       addSub?:boolean;
       Num?:number|number[];
-      relateBT?:number[]
+      relateBT?:number[],
+      Open?:number,
 }
 interface BaseParam {
       Start:number;
@@ -663,6 +664,54 @@ const PayRateData:BetTypeParam = {
                   27: [{ Title: '財神頭' }],
                   28: [{ Title: '特碼頭' }],
                   29: [{ Title: '27碼頭' }],
+            },
+      },
+      KENO: {
+            order: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+            data: {
+                  1: [{ Title: 'KENO 2', SubTitle: '中一' }, { Title: 'KENO 2', SubTitle: '中二' }],
+                  2: [{ Title: 'KENO 3', SubTitle: '中二' }, { Title: 'KENO 3', SubTitle: '中三' }],
+                  3: [{ Title: 'KENO 4', SubTitle: '中二' }, { Title: 'KENO 4', SubTitle: '中三' }, { Title: 'KENO 4', SubTitle: '中四' }],
+                  4: [
+                        { Title: 'KENO 5', SubTitle: '中三' },
+                        { Title: 'KENO 5', SubTitle: '中四' },
+                        { Title: 'KENO 5', SubTitle: '中五' },
+                  ],
+                  5: [
+                        { Title: 'KENO 6', SubTitle: '中三' },
+                        { Title: 'KENO 6', SubTitle: '中四' },
+                        { Title: 'KENO 6', SubTitle: '中五' },
+                        { Title: 'KENO 6', SubTitle: '中六' },
+                  ],
+                  6: [
+                        { Title: 'KENO 7', SubTitle: '中四' },
+                        { Title: 'KENO 7', SubTitle: '中五' },
+                        { Title: 'KENO 7', SubTitle: '中六' },
+                        { Title: 'KENO 7', SubTitle: '中七' },
+                  ],
+                  7: [
+                        { Title: 'KENO 8', SubTitle: '中四' },
+                        { Title: 'KENO 8', SubTitle: '中五' },
+                        { Title: 'KENO 8', SubTitle: '中六' },
+                        { Title: 'KENO 8', SubTitle: '中七' },
+                        { Title: 'KENO 8', SubTitle: '中八' },
+                  ],
+                  8: [
+                        { Title: 'KENO 9', SubTitle: '中五' },
+                        { Title: 'KENO 9', SubTitle: '中六' },
+                        { Title: 'KENO 9', SubTitle: '中七' },
+                        { Title: 'KENO 9', SubTitle: '中八' },
+                        { Title: 'KENO 9', SubTitle: '中九' },
+                  ],
+                  9: [
+                        { Title: 'KENO 10', SubTitle: '中零' },
+                        { Title: 'KENO 10', SubTitle: '中五' },
+                        { Title: 'KENO 10', SubTitle: '中六' },
+                        { Title: 'KENO 10', SubTitle: '中七' },
+                        { Title: 'KENO 10', SubTitle: '中八' },
+                        { Title: 'KENO 10', SubTitle: '中九' },
+                        { Title: 'KENO 10', SubTitle: '中十' },
+                  ],
             },
       },
 };

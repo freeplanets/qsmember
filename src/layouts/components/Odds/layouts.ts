@@ -2690,6 +2690,98 @@ const VNNorth:Layout = [
         ],
     },
 ];
+const KENO: Layout = [
+    {
+        name: 'Game.KENO.Menu.Group.0.title',
+        cont: [
+            {
+                BT: 1,
+                item: getblocks(1, 80),
+                Sortable: true,
+            },
+        ],
+    },
+    {
+        name: 'Game.KENO.Menu.Group.1.title',
+        cont: [
+            {
+                BT: 2,
+                item: getblocks(1, 80),
+                Sortable: true,
+            },
+        ],
+    },
+    {
+        name: 'Game.KENO.Menu.Group.2.title',
+        cont: [
+            {
+                BT: 3,
+                item: getblocks(1, 80),
+                Sortable: true,
+            },
+        ],
+    },
+    {
+        name: 'Game.KENO.Menu.Group.3.title',
+        cont: [
+            {
+                BT: 4,
+                item: getblocks(1, 80),
+                Sortable: true,
+            },
+        ],
+    },
+    {
+        name: 'Game.KENO.Menu.Group.4.title',
+        cont: [
+            {
+                BT: 5,
+                item: getblocks(1, 80),
+                Sortable: true,
+            },
+        ],
+    },
+    {
+        name: 'Game.KENO.Menu.Group.5.title',
+        cont: [
+            {
+                BT: 6,
+                item: getblocks(1, 80),
+                Sortable: true,
+            },
+        ],
+    },
+    {
+        name: 'Game.KENO.Menu.Group.6.title',
+        cont: [
+            {
+                BT: 7,
+                item: getblocks(1, 80),
+                Sortable: true,
+            },
+        ],
+    },
+    {
+        name: 'Game.KENO.Menu.Group.7.title',
+        cont: [
+            {
+                BT: 8,
+                item: getblocks(1, 80),
+                Sortable: true,
+            },
+        ],
+    },
+    {
+        name: 'Game.KENO.Menu.Group.8.title',
+        cont: [
+            {
+                BT: 9,
+                item: getblocks(1, 80),
+                Sortable: true,
+            },
+        ],
+    },
+];
 const Layouts:ILayouts = {};
 Layouts.MarkSix = MarkSixLayout;
 Layouts['3D'] = D3;
@@ -2702,4 +2794,5 @@ Layouts.BTCHash = BTCHash;
 Layouts.HashSix = HashSix;
 Layouts.SGPools = SGPools;
 Layouts.VNNorth = VNNorth;
+Layouts.KENO = KENO;
 export default Layouts;

@@ -236,7 +236,12 @@ export interface LedgerLever {
   BuyTime?: number; // 買進時間
   SellTime: number; // 賣出時間
 }
-
+export interface LedgerReport extends LedgerLever {
+  User: string;
+  Item: string;
+  // Code: string;
+  SiteName: string;
+}
 export interface CryptoOpParams extends HasID {
   ItemID: number; // 項目代號
   OpType: OpTypes; // 控盤類型 None, A, B, C, D

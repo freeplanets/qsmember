@@ -19,7 +19,8 @@ export default class TermIDSelector extends Vue {
     onGameIDChange() {
       this.getGameID();
     }
-    models:SelectOptions = { value: 0, label: '' };
+    defaultOption:SelectOptions = { value: 0, label: '-' };
+    models:SelectOptions = { value: 0, label: '-' };
     options:SelectOptions[] = []
     set model(v:SelectOptions) {
           this.models = v;
@@ -28,7 +29,7 @@ export default class TermIDSelector extends Vue {
     get model() {
           // console.log('get Model:', this.models);
       return this.models;
-      }
+    }
     async getGameID() {
         // console.log('getGames AddAllItem:',this.AddAllItem);
         if (this.GameID && this.store) {
@@ -36,6 +37,7 @@ export default class TermIDSelector extends Vue {
           const ans:SelectOptions[] | undefined = await this.store.ax.getTermIDByGameID(this.store.personal.id, this.store.personal.sid, this.GameID);
           if (ans) {
             this.options = ans;
+            this.options.splice(0, 0, this.defaultOption);
             this.model = this.options[0];
           }
         }

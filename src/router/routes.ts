@@ -94,6 +94,10 @@ const routes: RouteConfig[] = [
         path: '/modifytextfile',
         component: () => import('pages/ModifyTextFile.vue'),
       },
+      {
+        path: '/cryptoledgerreport',
+        component: () => import('pages/CryptoLedgerReport.vue'),
+      },
    ],
   },
 ];

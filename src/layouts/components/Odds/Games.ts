@@ -176,6 +176,7 @@ export class CGame implements AnyObject {
                     func: RickF.OpenMulti,
                 },
             ],
+            KENO: [],
         }
     constructor() {
         this.member = {};
