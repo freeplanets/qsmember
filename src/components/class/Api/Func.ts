@@ -197,7 +197,7 @@ export default class Func extends AForAll {
 	}
 	private async getAskChkBuy(sdate:string, filter:KeyVal[], TableName:string, Fields:string[]) {
 		const Filter = filter.map((itm) => itm);
-		Filter.push(DateFunc.createDbDateFilter(sdate, 'CreateTime'));
+		if (sdate) Filter.push(DateFunc.createDbDateFilter(sdate, 'CreateTime'));
 		console.log('getAskChkBuy', Filter);
 		return this.getTableData(TableName, Filter, Fields);
 	}
@@ -207,13 +207,17 @@ export default class Func extends AForAll {
 		console.log('getAskChkSell', Filter);
 		return this.getTableData(TableName, Filter, Fields);
 	}
-	async getAskList(sdate:string, itemid?:number, Nickname?:string) {
+	async getAskList(sdate:string, BetID?:string, itemid?:number, Nickname?:string) {
 		let msg:Msg = {};
     const TableName = 'AskTable';
     const Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'ItemType', 'Code', 'Qty', 'Price', 'Amount',
         'Fee', 'AskFee', 'AskPrice', 'LeverCredit', 'ExtCredit', 'Lever', 'SetID', 'USetID', 'ProcStatus',
         'CreateTime', 'DealTime', 'isUserSettle'];
 		const Filter:KeyVal[] = [];
+		if (BetID) {
+			const ids = BetID.split(',').map((v) => parseInt(v, 10));
+			Filter.push({ Key: 'id', Val: ids.join(','), Cond: 'in' });
+		}
 		if (itemid) {
 			Filter.push({ Key: 'ItemID', Val: itemid });
 		}
@@ -255,10 +259,14 @@ export default class Func extends AForAll {
 		}
 		return msg;
 	}
-	async getLedgerLever(sdate:string, itemid?:number, Nickname?:string) {
+	async getLedgerLever(sdate:string, BetID?:string, itemid?:number, Nickname?:string) {
 		const TableName = 'LedgerLever';
 		const Filter:KeyVal[] = [];
-		Filter.push(DateFunc.createDateFilter(sdate, 'SellTime'));
+		if (sdate) Filter.push(DateFunc.createDateFilter(sdate, 'SellTime'));
+		if (BetID) {
+			const ids = BetID.split(',').map((v) => parseInt(v, 10));
+			Filter.push({ Key: 'id', Val: ids.join(','), Cond: 'in' });
+		}
 		if (this.User.Types === 1 || this.User.Types === 2) {
 			Filter.push({ Key: 'UpId', Val: this.User.id });
 		}
@@ -286,5 +294,8 @@ export default class Func extends AForAll {
 			Cond: 'in',
 		};
 		return this.getTableData(tableName, filter, fields);
+	}
+	saveGameOrder(dta:HasID[]) {
+		return this.setTableData('Games', dta);
 	}
 }

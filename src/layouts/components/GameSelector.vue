@@ -59,7 +59,7 @@ export default class GameSelector extends Vue {
 	async getGames() {
         // console.log('GameSelector getGames AddAllItem:',this.AddAllItem);
         if (!this.store) return;
-        let ans:SelectOptions[] | undefined = await this.store.ax.getGames(this.store.personal.id, this.store.personal.sid, this.showall);
+        let ans:SelectOptions[] | undefined = await this.store.ax.getGames(this.showall);
         if (ans) {
             if (this.UserPayClass.length > 0) {
                 const tmp:SelectOptions[] = ans;

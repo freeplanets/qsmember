@@ -2,6 +2,7 @@
 <div class="gametable">
     <div class="row q-pa-sm">
         <div class="col-3"><GS :store='store' :showall='true' @setGames="setCurGames"></GS></div>
+        <div><q-btn color="secondary" :label="$t('Button.MemberDashboardSet')" @click="showMemberDashboard=true" /></div>
     </div>
     <div v-if="MyGame" class='my-pa-left'>
         <div class="row my-line-high">
@@ -51,6 +52,20 @@
             <div v-if="PInfo.Levels==9"><q-btn color="red" icon-right="save" label="SaveGameCaption" @click="saveGameCaption();" /></div>
         </div>
     </div>
+    <q-dialog v-model="showMemberDashboard" id="mydialog">
+      <q-card>
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">{{ $t('Button.MemberDashboardSet') }}</div>
+          <q-btn color="deep-orange" glossy :label="$t('Label.Save')" @click="saveOrder=1" />
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section>
+            <MD :Save="saveOrder" @EndSave="EndSave"></MD>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
 </div>
 </template>
 <script lang="ts">
@@ -63,6 +78,7 @@ import { itemNameNew } from './components/func';
 import getBetItems from './class/BetItems';
 import { GameM } from './class/GameM';
 import GameSelector from './components/GameSelector.vue';
+import MemberDashboard from '../components/Member/Dashboard.vue';
 
 interface OddsItem {
     GType:string;
@@ -79,6 +95,7 @@ interface ItemSub {
 @Component({
     components: {
         GS: GameSelector,
+        MD: MemberDashboard,
     },
 })
 export default class GameManager extends Vue {
@@ -103,11 +120,17 @@ export default class GameManager extends Vue {
     */
     options:SelectOptions[]=[];
     gamelist:Game[]=[];
+    showMemberDashboard = false;
+    saveOrder = 0;
     get PInfo():LoginInfo {
         return this.store.personal;
     }
     get ax() {
         return this.store.ax;
+    }
+    EndSave(v:number) {
+        console.log('EndSave', v);
+        this.saveOrder = v;
     }
     async setCurGames(v:SelectOptions) {
         const gid:number = v.value;
@@ -323,5 +346,8 @@ export default class GameManager extends Vue {
 }
 .my-line-high {
     line-height: 40px;
+}
+#mydialog .q-card {
+    overflow: hidden;
 }
 </style>

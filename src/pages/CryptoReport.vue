@@ -4,6 +4,7 @@
       <div class="col-2"><selector :Title="$t('Title.Item')" :defaultModel="itemid" :options="options" @SetItem="setItem" /></div>
       <div class="col-2"><q-input class="" outlined dense v-model="SelectDate" /></div>
       <div class="pbtn2"><q-btn color="primary" dense icon="date_range" @click="isDateSlt=true"/></div>
+      <div><q-input outlined dense v-model="BetID" :label="$t('Report.OrderNo')+'(n,1,2,3,...)'" /></div>
       <div class="col row">
         <q-chip square>
           <q-avatar icon="account_circle" color="red" text-color="white" />
@@ -70,6 +71,7 @@ export default class CrytoReport extends Vue {
   isDateSlt = false;
   SelectDate = '';
   Nickname = '';
+  BetID = '';
   askReports:AskReport[]=[];
   @Watch('SelectDate')
   onSDChange() {
@@ -84,10 +86,10 @@ export default class CrytoReport extends Vue {
     this.SelectDate = '';
   }
   async SearchData() {
-    if (!this.SelectDate) return;
+    if (!this.SelectDate && !this.BetID) return;
     this.store.setShowProgress(true);
     this.askReports = [];
-    const msg:Msg = await this.api.getAskList(this.SelectDate, this.itemid, this.Nickname);
+    const msg:Msg = await this.api.getAskList(this.SelectDate, this.BetID, this.itemid, this.Nickname);
     if (msg.ErrNo === ErrCode.PASS) {
       if (msg.data) {
         // const asks:AskTable[] = msg.data as AskTable[];

@@ -187,7 +187,7 @@ module.exports = configure((ctx) => ({
         builder: {
             // https://www.electron.build/configuration/configuration
 
-            appId: 'crypto',
+            appId: 'qsmember',
         },
 
         // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration

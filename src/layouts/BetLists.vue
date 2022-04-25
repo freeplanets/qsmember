@@ -142,7 +142,7 @@ export default class BetLists extends Vue {
   }
   ClearSearch() {
     this.NameOrNick = '';
-    this.curGameID = 0;
+    // this.curGameID = 0;
     this.BetID = '';
     this.UpName = '';
     this.termid = 0;
@@ -166,7 +166,7 @@ export default class BetLists extends Vue {
       const tmp:string[] = this.dateSet.split('-');
       if (tmp[0]) param.SDate = tmp[0];
       if (tmp[1]) param.EDate = tmp[1];
-    } else if (!this.termid) {
+    } else if (!this.termid && !this.BetID) {
       this.$q.dialog({
         title: `${this.$t('Label.BetLists')}`,
         message: `${this.$t('Error.10')}`, // 參數不足

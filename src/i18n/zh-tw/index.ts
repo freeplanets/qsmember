@@ -326,6 +326,7 @@ export default {
     EmergencyShutdown: '緊急關閉',
     MemberSettleMark: '會員平倉提示',
     GenNums: '產生號碼',
+    MemberDashboardSet: '會員介面排列',
   },
   Dialog: {
     MTitle: '主選單',
@@ -487,6 +488,7 @@ export default {
     33: '越南彩南部18B',
     34: '越南彩南部18C',
     35: '越南彩南部18A+B',
+    36: 'KENO',
   },
   Game: {
     Cars: {

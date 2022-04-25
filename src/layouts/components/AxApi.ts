@@ -48,11 +48,12 @@ export class AxApi {
             this.router.push({ path: '/login' });
         }
     }
-	async getGames(UserID:number, sid:string, showall?:boolean):Promise<SelectOptions[] | undefined> {
-        const params:CommonParams = {
-            UserID,
-            sid,
+	async getGames(showall = false, order = false):Promise<SelectOptions[] | undefined> {
+        const params = {
+            // UserID,
+            // sid,
             showall: showall ? 1 : 0,
+            order: order ? 1 : 0,
         };
         let rlt:SelectOptions[] | undefined;
         const ans = await this.getApi('getGames', params);
@@ -173,7 +174,6 @@ export class AxApi {
         // const url:string=this.ApiUrl+'/api/UpdateGame';
         return this.getApi('UpdateGame', param, 'post');
     }
-
     getTerms(UserID:number, sid:string, GameID:number|string, sdate?:string):Promise<Msg> {
         const param:CommonParams = {
             UserID,

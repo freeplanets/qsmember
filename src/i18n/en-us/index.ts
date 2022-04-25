@@ -324,6 +324,7 @@ export default {
     EmergencyShutdown: 'emergency close',
     MemberSettleMark: 'member settlement notice',
     GenNums: 'auto generate',
+    MemberDashboardSet: 'Member Dashboard',
   },
   Dialog: {
     MTitle: 'main',
@@ -485,6 +486,7 @@ export default {
     33: '越南彩南部18B',
     34: '越南彩南部18C',
     35: '越南彩南部18A+B',
+    36: 'KENO',
   },
   Game: {
     Cars: {

@@ -94,7 +94,7 @@ export default class GamePayClassSelector extends Vue {
     if (!this.store) return;
     const UserID = this.store.personal.id;
     const sid = this.store.personal.sid;
-    const ans:SelectOptions[] | undefined = await this.store.ax.getGames(UserID, sid);
+    const ans:SelectOptions[] | undefined = await this.store.ax.getGames();
     if (ans) {
       ans.map((itm) => {
           const tmp:GamePayClass = {
