@@ -343,7 +343,7 @@ export class AxApi {
             // config.headers['Access-Control-Expose-Headers'] = 'Authorization';
         }
         let func:Promise<AnyObject>;
-        console.log('getApi param:', config);
+        // console.log('getApi param:', config);
         if (method === 'post') {
             func = this.doPost(url, config);
         } else {
@@ -388,7 +388,7 @@ export class AxApi {
         return this.doit(url, param);
     }
     doit(url:string, config: AxiosRequestConfig):Promise<Msg> {
-       console.log('doit config', config);
+        // console.log('doit config', config);
         let msg:Msg = { ErrNo: 0 };
         return new Promise((resolve, reject) => {
             axios.get(url, config).then((res:AxiosResponse) => {
