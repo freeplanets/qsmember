@@ -19,6 +19,8 @@ jObj[21] = Speed3;
 jObj[22] = Happy8;
 jObj[30] = Happy8;
 jObj[36] = KENO;
+jObj[37] = Always;
+jObj[38] = Cars;
 function getBetItems(id:number):BetItem[]|boolean {
     if (!jObj[id]) return false;
     const js = jObj[id];
