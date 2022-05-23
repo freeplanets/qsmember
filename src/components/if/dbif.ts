@@ -140,13 +140,25 @@ export interface WsMsg {
   SendTo?: number | number[]; // message to who's id
   action?: string;
 }
+export interface Msgs {
+  MessageID: number;
+	Sender: string;
+	message: string;
+	receiveTime: number;
+}
+export interface KeyMsgs {
+	[key:string]: Msgs[];
+}
 export interface MsgCont {
 	action: string,
-	text?: string;
+	text: string;
 	Receiver?: string;
 	Sender?: string;
 	SenderNick?: string;
 	roomId?: string;
+  receiveTime?:number;
+  Msgs?:KeyMsgs;
+  MessageID?:number;
 }
 
 /*
@@ -187,11 +199,12 @@ export interface ChatMsg {
   // txtColor?:string; // 訊息字顏色 for Chat Message 'text-color'
   avatar?:string; // 發話者圖片（或圖片網址）for Chat Message 'avatar'
   inMessage?:boolean; // 收訊方用，發話方是否正在輸入訊息 for Chat Message tag q-spinner-dots
-  receiveTime:number|string;
+  receiveTime:number;
   SenderID:number;
   UpID?:number;
-  ReceiverID:number;
-  MKey:string;
+  // ReceiverID:number;
+  // MessageID: number;
+  // MKey:string;
 }
 export interface ItemTypeTotal {
   Records:number;

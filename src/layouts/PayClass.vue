@@ -43,9 +43,10 @@
 // import Vue from 'vue';
 // import Component from 'vue-class-component';
 import { Vue, Component } from 'vue-property-decorator';
-import axios, { AxiosResponse } from 'axios';
+// import axios, { AxiosResponse } from 'axios';
 import { getModule } from 'vuex-module-decorators';
 import { cloneDeep } from 'lodash';
+import { ErrCode } from 'src/components/if/ENum';
 import LayoutStoreModule from './data/LayoutStoreModule';
 // import {Games} from './data/schema';
 import { SelectOptions, PayRateItm, Msg, PayClass, CommonParams, LoginInfo, AnyObject } from './data/if';
@@ -281,6 +282,28 @@ export default class BetClass extends Vue {
             PayClassID: this.curPayClass.id,
             data: JSON.stringify(dtas),
 		};
+        this.store.ax.getApi('batch/savePayRate', data, 'post').then((res) => {
+            console.log('savePayRate', res);
+            if (res.ErrNo !== ErrCode.PASS) {
+                this.$q.dialog({
+                    title: this.$t('Label.Save') as string,
+                    message: 'OK!!',
+                });
+            }
+            if (res.data.affectedRows > 0) {
+                this.$q.dialog({
+                    title: this.$t('Label.Save') as string,
+                    message: 'OK!!',
+                });
+            }
+            dtas.map((itm) => {
+                const tmp = this.PayR.find((elm) => elm.BetType === itm.BetType && elm.SubType === itm.SubType);
+                if (tmp) {
+                    tmp.DataChanged = false;
+                }
+            });
+        });
+        /*
 		const url = `${this.store.ax.Host}/api/batch/savePayRate`;
 		axios.post(url, data).then((res:AxiosResponse) => {
             // console.log(res.data);
@@ -299,6 +322,7 @@ export default class BetClass extends Vue {
 		}).catch((err) => {
 			console.error(err);
 		});
+        */
     }
 	async setPayClass(pc?:PayClass) {
         if (pc) {

@@ -47,6 +47,7 @@ export default class Chat extends Vue {
 	onMessagesChange() {
 		// console.log('onMessgesChange:', this.messages.length);
 		const rtn = this.messages.map((itm:ChatMsg) => {
+			console.log('onMessagesChange', itm);
 			const minutesAgo = FuncDate.howMinutesAgo(itm.receiveTime);
 			itm.stamp = this.getStamp(minutesAgo);
 			return itm;
@@ -54,6 +55,7 @@ export default class Chat extends Vue {
 		// console.log('onMessageChage:', rtn);
 		if (rtn) this.list = rtn;
 		this.scrollToBottom();
+		this.chat.Readed();
 	}
 	scrollToBottom() {
 		if (this.scrollRef) {

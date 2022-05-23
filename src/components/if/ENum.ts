@@ -30,6 +30,11 @@ export enum FuncKey {
 	SET_CHANNEL = 'SetChannel',
 	CLIENT_INFO = 'ClientInfo',
   MESSAGE = 'Message',
+  ENTER_ROOM = 'enterRoom',
+  EXIT_ROOM = 'exitRoom',
+  GET_MESSAGE = 'getMessages',
+  NEW_ROOM = 'newRoom',
+  CLOSE_CONVERSATION = 'closeConversation',
 }
 
 export enum CreditType {
@@ -63,7 +68,7 @@ export enum Channels {
   ADMIN = 'Admin',
   PUB = 'Public',
   MEMBER = 'Member',
-  SERVICE = 'CustomerSerice',
+  SERVICE = 'CustomerService',
 }
 
 export enum OpTypes {

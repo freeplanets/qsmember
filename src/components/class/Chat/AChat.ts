@@ -1,32 +1,59 @@
 // import { WebParams, Msg } from 'src/layouts/data/if';
-import { AnyObject } from 'src/layouts/data/if';
 import LayoutStoreModule from 'src/layouts/data/LayoutStoreModule';
 import { ChatMsg, MsgCont } from '../../if/dbif';
 import { FuncKey } from '../../if/ENum';
 import ChatManager from './ChatManager';
 
 export default abstract class AChat {
-	protected list:ChatMsg[]=[];
+	protected list:ChatMsg[] = [];
+	private listkey:number[] = [];
 	protected readed = 0;
 	protected messageFrom = '';
 	protected SendTo = '';
 	private UserID:number;
-	constructor(protected CM:ChatManager, protected LS:LayoutStoreModule, protected roomId?:string, sender?:string) {
+	private UserName:string;
+	private RoomID = '';
+	constructor(protected CM:ChatManager, protected LS:LayoutStoreModule, msg:MsgCont) {
 		// this.ws = ws;
-		this.messageFrom = sender || '';
+		this.messageFrom = msg.Sender || '';
 		this.UserID = this.LS.UserInfo.id;
-		console.log('AChat constructor:', this.messageFrom, this.UserID, roomId);
+		this.UserName = this.LS.UserInfo.Account;
+		this.RoomID = msg.roomId || '';
+		this.AcceptChat(msg);
+		console.log('AChat constructor:', this.messageFrom, this.UserID, this.MsgFrom);
 	}
 	abstract add(fromWho:string, msg:string):void;
-	
-	AcceptChat(msg:AnyObject) {
-		const cMsg:ChatMsg = this.CreateMsg(msg.text || '');
-		cMsg.sent = false;
-		cMsg.name = msg.SenderNick || '';
+	get roomId() {
+		return this.RoomID;
+	}
+	SwitchRoom(msg:MsgCont) {
+		console.log('SwitchRoom', msg, this.RoomID, this.MsgFrom);
+		if (msg.roomId) {
+			if (msg.Receiver === this.MsgFrom) {
+				this.RoomID = msg.roomId;
+				this.AcceptChat(msg);
+			}
+		}
+	}
+	AcceptChat(msg:MsgCont) {
 		console.log('AChat AcceptChat', msg);
-		if (!this.SendTo) this.SendTo = msg.Sender || '';
-		this.AddToList(cMsg);
+		if (this.RoomID === msg.roomId || this.MsgFrom === msg.Sender) {
+			const MessageID = msg.MessageID || 0;
+			const f = this.listkey.find((itm) => itm === MessageID);
+			if (!f) {
+				this.listkey.push(MessageID);
+				this.AddToList(msg);
+			}
+		}
 		this.CM.refreshCounter();
+		// if (msg.Sender === this.UserName) this.Readed();
+		/*
+		const cMsg:ChatMsg = this.CreateMsg(msg);
+		cMsg.sent = msg.Sender === this.UserName;
+		cMsg.name = msg.SenderNick || msg.Sender || '';
+		// if (!this.SendTo) this.SendTo = msg.Sender || '';
+		if (msg.Sender !== this.UserName) this.SendTo = msg.Sender || '';
+		*/
 	}
 	get MsgFrom() {
 		return this.messageFrom;
@@ -40,18 +67,13 @@ export default abstract class AChat {
 	get unReadedLength() {
 		return this.length - this.readed;
 	}
-	Send(msg:string) {
-		// console.log('AChat Send:', msg);
-		const cMsg:ChatMsg = this.CreateMsg(msg);
-		console.log('AChat Create:', cMsg);
-		// this.list.push(cMsg);
-		this.AddToList(cMsg);
-		// console.log('AChat Sent:', this.list.length);
+	Send(msg:string, action = FuncKey.GET_MESSAGE) {
 		const msgS:MsgCont = {
-			action: FuncKey.MESSAGE,
+			action,
 			text: msg,
 			// roomId: this.SendTo,
 			Receiver: this.MsgFrom,
+			roomId: this.roomId,
 		};
 		console.log('AChat Sent:', msgS);
 		/*
@@ -80,21 +102,24 @@ export default abstract class AChat {
 		*/
 		this.Readed();
 	}
-	AddToList(msg:ChatMsg) {
-		if (this.list.length === 0) this.list.push(msg);
-		else {
+	private AddToList(msg:MsgCont) {
+		const chat:ChatMsg = this.CreateMsg(msg);
+		console.log('AddToList', chat);
+		if (this.list.length === 0) {
+			this.list.push(chat);
+		} else {
 			const listIdx = this.list.length - 1;
-			if (this.list[listIdx].sent === msg.sent) {
-				const newT = msg.receiveTime as number;
-				const oldT = this.list[listIdx].receiveTime as number;
+			if (this.list[listIdx].sent === chat.sent) {
+				const newT = chat.receiveTime;
+				const oldT = this.list[listIdx].receiveTime;
 				// console.log('AddToList', newT, oldT, newT - oldT);
 				if (newT - oldT < 60000) {
-					this.list[listIdx].text.push(msg.text[0]);
+					this.list[listIdx].text.push(chat.text[0]);
 				} else {
-					this.list.push(msg);
+					this.list.push(chat);
 				}
 			} else {
-				this.list.push(msg);
+				this.list.push(chat);
 			}
 		}
 	}
@@ -102,12 +127,19 @@ export default abstract class AChat {
 		this.readed = this.length;
 		this.CM.refreshCounter();
 	}
-	protected CreateMsg(msg:string):ChatMsg {
+	protected CreateMsg(msg:string|MsgCont):ChatMsg {
 		const cMsg = this.createEmptyMsg();
-		cMsg.text.push(msg);
+		if (typeof msg === 'string') {
+			cMsg.text.push(msg);
+			cMsg.sent = true;
+			cMsg.name = this.LS.UserInfo.Account;
+		} else {
+			cMsg.text.push(msg.text);
+			cMsg.receiveTime = msg.receiveTime || 0;
+			cMsg.sent = msg.Sender === this.UserName;
+			cMsg.name = msg.SenderNick || msg.Sender || '';
+		}
 		// cMsg.name = this.ws.UserName;
-		cMsg.name = this.LS.UserInfo.Account;
-		cMsg.sent = true;
 		return cMsg;
 	}
 	protected createEmptyMsg():ChatMsg {
@@ -117,8 +149,6 @@ export default abstract class AChat {
 			sent: false,
 			receiveTime: new Date().getTime(),
 			SenderID: this.UserID,
-			ReceiverID: 0, // this.SendTo,
-			MKey: this.roomId || '',
 		};
 	}
 }
