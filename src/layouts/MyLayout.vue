@@ -299,7 +299,12 @@ export default class MyLayout extends Vue {
   openChat() {
     const host = this.store.ax.Host;
     const token = this.store.ax.Auth;
-    const url = `http://localhost:8083?host=${host}/api/chat/CheckIn&token=${token}`;
+    let chatsite = 'http://localhost:8083';
+    if (window.location.href.indexOf('localhost') === -1) {
+      chatsite = 'https://cschat.novaapps.net';
+    }
+    const url = `${chatsite}?host=${host}/api/chat/CheckIn&token=${token}`;
+    console.log('openChat', window.location.href, url);
     window.open(url, '_blank');
   }
   CancelPass2() {
