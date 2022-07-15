@@ -67,7 +67,7 @@ export default abstract class AChat {
 	get unReadedLength() {
 		return this.length - this.readed;
 	}
-	Send(msg:string, action = FuncKey.GET_MESSAGE) {
+	Send(msg:string, action = FuncKey.MESSAGE) {
 		const msgS:MsgCont = {
 			action,
 			text: msg,

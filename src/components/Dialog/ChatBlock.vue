@@ -7,7 +7,7 @@
     >
       <q-card class="bg-cyan-1 text-black fixed-bottom-right">
         <q-bar>
-          <q-btn round dense color="primary" icon="voice_over_off" @click="CloseConversation" >
+          <q-btn v-if = "chat && chat.roomId != 'CustomerService'" round dense color="primary" icon="voice_over_off" @click="CloseConversation" >
             <q-tooltip class="bg-accent">Close conversation!!</q-tooltip>
           </q-btn>
           <q-space />

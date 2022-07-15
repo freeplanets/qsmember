@@ -43,9 +43,9 @@ export default abstract class ASock {
 		this.sock.onmessage = (event:MessageEvent) => {
 				this.OnMessage(event.data.toString());
 		};
-		this.sock.onopen = (ev:Event) => {
+		this.sock.onopen = (/* ev:Event */) => {
 				// this.registerChannel(ClientChannel);
-				console.log('Chat onopen', ev);
+				// console.log('Chat onopen', ev);
 				this.isConnected = true;
 				this.OnOpen();
 		};

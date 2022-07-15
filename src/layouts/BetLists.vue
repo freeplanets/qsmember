@@ -35,7 +35,7 @@
       <table>
         <tr>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OrderNo')}}</td>
-          <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.WebOwner')}}</td>
+          <td class="col-1 mytable-head mytable-field-txt">{{$t('Table.SiteName')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.Member')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Report.OrderTime')}}</td>
           <td class="col-1 mytable-head mytable-field-txt">{{$t('Label.GameName')}}</td>
@@ -200,7 +200,7 @@ export default class BetLists extends Vue {
         }
         f = msg.UpUser.find((itm:any) => itm.id === bh.UpId);
         if (f) {
-          bh.UPName = f.Account;
+          bh.UPName = f.SiteName;
         }
         bh = BHRemaster(bh, this.GameList, this);
       });

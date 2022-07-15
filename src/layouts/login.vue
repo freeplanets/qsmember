@@ -62,10 +62,24 @@ interface selOptions {
   label: string;
   value: string;
 }
+interface PlatformParams {
+  userCode:string;
+  token:string;
+  lang:string;
+  [key:string]:string;
+}
+interface objD {
+  [key:string]:string;
+}
 
 @Component
 export default class Login extends Vue {
   store = getModule(LayoutStoreModule);
+  params:PlatformParams = {
+    userCode: '',
+    token: '',
+    lang: '',
+  };
   Account='';
   Password='';
   Pin='';
@@ -94,17 +108,10 @@ export default class Login extends Vue {
   get isLogin():boolean {
     return this.store.isLogin;
   }
-  async login() {
-    /*
-    const config:AxiosRequestConfig = {
-      //withCredentials: true,
-      //headers: {'Access-Control-Allow-Origin': 'http://localhost:8080'},
-      params: {
-        Account: this.Account,
-        Password: this.Password
-      }
-    }
-    */
+  async autoLogin() {
+    await this.login(this.params);
+  }
+  async login(param?:PlatformParams) {
     const params:CommonParams = {
         Account: this.Account,
         Password: this.Password,
@@ -112,7 +119,7 @@ export default class Login extends Vue {
         sid: '',
     };
     // const url:string=this.store.ax.Host+'/login';
-    const msg:Msg = await this.store.ax.getApi('/login', params);
+    const msg:Msg = await this.store.ax.getApi('/login', param?.userCode ? param : params);
     console.log('after login:', msg);
     if (msg.ErrNo === 0) {
         this.Account = '';
@@ -125,7 +132,7 @@ export default class Login extends Vue {
           const ws:WSock = new WSock(this.store, msg.wsServer);
           this.store.setWSock(ws);
         }
-        if (msg.chatServer) {
+        if (msg.chatServer && !param) {
           const chat:ChatClient = new ChatClient(this.store, msg.chatServer, msg.chatSite);
           this.store.setChater(chat);
         }
@@ -134,32 +141,16 @@ export default class Login extends Vue {
           this.store.setCghPW(true);
         } else if (this.Personal.isChkGA) {
           this.prompt = true;
-        } else {
-          this.$router.push({ path: '/' });
         }
-        console.log('header chk info:', this.store.ax.Info);
+        // console.log('login router push', this.$router.getRoutes());
+        this.$router.push({ path: '/Main' });
+        // console.log('header chk info:', this.store.ax.Info);
     } else {
       this.$q.dialog({
           title: this.$t('Title.PersonalInfo') as string,
           message: this.$t('Title.LoginERR') as string,
       });
     }
-    // console.log('login:',url);
-    /*
-    await axios.get(url,config).then((res:AxiosResponse)=>{
-      const ans:Msg=res.data as Msg;
-      //console.log('login:',ans);
-      if(ans.ErrNo===0){
-        this.Personal = ans.data as User;
-        this.isLogin = true;
-        //this.store.leftDrawerOpen=true;
-        this.$router.push({path:'/'});
-      }
-    }).catch(err=>{
-      console.error('login error:',err);
-    })
-    */
-    // console.log('login',this.Account,this.Password);
   }
   async GAValidate() {
     this.store.setShowProgress(true);
@@ -192,9 +183,32 @@ export default class Login extends Vue {
     // if (this.$i18n.locale !== lang) this.$i18n.locale = lang;
     return lang;
   }
-  mounted() {
+  regroupParams(urlparam:string): PlatformParams {
+    urlparam = urlparam.replace('?', '');
+    const arrStr:string[] = urlparam.split('&');
+    const param:objD = {};
+    arrStr.map((itm) => {
+      const tmp:string[] = itm.split('=');
+      param[tmp[0]] = tmp[1];
+    });
+    return param as PlatformParams;
+  }
+  async mounted() {
+    console.log('login mounted', this.$route);
+    if (this.$route.params.userCode) {
+      this.params = this.$route.params as PlatformParams;
+      console.log('login mounted params', this.params);
+    } else {
+      // this.params = this.regroupParams(window.location.search);
+      Object.assign(this.params, this.regroupParams(window.location.search));
+      // console.log('Location', window.location);
+      window.history.pushState('', '', `${window.location.origin}/#/`);
+    }
     this.store.setIsLogin(false);
     this.getDefaultLanguage();
+    if (this.params.token) {
+      await this.autoLogin();
+    }
     // console.log('login SysInfo:',this.store.SysInfo);
     // console.log('login locale:',this.$i18n);
     // this.$i18n.locale='zh-cn';

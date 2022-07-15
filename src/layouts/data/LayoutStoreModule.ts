@@ -87,6 +87,7 @@ export default class LayoutStoreModule extends VuexModule {
     @Mutation
     public SET_PERSONAL(value:LoginInfo) {
         this.personal = value;
+        this.ax.Param = this.Param;
     }
     @Action
     public setPersonal(value:LoginInfo) {

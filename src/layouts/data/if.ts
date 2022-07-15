@@ -201,6 +201,7 @@ export interface BetHeader {
     Amt?:number;
     BetType?:number;
     Odds?:number;
+    SiteName?:string;
 }
 
 export interface NumData {
@@ -262,6 +263,7 @@ export interface MyUser {
     Account: string;
     Nickname: string;
     Types?:number;
+    SiteName?:string;
  }
 
  export interface ProbTable {

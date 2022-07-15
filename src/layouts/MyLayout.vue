@@ -44,6 +44,7 @@
           </q-btn-dropdown>
         </div>
         <div v-if="!Personal.Account">App v{{ $q.version }}</div>
+        <q-btn v-if="Personal.Account" flat round dense icon="spatial_audio_off" @click="openChat" />
       </q-toolbar>
     </q-header>
 
@@ -162,6 +163,7 @@ export default class MyLayout extends Vue {
   GAIMG='';
   showGAPop=false;
   get Funcs():Progs[] {
+    console.log('MyLayout Funcs', this.store.personal.Progs);
     return this.store.personal.Progs;
   }
   get showProgress() {
@@ -178,11 +180,11 @@ export default class MyLayout extends Vue {
     this.showCp = this.store.chgPW;
   }
   get leftDrawerOpen() {
-    // console.log('leftDrawerOpen get:',this.store.leftDrawerOpen);
+    // console.log('leftDrawerOpen get:', this.store.leftDrawerOpen);
     return this.store.leftDrawerOpen;
   }
   set leftDrawerOpen(value:boolean) {
-    // console.log('MyLayout leftDrawerOpen set:',value,this.store.isLogin);
+    // console.log('MyLayout leftDrawerOpen set:', value, this.store.isLogin);
     this.store.setLeftDrawerOpen(value);
   }
   get showGA() {
@@ -290,9 +292,15 @@ export default class MyLayout extends Vue {
     this.store.setWSock(null);
     this.store.setMqtt(null);
     this.store.setChater(null);
-    this.$router.push({ path: '/login' }).catch((err) => {
+    this.$router.push({ path: '/' }).catch((err) => {
       console.log('router error', err);
     });
+  }
+  openChat() {
+    const host = this.store.ax.Host;
+    const token = this.store.ax.Auth;
+    const url = `http://localhost:8083?host=${host}/api/chat/CheckIn&token=${token}`;
+    window.open(url, '_blank');
   }
   CancelPass2() {
       this.$q.dialog({
@@ -329,6 +337,7 @@ export default class MyLayout extends Vue {
   mounted() {
     // console.log('MyLayout mounted');
     this.getSysInfo();
+    /*
     if (!this.isLogin) {
       // console.log('MyLayout:',this.$route);
       this.store.ax.Router = this.$router;
@@ -338,6 +347,7 @@ export default class MyLayout extends Vue {
     } else {
          this.$router.push({ path: '/' });
     }
+    */
   }
 }
 

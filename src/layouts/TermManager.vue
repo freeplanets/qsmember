@@ -436,6 +436,9 @@ export default class TermManager extends Vue {
         console.log('chkNums:', nums);
         if (this.curGType) {
             const cGType = this.curGType.GType;
+            if (cGType === 'HashSix' || cGType === 'BTCHash') {
+                if (nums.length > 0) return true;
+            }
             if (nums.length !== this.curGType.OpenNums) return false;
             const GT = this.curGType;
             const tmpA:number[] = [];

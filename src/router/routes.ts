@@ -3,13 +3,13 @@ import { RouteConfig } from 'vue-router';
 const routes: RouteConfig[] = [
   {
     path: '/',
+    component: () => import('layouts/login.vue'),
+  },
+  {
+    path: '/Main',
     component: () => import('layouts/MyLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue') },
-      {
-        path: '/login',
-        component: () => import('layouts/login.vue'),
-      },
       {
         path: '/betclass',
         component: () => import('layouts/BetClass.vue'),
@@ -97,6 +97,10 @@ const routes: RouteConfig[] = [
       {
         path: '/cryptoledgerreport',
         component: () => import('pages/CryptoLedgerReport.vue'),
+      },
+      {
+        path: '/pfkeymanager',
+        component: () => import('pages/PfKeyManager.vue'),
       },
    ],
   },

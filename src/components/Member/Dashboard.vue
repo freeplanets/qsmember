@@ -69,6 +69,8 @@ export default class Dashboard extends Vue {
         34: require('../../assets/img/ico4.png'),
         35: require('../../assets/img/ico5.png'),
         36: require('../../assets/img/twbg.png'),
+				39: require('../../assets/img/twbg.png'),
+				40: require('../../assets/img/twbg.png'),
       };
 	async getGames() {
 		const ans:SelectOptions[] | undefined = await this.store.ax.getGames(false, true);

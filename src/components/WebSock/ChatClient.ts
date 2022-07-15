@@ -7,8 +7,10 @@ export default class ChatClient extends ASock {
 	// private roomId = '';
 	chkurl():string {
 		// const ws = this.url === 'localhost:4002' ? 'ws' : 'wss';
+		const Host = 'https://testu.uuss.net:3000';
 		const ws = this.addPrefix(this.url);
-		return `${ws}?host=${this.LSM.ax.Host}&auth=${this.LSM.ax.Auth}`;
+		// return `${ws}?host=${this.LSM.ax.Host}&auth=${this.LSM.ax.Auth}`;
+		return `${ws}?host=${Host}&auth=${this.LSM.ax.Auth}`;
 		// return `${ws}://${this.url}/${this.site}/${Channels.ADMIN}/${this.UserID}_${this.UserName}?token1=1`;
 	}
 	OnOpen() {
@@ -32,6 +34,7 @@ export default class ChatClient extends ASock {
 			case FuncKey.NEW_ROOM:
 				console.log('do new room');
 				this.chatM.switchRoom(msg);
+				this.chatM.remove(msg);
 				break;
 			case FuncKey.CLOSE_CONVERSATION:
 				this.chatM.remove(msg);

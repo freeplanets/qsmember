@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import jwt from 'jsonwebtoken';
+import { PfKey } from 'src/components/if/dbif';
 import { ErrCode } from 'src/components/if/ENum';
 import { SelectOptions, CBetItems, Msg, CommonParams, IbtCls, ParamLog, WebParams, HasID, AnyObject } from '../data/if';
 import { Terms, Game, User } from '../data/schema';
@@ -27,6 +28,7 @@ export class AxApi {
     private authlimit = 0;
     private authgap = 600; // before auth expire. (sec)
     private info: authinfo = { iat: 0, exp: 0 };
+    private defaultParam:AnyObject = {};
     constructor(private ApiUrl:string) {
         console.log('AxApi created!!', ApiUrl);
     }
@@ -41,6 +43,9 @@ export class AxApi {
     }
     get Auth() {
         return this.auth;
+    }
+    set Param(o:AnyObject) {
+        this.defaultParam = o;
     }
     gotoLoginPage() {
         // console.log('gotoLoginPage',typeof(this.router));
@@ -235,6 +240,17 @@ export class AxApi {
         })
         return ans;
         */
+    }
+    getPfList() {
+        const param = { ...this.Param } as WebParams;
+        param.TableName = 'ClientKey';
+        return this.getApi('cc/GetData', param);
+    }
+    savePf(data:PfKey) {
+        const param = { ...this.Param } as WebParams;
+        param.TableName = 'ClientKey';
+        param.TableData = data;
+        return this.getApi('cc/SaveData', param);
     }
     getPayClass(UserID:number, sid:string, GameID?:number|string):Promise<Msg> {
         const param:CommonParams = {

@@ -130,6 +130,7 @@ export default {
     CurGainLose: '及時盈虧',
     OpenClose: '開關',
     CryptoOpManager: '操盤參數管理',
+    PfKeyManager: '平台登入碼設定',
     Stamp: {
       Minutes: '分鐘前',
       Hours: '小時前',
@@ -490,6 +491,8 @@ export default {
     34: '越南彩南部18C',
     35: '越南彩南部18A+B',
     36: 'KENO',
+    39: '賓果時時彩',
+    40: '賓果賽車',
   },
   Game: {
     Cars: {

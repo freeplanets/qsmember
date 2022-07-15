@@ -469,26 +469,6 @@ export default class BetClass extends Vue {
                 message: msg.ErrCon,
             });
         }
-        /*
-        const url:string=this.store.ax.Host+'/api/batch/saveBasePayRate';
-		axios.post(url,data).then((res:AxiosResponse)=>{
-            //console.log(res);
-            if(res.data.ErrNo===0){
-                this.$q.dialog({
-                    title: this.$t('Label.Save') as string,
-                    message: 'OK!!'
-                });
-            }            
-            dtas.map(itm=>{
-                const tmp = this.BasePayR.find(elm => elm.BetType == itm.BetType && elm.SubType == itm.SubType)
-                if(tmp){
-                    tmp.DataChanged = false;
-                }
-            })
-		}).catch(err=>{
-			console.log(err);
-        })
-        */
     }
     showStepGroup(itm:BasePayRate<BasePayRateItm>) {
         this.BFCTitle = itm.Title + (itm.SubTitle ? ` / ${itm.SubTitle}` : '');

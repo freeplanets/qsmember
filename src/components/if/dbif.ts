@@ -328,3 +328,11 @@ export interface ReportTotal {
   getTitle(key:number[], isLedger:boolean):Promise<Msg>;
   getReport(ItmRpt:AItemReport):Promise<void>
 }
+
+export interface PfKey {
+  id:number;
+  PfName: string;
+  MKey?: string;
+  ModifyID: number;
+  CreateTime?: string;
+}
