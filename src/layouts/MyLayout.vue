@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          App {{ ProName }} v0.01
+          App {{ TitleName }} v0.01
         </q-toolbar-title>
         <BMG v-if="Personal.Account"></BMG>
         <q-btn flat round dense icon="edit" @click="showComment=!showComment" />
@@ -45,6 +45,7 @@
         </div>
         <div v-if="!Personal.Account">App v{{ $q.version }}</div>
         <q-btn v-if="Personal.Account" flat round dense icon="spatial_audio_off" @click="openChat" />
+        <q-btn v-if="Personal.Types === 9" flat round dense icon="savings" @click="RegisterChat" />
       </q-toolbar>
     </q-header>
 
@@ -66,7 +67,7 @@
             <q-icon :name="func.Icon" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>{{ $t(`Label.${func.Title}`) }}</q-item-label>
+            <q-item-label>{{ ProName(func.Title) }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -155,7 +156,7 @@ import BdgMsgGroup from '../components/Badge/MsgControl.vue';
 export default class MyLayout extends Vue {
   store = getModule(LayoutStoreModule);
   showComment=false;
-  ProName='*';
+  TitleName='*';
   showCp=false;
   OPassword='';
   NPassword='';
@@ -165,6 +166,9 @@ export default class MyLayout extends Vue {
   get Funcs():Progs[] {
     console.log('MyLayout Funcs', this.store.personal.Progs);
     return this.store.personal.Progs;
+  }
+  get UserTypes() {
+    return this.store.personal.Types;
   }
   get showProgress() {
     return this.store.showProgress;
@@ -207,8 +211,18 @@ export default class MyLayout extends Vue {
     return this.store.personal;
   }
   setProName(v:string) {
-    this.ProName = `${this.$t(`Label.${v}`)}`;
+    // OddsManager: '控盤',
+    // RealTimeBets: '及時注單',
+    this.TitleName = this.ProName(v);
     this.showComment = false;
+  }
+  ProName(v:string) {
+    if (this.UserTypes < 3) {
+      if (v === 'OddsManager') {
+        v = 'RealTimeBets';
+      }
+    }
+    return `${this.$t(`Label.${v}`)}`;
   }
   async getGAImg() {
     this.showProgress = true;
@@ -306,6 +320,16 @@ export default class MyLayout extends Vue {
     const url = `${chatsite}?host=${host}/api/chat/CheckIn&token=${token}`;
     console.log('openChat', window.location.href, url);
     window.open(url, '_blank');
+  }
+  async RegisterChat() {
+    const ax = this.store.ax;
+    const param = {
+      siteid: this.Personal.site,
+      notify: `${ax.Host}/api/chat/notifysite`,
+    };
+    console.log('RegisterChat param', param);
+    const ans = await ax.getApi('chat/register', param, 'post');
+    console.log('RegisterChat', ans);
   }
   CancelPass2() {
       this.$q.dialog({

@@ -80,6 +80,7 @@ export default {
     Settled: ['', '己結帳', '', '己重結', '取消'],
     OpenParams: '開盤參數',
     OddsManager: '控盤',
+    RealTimeBets: '及時注單',
     BetLists: '注單查詢',
     NameOrNick: '名稱/代號',
     TotalN: '共 {N} 筆',

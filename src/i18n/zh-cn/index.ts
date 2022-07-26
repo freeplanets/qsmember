@@ -79,6 +79,7 @@ export default {
     Settled: ['', '己结帐', '', '己重结', '取消'],
     OpenParams: '开盘参数',
     OddsManager: '控盘',
+    RealTimeBets: '即时注单',
     BetLists: '注单查询',
     NameOrNick: '名称/代号',
     TotalN: '共{N} 笔',

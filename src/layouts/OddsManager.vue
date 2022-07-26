@@ -33,7 +33,7 @@
             <div class='col-3 talign1'
                  v-if="oddshow"
             >
-                <q-btn-group outline class='mtop'>
+                <q-btn-group outline class='mtop'  v-if="PInfo.Types>2">
                     <q-btn outline color="brown" :label="$t('Button.TotalStop')" @click="setStop(1)" />
                     <q-btn outline color="brown" :label="$t('Button.TotalOpen')" @click="setStop(0)" />
                     <q-btn outline color="brown" :label="$t('Button.PageStop')"  @click="setStop(1,cont)" />
@@ -580,6 +580,7 @@ export default class OddsManager extends Vue {
         this.SortItems.push(this.$t('Label.SortItem.0').toString());
         this.SortItems.push(this.$t('Label.SortItem.1').toString());
         this.SortItems.push(this.$t('Label.SortItem.2').toString());
+        console.log('OddsManager mounted:', this.PInfo);
     }
 }
 // export default Vue.extend({

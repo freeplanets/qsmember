@@ -79,6 +79,7 @@ export default {
     Settled: ['', 'settled', '', 're-settle', 'cancel'],
     OpenParams: 'parameter',
     OddsManager: 'control panel',
+    RealTimeBets: 'Instant betting',
     BetLists: 'ticket search',
     NameOrNick: 'name/nickname',
     TotalN: 'total {N}',

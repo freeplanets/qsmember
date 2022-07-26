@@ -24,8 +24,8 @@
         <td>{{ itm.SiteName }}</td>
         <td>{{ itm.User }}</td>
         <td>{{ itm.Item }}</td>
-        <td align='center' :class="{ colorSell: !itm.ItemType, colorBuy: itm.ItemType }">
-           {{ $t(`Select.Crypto.ItemType.${itm.ItemType}`) }}
+        <td align='center' :class="{ colorSell: itm.ItemType > 0 , colorBuy: itm.ItemType < 0 }">
+           {{ itemTypeTitle(itm.ItemType) }}
         </td>
         <td align='right'> {{ itm.Qty.toFixed(8) }} </td>
         <td align='right'> {{ showPrice(itm).toFixed(2) }} </td>
@@ -75,6 +75,10 @@ export default class LedgerList extends Vue {
   }
   showFee(itm:LedgerReport) {
     return itm.BuyFee + itm.SellFee + itm.TFee;
+  }
+  itemTypeTitle(itemType:number) {
+    const iType = itemType < 0 ? 0 : itemType;
+    return this.$t(`Select.Crypto.ItemType.${iType}`);
   }
 }
 </script>

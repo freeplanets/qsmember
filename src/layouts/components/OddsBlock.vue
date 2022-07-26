@@ -12,11 +12,11 @@
             <td class='col data'>
                 <div class='row' v-if="!EditMode && !NoOddsAdjust" @dblclick="SwitchMode(Odds.Odds)">
                     <div class='col btnpos'>
-                        <q-btn dense style="font-szie:6px" icon="add" @click="setOdds(Odds.BT,Odds.Num,1,Odds.Steps)" />
+                        <q-btn v-if="UserTypes>2" dense style="font-szie:6px" icon="add" @click="setOdds(Odds.BT,Odds.Num,1,Odds.Steps)" />
                     </div>
                     <div class='col'>{{parseFloat(Odds.Odds.toFixed(4))}}</div>
                     <div class='col btnpos'>
-                        <q-btn dense style="font-szie:6px" icon="remove" @click="setOdds(Odds.BT,Odds.Num,-1,Odds.Steps)" />
+                        <q-btn v-if="UserTypes>2" dense style="font-szie:6px" icon="remove" @click="setOdds(Odds.BT,Odds.Num,-1,Odds.Steps)" />
                     </div>
                 </div>
                 <div class='row' v-if="EditMode && !NoOddsAdjust" @dblclick="SwitchMode">
@@ -27,7 +27,7 @@
                         <input type="text" v-model="NewOdds">
                     </div>
                     <div class='col btnpos'>
-                        <q-btn dense icon="send" @click="setOdds(Odds.BT,Odds.Num)" />
+                        <q-btn v-if="UserTypes>2" dense icon="send" @click="setOdds(Odds.BT,Odds.Num)" />
                     </div>
                 </div>
                 <div class='row'
@@ -35,11 +35,11 @@
                      @dblclick="SwitchMode1(ExtOdds.Odds)"
                 >
                     <div class='col btnpos'>
-                        <q-btn dense style="font-szie:6px" icon="add" @click="setOdds(ExtOdds.BT,ExtOdds.Num,1,ExtOdds.Steps)" />
+                        <q-btn v-if="UserTypes>2" dense style="font-szie:6px" icon="add" @click="setOdds(ExtOdds.BT,ExtOdds.Num,1,ExtOdds.Steps)" />
                     </div>
                     <div class='col'>{{ExtOdds.Odds}}</div>
                     <div class='col btnpos'>
-                        <q-btn dense style="font-szie:6px" icon="remove" @click="setOdds(ExtOdds.BT,ExtOdds.Num,-1,ExtOdds.Steps)" />
+                        <q-btn v-if="UserTypes>2" dense style="font-szie:6px" icon="remove" @click="setOdds(ExtOdds.BT,ExtOdds.Num,-1,ExtOdds.Steps)" />
                     </div>
                 </div>
                 <div class='row' v-if="ExtOdds && EditMode1 && !NoOddsAdjust" @dblclick="SwitchMode1">
@@ -50,7 +50,7 @@
                         <input type="text" v-model="NewOdds1">
                     </div>
                     <div class='col btnpos'>
-                        <q-btn dense icon="send" @click="setOdds(ExtOdds.BT,ExtOdds.Num)" />
+                        <q-btn v-if="UserTypes>2" dense icon="send" @click="setOdds(ExtOdds.BT,ExtOdds.Num)" />
                     </div>
                 </div>
                 <div class='row'>
@@ -90,6 +90,7 @@ export default class OddsBlock extends Vue {
     EditMode=false;
     NewOdds1=0;
     EditMode1=false;
+    usertypes=0;
     title='';
     @Watch('Odds', { immediate: true, deep: true })
     onOddsChange(newVal:Odds, oldVal:Odds) {
@@ -102,6 +103,9 @@ export default class OddsBlock extends Vue {
     get digital() {
         if (this.dgt) return this.dgt;
         return 1;
+    }
+    get UserTypes() {
+        return this.usertypes;
     }
     getColor() {
         // console.log(this.Num,this.GType,this.colorWave,this.colorExt)
@@ -184,6 +188,7 @@ export default class OddsBlock extends Vue {
         }
     }
     SwitchMode(odds?:number) {
+        if (this.UserTypes < 3) return;
         this.EditMode1 = false;
         this.EditMode = !this.EditMode;
         console.log('SwitchMode:', typeof odds);
@@ -192,6 +197,7 @@ export default class OddsBlock extends Vue {
         }
     }
     SwitchMode1(odds?:number) {
+        if (this.UserTypes < 3) return;
         this.EditMode = false;
         this.EditMode1 = !this.EditMode1;
         console.log('SwitchMode:', typeof odds);
@@ -205,6 +211,7 @@ export default class OddsBlock extends Vue {
     mounted() {
         // console.log('OddsBlock mounted:',this.Odds);
         // this.getItemName()
+        if (this.store) this.usertypes = this.store.personal.Types;
     }
 }
 // export default Vue.extend({

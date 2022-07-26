@@ -246,6 +246,7 @@ export interface LoginInfo {
     isChkGA:number;
     Progs:Progs[];
     PayClass?:PClass[];
+    site?:string;
 }
 
 export interface ParamLog {
