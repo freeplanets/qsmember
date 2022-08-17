@@ -326,6 +326,7 @@ export default class MyLayout extends Vue {
     const param = {
       siteid: this.Personal.site,
       notify: `${ax.Host}/api/chat/notifysite`,
+      tkey: 'CryptoCurrency',
     };
     console.log('RegisterChat param', param);
     const ans = await ax.getApi('chat/register', param, 'post');

@@ -78,3 +78,17 @@ export enum OpTypes {
   C = 'C',
   D = 'D'
 }
+export enum RefGameType {
+  MarkSix = 'MarkSix',
+  D3 = '3D',
+  Always = 'Always',
+  Happy = 'Happy',
+  Cars = 'Cars',
+  Happy8 = 'Happy8',
+  Speed3 = 'Speed3',
+  BTCHash = 'BTCHash',
+  HashSix = 'HashSix',
+  SGPools = 'SGPools',
+  VNNorth = 'VNNorth',
+  KENO = 'KENO',
+}

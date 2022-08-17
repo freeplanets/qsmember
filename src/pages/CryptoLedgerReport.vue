@@ -35,7 +35,7 @@ import { Msg, SelectOptions, WebParams } from 'src/layouts/data/if';
 import { CryptoItem, LedgerLever, LedgerReport } from '../components/if/dbif';
 import LStore from '../layouts/data/LayoutStoreModule';
 import Selector from '../components/Selector.vue';
-import ErrCode from '../layouts/data/ErrCode';
+import { ErrCode } from '../components/if/ENum';
 import SEDate from '../layouts/components/SEDate.vue';
 import LedgerList from '../components/LedgerList.vue';
 import ApiFunc from '../components/class/Api/Func';

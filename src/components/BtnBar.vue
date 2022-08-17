@@ -20,7 +20,7 @@ import { getModule } from 'vuex-module-decorators';
 import LStore from '../layouts/data/LayoutStoreModule';
 import { CryptoItem } from './if/dbif';
 import { WebParams, Msg } from '../layouts/data/if';
-import ErrCode from '../layouts/data/ErrCode';
+import { ErrCode } from './if/ENum';
 
 @Component
 export default class BtnBar extends Vue {

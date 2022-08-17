@@ -1,5 +1,5 @@
 import { LeverData, WebParams, Msg } from '../../../layouts/data/if';
-import ErrCode from '../../../layouts/data/ErrCode';
+import { ErrCode } from '../../if/ENum';
 import Lever from './Lever';
 import { AxApi } from '../../../layouts/components/AxApi';
 

@@ -1,6 +1,6 @@
 <template>
 	<div class="row">
-	<q-input class="numbox"
+	<q-input :class="{ numboxWidth: nums.length>1, 'full-width':nums.length<2 , numbox:true}"
 			v-for="(num,idx) in nums"
 			:key="idx"
 			outlined dense v-model="nums[idx]" />
@@ -31,8 +31,10 @@ export default class Defaults extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+.numboxWidth {
+	width: 40px !important;
+}
 .numbox {
-    width: 40px !important;
-    margin-right: 5px;
+	margin-right: 5px;
 }
 </style>

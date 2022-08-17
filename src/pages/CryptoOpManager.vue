@@ -15,7 +15,7 @@ import { WebParams, Msg } from '../layouts/data/if';
 import { CryptoItem, CryptoOpParams } from '../components/if/dbif';
 import OpParamList from '../components/List/CryptoOpParamList.vue';
 import BtnBar from '../components/BtnBar.vue';
-import ErrCode from '../layouts/data/ErrCode';
+import { ErrCode } from '../components/if/ENum';
 import LStore from '../layouts/data/LayoutStoreModule';
 import OpParams from '../components/class/Params/CryptoOpParams';
 

@@ -3,7 +3,7 @@
 		<template v-if="Nums">
 			{{Nums ? Nums.replace(/\,/g,', ') : ''}}
 		</template>
-		<template v-if="Result">
+		<template v-else-if="Result">
 				<div class="result_contain">
 					<div class="DW_game">
 						<div class="DW_balltable">
@@ -30,16 +30,37 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { AnyObject, NumInfo } from 'src/layouts/data/if';
+import { RefGameType } from '../../../components/if/ENum';
 
 @Component
 export default class ForTermList extends Vue {
 	@Prop({ type: Object }) readonly game!:AnyObject;
-	@Prop({ type: Array }) readonly Result!:NumInfo[];
-	@Prop({ type: Object }) readonly SpNo!:NumInfo;
-	@Prop({ type: String }) readonly Nums!:string;
-	@Watch('Result', { immediate: true, deep: true })
-	onResultChange() {
-		console.log('onResultChange:', this.Result);
+	// @Prop({ type: Array }) readonly Result!:NumInfo[];
+	// @Prop({ type: Object }) readonly SpNo!:NumInfo;
+	// @Prop({ type: String }) readonly Nums!:string;
+	@Prop({ type: Object }) readonly ResultFmt!:AnyObject;
+	Result:NumInfo[] | undefined;
+	SpNo:NumInfo | undefined;
+	Nums = '';
+	GType = '';
+	@Watch('game', { immediate: true, deep: true })
+	onGameChange() {
+		console.log('game:', this.game);
+		this.GType = this.game.GType;
+	}
+	@Watch('ResultFmt', { immediate: true, deep: true })
+	onResultFmtChange() {
+		console.log('ForTermList:', this.ResultFmt);
+		if ((this.GType === RefGameType.Always || this.GType === RefGameType.Cars) && this.ResultFmt.Nums) {
+			this.Nums = this.ResultFmt.Nums.join(',');
+		} else if (this.ResultFmt.RGNums) {
+			this.Result = this.ResultFmt.RGNums;
+		} else if (this.ResultFmt.Nums) {
+			this.Nums = this.ResultFmt.Nums.join(',');
+		}
+		if (this.ResultFmt.SPNum) {
+			this.SpNo = this.ResultFmt.SPNum;
+		}
 	}
 	Color(v?:number):string {
 		if (typeof v === 'number') {

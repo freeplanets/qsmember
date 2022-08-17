@@ -30,11 +30,10 @@
                 <div class='col-1 mytable-field'>{{itm.StopTime}}</div>
                 <div class='col-1 mytable-field'>{{itm.StopTimeS}}</div>
                 <div class='col-3 mytable-field'>
+                    <q-tooltip>{{ itm.Result }}{{ itm.SpNo ? ` + ${itm.SpNo}` : '' }}</q-tooltip>
                     <RL
                         :game="curGType"
-                        :Result="(curGType.GType ==='MarkSix' || curGType.GType ==='HashSix') && itm.ResultFmt ? itm.ResultFmt.RGNums : undefined"
-                        :SpNo="(curGType.GType ==='MarkSix' || curGType.GType ==='HashSix') && itm.ResultFmt ? itm.ResultFmt.SPNum : undefined"
-                        :Nums="!( curGType.GType ==='MarkSix' || curGType.GType ==='HashSix') ? itm.Result : undefined"
+                        :ResultFmt="itm.ResultFmt"
                     ></RL>
                 </div>
                 <div class='col-1 mytable-field'>{{ itm.isCanceled ? $t('Label.Settled.4') : $t(`Label.Settled.${itm.isSettled}`)}}</div>
@@ -181,10 +180,10 @@ import { dateAddZero } from './components/func';
 import GameSelector from './components/GameSelector.vue';
 import NumFunc from '../components/Functions/Nums';
 import ResultList from './components/OpenResults/ForTermList.vue';
-import { ErrCode } from '../components/if/ENum';
 import OPDefaults from './components/OpenResults/Defaults.vue';
 import OPSGPools from './components/OpenResults/SGPools.vue';
 import OPVNNorth from './components/OpenResults/VNNorth.vue';
+import { RefGameType, ErrCode } from '../components/if/ENum';
 
 @Component({
     components: {
@@ -387,7 +386,7 @@ export default class TermManager extends Vue {
                     // console.log('getTerms parse', JSON.parse(itm.ResultFmt));
                     itm.ResultFmt = JSON.parse(itm.ResultFmt);
                 }
-                return itm;
+                // return itm;
             });
             console.log('after getTerms', this.data);
         }
@@ -411,7 +410,10 @@ export default class TermManager extends Vue {
     }
     InputNum(v:Terms, rlt?:string, spno?:string) {
         this.oldTerm = { ...v };
-        if (rlt) {
+        if (this.curGType?.GType === RefGameType.BTCHash || this.curGType?.GType === RefGameType.HashSix) {
+            this.nums = [rlt || ''];
+            this.curResult = rlt;
+        } else if (rlt) {
             this.nums = rlt.split(',');
             if (spno) {
                 this.nums.push(spno);
