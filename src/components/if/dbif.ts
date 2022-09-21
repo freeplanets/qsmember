@@ -60,6 +60,7 @@ export interface AskTable {
   ModifyTime?: string; // 修改時間
   SetID: number; // 平倉對象ID -> System下單
   USetID: number; // 平倉對象ID -> User下單
+  isUserSettle?: number;
 }
 export interface AskReport {
   id: number;
@@ -86,6 +87,7 @@ export interface AskReport {
   DealTime: number;
   SiteName?: string;
   SettleType?: number; // 手動平倉
+  isUserSettle?: number;
 }
 export interface ReceiveData {
   eventTime: number;
@@ -265,6 +267,7 @@ export interface CryptoOpParams extends HasID {
   ShortTerm1: number; // 短線1 不可平倉時間
   ShortTerm2: number; // 短線2 可平倉但加收手續費
   ShortTermFee: number; // 短線手續費則
+  ChoicePrice: number; // 有利價秒數
   ModifyID: number; //
   [key:string]:any;
 }

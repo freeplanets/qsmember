@@ -223,6 +223,7 @@ export default {
         ShortTerm1: 'short 11',
         ShortTerm2: 'short 2',
         ShortTermFee: 'short fee',
+        ChoicePrice: 'choice price',
       },
     },
     EmergencyClose: {
@@ -414,6 +415,7 @@ export default {
     GainLose: 'win/lose',
     SettleType: 'type',
     HandSettle: 'manual',
+    SysSettle: 'system',
     RptType: {
       Head: 'head',
       Detail: 'detail',

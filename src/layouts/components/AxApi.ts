@@ -1,3 +1,4 @@
+import VueRouter from 'vue-router';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import jwt from 'jsonwebtoken';
 import { PfKey } from 'src/components/if/dbif';
@@ -22,7 +23,7 @@ interface authinfo extends AnyObject {
 }
 
 export class AxApi {
-    private router: any;
+    private router: VueRouter | undefined;
     private auth = '';
     private authkey = '';
     private authlimit = 0;
@@ -35,7 +36,7 @@ export class AxApi {
     get Host() {
         return this.ApiUrl;
     }
-    set Router(v:any) {
+    setRouter(v:VueRouter) {
         this.router = v;
     }
     get Info() {
@@ -44,13 +45,12 @@ export class AxApi {
     get Auth() {
         return this.auth;
     }
-    set Param(o:AnyObject) {
+    setParam(o:AnyObject) {
         this.defaultParam = o;
     }
     gotoLoginPage() {
-        // console.log('gotoLoginPage',typeof(this.router));
         if (this.router) {
-            this.router.push({ path: '/login' });
+            this.router.push({ path: '/' });
         }
     }
 	async getGames(showall = false, order = false):Promise<SelectOptions[] | undefined> {
@@ -242,12 +242,12 @@ export class AxApi {
         */
     }
     getPfList() {
-        const param = { ...this.Param } as WebParams;
+        const param = { ...this.defaultParam } as WebParams;
         param.TableName = 'ClientKey';
         return this.getApi('cc/GetData', param);
     }
     savePf(data:PfKey) {
-        const param = { ...this.Param } as WebParams;
+        const param = { ...this.defaultParam } as WebParams;
         param.TableName = 'ClientKey';
         param.TableData = data;
         return this.getApi('cc/SaveData', param);
@@ -367,9 +367,10 @@ export class AxApi {
         }
         return new Promise((resolve, reject) => {
             func.then((res:AnyObject) => {
-                let msg:Msg = { ErrNo: 0 };
+                let msg:Msg = { ErrNo: ErrCode.NOT_DEFINED_ERR };
                 if (res.data) msg = res.data;
-                if (msg.ErrNo === 7) {
+                // console.log('AxApi login check:', msg);
+                if (msg.ErrNo === ErrCode.NO_LOGIN) {
                     this.gotoLoginPage();
                 }
                 if (res.headers.authorization) {

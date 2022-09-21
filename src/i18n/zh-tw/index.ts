@@ -80,7 +80,7 @@ export default {
     Settled: ['', '己結帳', '', '己重結', '取消'],
     OpenParams: '開盤參數',
     OddsManager: '控盤',
-    RealTimeBets: '及時注單',
+    RealTimeBets: '即時注單',
     BetLists: '注單查詢',
     NameOrNick: '名稱/代號',
     TotalN: '共 {N} 筆',
@@ -227,6 +227,7 @@ export default {
         ShortTerm1: '短線1',
         ShortTerm2: '短線2',
         ShortTermFee: '短線手續費',
+        ChoicePrice: '有利價',
       },
     },
     EmergencyClose: {
@@ -418,6 +419,7 @@ export default {
     GainLose: '盈虧',
     SettleType: '方式',
     HandSettle: '手動',
+    SysSettle: '系統平倉',
     RptType: {
       Head: '單頭',
       Detail: '明細',

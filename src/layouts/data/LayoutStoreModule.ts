@@ -1,4 +1,5 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
+import VueRouter from 'vue-router';
 import Store from '../../store/index';
 import AxApi from '../components/AxApi';
 // import WSock from '../../components/WebSock/WSock';
@@ -87,7 +88,7 @@ export default class LayoutStoreModule extends VuexModule {
     @Mutation
     public SET_PERSONAL(value:LoginInfo) {
         this.personal = value;
-        this.ax.Param = this.Param;
+        this.ax.setParam(this.Param);
     }
     @Action
     public setPersonal(value:LoginInfo) {
@@ -175,5 +176,13 @@ export default class LayoutStoreModule extends VuexModule {
     @Action
     public setMqtt(mqtt:Mqtt | null) {
         this.SET_MQTT(mqtt);
+    }
+    @Mutation
+    private SET_ROUTER(router:VueRouter) {
+        this.ax.setRouter(router);
+    }
+    @Action
+    public setRouter(router:VueRouter) {
+        this.SET_ROUTER(router);
     }
 }

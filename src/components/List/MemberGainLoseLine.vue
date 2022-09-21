@@ -3,7 +3,7 @@
 		<td>{{ mgl.Nickname }}</td>
 		<td class="number">{{ mgl.Total.toFixed(2) }}</td>
 		<td class="number">{{ mgl.LeverTotal.toFixed(2) }}</td>
-		<td class="number">{{ mgl.LeverAvgRate.toFixed(2) }}</td>
+		<td class="number">{{ (mgl.LeverAvgRate*100).toFixed(2) }}</td>
 		<td class="number">{{ mgl.GainLose.toFixed(2) }}</td>
 		<td class="number">{{ mgl.GainLoseRate.toFixed(2) }}</td>
 		<td class="number">{{ mgl.CLevel }}</td>

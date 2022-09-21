@@ -5,7 +5,7 @@
 			:id="`container${idx}`" data-role="drag-drop-container"
 		>
 			<div :id="`drag-source${game.value}`" class="drag-source" draggable="true">
-				<img :src="icon[`${game.value}`]" />
+				<img :src="icon[`${game.value}`]" :id="`drag-source${game.value}-image`"  draggable="true" />
 				<h5>{{ $t(`GameTitle.${game.value}`)}}</h5>
 			</div>
 		</div>

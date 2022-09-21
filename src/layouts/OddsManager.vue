@@ -336,6 +336,7 @@ export default class OddsManager extends Vue {
     SortName='';
     SortItems:string[]=[];
     showSubTotal = false;
+    curPayClassID = 0;
     get BtnSubTotal() {
         const titlekey = `Label.SubTotal.${this.showSubTotal ? 'Close' : 'Open'}`;
         return this.$t(titlekey);
@@ -351,7 +352,7 @@ export default class OddsManager extends Vue {
         console.log('onTotalChange:', newV, oldV);
     }
     async setCurGames(v:SelectOptions) {
-        console.log('setGames:', v);
+        console.log('setGames:', v, this.PInfo);
         if (v.value === this.curGameID) {
             return;
         }
@@ -361,6 +362,10 @@ export default class OddsManager extends Vue {
         if (v.GType) {
             this.oddshow = false;
             this.showSubTotal = false;
+            const f = this.PInfo.PayClass?.find((itm) => (itm.GameID === v.value));
+            if (f) {
+                this.curPayClassID = f.PayClassID;
+            }
             /*
             console.log(this.$t(`Game.${v.GType}.Menu.Group`))
             const tmp:any=this.$t(`Game.${v.GType}.Menu.Group`);
@@ -390,6 +395,7 @@ export default class OddsManager extends Vue {
                     UserID: this.PInfo.id,
                     sid: this.PInfo.sid,
                     GameID: v.value,
+                    PayClassID: this.curPayClassID,
                     MaxOddsID: 0,
                 };
                 const ans:Msg = await this.store.ax.getApi('CurOddsInfo', param);
@@ -454,6 +460,7 @@ export default class OddsManager extends Vue {
             UserID: this.PInfo.id,
             sid: this.PInfo.sid,
             GameID: this.curGameID,
+            PayClassID: this.curPayClassID,
             MaxOddsID: this.Game.MaxOddsID,
         };
         const ans:Msg = await this.store.ax.getApi('CurOddsInfo', param);

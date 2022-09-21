@@ -8,8 +8,14 @@ function cancelDefault(e) {
 function dragStart(e) {
   // oldE = e;
 	this.classList.add('dragging');
-  e.dataTransfer.setData('text/plain', e.target.id);
+  let targetid = e.target.id;
+  if (e.target.id.indexOf('image') > -1) {
+    targetid = e.target.id.replace('-image', '');
+    if (targetid === this.parentElement.id) return;
+  }
+  e.dataTransfer.setData('text/plain', targetid);
   // tempid = e.target.id;
+  // console.log('dragStart', e.target.id, this.parentElement.id);
   sourceContainerId = this.parentElement.id;
   // console.log('sourceContainerId', sourceContainerId);
 }

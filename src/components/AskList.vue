@@ -47,7 +47,7 @@
         <td > {{ new Date(itm.CreateTime).toLocaleString(lang,dOpt) }} </td>
         <td :style="itm.isSettle ? 'color:green' : ''"> {{ new Date(itm.DealTime).toLocaleString(lang,dOpt) }}</td>
         <td align='center' :class="`StatusColor${itm.ProcStatus}`" @click="getPriceTick(itm)"> {{ $t(`Label.ProcStatus.${itm.ProcStatus}`) }} </td>
-        <td align='center'> {{ itm.SettleType ? $t('Report.HandSettle') : '' }} </td>
+        <td align='center'> {{ settleStatus(itm) }} </td>
       </tr>
     </table>
     <q-dialog v-model="showPT" persistent>
@@ -125,6 +125,13 @@ export default class AskList extends Vue {
         }
       }
     });
+  }
+  settleStatus(itm:AskReport) {
+    let tmp = itm.SettleType ? this.$t('Report.HandSettle') : '';
+    if (itm.isSettle && !itm.isUserSettle) {
+      tmp = this.$t('Report.SysSettle');
+    }
+    return tmp;
   }
 }
 </script>

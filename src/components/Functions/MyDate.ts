@@ -86,7 +86,7 @@ class MyDate {
 			keyV.Val2 = dates[0];
 		}
 		const fIdx = keyV.Val2.indexOf(':');
-		keyV.Val2 = fIdx > -1 ? keyV.Val2 : `${keyV.Val2} 24:00:00`;
+		keyV.Val2 = fIdx > -1 ? keyV.Val2 : `${keyV.Val2} 23:59:59`;
 		keyV.Cond = 'between';
 		return keyV;
 	}

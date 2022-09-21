@@ -143,6 +143,7 @@ export default class Login extends Vue {
           this.prompt = true;
         }
         // console.log('login router push', this.$router.getRoutes());
+        this.store.setRouter(this.$router);
         this.$router.push({ path: '/Main' });
         // console.log('header chk info:', this.store.ax.Info);
     } else {
@@ -197,7 +198,7 @@ export default class Login extends Vue {
     console.log('login mounted', this.$route);
     if (this.$route.params.userCode) {
       this.params = this.$route.params as PlatformParams;
-      console.log('login mounted params', this.params);
+      // console.log('login mounted params', this.params);
     } else {
       // this.params = this.regroupParams(window.location.search);
       Object.assign(this.params, this.regroupParams(window.location.search));

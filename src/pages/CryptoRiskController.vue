@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="q-pa-sm row esblock">
+		<div v-if="LoginInfo.Types>2" class="q-pa-sm row esblock">
 			<div :class="{title:true,closed:isEmergencyClose,opend:!isEmergencyClose}">{{ $t('Label.EmergencySwitch.Title') }}</div>
 			<q-btn color="red" icon="dangerous" v-if="!isEmergencyClose" :label="$t('Label.EmergencySwitch.Shutdown')" @click="CloseAll" />
 			<q-btn color="green" icon="check_circle" v-if="isEmergencyClose" :label="$t('Label.EmergencySwitch.RaiseUp')" @click="OpenAll" />

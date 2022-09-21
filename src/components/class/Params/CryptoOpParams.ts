@@ -80,6 +80,13 @@ export default class CryptoParams {
 		this.data.ShortTermFee = parseFloat(v) / this.FeeDenominator;
 		this.ischanged = true;
 	}
+	get ChoicePrice() {
+		return this.data.ChoicePrice;
+	}
+	set ChoicePrice(v:number) {
+		this.data.ChoicePrice = Math.round(v);
+		this.isChanged = true;
+	}
 	get ModifyID():number {
 		return this.data.ModifyID;
 	}
@@ -115,6 +122,7 @@ export default class CryptoParams {
 			ShortTerm1: 0,
 			ShortTerm2: 0,
 			ShortTermFee: 0,
+			ChoicePrice: 0,
 			ModifyID: 0,
 		};
 		return data;

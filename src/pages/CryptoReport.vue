@@ -103,6 +103,7 @@ export default class CrytoReport extends Vue {
             asks.push(itm);
           }
         });
+        console.log('asks length:', asks);
         let askmark:AskMark[] = [];
         if (askids.length > 0) {
           const mark = await this.api.getSettleMarkByAskID(askids);
@@ -115,7 +116,7 @@ export default class CrytoReport extends Vue {
           console.log('after getUsers', Usrs);
           if (Usrs.length > 0) {
             this.askReports = this.getAskReports(asks, Usrs, this.options, askmark).sort((a, b) => a.DealTime - b.DealTime);
-            // console.log('after getAskReports', this.askReports);
+            console.log('after getAskReports length:', this.askReports.length);
           }
         }
       }
@@ -163,6 +164,7 @@ export default class CrytoReport extends Vue {
         DealTime: ask.DealTime || 0,
         isSettle: !!ask.BuyType,
         SettleType,
+        isUserSettle: ask.isUserSettle,
       };
       return tmp;
     });

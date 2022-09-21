@@ -1,6 +1,6 @@
 import { ErrCode } from 'src/components/if/ENum';
 import { CryptoOpParams, MemberCLevel, PartialCryptoItems, EmergencyCloseData } from '../../../components/if/dbif';
-import { HasID, KeyVal, WebParams, HasModifyID, Msg } from '../../../layouts/data/if';
+import { HasID, KeyVal, WebParams, HasModifyID } from '../../../layouts/data/if';
 import AForAll from './AForAll';
 import DateFunc from '../../Functions/MyDate';
 
@@ -195,12 +195,23 @@ export default class Func extends AForAll {
 		// console.log('filter', filter);
 		return this.getTableData('PriceTick', filter);
 	}
-	private async getAskChkBuy(sdate:string, filter:KeyVal[], TableName:string, Fields:string[]) {
-		const Filter = filter.map((itm) => itm);
-		if (sdate) Filter.push(DateFunc.createDbDateFilter(sdate, 'CreateTime'));
-		console.log('getAskChkBuy', Filter);
-		return this.getTableData(TableName, Filter, Fields);
+	private getAskChkFilter(sdate:string, type = 'Buy'):string {
+		// const Filter = filter.map((itm) => itm);
+		if (sdate) {
+			// Filter.push(DateFunc.createDbDateFilter(sdate, 'CreateTime'));
+			let filter:KeyVal;
+			if (type === 'Buy') {
+				filter = DateFunc.createDbDateFilter(sdate, 'CreateTime');
+				return `${filter.Key} ${filter.Cond} '${filter.Val}' and '${filter.Val2}'`;
+			}
+			filter = DateFunc.createTSDateFilter(sdate, 'DealTime');
+			return `${filter.Key} ${filter.Cond} ${filter.Val} and ${filter.Val2}`;
+		}
+		return '';
+		// console.log('getAskChkBuy', Filter);
+		// return this.getTableData(TableName, Filter, Fields);
 	}
+	// private async getAskChkSell(sdate:string, filter:KeyVal[], TableName:string, Fields:string[]) {
 	private async getAskChkSell(sdate:string, filter:KeyVal[], TableName:string, Fields:string[]) {
 		const Filter = filter.map((itm) => itm);
 		Filter.push(DateFunc.createTSDateFilter(sdate, 'DealTime'));
@@ -208,56 +219,40 @@ export default class Func extends AForAll {
 		return this.getTableData(TableName, Filter, Fields);
 	}
 	async getAskList(sdate:string, BetID?:string, itemid?:number, Nickname?:string) {
-		let msg:Msg = {};
     const TableName = 'AskTable';
     const Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'ItemType', 'Code', 'Qty', 'Price', 'Amount',
         'Fee', 'AskFee', 'AskPrice', 'LeverCredit', 'ExtCredit', 'Lever', 'SetID', 'USetID', 'ProcStatus',
         'CreateTime', 'DealTime', 'isUserSettle'];
-		const Filter:KeyVal[] = [];
+		const Filter:string[] = [];
 		if (BetID) {
 			const ids = BetID.split(',').map((v) => parseInt(v, 10));
-			Filter.push({ Key: 'id', Val: ids.join(','), Cond: 'in' });
+			// Filter.push({ Key: 'id', Val: ids.join(','), Cond: 'in' });
+			if (ids.length > 1) {
+				Filter.push(`id in (${ids.join(',')})`);
+			} else {
+				Filter.push(`id = ${ids[0]}`);
+			}
 		}
 		if (itemid) {
-			Filter.push({ Key: 'ItemID', Val: itemid });
+			Filter.push(`ItemID = ${itemid} }`);
 		}
 		if (this.User.Types === 1 || this.User.Types === 2) {
-				Filter.push({ Key: 'UpId', Val: this.User.id });
+				Filter.push(`UpId = ${this.User.id}`);
 		}
 		if (Nickname) {
 			const filter = await this.getMemberIDFilter(Nickname);
 			if (filter) {
-				Filter.push(filter);
-			}
-			/*
-			msg = await this.getMemberIdByNickname(Nickname);
-			if (msg.ErrNo === ErrCode.PASS) {
-				if (msg.data && msg.data.length > 0) {
-					const dta = msg.data as HasID[];
-					const ids = dta.map((usr) => usr.id);
-					Filter.push({
-						Key: 'UserID',
-						Val: ids.join(','),
-						Cond: 'in',
-					});
-				}
-			}
-			*/
-		}
-		msg = await this.getAskChkBuy(sdate, Filter, TableName, Fields);
-		if (msg.ErrNo === ErrCode.PASS) {
-			const msgSell = await this.getAskChkSell(sdate, Filter, TableName, Fields);
-			if (msgSell.ErrNo === ErrCode.PASS) {
-				if (msgSell.data) {
-					if (Array.isArray(msg.data)) {
-						msg.data = msg.data.concat(msgSell.data);
-					} else {
-						msg.data = msgSell.data;
-					}
-				}
+				Filter.push(`${filter.Key} ${filter.Cond} (${filter.Val})`);
 			}
 		}
-		return msg;
+		const buyF = this.getAskChkFilter(sdate, 'Buy');
+		const sellF = this.getAskChkFilter(sdate, 'Sell');
+		const bsF = `${buyF} or ${sellF}`;
+		let strFilter = `${Filter ? Filter.join(' and ') : ''}`;
+		if (strFilter) strFilter += ` and ( ${bsF} )`;
+		else strFilter = bsF;
+		console.log('filter:', strFilter);
+		return this.getTableData(TableName, strFilter, Fields);
 	}
 	async getLedgerLever(sdate:string, BetID?:string, itemid?:number, Nickname?:string) {
 		const TableName = 'LedgerLever';

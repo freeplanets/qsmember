@@ -5,7 +5,7 @@
 			<tr>
 				<th rowspan="2"><div>{{ $t('Table.CryptoOpParams.OpType') }}</div></th>
 				<th rowspan="2"><div>{{ $t('Table.CryptoOpParams.isActive') }}</div></th>
-				<th colspan="6"><div>{{ $t('Table.CryptoOpParams.OpType') }}</div></th>
+				<th colspan="7"><div>{{ $t('Table.CryptoOpParams.OpType') }}</div></th>
 				<th rowspan="2"><div>{{ $t('Label.Save') }}</div></th>
 			</tr>
 			<tr>
@@ -15,6 +15,7 @@
 				<th><div>{{ $t('Table.CryptoOpParams.RuleName.ShortTerm1') }}({{$t('Label.Sec')}})</div></th>
 				<th><div>{{ $t('Table.CryptoOpParams.RuleName.ShortTerm2') }}({{$t('Label.Sec')}})</div></th>
 				<th><div>{{ $t('Table.CryptoOpParams.RuleName.ShortTermFee') }}(&#8240;)</div></th>
+				<th><div>{{ $t('Table.CryptoOpParams.RuleName.ChoicePrice') }}({{$t('Label.Sec')}})</div></th>
 			</tr>
 			<tr
 				v-for="(itm,idx) in items"
@@ -28,6 +29,7 @@
 				<td><div><q-input outlined dense v-model="itm.ShortTerm1" /></div></td>
 				<td><div><q-input outlined dense v-model="itm.ShortTerm2" /></div></td>
 				<td><div><q-input outlined dense v-model="itm.ShortTermFee" /></div></td>
+				<td><div><q-input outlined dense v-model="itm.ChoicePrice" /></div></td>
 				<td><div><q-btn v-if="itm.isChanged" color="primary" :label="$t('Label.Save')" @click="Save(itm,idx)" /></div></td>
 			</tr>
 		</table>

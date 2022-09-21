@@ -223,6 +223,7 @@ export default {
         ShortTerm1: '短线1',
         ShortTerm2: '短线2',
         ShortTermFee: '短线手续费',
+        ChoicePrice: '有利价',
       },
     },
     EmergencyClose: {
@@ -414,6 +415,7 @@ export default {
     GainLose: '盈亏',
     SettleType: '方式',
     HandSettle: '手动',
+    SysSettle: '系统平仓',
     RptType: {
       Head: '单头',
       Detail: '明细',

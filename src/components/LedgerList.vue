@@ -68,10 +68,14 @@ export default class LedgerList extends Vue {
     weekday: 'short',
   }
   showPrice(itm:LedgerReport, type = 'New') {
+    return type === 'New' ? itm.BuyPrice : itm.SellPrice;
+    /*
+    console.log('showPrice', itm.id, itm.ItemType, itm.BuyPrice, itm.SellPrice);
     if (type === 'New') {
       return itm.ItemType > 0 ? itm.BuyPrice : itm.SellPrice;
     }
     return itm.ItemType > 0 ? itm.SellPrice : itm.BuyPrice;
+    */
   }
   showFee(itm:LedgerReport) {
     return itm.BuyFee + itm.SellFee + itm.TFee;
