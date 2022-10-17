@@ -11,6 +11,11 @@ export default abstract class AForAll {
 		this.dfParam = store.Param;
 		this.User = store.UserInfo;
 	}
+	protected getOrderList(filters?:string) {
+		const params:WebParams = { ...this.dfParam };
+		params.Filter = filters;
+		return this.ax.getApi('cc/GetOrderList', params);
+	}
 	protected getTableData(tableName:string, filters?:string| KeyVal | KeyVal[], fields?:string | string[]) {
 		const params:WebParams = { ...this.dfParam };
 		params.TableName = tableName;

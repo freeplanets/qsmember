@@ -93,17 +93,20 @@ export default class CrytoReport extends Vue {
     if (msg.ErrNo === ErrCode.PASS) {
       if (msg.data) {
         // const asks:AskTable[] = msg.data as AskTable[];
-        const users:number[] = [];
+        // const users:number[] = [];
+        const upids:number[] = [];
         const asks:AskTable[] = [];
-        const askids:number[] = [];
+        // const askids:number[] = [];
         (msg.data as AskTable[]).map((itm) => {
           if (!((itm.USetID || itm.SetID) && itm.ProcStatus < 2)) {
-            if (users.indexOf(itm.UserID) === -1) users.push(itm.UserID);
-            askids.push(itm.id);
+            // if (users.indexOf(itm.UserID) === -1) users.push(itm.UserID);
+            // askids.push(itm.id);
+            if (upids.indexOf(itm.UpId) === -1) upids.push(itm.UpId);
             asks.push(itm);
           }
         });
         console.log('asks length:', asks);
+        /*
         let askmark:AskMark[] = [];
         if (askids.length > 0) {
           const mark = await this.api.getSettleMarkByAskID(askids);
@@ -111,11 +114,13 @@ export default class CrytoReport extends Vue {
             askmark = mark.data;
           }
         }
-        if (users.length > 0) {
-          const Usrs = await this.getUsers(users);
-          console.log('after getUsers', Usrs);
-          if (Usrs.length > 0) {
-            this.askReports = this.getAskReports(asks, Usrs, this.options, askmark).sort((a, b) => a.DealTime - b.DealTime);
+        */
+        if (upids.length > 0) {
+          // const Usrs = await this.getUsers(users);
+          const Ups = await this.getUps(upids);
+          console.log('after getUps', Ups);
+          if (Ups.length > 0) {
+            this.askReports = this.getAskReports(asks, Ups, this.options).sort((a, b) => a.DealTime - b.DealTime);
             console.log('after getAskReports length:', this.askReports.length);
           }
         }
@@ -123,9 +128,10 @@ export default class CrytoReport extends Vue {
     }
     this.store.setShowProgress(false);
   }
-  getAskReports(asks:AskTable[], users:UserName[], items:SelectOptions[], askmark:AskMark[]):AskReport[] {
+  getAskReports(asks:AskTable[], ups:SiteName[], items:SelectOptions[]):AskReport[] {
     console.log('getAskReports', items);
     return asks.map((ask) => {
+      /*
       const fu = users.find((usr) => usr.id === ask.UserID);
       let UsrName = '';
       let SiteName = '';
@@ -133,16 +139,19 @@ export default class CrytoReport extends Vue {
         UsrName = fu.Nickname;
         SiteName = fu.SiteName;
       }
+      */
       const fi = items.find((itm) => itm.value === ask.ItemID);
       let ItemName = '';
       if (fi) ItemName = fi.label;
       let SettleType = 0;
-      const fmark = askmark.find((itm) => itm.AskID === ask.id);
-      if (fmark) SettleType = 1;
+      // const fmark = askmark.find((itm) => itm.AskID === ask.id);
+      if (ask.MarkTS) SettleType = 1;
+      const f = ups.find((itm) => itm.id === ask.UpId);
+      const SiteName = f ? f.SiteName : '';
       const tmp:AskReport = {
         id: ask.id,
         SiteName,
-        User: UsrName,
+        User: String(ask.Nickname),
         Item: ItemName,
         Code: ask.Code,
         AskType: this.$t(`Select.Crypto.AskType.${ask.AskType}`).toString(),
@@ -169,6 +178,14 @@ export default class CrytoReport extends Vue {
       return tmp;
     });
   }
+  async getUps(upids:number[]) {
+    const msg = await this.api.getMemberSiteNameByUpId(upids);
+    if (msg.ErrNo === ErrCode.PASS) {
+      const site = msg.data as SiteName[];
+      return site;
+    }
+    return [];
+  }
   async getUsers(userid:number[]):Promise<UserName[]> {
     let msg:Msg = await this.api.getMemberNameByID(userid);
     if (msg.ErrNo === ErrCode.PASS) {
@@ -191,32 +208,35 @@ export default class CrytoReport extends Vue {
     }
     return [];
   }
-  async getData() {
+  getData() {
     const param:WebParams = { ...this.store.Param };
     param.TableName = 'Items';
     param.Fields = ['id', 'Title'];
-    const msg:Msg = await this.store.ax.getApi('cc/GetData', param);
-    if (msg.ErrNo === ErrCode.PASS) {
-      if (msg.data) {
-        const list = msg.data as CryptoItem[];
-        console.log('getData:', list);
-        this.options = list.map((itm) => {
-          const tmp:SelectOptions = {
-            label: `${itm.Title}`,
-            value: itm.id,
+    this.store.ax.getApi('cc/GetData', param).then((msg) => {
+      if (msg.ErrNo === ErrCode.PASS) {
+        if (msg.data) {
+          const list = msg.data as CryptoItem[];
+          console.log('getData:', list);
+          this.options = list.map((itm) => {
+            const tmp:SelectOptions = {
+              label: `${itm.Title}`,
+              value: itm.id,
+            };
+            return tmp;
+          });
+          const sltOne:SelectOptions = {
+            label: 'ALL',
+            value: 0,
           };
-          return tmp;
-        });
-        const sltOne:SelectOptions = {
-          label: 'ALL',
-          value: 0,
-        };
-        this.options.splice(0, 0, sltOne);
+          this.options.splice(0, 0, sltOne);
+        }
       }
-    }
+    });
   }
-  async mounted() {
-    await this.getData();
+  created() {
+    setTimeout(() => {
+      this.getData();
+    }, 100);
   }
 }
 </script>

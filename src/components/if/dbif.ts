@@ -61,6 +61,8 @@ export interface AskTable {
   SetID: number; // 平倉對象ID -> System下單
   USetID: number; // 平倉對象ID -> User下單
   isUserSettle?: number;
+  MarkTS?: string;
+  Nickname?: string;
 }
 export interface AskReport {
   id: number;

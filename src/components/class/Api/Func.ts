@@ -19,7 +19,7 @@ export default class Func extends AForAll {
 				Cond: '>',
 			},
 			{
-				Key: 'id',
+				Key: 'AskID',
 				Val: `${askids.join(',')}`,
 				Cond: 'in',
 			},
@@ -219,22 +219,24 @@ export default class Func extends AForAll {
 		return this.getTableData(TableName, Filter, Fields);
 	}
 	async getAskList(sdate:string, BetID?:string, itemid?:number, Nickname?:string) {
+		/*
     const TableName = 'AskTable';
     const Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'ItemType', 'Code', 'Qty', 'Price', 'Amount',
         'Fee', 'AskFee', 'AskPrice', 'LeverCredit', 'ExtCredit', 'Lever', 'SetID', 'USetID', 'ProcStatus',
         'CreateTime', 'DealTime', 'isUserSettle'];
+		*/
 		const Filter:string[] = [];
 		if (BetID) {
 			const ids = BetID.split(',').map((v) => parseInt(v, 10));
 			// Filter.push({ Key: 'id', Val: ids.join(','), Cond: 'in' });
 			if (ids.length > 1) {
-				Filter.push(`id in (${ids.join(',')})`);
+				Filter.push(`A.id in (${ids.join(',')})`);
 			} else {
-				Filter.push(`id = ${ids[0]}`);
+				Filter.push(`A.id = ${ids[0]}`);
 			}
 		}
 		if (itemid) {
-			Filter.push(`ItemID = ${itemid} }`);
+			Filter.push(`A.ItemID = ${itemid}`);
 		}
 		if (this.User.Types === 1 || this.User.Types === 2) {
 				Filter.push(`UpId = ${this.User.id}`);
@@ -252,7 +254,8 @@ export default class Func extends AForAll {
 		if (strFilter) strFilter += ` and ( ${bsF} )`;
 		else strFilter = bsF;
 		console.log('filter:', strFilter);
-		return this.getTableData(TableName, strFilter, Fields);
+		// return this.getTableData(TableName, strFilter, Fields);
+		return this.getOrderList(strFilter);
 	}
 	async getLedgerLever(sdate:string, BetID?:string, itemid?:number, Nickname?:string) {
 		const TableName = 'LedgerLever';
