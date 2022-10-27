@@ -27,6 +27,7 @@ export interface CryptoItem extends HasID {
   OneHand?:number;
   DecimalPlaces?:number; // 金額小數位數
   QtyDecimalPlaces?:number; // 數量小數位數
+  StayLimit?:number; // 留倉天數
   PerStep?:number; // 跳動點（每次價格調整變量）
   Closed?:number; // 0 開放, 1 停多, 2 停空, 3 停收；
   EmergencyClosed?:number; // 0 開放, 1 關閉

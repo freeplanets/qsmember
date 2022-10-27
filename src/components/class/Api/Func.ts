@@ -31,7 +31,7 @@ export default class Func extends AForAll {
 		const Filter:KeyVal = {
 			Key: 'Nickname',
 			Val: Nickname,
-			Cond: 'like',
+			// Cond: 'like',
 		};
 		const Fields = 'id,Nickname';
 		return this.getTableData(Tablename, Filter, Fields);

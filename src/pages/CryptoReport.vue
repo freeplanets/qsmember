@@ -19,6 +19,7 @@
     </div>
     <q-separator />
     <AL v-if="askReports.length>0" :list="askReports" />
+    <div>{{ recordCnt > 0 ? `Records:${recordCnt}` : '' }}</div>
     <q-dialog v-model="isDateSlt">
       <q-card class='diaDate'>
         <q-card-section class="q-pt-none">
@@ -73,6 +74,7 @@ export default class CrytoReport extends Vue {
   Nickname = '';
   BetID = '';
   askReports:AskReport[]=[];
+  recordCnt = 0;
   @Watch('SelectDate')
   onSDChange() {
     console.log('onSDChange:', this.SelectDate);
@@ -87,6 +89,7 @@ export default class CrytoReport extends Vue {
   }
   async SearchData() {
     if (!this.SelectDate && !this.BetID) return;
+    this.recordCnt = 0;
     this.store.setShowProgress(true);
     this.askReports = [];
     const msg:Msg = await this.api.getAskList(this.SelectDate, this.BetID, this.itemid, this.Nickname);
@@ -116,6 +119,7 @@ export default class CrytoReport extends Vue {
         }
         */
         if (upids.length > 0) {
+          this.recordCnt = asks.length;
           // const Usrs = await this.getUsers(users);
           const Ups = await this.getUps(upids);
           console.log('after getUps', Ups);

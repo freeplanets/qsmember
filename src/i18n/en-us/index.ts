@@ -12,7 +12,7 @@ export default {
     'Fail!', // 9
     'missing parameter', // 10
     'insufficient number selected', // 11
-    'connection error', // 12
+    'system busy', // 'connection error', // 12
     'invalid inquiry format', // 13,
     'error', // 14,
     'no data found', // 15,
@@ -185,6 +185,7 @@ export default {
       IMG: 'IMG',
       Type: 'Long/Short',
       OneHand: 'bet limit',
+      StayLimit: 'days to stay',
     },
     Lever: {
       Multiples: 'leverage',

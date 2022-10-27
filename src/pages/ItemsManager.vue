@@ -83,6 +83,7 @@ export default class ItemsManager extends Vue {
     StopLose: 0,
     DecimalPlaces: 2,
     QtyDecimalPlaces: 8,
+    StayLimit: 0,
     PerStep: 1,
     isActive: 0,
     IMG: '',
@@ -99,7 +100,7 @@ export default class ItemsManager extends Vue {
   columns:TableColumn[] = [];
   data:CryptoItem[] = [];
   visibleColumns = ['id', 'Title', 'OpenFee', 'CloseFee', 'isLoan', 'PriceLimitPercentage',
-   'StopGain', 'StopLose', 'DecimalPlaces', 'QtyDecimalPlaces', 'PerStep', 'isActive'];
+   'StopGain', 'StopLose', 'DecimalPlaces', 'QtyDecimalPlaces', 'StayLimit', 'PerStep', 'isActive'];
   async GetData() {
     const param:WebParams = {
       sid: this.uInfo.sid,

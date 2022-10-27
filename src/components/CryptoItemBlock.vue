@@ -41,6 +41,10 @@
       <div class="col-3"><q-input outlined  dense v-model="QtyDecimalPlaces" label="" /></div>
     </div>
     <div class="row">
+      <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.StayLimit")}}</div>
+      <div class="col-3"><q-input outlined  dense v-model="StayLimit" label="" /></div>
+    </div>
+    <div class="row">
       <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.PerStep")}}</div>
       <div class="col-3"><q-input outlined  dense v-model="PerStep" label="" /></div>
     </div>
@@ -138,6 +142,12 @@ export default class CryptoItemBlock extends Vue implements AnyObject {
   onQtyDecimalPlacesChange() {
     if (this.Item) this.Item.QtyDecimalPlaces = parseInt(this.QtyDecimalPlaces, 10);
   }
+  StayLimit = '';
+  @Watch('StayLimit')
+  onStayLimitChange() {
+    if (this.Item) this.Item.StayLimit = parseInt(this.StayLimit, 10);
+  }
+
   PerStep = '';
   @Watch('PerStep')
   onPerStepChange() {
