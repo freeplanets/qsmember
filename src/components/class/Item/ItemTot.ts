@@ -88,7 +88,7 @@ export default class ItemTot implements ReportTotal {
 		let Field = 'Account';
 		if (isLedger) {
 			TableName = 'Items';
-			Field = 'Title';
+			Field = 'isLoan,Title';
 		}
 		return this.api.getTitle(TableName, keys, Field);
 		// const params = this.getParams(keys);

@@ -1,7 +1,7 @@
 <template>
 	<div class="row banblock">
 		<div class="col-2 banmain">
-			{{ item.Title }}
+			{{ item.Title }}{{ $t(`Select.Crypto.LoanType.${item.isLoan ? 1 : 0}`) }}
 			<q-btn color="primary" v-if="false" icon="description" :label="$t('Button.MemberSettleMark')" @click="getMemberSettleMark" />
 		</div>
 		<div class="col-2 banmain">{{ item.Price }}</div>

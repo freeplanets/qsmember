@@ -6,6 +6,7 @@
 			<q-btn color="green" icon="check_circle" v-if="isEmergencyClose" :label="$t('Label.EmergencySwitch.RaiseUp')" @click="OpenAll" />
 			<div v-if="isEmergencyClose" class="info">{{ $t('Label.EmergencySwitch.info') }}</div>
 			<q-btn color="info" icon="article" :label="$t('Label.EmergencySwitch.log')" @click="EmergencyLog" />
+			<q-btn color="secondary" icon="schedule" :label="ServerInfo" />
 		</div>
 		<q-separator />
 		<BCIH class="q-pt-sm" :info="LoginInfo" />
@@ -70,9 +71,17 @@ export default class CryptoRiskController extends Vue {
 	losefocustimer = 0;
 	ECLogList:EmergencyCloseLog[] = [];
 	showECLog = false;
+	ServerInfo='';
 	get LoginInfo() {
 		return this.store.personal;
 	}
+	/*
+	@Watch('ServerInfo', { immediate: true, deep: true })
+	onWsMsgChange(newV:WsMsg) {
+		console.log('onWsMsgChange:', newV);
+		// this.ServerInfo = newV;
+	}
+	*/
 	getData() {
 		this.Api.getLoanItem().then((msg:Msg) => {
 			if (msg.ErrNo === 0) {
@@ -80,9 +89,9 @@ export default class CryptoRiskController extends Vue {
 				console.log('CryptoRiskController getData', data);
 				data.forEach((itm) => {
 					// console.log('getdata', itm.id, itm.Closed);
-					if (itm.isLoan) {
+					// if (itm.isLoan) {
 						this.list.push(new Items(itm, this.store));
-					}
+					// }
 				});
 				if (this.list.length > 0) {
 					this.list.forEach((itm) => {
@@ -93,8 +102,8 @@ export default class CryptoRiskController extends Vue {
 					});
 				}
 			}
+			this.getAsks();
 		});
-		this.getAsks();
 		if (this.mqtt) {
 			this.mqtt.setItems(this.list);
 		} else {
@@ -241,8 +250,12 @@ export default class CryptoRiskController extends Vue {
 		}
 		this.getData();
 		// this.getAsks();
-		window.onfocus = () => { this.focusMsg('Active'); };
-		window.onblur = () => { this.focusMsg('Inactive'); };
+		// window.onfocus = () => { this.focusMsg('Active'); };
+		// window.onblur = () => { this.focusMsg('Inactive'); };
+		if (this.store.WSock) {
+			console.log('mounted setMsg:');
+			this.store.WSock.setMsg(this);
+		}
 		// this.interval = setInterval(this.getAsks,500000);
 	}
 }

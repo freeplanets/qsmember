@@ -2,7 +2,7 @@
   <div v-if="Item">
     <div class="row">
       <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.Title") }}</div>
-      <div class="col-3"><q-input outlined  dense v-model="Title" label="" /></div>
+      <div class="col-3"><q-input outlined  dense v-model="Title" :label="TitleString" /></div>
     </div>
     <div class="row" v-if="UserLevel===9">
       <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.Code") }}</div>
@@ -16,9 +16,9 @@
       <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.CloseFee") }}</div>
       <div class="col-3"><q-input outlined  dense v-model="CloseFee" label="" /></div>
     </div>
-    <div class="row">
+    <div v-if="!Item.id" class="row">
       <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.isLoan") }}</div>
-      <div class="col-3">N<q-toggle v-model="isLoan" />Y</div>
+      <div class="col-3">{{ $t('Select.Crypto.LoanType.0') }}<q-toggle v-model="isLoan" />{{ $t('Select.Crypto.LoanType.1') }}</div>
     </div>
     <div class="row">
       <div class="col-3 title" style='text-valign:center'>{{ $t("Table.Items.PriceLimitPercentage") }}</div>
@@ -85,6 +85,13 @@ export default class CryptoItemBlock extends Vue implements AnyObject {
     console.log('onUserLevelChange:', this.UserLevel);
   }
   */
+  get TitleString() {
+    let title = '';
+    if (this.Item && this.Item.id !== undefined) {
+      title = String(this.$t(`Select.Crypto.LoanType.${this.Item.isLoan}`));
+    }
+    return title;
+  }
   Item:CryptoItem | null = null;
   Title='';
   @Watch('Title')

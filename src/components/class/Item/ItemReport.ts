@@ -4,7 +4,7 @@ import AItemReport from './AItemReport';
 import ItemT, { titleT } from './ItemT';
 
 export default class ItemReport extends AItemReport {
-	constructor(private rt:ReportTotal, private key:number, isledger = false) {
+	constructor(private rt:ReportTotal, private key:number, private subT:string[], isledger = false) {
 		super(isledger);
 	}
 	async getReport(sdate?: string): Promise<void> {
@@ -26,7 +26,7 @@ export default class ItemReport extends AItemReport {
 			const tt = await this.rt.getTitle(keys, this.isLedger);
 			if (tt.ErrNo === ErrCode.PASS) {
 				this.list.forEach((itm) => {
-					itm.setTitle(tt.data as titleT[]);
+					itm.setTitle(tt.data as titleT[], this.subT);
 				});
 			}
 		}

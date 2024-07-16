@@ -8,7 +8,7 @@
       <q-btn
         :color="idx === curIdx ? 'teal-9' : 'teal-2' "
         size="xs"
-        :label="itm.Title"
+        :label="itm.Title + $t(`Select.Crypto.LoanType.${itm.isLoan}`) "
         @click="setValue(itm, idx)"
       />
     </div>
@@ -28,10 +28,12 @@ export default class BtnBar extends Vue {
   curIdx = 0;
   list:CryptoItem[]=[];
   getData() {
+    console.log('BtnBar getData......');
     const param:WebParams = { ...this.store.Param };
     param.TableName = 'Items';
     param.Filter = { isLoan: 1 };
     this.store.ax.getApi('cc/GetData', param).then((res:Msg) => {
+      console.log('BtnBar getData:', res);
       if (res.ErrNo === ErrCode.PASS) {
         this.list = res.data as CryptoItem[];
         if (this.list.length > 0) {

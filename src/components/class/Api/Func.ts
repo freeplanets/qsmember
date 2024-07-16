@@ -218,7 +218,7 @@ export default class Func extends AForAll {
 		console.log('getAskChkSell', Filter);
 		return this.getTableData(TableName, Filter, Fields);
 	}
-	async getAskList(sdate:string, BetID?:string, itemid?:number, Nickname?:string) {
+	async getAskList(sdate:string, BetID?:string, itemid?:number, Nickname?:string, askState = -1, itemType = 0) {
 		/*
     const TableName = 'AskTable';
     const Fields = ['id', 'UserID', 'ItemID', 'AskType', 'BuyType', 'ItemType', 'Code', 'Qty', 'Price', 'Amount',
@@ -238,6 +238,12 @@ export default class Func extends AForAll {
 		if (itemid) {
 			Filter.push(`A.ItemID = ${itemid}`);
 		}
+		if (askState > -1) {
+			Filter.push(`A.ProcStatus = ${askState}`);
+		}
+		if (itemType) {
+			Filter.push(`A.ItemType = ${itemType}`);
+		}
 		if (this.User.Types === 1 || this.User.Types === 2) {
 				Filter.push(`UpId = ${this.User.id}`);
 		}
@@ -247,12 +253,17 @@ export default class Func extends AForAll {
 				Filter.push(`${filter.Key} ${filter.Cond} (${filter.Val})`);
 			}
 		}
-		const buyF = this.getAskChkFilter(sdate, 'Buy');
-		const sellF = this.getAskChkFilter(sdate, 'Sell');
-		const bsF = `${buyF} or ${sellF}`;
+		let bsF = '';
+		if (sdate) {
+			const buyF = this.getAskChkFilter(sdate, 'Buy');
+			const sellF = this.getAskChkFilter(sdate, 'Sell');
+			bsF = `${buyF} or ${sellF}`;
+		}
 		let strFilter = `${Filter ? Filter.join(' and ') : ''}`;
-		if (strFilter) strFilter += ` and ( ${bsF} )`;
-		else strFilter = bsF;
+		if (bsF) {
+			if (strFilter) strFilter += ` and ( ${bsF} )`;
+			else strFilter = bsF;
+		}
 		console.log('filter:', strFilter);
 		// return this.getTableData(TableName, strFilter, Fields);
 		return this.getOrderList(strFilter);

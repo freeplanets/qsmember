@@ -9,7 +9,7 @@
 	</div>
 </template>
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
 import { WebParams, Msg } from '../layouts/data/if';
 import { CryptoItem, CryptoOpParams } from '../components/if/dbif';
@@ -30,7 +30,12 @@ export default class CryptoOpManager extends Vue {
 	curItemID = 0;
 	list:OpParams[] = [];
 	// curItem:CryptoItem | undefined;
+	@Watch('list', { immediate: true, deep: true })
+	onListChange(newV:OpParams[]) {
+		console.log('onListChange', newV);
+	}
 	setValue(itm:CryptoItem) {
+		console.log('setValue trigged....');
 		// this.curItem = itm;
 		this.curItemID = itm.id;
 		const param:WebParams = { ...this.store.Param };
@@ -43,6 +48,9 @@ export default class CryptoOpManager extends Vue {
 				this.list = ans.map((r) => new OpParams(this.curItemID, r));
 			}
 		});
+	}
+	mounted() {
+		console.log('CryptoOpManager mounted');
 	}
 }
 </script>

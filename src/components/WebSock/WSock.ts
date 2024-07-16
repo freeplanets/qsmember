@@ -1,6 +1,7 @@
 import { FuncKey, MsgType, Channels } from '../if/ENum';
 import { AskTable, WsMsg } from '../if/dbif';
 import ASock from './ASock';
+import MyDate from '../Functions/MyDate';
 
 const ClientChannel = Channels.ADMIN;
 
@@ -20,8 +21,12 @@ export default class WSock extends ASock {
     // console.log('onmessage', data);
         try {
             const msg:WsMsg = JSON.parse(data);
-            console.log('onmessage', msg);
-            if (msg.Ask) {
+            if (msg.Func === FuncKey.CONNECTION_CHECK) {
+                console.log('FuncKey.CONNECTION_CHECK', msg.Message);
+                if (this.objInfo) {
+                    this.objInfo.ServerInfo = MyDate.toLocalString(msg.data);
+                }
+            } else if (msg.Ask) {
                 this.doAsk(msg.Ask as AskTable);
             } else if (msg.Asks) {
                 if (Array.isArray(msg.Asks)) {
@@ -50,7 +55,7 @@ export default class WSock extends ASock {
         });
     }
     private registerChannel(channel: string) {
-        if (this.sock.readyState === this.sock.OPEN) {
+        if (this.sock && this.sock.readyState === this.sock.OPEN) {
             console.log('Register Channel to Server:', channel);
             const msg:WsMsg = {
                 Func: FuncKey.SET_CHANNEL,

@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<div class="row q-pa-sm">
-            <div class='col-2'><GS :store='store' @setGames="setCurGames"></GS></div>
-            <div class='pbtn'><q-btn color="blue" icon-right="save" label="Save" @click="SaveData();" /></div>
+            <div class='col-2 pbtn'><GS :store='store' @setGames="setCurGames"></GS></div>
+            <div class='col-1 pbtn'><q-btn color="blue" icon-right="save" label="Save" @click="SaveData();" /></div>
             <div class='col'
                 v-if='curGameID'
                 >

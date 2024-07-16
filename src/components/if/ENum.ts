@@ -35,6 +35,7 @@ export enum FuncKey {
   GET_MESSAGE = 'getMessages',
   NEW_ROOM = 'newRoom',
   CLOSE_CONVERSATION = 'closeConversation',
+  CONNECTION_CHECK = 'connectionCheck', // for Browser
 }
 
 export enum CreditType {

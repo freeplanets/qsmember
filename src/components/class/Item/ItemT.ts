@@ -4,6 +4,7 @@ import ItemTT from './ItemTT';
 export interface titleT {
 	id:number;
 	Title:string;
+	isLoan?:number;
 }
 
 export default class ItemT implements ItemTotal {
@@ -53,13 +54,19 @@ export default class ItemT implements ItemTotal {
 	get Items() {
 		return this.items;
 	}
-	setTitle(t:titleT[]|string) {
+	setTitle(t:titleT[]|string, subT?:string[]) {
 		if (typeof t === 'string') {
 			this.title = t;
 		} else {
 			const f = t.find((itm) => itm.id === this.key);
-			this.title = f ? f.Title : 'none';
-			// console.log('itemT:', this.key, f, this.title);	
+			this.title = 'none';
+			if (f) {
+				this.title = f.Title;
+				if (f.isLoan !== undefined && subT) {
+					this.title = `${this.title}${subT[f.isLoan]}`;
+				}
+			}
+			console.log('itemT:', this.key, f, this.title);
 		}
 	}
 	add(ll:LedgerLever, key:number) {

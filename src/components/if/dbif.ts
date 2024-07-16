@@ -5,6 +5,9 @@ import AItemReport from '../class/Item/AItemReport';
 export interface AnyObject {
 	[key: string]: any;
 }
+export interface ObjWithServerInfo extends AnyObject {
+  ServerInfo: string;
+}
 export interface TableData {
   TableName: string;
   keys?: string[];
@@ -144,6 +147,7 @@ export interface WsMsg {
   UserID?: number;
   SendTo?: number | number[]; // message to who's id
   action?: string;
+  cnt?:number;
 }
 export interface Msgs {
   MessageID: number;
@@ -233,7 +237,7 @@ export interface ItemTotal {
   NetGainLose:number;
   add(ll:LedgerLever, key:number):void;
   reCal():void;
-  setTitle(t:HasID[]|string):void;
+  setTitle(t:HasID[]|string, subT?:string[]):void;
 }
 export interface LedgerLever {
   id:number;

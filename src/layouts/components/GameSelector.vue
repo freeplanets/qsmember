@@ -1,8 +1,5 @@
 <template>
-    <div class="row">
-        <div class="talign" >{{ $t('Label.GameName')}}</div>
-        <q-select class="col" square filled dense v-model="model" :options="options" style="width:200px"/>
-    </div>
+    <q-select class="col" square filled dense v-model="model" :options="options" style="width:200px" :label="$t('Label.GameName')"/>
 </template>
 <script lang="ts">
 import Vue from 'vue';

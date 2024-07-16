@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <div class="row selector">
-      <div class="col-2"><selector :Title="$t('Title.Item')" :defaultModel="itemid" :options="options" @SetItem="setItem" /></div>
+      <div class="col-2"><item-selector :defaultModel="itemid" :retryData="1" @SetItem="setItem" @SendOptions="getOptions" /></div>
       <div class="col-2"><q-input class="" outlined dense v-model="SelectDate" /></div>
       <div class="pbtn2"><q-btn color="primary" dense icon="date_range" @click="isDateSlt=true"/></div>
       <div><q-input outlined dense v-model="BetID" :label="$t('Report.OrderNo')+'(n,1,2,3,...)'" /></div>
@@ -31,10 +31,10 @@
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator';
 import { getModule } from 'vuex-module-decorators';
-import { Msg, SelectOptions, WebParams } from 'src/layouts/data/if';
-import { CryptoItem, LedgerLever, LedgerReport } from '../components/if/dbif';
+import { Msg, SelectOptions } from 'src/layouts/data/if';
+import { LedgerLever, LedgerReport } from '../components/if/dbif';
 import LStore from '../layouts/data/LayoutStoreModule';
-import Selector from '../components/Selector.vue';
+import ItemSelector from '../components/Selector/ItemSelector.vue';
 import { ErrCode } from '../components/if/ENum';
 import SEDate from '../layouts/components/SEDate.vue';
 import LedgerList from '../components/LedgerList.vue';
@@ -53,7 +53,7 @@ interface SiteName {
 
 @Component({
   components: {
-    Selector,
+    ItemSelector,
     SED: SEDate,
     LL: LedgerList,
   },
@@ -143,32 +143,8 @@ export default class CrytoLedgerReport extends Vue {
     }
     return [];
   }
-  async getData() {
-    const param:WebParams = { ...this.store.Param };
-    param.TableName = 'Items';
-    param.Fields = ['id', 'Title'];
-    const msg:Msg = await this.store.ax.getApi('cc/GetData', param);
-    if (msg.ErrNo === ErrCode.PASS) {
-      if (msg.data) {
-        const list = msg.data as CryptoItem[];
-        console.log('getData:', list);
-        this.options = list.map((itm) => {
-          const tmp:SelectOptions = {
-            label: `${itm.Title}`,
-            value: itm.id,
-          };
-          return tmp;
-        });
-        const sltOne:SelectOptions = {
-          label: 'ALL',
-          value: 0,
-        };
-        this.options.splice(0, 0, sltOne);
-      }
-    }
-  }
-  async mounted() {
-    await this.getData();
+  getOptions(v:SelectOptions[]) {
+    this.options = v;
   }
 }
 </script>

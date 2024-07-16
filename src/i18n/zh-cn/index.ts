@@ -92,7 +92,7 @@ export default {
       '会员取消',
       '系统注销',
     ],
-    ProcStatus: ['处理中', '处理中', '成交', '取消', '取消', '系统平仓'],
+    ProcStatus: ['己接收', '处理中', '成交', '会员取消', '取消'],
     GAMsg: '请用手机APP-Google Authenticator 扫瞄后存档.',
     InputGA: '请输入Google 认证码(6位数).',
     GAError: '认证码错误!!',
@@ -165,6 +165,7 @@ export default {
       BuyType: ['新', '平'],
       ItemType: ['空', '多'],
       ItemTypeLong: ['空单', '多单'],
+      LoanType: ['现货', '合約'],
     },
   },
   Table: {

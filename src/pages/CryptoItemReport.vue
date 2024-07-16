@@ -69,12 +69,13 @@ export default class CryptoItemReport extends Vue {
 	rptSub:ItemReport | null = null;
 	showSub = false;
 	rptSubTitle = '';
+	subT:string[] = [];
 	async SearchData() {
 		if (this.SelectDate) {
 			this.list = [];
 			this.store.setShowProgress(true);
 			this.isLedger = this.isLedgerT;
-			this.rptMain = new ItemReport(this.itemTot, 0, this.isLedgerT);
+			this.rptMain = new ItemReport(this.itemTot, 0, this.subT, this.isLedgerT);
 			await this.rptMain.getReport(this.SelectDate);
 			this.list = this.rptMain.List;
 			this.total = this.rptMain.Total;
@@ -102,12 +103,17 @@ export default class CryptoItemReport extends Vue {
 		// console.log('CryptoItemReprot showItem:', isLedger, key);
 		// if (!isLedger) {
 			this.rptSubTitle = title;
-			this.rptSub = new ItemReport(this.itemTot, key, !isLedger);
+			this.rptSub = new ItemReport(this.itemTot, key, this.subT, !isLedger);
 			this.rptSub.getReport();
 			this.rptSub.Total.reCal();
 			this.rptSub.Total.setTitle(String(this.$t('Report.Total')));
 			this.showSub = true;
 		// }
+	}
+	mounted() {
+		const tmpT:any = this.$t('Select.Crypto.LoanType');
+		this.subT = (tmpT as string[]).map((itm:string) => itm);
+		// console.log('SubT:', this.subT);
 	}
 }
 </script>

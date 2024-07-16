@@ -93,7 +93,7 @@ export default {
       '會員取消',
       '系統註銷',
     ],
-    ProcStatus: ['處理中', '處理中', '成交', '取消', '取消', '系統平倉'],
+    ProcStatus: ['己接收', '處理中', '成交', '會員取消', '取消'],
     GAMsg: '請用手機APP-Google Authenticator 掃瞄後存檔.',
     InputGA: '請輸入Google 認証碼(6位數).',
     GAError: '認証碼錯誤!!',
@@ -169,6 +169,7 @@ export default {
       BuyType: ['新', '平'],
       ItemType: ['空', '多'],
       ItemTypeLong: ['空單', '多單'],
+      LoanType: ['現貨', '合約'],
     },
   },
   Table: {

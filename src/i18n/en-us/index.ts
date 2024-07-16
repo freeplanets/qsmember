@@ -92,7 +92,7 @@ export default {
       'cancelled',
       'system cancel',
     ],
-    ProcStatus: ['processing', 'processing', 'success', 'cancel', 'cancel', 'system settle'],
+    ProcStatus: ['accepted', 'processing', 'success', 'member cancel', 'cancel'],
     GAMsg: 'please scan APP-Google Authenticator and save.',
     InputGA: 'please enter Google authentic 6 digit codes.',
     GAError: 'wrong code!!',
@@ -165,6 +165,7 @@ export default {
       BuyType: ['open', 'close'],
       ItemType: ['short', 'long'],
       ItemTypeLong: ['short', 'long'],
+      LoanType: ['spot', 'contract'],
     },
   },
   Table: {

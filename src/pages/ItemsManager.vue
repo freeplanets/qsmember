@@ -74,10 +74,10 @@ export default class ItemsManager extends Vue {
   initItemData:CryptoItem = {
     id: 0,
     Title: '',
+    isLoan: 0,
     Code: '',
     OpenFee: 0,
     CloseFee: 0,
-    isLoan: 0,
     PriceLimitPercentage: 0,
     StopGain: 0,
     StopLose: 0,
@@ -99,6 +99,9 @@ export default class ItemsManager extends Vue {
   */
   columns:TableColumn[] = [];
   data:CryptoItem[] = [];
+  ItemData():CryptoItem[] {
+    return this.data;
+  }
   visibleColumns = ['id', 'Title', 'OpenFee', 'CloseFee', 'isLoan', 'PriceLimitPercentage',
    'StopGain', 'StopLose', 'DecimalPlaces', 'QtyDecimalPlaces', 'StayLimit', 'PerStep', 'isActive'];
   async GetData() {
@@ -148,7 +151,11 @@ export default class ItemsManager extends Vue {
         align: 'center',
       };
       if (typeof this.initItemData[key] === 'number') column.align = 'right';
-      if (key === 'isLoan' || key === 'isActive') {
+      if (key === 'isLoan') {
+        // column.format = (val:number) => `${val ? `${this.$t()}` : 'N'}`; 
+        column.format = (val:number) => this.$t(`Select.Crypto.LoanType.${val}`);
+      }
+      if (key === 'isActive') {
         column.format = (val:number) => `${val ? 'Y' : 'N'}`;
       }
       return column;

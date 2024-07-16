@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          App {{ TitleName }} v0.01
+          App {{ TitleName }} v0.013
         </q-toolbar-title>
         <BMG v-if="Personal.Account"></BMG>
         <q-btn flat round dense icon="edit" @click="showComment=!showComment" />

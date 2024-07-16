@@ -350,6 +350,7 @@ export class AxApi {
         };
         if (this.auth) {
             config.headers = {
+                // 'Access-Control-Allow-Headers': 'Authorization,token,content-type',
                 Authorization: this.auth,
             };
             const { iat, exp } = this.Info;
